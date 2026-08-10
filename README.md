@@ -7,7 +7,7 @@ This is a **personal working/staging repo**, separate from the shared team repo 
 ## Status
 
 - Task 0.4 — Flutter project skeleton (folder structure, Riverpod setup, routing skeleton) — done
-- Task 1.8 — Navigation shell (Guardian app + Dependent app routing) — in progress
+- Task 1.8 — Navigation shell (Guardian app + Dependent app routing) — done
 
 ## Setup
 
