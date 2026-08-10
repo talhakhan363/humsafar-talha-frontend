@@ -18,9 +18,9 @@ migrate_working_dir/
 *.iws
 .idea/
 
-# The .vscode folder contains launch configuration and tasks you configure in
-# VS Code which you may wish to be included in version control, so this line
-# is commented out by default.
+# VS Code
+# (left tracked on purpose — launch configs are handy to share with yourself
+# across machines; uncomment the line below if you'd rather keep it local)
 #.vscode/
 
 # Flutter/Dart/Pub related
@@ -32,6 +32,7 @@ migrate_working_dir/
 .pub-cache/
 .pub/
 /build/
+**/generated_plugin_registrant.dart
 
 # Symbolication related
 app.*.symbols
@@ -39,7 +40,24 @@ app.*.symbols
 # Obfuscation related
 app.*.map.json
 
-# Android Studio will place build artifacts here
-/android/app/debug
-/android/app/profile
-/android/app/release
+# Android Studio / Gradle build artifacts
+android/.gradle
+android/captures/
+android/gradlew
+android/gradlew.bat
+android/local.properties
+android/**/GeneratedPluginRegistrant.java
+android/key.properties
+android/app/debug
+android/app/profile
+android/app/release
+**/*.keystore
+**/*.jks
+
+# NOTE: this file deliberately does NOT contain a bare "lib/" rule anywhere.
+# The incident on the shared team repo happened because a Python-style
+# ".gitignore" line meant for "build/lib/" was written as just "lib/" with
+# no anchor, which silently matched (and ate) the Flutter lib/ source folder
+# everywhere in that repo. Keep this file Flutter-only and every rule either
+# anchored to a specific path or clearly scoped, so that mistake can't repeat
+# here.
