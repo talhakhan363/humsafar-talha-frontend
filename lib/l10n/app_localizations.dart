@@ -169,6 +169,216 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Switch to large-text, high-contrast view'**
   String get switchToAccessibleView;
+
+  /// No description provided for @previewLoginLink.
+  ///
+  /// In en, this message translates to:
+  /// **'Preview: Login screen (Task 1.11)'**
+  String get previewLoginLink;
+
+  /// No description provided for @previewRegisterLink.
+  ///
+  /// In en, this message translates to:
+  /// **'Preview: Register screen (Task 1.11)'**
+  String get previewRegisterLink;
+
+  /// No description provided for @registerScreenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Create Account'**
+  String get registerScreenTitle;
+
+  /// No description provided for @loginScreenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Login'**
+  String get loginScreenTitle;
+
+  /// No description provided for @guardianVerificationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Guardian Verification'**
+  String get guardianVerificationTitle;
+
+  /// No description provided for @dependentKycTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Dependent Verification (KYC)'**
+  String get dependentKycTitle;
+
+  /// No description provided for @fullNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Full Name'**
+  String get fullNameLabel;
+
+  /// No description provided for @emailLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Email'**
+  String get emailLabel;
+
+  /// No description provided for @phoneLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone Number'**
+  String get phoneLabel;
+
+  /// No description provided for @passwordLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Password'**
+  String get passwordLabel;
+
+  /// No description provided for @confirmPasswordLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm Password'**
+  String get confirmPasswordLabel;
+
+  /// No description provided for @registeringAsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Registering as'**
+  String get registeringAsLabel;
+
+  /// No description provided for @roleGuardianOption.
+  ///
+  /// In en, this message translates to:
+  /// **'Guardian'**
+  String get roleGuardianOption;
+
+  /// No description provided for @roleDependentOption.
+  ///
+  /// In en, this message translates to:
+  /// **'Dependent'**
+  String get roleDependentOption;
+
+  /// No description provided for @registerButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Register'**
+  String get registerButton;
+
+  /// No description provided for @loginButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Login'**
+  String get loginButton;
+
+  /// No description provided for @alreadyHaveAccountPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Already have an account? Login'**
+  String get alreadyHaveAccountPrompt;
+
+  /// No description provided for @dontHaveAccountPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Don\'t have an account? Register'**
+  String get dontHaveAccountPrompt;
+
+  /// No description provided for @fieldRequiredError.
+  ///
+  /// In en, this message translates to:
+  /// **'This field is required'**
+  String get fieldRequiredError;
+
+  /// No description provided for @invalidEmailError.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid email address'**
+  String get invalidEmailError;
+
+  /// No description provided for @passwordTooShortError.
+  ///
+  /// In en, this message translates to:
+  /// **'Password must be at least 8 characters'**
+  String get passwordTooShortError;
+
+  /// No description provided for @passwordTooWeakError.
+  ///
+  /// In en, this message translates to:
+  /// **'Password must include at least one letter and one number'**
+  String get passwordTooWeakError;
+
+  /// No description provided for @passwordsDoNotMatchError.
+  ///
+  /// In en, this message translates to:
+  /// **'Passwords do not match'**
+  String get passwordsDoNotMatchError;
+
+  /// No description provided for @invalidPhoneError.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid Pakistani phone number (e.g. 03XXXXXXXXX)'**
+  String get invalidPhoneError;
+
+  /// No description provided for @invalidCnicError.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter CNIC in the format XXXXX-XXXXXXX-X'**
+  String get invalidCnicError;
+
+  /// No description provided for @cnicLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'CNIC Number'**
+  String get cnicLabel;
+
+  /// No description provided for @cnicHint.
+  ///
+  /// In en, this message translates to:
+  /// **'XXXXX-XXXXXXX-X'**
+  String get cnicHint;
+
+  /// No description provided for @sendOtpButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Send OTP'**
+  String get sendOtpButton;
+
+  /// No description provided for @otpSentDummyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'OTP sent (dummy — Task 1.11 UI only)'**
+  String get otpSentDummyMessage;
+
+  /// No description provided for @otpLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter OTP'**
+  String get otpLabel;
+
+  /// No description provided for @verifyAndContinueButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify & Continue'**
+  String get verifyAndContinueButton;
+
+  /// No description provided for @noLivenessRequiredNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Guardian verification does not require a liveness photo.'**
+  String get noLivenessRequiredNote;
+
+  /// No description provided for @captureLivenessButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Capture Liveness Photo'**
+  String get captureLivenessButton;
+
+  /// No description provided for @livenessCapturedConfirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Liveness photo captured (mock)'**
+  String get livenessCapturedConfirmation;
+
+  /// No description provided for @submitForVerificationButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit for Verification'**
+  String get submitForVerificationButton;
 }
 
 class _AppLocalizationsDelegate

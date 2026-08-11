@@ -7,6 +7,11 @@ import '../../../providers/app_mode_provider.dart';
 import '../../../shared/widgets/language_switch_button.dart';
 
 // TEMPORARY, DEV-ONLY. Deleted once real login (Task 1.11 / 2.5) lands.
+//
+// Task 1.11 note: the two "Preview" links at the bottom are also
+// temporary — they exist so the new static Register/Login screens are
+// reachable for testing before they become the app's actual entry point
+// (that swap-over happens at Task 2.5, when this whole screen is deleted).
 class RoleSelectScreen extends ConsumerWidget {
   const RoleSelectScreen({super.key});
 
@@ -46,6 +51,17 @@ class RoleSelectScreen extends ConsumerWidget {
                 context.go('/dependent');
               },
               child: Text(l10n.continueAsDependent),
+            ),
+            const SizedBox(height: 32),
+            const Divider(),
+            const SizedBox(height: 8),
+            TextButton(
+              onPressed: () => context.go('/login'),
+              child: Text(l10n.previewLoginLink),
+            ),
+            TextButton(
+              onPressed: () => context.go('/register'),
+              child: Text(l10n.previewRegisterLink),
             ),
           ],
         ),
