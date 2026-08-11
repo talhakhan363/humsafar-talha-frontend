@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:humsafar_frontend/l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
+import 'package:humsafar_frontend/l10n/app_localizations.dart';
 
 import '../../../shared/widgets/accessibility_toggle_button.dart';
+import '../../../shared/widgets/language_switch_button.dart';
 
 class GuardianHomeScreen extends StatelessWidget {
   const GuardianHomeScreen({super.key});
@@ -15,6 +16,7 @@ class GuardianHomeScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(l10n.guardianAppTitle),
         actions: [
+          const LanguageSwitchButton(),
           const AccessibilityToggleButton(),
           IconButton(
             icon: const Icon(Icons.swap_horiz),

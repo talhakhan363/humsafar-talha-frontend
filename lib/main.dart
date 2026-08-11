@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:humsafar_frontend/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:humsafar_frontend/l10n/app_localizations.dart';
 
+import 'core/localization/app_locale_provider.dart';
 import 'core/router/app_router.dart';
 import 'core/theme/accessibility_mode_provider.dart';
 import 'core/theme/app_theme.dart';
@@ -23,6 +24,7 @@ class HumsafarApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final router = ref.watch(appRouterProvider);
     final accessibilityMode = ref.watch(accessibilityModeProvider);
+    final chosenLocale = ref.watch(appLocaleProvider);
 
     return MaterialApp.router(
       title: 'Humsafar',
@@ -30,6 +32,7 @@ class HumsafarApp extends ConsumerWidget {
       theme: AppTheme.themeFor(accessibilityMode),
       routerConfig: router,
       // Task 1.10 — localization scaffold.
+      locale: chosenLocale, // null = follow the phone's system language
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
     );

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:humsafar_frontend/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:humsafar_frontend/l10n/app_localizations.dart';
 
 import '../../../providers/app_mode_provider.dart';
+import '../../../shared/widgets/language_switch_button.dart';
 
 // TEMPORARY, DEV-ONLY. Deleted once real login (Task 1.11 / 2.5) lands.
 class RoleSelectScreen extends ConsumerWidget {
@@ -14,7 +15,10 @@ class RoleSelectScreen extends ConsumerWidget {
     final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.devRoleSwitcherTitle)),
+      appBar: AppBar(
+        title: Text(l10n.devRoleSwitcherTitle),
+        actions: const [LanguageSwitchButton()],
+      ),
       body: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
