@@ -10,6 +10,7 @@ This is a **personal working/staging repo**, separate from the shared team repo 
 - Task 1.8 — Navigation shell (Guardian app + Dependent app routing) — done
 - Task 1.9 — Theming system (standard mode + large-text/high-contrast toggle) — done
 - Task 1.10 — Localization scaffold (English/Urdu, includes in-app language switcher) — done
+- Task 1.11 — Static registration/login/KYC screens (FR-A1/A2/A3, dummy data, accessibility toggle + language switcher, client-side field validation) — done
 
 ## Setup
 
