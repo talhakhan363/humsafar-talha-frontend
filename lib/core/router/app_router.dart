@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -10,19 +11,20 @@ import '../../features/auth/screens/login_screen.dart';
 import '../../features/kyc/screens/guardian_verification_screen.dart';
 import '../../features/kyc/screens/dependent_kyc_screen.dart';
 
-// Task 1.8 — Navigation shell: Guardian app + Dependent app routing.
-// Task 1.11 — added static registration/login/KYC routes (UI only, dummy
-// data; wired to the real Auth/KYC APIs at Task 2.5).
+// Task 1.8 — Navigation shell. Task 1.11 — added auth/KYC routes.
 //
-//   /              -> SplashScreen        boot state; later checks a stored JWT
-//   /role-select   -> RoleSelectScreen     TEMPORARY dev-only picker — gets
-//                                          deleted once real auth (2.5) lands
-//   /register      -> RegisterScreen       FR-A1 role-based registration
-//   /login         -> LoginScreen          dummy login, real wiring at 2.5
-//   /kyc/guardian  -> GuardianVerificationScreen  FR-A3, no liveness
-//   /kyc/dependent -> DependentKycScreen   FR-A2, CNIC + mock liveness
-//   /guardian      -> GuardianHomeScreen   entry point into the Guardian app
-//   /dependent     -> DependentHomeScreen  entry point into the Dependent app
+// Fix (post-1.11): switched every route from `builder:` to `pageBuilder:`
+// with `NoTransitionPage`. Reason: the default page-transition animation
+// keeps the outgoing AND incoming screen mounted at once for its
+// duration. Toggling the accessibility theme rebuilds the whole app
+// (theme: lives on MaterialApp.router, the root), and if that rebuild
+// landed while two screens' Material widgets were both alive mid-
+// transition, it triggered a "GlobalKey used multiple times" crash in
+// Flutter's internal ink-rendering code. Removing the transition removes
+// the overlap window entirely. These are temporary placeholder screens
+// (Task 2.5 rebuilds this whole flow against real auth) — trading away
+// transition polish here is a reasonable, cheap fix, not a compromise
+// worth agonizing over at this stage.
 final appRouterProvider = Provider<GoRouter>((ref) {
   return GoRouter(
     initialLocation: '/',
@@ -30,42 +32,42 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/',
         name: 'splash',
-        builder: (context, state) => const SplashScreen(),
+        pageBuilder: (context, state) => NoTransitionPage(key: state.pageKey, child: const SplashScreen()),
       ),
       GoRoute(
         path: '/role-select',
         name: 'role-select',
-        builder: (context, state) => const RoleSelectScreen(),
+        pageBuilder: (context, state) => NoTransitionPage(key: state.pageKey, child: const RoleSelectScreen()),
       ),
       GoRoute(
         path: '/register',
         name: 'register',
-        builder: (context, state) => const RegisterScreen(),
+        pageBuilder: (context, state) => NoTransitionPage(key: state.pageKey, child: const RegisterScreen()),
       ),
       GoRoute(
         path: '/login',
         name: 'login',
-        builder: (context, state) => const LoginScreen(),
+        pageBuilder: (context, state) => NoTransitionPage(key: state.pageKey, child: const LoginScreen()),
       ),
       GoRoute(
         path: '/kyc/guardian',
         name: 'kyc-guardian',
-        builder: (context, state) => const GuardianVerificationScreen(),
+        pageBuilder: (context, state) => NoTransitionPage(key: state.pageKey, child: const GuardianVerificationScreen()),
       ),
       GoRoute(
         path: '/kyc/dependent',
         name: 'kyc-dependent',
-        builder: (context, state) => const DependentKycScreen(),
+        pageBuilder: (context, state) => NoTransitionPage(key: state.pageKey, child: const DependentKycScreen()),
       ),
       GoRoute(
         path: '/guardian',
         name: 'guardian-home',
-        builder: (context, state) => const GuardianHomeScreen(),
+        pageBuilder: (context, state) => NoTransitionPage(key: state.pageKey, child: const GuardianHomeScreen()),
       ),
       GoRoute(
         path: '/dependent',
         name: 'dependent-home',
-        builder: (context, state) => const DependentHomeScreen(),
+        pageBuilder: (context, state) => NoTransitionPage(key: state.pageKey, child: const DependentHomeScreen()),
       ),
     ],
   );
