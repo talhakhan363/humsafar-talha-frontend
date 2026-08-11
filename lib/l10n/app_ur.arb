@@ -1,0 +1,19 @@
+{
+  "@@locale": "ur",
+
+  "appTitle": "ہمسفر",
+  "guardianAppTitle": "گارڈین ایپ",
+  "dependentAppTitle": "ڈیپینڈنٹ ایپ",
+
+  "devRoleSwitcherTitle": "ہمسفر — ڈیو رول سوئچر",
+  "devRoleSwitcherBody": "عارضی اسکرین — اسے اصل لاگ ان (ٹاسک 1.11 / 2.5) سے تبدیل کیا جائے گا۔",
+  "continueAsGuardian": "بطور گارڈین جاری رکھیں",
+  "continueAsDependent": "بطور ڈیپینڈنٹ جاری رکھیں",
+
+  "guardianHomePlaceholder": "گارڈین ہوم اسکرین کی جگہ نما۔\nاصل ڈیش بورڈ مواد فیز 2 سے شامل ہوگا۔",
+  "dependentHomePlaceholder": "ڈیپینڈنٹ ہوم اسکرین کی جگہ نما۔\nتین حفاظتی اقدامات (پینک موڈ، ویلنیس چیک، دوا) ٹاسک 3.10 سے یہاں شامل ہوں گے۔",
+
+  "switchModeTooltip": "موڈ تبدیل کریں (صرف ڈیو)",
+  "switchToStandardView": "معیاری ویو پر جائیں",
+  "switchToAccessibleView": "بڑے حروف، ہائی کنٹراسٹ ویو پر جائیں"
+}

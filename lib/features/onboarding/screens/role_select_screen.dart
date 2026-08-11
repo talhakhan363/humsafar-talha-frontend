@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -10,18 +11,20 @@ class RoleSelectScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
-      appBar: AppBar(title: const Text('Humsafar — Dev Role Switcher')),
+      appBar: AppBar(title: Text(l10n.devRoleSwitcherTitle)),
       body: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 32),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 32),
               child: Text(
-                'Temporary screen — will be replaced by real login (Task 1.11 / 2.5).',
+                l10n.devRoleSwitcherBody,
                 textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.grey),
+                style: const TextStyle(color: Colors.grey),
               ),
             ),
             const SizedBox(height: 24),
@@ -30,7 +33,7 @@ class RoleSelectScreen extends ConsumerWidget {
                 ref.read(appModeProvider.notifier).state = AppMode.guardian;
                 context.go('/guardian');
               },
-              child: const Text('Continue as Guardian'),
+              child: Text(l10n.continueAsGuardian),
             ),
             const SizedBox(height: 12),
             ElevatedButton(
@@ -38,7 +41,7 @@ class RoleSelectScreen extends ConsumerWidget {
                 ref.read(appModeProvider.notifier).state = AppMode.dependent;
                 context.go('/dependent');
               },
-              child: const Text('Continue as Dependent'),
+              child: Text(l10n.continueAsDependent),
             ),
           ],
         ),
