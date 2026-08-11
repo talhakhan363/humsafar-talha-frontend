@@ -15,5 +15,45 @@
 
   "switchModeTooltip": "موڈ تبدیل کریں (صرف ڈیو)",
   "switchToStandardView": "معیاری ویو پر جائیں",
-  "switchToAccessibleView": "بڑے حروف، ہائی کنٹراسٹ ویو پر جائیں"
+  "switchToAccessibleView": "بڑے حروف، ہائی کنٹراسٹ ویو پر جائیں",
+
+  "previewLoginLink": "پیش منظر: لاگ ان اسکرین (ٹاسک 1.11)",
+  "previewRegisterLink": "پیش منظر: رجسٹر اسکرین (ٹاسک 1.11)",
+
+  "registerScreenTitle": "اکاؤنٹ بنائیں",
+  "loginScreenTitle": "لاگ ان",
+  "guardianVerificationTitle": "گارڈین کی تصدیق",
+  "dependentKycTitle": "ڈیپینڈنٹ کی تصدیق (KYC)",
+
+  "fullNameLabel": "پورا نام",
+  "emailLabel": "ای میل",
+  "phoneLabel": "فون نمبر",
+  "passwordLabel": "پاس ورڈ",
+  "confirmPasswordLabel": "پاس ورڈ کی تصدیق کریں",
+
+  "registeringAsLabel": "بطور رجسٹر ہو رہے ہیں",
+  "roleGuardianOption": "گارڈین",
+  "roleDependentOption": "ڈیپینڈنٹ",
+
+  "registerButton": "رجسٹر کریں",
+  "loginButton": "لاگ ان کریں",
+  "alreadyHaveAccountPrompt": "پہلے سے اکاؤنٹ ہے؟ لاگ ان کریں",
+  "dontHaveAccountPrompt": "اکاؤنٹ نہیں ہے؟ رجسٹر کریں",
+
+  "fieldRequiredError": "یہ خانہ ضروری ہے",
+  "invalidEmailError": "درست ای میل ایڈریس درج کریں",
+  "passwordTooShortError": "پاس ورڈ کم از کم 6 حروف کا ہونا چاہیے",
+  "passwordsDoNotMatchError": "پاس ورڈ مماثل نہیں ہیں",
+
+  "cnicLabel": "شناختی کارڈ نمبر (CNIC)",
+  "cnicHint": "XXXXX-XXXXXXX-X",
+  "sendOtpButton": "OTP بھیجیں",
+  "otpSentDummyMessage": "OTP بھیج دیا گیا (نمائشی — ٹاسک 1.11 صرف یو آئی)",
+  "otpLabel": "OTP درج کریں",
+  "verifyAndContinueButton": "تصدیق کریں اور جاری رکھیں",
+  "noLivenessRequiredNote": "گارڈین کی تصدیق کے لیے لائیونیس تصویر درکار نہیں۔",
+
+  "captureLivenessButton": "لائیونیس تصویر لیں",
+  "livenessCapturedConfirmation": "لائیونیس تصویر لے لی گئی (نمائشی)",
+  "submitForVerificationButton": "تصدیق کے لیے جمع کروائیں"
 }

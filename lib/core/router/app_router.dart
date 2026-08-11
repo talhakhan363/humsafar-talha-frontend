@@ -5,15 +5,24 @@ import '../../features/splash/splash_screen.dart';
 import '../../features/onboarding/screens/role_select_screen.dart';
 import '../../features/guardian/screens/guardian_home_screen.dart';
 import '../../features/dependent/screens/dependent_home_screen.dart';
+import '../../features/auth/screens/register_screen.dart';
+import '../../features/auth/screens/login_screen.dart';
+import '../../features/kyc/screens/guardian_verification_screen.dart';
+import '../../features/kyc/screens/dependent_kyc_screen.dart';
 
 // Task 1.8 — Navigation shell: Guardian app + Dependent app routing.
+// Task 1.11 — added static registration/login/KYC routes (UI only, dummy
+// data; wired to the real Auth/KYC APIs at Task 2.5).
 //
-//   /             -> SplashScreen        boot state; later checks a stored JWT
-//   /role-select  -> RoleSelectScreen     TEMPORARY dev-only picker — gets
-//                                         deleted once real auth (Task 1.3 +
-//                                         2.5 wiring) exists
-//   /guardian     -> GuardianHomeScreen   entry point into the Guardian app
-//   /dependent    -> DependentHomeScreen  entry point into the Dependent app
+//   /              -> SplashScreen        boot state; later checks a stored JWT
+//   /role-select   -> RoleSelectScreen     TEMPORARY dev-only picker — gets
+//                                          deleted once real auth (2.5) lands
+//   /register      -> RegisterScreen       FR-A1 role-based registration
+//   /login         -> LoginScreen          dummy login, real wiring at 2.5
+//   /kyc/guardian  -> GuardianVerificationScreen  FR-A3, no liveness
+//   /kyc/dependent -> DependentKycScreen   FR-A2, CNIC + mock liveness
+//   /guardian      -> GuardianHomeScreen   entry point into the Guardian app
+//   /dependent     -> DependentHomeScreen  entry point into the Dependent app
 final appRouterProvider = Provider<GoRouter>((ref) {
   return GoRouter(
     initialLocation: '/',
@@ -27,6 +36,26 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: '/role-select',
         name: 'role-select',
         builder: (context, state) => const RoleSelectScreen(),
+      ),
+      GoRoute(
+        path: '/register',
+        name: 'register',
+        builder: (context, state) => const RegisterScreen(),
+      ),
+      GoRoute(
+        path: '/login',
+        name: 'login',
+        builder: (context, state) => const LoginScreen(),
+      ),
+      GoRoute(
+        path: '/kyc/guardian',
+        name: 'kyc-guardian',
+        builder: (context, state) => const GuardianVerificationScreen(),
+      ),
+      GoRoute(
+        path: '/kyc/dependent',
+        name: 'kyc-dependent',
+        builder: (context, state) => const DependentKycScreen(),
       ),
       GoRoute(
         path: '/guardian',

@@ -19,5 +19,45 @@
 
   "switchModeTooltip": "Switch mode (dev only)",
   "switchToStandardView": "Switch to standard view",
-  "switchToAccessibleView": "Switch to large-text, high-contrast view"
+  "switchToAccessibleView": "Switch to large-text, high-contrast view",
+
+  "previewLoginLink": "Preview: Login screen (Task 1.11)",
+  "previewRegisterLink": "Preview: Register screen (Task 1.11)",
+
+  "registerScreenTitle": "Create Account",
+  "loginScreenTitle": "Login",
+  "guardianVerificationTitle": "Guardian Verification",
+  "dependentKycTitle": "Dependent Verification (KYC)",
+
+  "fullNameLabel": "Full Name",
+  "emailLabel": "Email",
+  "phoneLabel": "Phone Number",
+  "passwordLabel": "Password",
+  "confirmPasswordLabel": "Confirm Password",
+
+  "registeringAsLabel": "Registering as",
+  "roleGuardianOption": "Guardian",
+  "roleDependentOption": "Dependent",
+
+  "registerButton": "Register",
+  "loginButton": "Login",
+  "alreadyHaveAccountPrompt": "Already have an account? Login",
+  "dontHaveAccountPrompt": "Don't have an account? Register",
+
+  "fieldRequiredError": "This field is required",
+  "invalidEmailError": "Enter a valid email address",
+  "passwordTooShortError": "Password must be at least 6 characters",
+  "passwordsDoNotMatchError": "Passwords do not match",
+
+  "cnicLabel": "CNIC Number",
+  "cnicHint": "XXXXX-XXXXXXX-X",
+  "sendOtpButton": "Send OTP",
+  "otpSentDummyMessage": "OTP sent (dummy — Task 1.11 UI only)",
+  "otpLabel": "Enter OTP",
+  "verifyAndContinueButton": "Verify & Continue",
+  "noLivenessRequiredNote": "Guardian verification does not require a liveness photo.",
+
+  "captureLivenessButton": "Capture Liveness Photo",
+  "livenessCapturedConfirmation": "Liveness photo captured (mock)",
+  "submitForVerificationButton": "Submit for Verification"
 }
