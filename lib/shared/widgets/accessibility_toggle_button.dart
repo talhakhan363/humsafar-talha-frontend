@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:humsafar_frontend/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/theme/accessibility_mode.dart';
@@ -26,9 +26,7 @@ class AccessibilityToggleButton extends ConsumerWidget {
 
     return IconButton(
       icon: Icon(isHighContrast ? Icons.contrast : Icons.contrast_outlined),
-      tooltip: isHighContrast
-          ? l10n.switchToStandardView
-          : l10n.switchToAccessibleView,
+      tooltip: isHighContrast ? l10n.switchToStandardView : l10n.switchToAccessibleView,
       onPressed: () => ref.read(accessibilityModeProvider.notifier).toggle(),
     );
   }
