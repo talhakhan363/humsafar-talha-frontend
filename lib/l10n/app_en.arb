@@ -1,0 +1,23 @@
+{
+  "@@locale": "en",
+
+  "appTitle": "Humsafar",
+  "@appTitle": {
+    "description": "App name shown on the splash screen and window title."
+  },
+
+  "guardianAppTitle": "Guardian App",
+  "dependentAppTitle": "Dependent App",
+
+  "devRoleSwitcherTitle": "Humsafar — Dev Role Switcher",
+  "devRoleSwitcherBody": "Temporary screen — will be replaced by real login (Task 1.11 / 2.5).",
+  "continueAsGuardian": "Continue as Guardian",
+  "continueAsDependent": "Continue as Dependent",
+
+  "guardianHomePlaceholder": "Guardian home screen placeholder.\nReal dashboard content lands from Phase 2 onward.",
+  "dependentHomePlaceholder": "Dependent home screen placeholder.\nThe 3 safety actions (Panic Mode, Wellness Check, Medication) land here from Task 3.10 onward.",
+
+  "switchModeTooltip": "Switch mode (dev only)",
+  "switchToStandardView": "Switch to standard view",
+  "switchToAccessibleView": "Switch to large-text, high-contrast view"
+}
