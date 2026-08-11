@@ -63,7 +63,7 @@ import 'app_localizations_ur.dart';
 /// property.
 abstract class AppLocalizations {
   AppLocalizations(String locale)
-    : localeName = intl.Intl.canonicalizedLocale(locale.toString());
+      : localeName = intl.Intl.canonicalizedLocale(locale.toString());
 
   final String localeName;
 
@@ -86,16 +86,16 @@ abstract class AppLocalizations {
   /// of delegates is preferred or required.
   static const List<LocalizationsDelegate<dynamic>> localizationsDelegates =
       <LocalizationsDelegate<dynamic>>[
-        delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-      ];
+    delegate,
+    GlobalMaterialLocalizations.delegate,
+    GlobalCupertinoLocalizations.delegate,
+    GlobalWidgetsLocalizations.delegate,
+  ];
 
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
     Locale('en'),
-    Locale('ur'),
+    Locale('ur')
   ];
 
   /// App name shown on the splash screen and window title.
@@ -293,14 +293,32 @@ abstract class AppLocalizations {
   /// No description provided for @passwordTooShortError.
   ///
   /// In en, this message translates to:
-  /// **'Password must be at least 6 characters'**
+  /// **'Password must be at least 8 characters'**
   String get passwordTooShortError;
+
+  /// No description provided for @passwordTooWeakError.
+  ///
+  /// In en, this message translates to:
+  /// **'Password must include at least one letter and one number'**
+  String get passwordTooWeakError;
 
   /// No description provided for @passwordsDoNotMatchError.
   ///
   /// In en, this message translates to:
   /// **'Passwords do not match'**
   String get passwordsDoNotMatchError;
+
+  /// No description provided for @invalidPhoneError.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid Pakistani phone number (e.g. 03XXXXXXXXX)'**
+  String get invalidPhoneError;
+
+  /// No description provided for @invalidCnicError.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter CNIC in the format XXXXX-XXXXXXX-X'**
+  String get invalidCnicError;
 
   /// No description provided for @cnicLabel.
   ///
@@ -390,9 +408,8 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
   }
 
   throw FlutterError(
-    'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
-    'an issue with the localizations generation tool. Please file an issue '
-    'on GitHub with a reproducible sample app and the gen-l10n configuration '
-    'that was used.',
-  );
+      'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
+      'an issue with the localizations generation tool. Please file an issue '
+      'on GitHub with a reproducible sample app and the gen-l10n configuration '
+      'that was used.');
 }

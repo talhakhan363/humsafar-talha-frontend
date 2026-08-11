@@ -23,6 +23,13 @@ class DependentKycScreen extends StatefulWidget {
 }
 
 class _DependentKycScreenState extends State<DependentKycScreen> {
+  // Pakistani CNIC format: 5 digits - 7 digits - 1 digit, matching the
+  // cnicHint shown on the field. Client-side format check only — real CNIC
+  // verification happens via the third-party KYC provider server-side
+  // (FR-A2), wired in at Task 2.5 once Task 1.4 exists.
+  static final _cnicRegExp = RegExp(r'^\d{5}-\d{7}-\d{1}$');
+
+  final _formKey = GlobalKey<FormState>();
   final _cnicController = TextEditingController();
   bool _livenessCaptured = false;
 
@@ -37,11 +44,11 @@ class _DependentKycScreenState extends State<DependentKycScreen> {
     setState(() => _livenessCaptured = true);
   }
 
-  bool get _canSubmit =>
-      _cnicController.text.trim().isNotEmpty && _livenessCaptured;
+  bool get _canSubmit => _livenessCaptured;
 
   void _submit() {
-    if (!_canSubmit) return;
+    if (!_formKey.currentState!.validate()) return;
+    if (!_livenessCaptured) return;
     // Dummy submission only — real KYC endpoint wiring happens once
     // Task 1.4 is available, at Task 2.5.
     context.go('/dependent');
@@ -58,34 +65,45 @@ class _DependentKycScreenState extends State<DependentKycScreen> {
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            TextField(
-              controller: _cnicController,
-              onChanged: (_) => setState(() {}),
-              decoration: InputDecoration(
-                labelText: l10n.cnicLabel,
-                hintText: l10n.cnicHint,
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              TextFormField(
+                controller: _cnicController,
+                decoration: InputDecoration(
+                  labelText: l10n.cnicLabel,
+                  hintText: l10n.cnicHint,
+                ),
+                validator: (value) {
+                  if (value == null || value.trim().isEmpty) {
+                    return l10n.fieldRequiredError;
+                  }
+                  if (!_cnicRegExp.hasMatch(value.trim())) {
+                    return l10n.invalidCnicError;
+                  }
+                  return null;
+                },
               ),
-            ),
-            const SizedBox(height: 16),
-            OutlinedButton.icon(
-              onPressed: _captureLiveness,
-              icon: Icon(
-                  _livenessCaptured ? Icons.check_circle : Icons.camera_alt),
-              label: Text(
-                _livenessCaptured
-                    ? l10n.livenessCapturedConfirmation
-                    : l10n.captureLivenessButton,
+              const SizedBox(height: 16),
+              OutlinedButton.icon(
+                onPressed: _captureLiveness,
+                icon: Icon(
+                    _livenessCaptured ? Icons.check_circle : Icons.camera_alt),
+                label: Text(
+                  _livenessCaptured
+                      ? l10n.livenessCapturedConfirmation
+                      : l10n.captureLivenessButton,
+                ),
               ),
-            ),
-            const SizedBox(height: 24),
-            ElevatedButton(
-              onPressed: _canSubmit ? _submit : null,
-              child: Text(l10n.submitForVerificationButton),
-            ),
-          ],
+              const SizedBox(height: 24),
+              ElevatedButton(
+                onPressed: _canSubmit ? _submit : null,
+                child: Text(l10n.submitForVerificationButton),
+              ),
+            ],
+          ),
         ),
       ),
     );

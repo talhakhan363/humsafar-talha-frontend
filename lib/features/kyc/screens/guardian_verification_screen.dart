@@ -23,6 +23,14 @@ class GuardianVerificationScreen extends StatefulWidget {
 
 class _GuardianVerificationScreenState
     extends State<GuardianVerificationScreen> {
+  // Pakistani CNIC format: 5 digits - 7 digits - 1 digit, matching the
+  // cnicHint shown on the field. Client-side format check only — real CNIC
+  // verification happens via the third-party KYC provider server-side
+  // (FR-A3), wired in at Task 2.5 once Task 1.4 exists.
+  static final _cnicRegExp = RegExp(r'^\d{5}-\d{7}-\d{1}$');
+
+  final _cnicFormKey = GlobalKey<FormState>();
+  final _otpFormKey = GlobalKey<FormState>();
   final _cnicController = TextEditingController();
   final _otpController = TextEditingController();
   bool _otpSent = false;
@@ -35,7 +43,7 @@ class _GuardianVerificationScreenState
   }
 
   void _sendOtp(AppLocalizations l10n) {
-    if (_cnicController.text.trim().isEmpty) return;
+    if (!_cnicFormKey.currentState!.validate()) return;
     setState(() => _otpSent = true);
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(l10n.otpSentDummyMessage)),
@@ -43,10 +51,8 @@ class _GuardianVerificationScreenState
   }
 
   void _verifyAndContinue() {
-    if (_cnicController.text.trim().isEmpty ||
-        _otpController.text.trim().isEmpty) {
-      return;
-    }
+    if (!_cnicFormKey.currentState!.validate()) return;
+    if (_otpSent && !_otpFormKey.currentState!.validate()) return;
     // Dummy verification only — real CNIC/OTP validation happens once
     // Task 1.4 (KYC endpoints) is wired in at Task 2.5.
     context.go('/guardian');
@@ -71,11 +77,23 @@ class _GuardianVerificationScreenState
               style: TextStyle(color: Theme.of(context).colorScheme.secondary),
             ),
             const SizedBox(height: 16),
-            TextField(
-              controller: _cnicController,
-              decoration: InputDecoration(
-                labelText: l10n.cnicLabel,
-                hintText: l10n.cnicHint,
+            Form(
+              key: _cnicFormKey,
+              child: TextFormField(
+                controller: _cnicController,
+                decoration: InputDecoration(
+                  labelText: l10n.cnicLabel,
+                  hintText: l10n.cnicHint,
+                ),
+                validator: (value) {
+                  if (value == null || value.trim().isEmpty) {
+                    return l10n.fieldRequiredError;
+                  }
+                  if (!_cnicRegExp.hasMatch(value.trim())) {
+                    return l10n.invalidCnicError;
+                  }
+                  return null;
+                },
               ),
             ),
             const SizedBox(height: 16),
@@ -85,10 +103,16 @@ class _GuardianVerificationScreenState
             ),
             if (_otpSent) ...[
               const SizedBox(height: 16),
-              TextField(
-                controller: _otpController,
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(labelText: l10n.otpLabel),
+              Form(
+                key: _otpFormKey,
+                child: TextFormField(
+                  controller: _otpController,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(labelText: l10n.otpLabel),
+                  validator: (value) => (value == null || value.trim().isEmpty)
+                      ? l10n.fieldRequiredError
+                      : null,
+                ),
               ),
             ],
             const SizedBox(height: 24),

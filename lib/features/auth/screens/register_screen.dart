@@ -29,6 +29,11 @@ class RegisterScreen extends ConsumerStatefulWidget {
 }
 
 class _RegisterScreenState extends ConsumerState<RegisterScreen> {
+  // Pakistani mobile format: 03XXXXXXXXX or +923XXXXXXXXX (11 digits local,
+  // or +92 followed by 10 digits). Client-side format only — see the phone
+  // field's validator doc comment below for what's deliberately not here.
+  static final _pakPhoneRegExp = RegExp(r'^(\+92|0)3\d{9}$');
+
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
@@ -104,18 +109,35 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                 controller: _phoneController,
                 keyboardType: TextInputType.phone,
                 decoration: InputDecoration(labelText: l10n.phoneLabel),
-                validator: (value) => (value == null || value.trim().isEmpty)
-                    ? l10n.fieldRequiredError
-                    : null,
+                // Client-side format check only — Task 1.11 scope. Real
+                // uniqueness/OTP verification happens server-side at
+                // Task 2.5 once Abdullah's Auth API (1.3) exists.
+                validator: (value) {
+                  if (value == null || value.trim().isEmpty) {
+                    return l10n.fieldRequiredError;
+                  }
+                  if (!_pakPhoneRegExp.hasMatch(value.trim())) {
+                    return l10n.invalidPhoneError;
+                  }
+                  return null;
+                },
               ),
               const SizedBox(height: 16),
               TextFormField(
                 controller: _passwordController,
                 obscureText: true,
                 decoration: InputDecoration(labelText: l10n.passwordLabel),
+                // Length + basic letter/number mix, checked client-side only.
+                // This is a starting baseline, not a locked policy — real
+                // enforcement (and hashing) happens server-side at Task 1.3;
+                // this validator should just mirror whatever policy the team
+                // settles on there.
                 validator: (value) {
                   if (value == null || value.isEmpty) return l10n.fieldRequiredError;
-                  if (value.length < 6) return l10n.passwordTooShortError;
+                  if (value.length < 8) return l10n.passwordTooShortError;
+                  final hasLetter = RegExp(r'[A-Za-z]').hasMatch(value);
+                  final hasDigit = RegExp(r'\d').hasMatch(value);
+                  if (!hasLetter || !hasDigit) return l10n.passwordTooWeakError;
                   return null;
                 },
               ),

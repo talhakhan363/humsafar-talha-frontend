@@ -109,10 +109,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get invalidEmailError => 'Enter a valid email address';
 
   @override
-  String get passwordTooShortError => 'Password must be at least 6 characters';
+  String get passwordTooShortError => 'Password must be at least 8 characters';
+
+  @override
+  String get passwordTooWeakError =>
+      'Password must include at least one letter and one number';
 
   @override
   String get passwordsDoNotMatchError => 'Passwords do not match';
+
+  @override
+  String get invalidPhoneError =>
+      'Enter a valid Pakistani phone number (e.g. 03XXXXXXXXX)';
+
+  @override
+  String get invalidCnicError => 'Enter CNIC in the format XXXXX-XXXXXXX-X';
 
   @override
   String get cnicLabel => 'CNIC Number';

@@ -46,8 +46,11 @@
 
   "fieldRequiredError": "This field is required",
   "invalidEmailError": "Enter a valid email address",
-  "passwordTooShortError": "Password must be at least 6 characters",
+  "passwordTooShortError": "Password must be at least 8 characters",
+  "passwordTooWeakError": "Password must include at least one letter and one number",
   "passwordsDoNotMatchError": "Passwords do not match",
+  "invalidPhoneError": "Enter a valid Pakistani phone number (e.g. 03XXXXXXXXX)",
+  "invalidCnicError": "Enter CNIC in the format XXXXX-XXXXXXX-X",
 
   "cnicLabel": "CNIC Number",
   "cnicHint": "XXXXX-XXXXXXX-X",

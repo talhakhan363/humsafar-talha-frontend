@@ -108,10 +108,22 @@ class AppLocalizationsUr extends AppLocalizations {
   String get invalidEmailError => 'درست ای میل ایڈریس درج کریں';
 
   @override
-  String get passwordTooShortError => 'پاس ورڈ کم از کم 6 حروف کا ہونا چاہیے';
+  String get passwordTooShortError => 'پاس ورڈ کم از کم 8 حروف کا ہونا چاہیے';
+
+  @override
+  String get passwordTooWeakError =>
+      'پاس ورڈ میں کم از کم ایک حرف اور ایک ہندسہ ہونا ضروری ہے';
 
   @override
   String get passwordsDoNotMatchError => 'پاس ورڈ مماثل نہیں ہیں';
+
+  @override
+  String get invalidPhoneError =>
+      'درست پاکستانی فون نمبر درج کریں (مثلاً 03XXXXXXXXX)';
+
+  @override
+  String get invalidCnicError =>
+      'شناختی کارڈ نمبر اس فارمیٹ میں درج کریں: XXXXX-XXXXXXX-X';
 
   @override
   String get cnicLabel => 'شناختی کارڈ نمبر (CNIC)';

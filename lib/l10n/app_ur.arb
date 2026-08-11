@@ -42,8 +42,11 @@
 
   "fieldRequiredError": "یہ خانہ ضروری ہے",
   "invalidEmailError": "درست ای میل ایڈریس درج کریں",
-  "passwordTooShortError": "پاس ورڈ کم از کم 6 حروف کا ہونا چاہیے",
+  "passwordTooShortError": "پاس ورڈ کم از کم 8 حروف کا ہونا چاہیے",
+  "passwordTooWeakError": "پاس ورڈ میں کم از کم ایک حرف اور ایک ہندسہ ہونا ضروری ہے",
   "passwordsDoNotMatchError": "پاس ورڈ مماثل نہیں ہیں",
+  "invalidPhoneError": "درست پاکستانی فون نمبر درج کریں (مثلاً 03XXXXXXXXX)",
+  "invalidCnicError": "شناختی کارڈ نمبر اس فارمیٹ میں درج کریں: XXXXX-XXXXXXX-X",
 
   "cnicLabel": "شناختی کارڈ نمبر (CNIC)",
   "cnicHint": "XXXXX-XXXXXXX-X",
