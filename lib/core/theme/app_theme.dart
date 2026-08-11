@@ -53,7 +53,20 @@ class AppTheme {
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
         minimumSize: const Size(64, 56), // bigger tap targets alongside bigger text
-        textStyle: const TextStyle(fontWeight: FontWeight.w700),
+        // Bug fix (2026-08-12): deliberately NOT setting a raw `textStyle:`
+        // here anymore. Every ElevatedButton internally re-wraps itself in
+        // its own AnimatedTheme (Flutter's ButtonStyleButton, not ours),
+        // which lerps the FULL ambient ThemeData on every accessibility
+        // toggle — including this field. A bare `const TextStyle(...)`
+        // defaults to `inherit: true` and never passes through
+        // ThemeData's own textTheme-merge pipeline, so it stayed inherit
+        // TRUE while everything else (bodyLarge, titleLarge, and the
+        // button's own default label style in the standard theme) gets
+        // forced to inherit FALSE by that pipeline. That mismatch is what
+        // "Failed to interpolate TextStyles with different inherit
+        // values" was actually pointing at. Fixed below by driving the
+        // bold weight through textTheme.labelLarge instead, so it goes
+        // through the same safe merge as every other role.
       ),
     ),
   );
@@ -65,12 +78,19 @@ class AppTheme {
   );
 
   static TextTheme _scaledTextTheme(TextTheme base, double factor) {
-    TextStyle? scale(TextStyle? style) =>
-        style?.copyWith(fontSize: (style.fontSize ?? 14) * factor);
+    TextStyle? scale(TextStyle? style) => style?.copyWith(fontSize: (style.fontSize ?? 14) * factor);
     return base.copyWith(
       bodyLarge: scale(base.bodyLarge),
       bodyMedium: scale(base.bodyMedium),
       titleLarge: scale(base.titleLarge),
+      // Bold button/label text in high-contrast mode. This role feeds
+      // ElevatedButton's default label style (Material 3 uses labelLarge
+      // for button text) and, unlike the old elevatedButtonTheme.textStyle
+      // override, it flows through ThemeData's textTheme-merge pipeline —
+      // same safe path as bodyLarge/titleLarge above — so its `inherit`
+      // flag stays consistent with the standard theme's fallback instead
+      // of clashing with it.
+      labelLarge: const TextStyle(fontWeight: FontWeight.w700),
     );
   }
 }
