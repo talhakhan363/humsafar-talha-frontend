@@ -5,6 +5,8 @@ import 'package:go_router/go_router.dart';
 import '../../../core/guardian/dependent_summary.dart';
 import '../../../core/network/api_exception.dart';
 import '../../../core/network/providers.dart';
+import '../../../shared/widgets/accessibility_toggle_button.dart';
+import '../../../shared/widgets/language_switch_button.dart';
 
 /// New screen for Task 2.5 Step E. Shows who is linked to a Dependent
 /// (GET /dependents/{id}/guardians, linkage_contract.md section 2) and the
@@ -54,7 +56,10 @@ class _DependentDetailScreenState extends ConsumerState<DependentDetailScreen> {
     final summary = widget.summary;
 
     return Scaffold(
-      appBar: AppBar(title: Text(summary.email)),
+      appBar: AppBar(
+        title: Text(summary.email),
+        actions: const [LanguageSwitchButton(), AccessibilityToggleButton()],
+      ),
       body: RefreshIndicator(
         onRefresh: _loadGuardians,
         child: ListView(

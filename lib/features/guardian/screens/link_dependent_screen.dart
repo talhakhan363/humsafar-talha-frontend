@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/network/api_exception.dart';
 import '../../../core/network/providers.dart';
+import '../../../shared/widgets/accessibility_toggle_button.dart';
+import '../../../shared/widgets/language_switch_button.dart';
 
 /// New screen for Task 2.5 Step E. A verified Primary Guardian enters a
 /// Dependent's user_id (the Dependent sees/shares this from their own KYC
@@ -68,7 +70,10 @@ class _LinkDependentScreenState extends ConsumerState<LinkDependentScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Link a Dependent')),
+      appBar: AppBar(
+        title: const Text('Link a Dependent'),
+        actions: const [LanguageSwitchButton(), AccessibilityToggleButton()],
+      ),
       body: Padding(
         padding: const EdgeInsets.all(24.0),
         child: Form(

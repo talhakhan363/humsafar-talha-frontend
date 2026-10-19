@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/network/api_exception.dart';
 import '../../../core/network/providers.dart';
+import '../../../shared/widgets/accessibility_toggle_button.dart';
+import '../../../shared/widgets/language_switch_button.dart';
 
 /// New screen for Task 2.5 Step E. Read-only view of what the logged-in
 /// Guardian (Primary or Secondary) may do for one Dependent:
@@ -60,7 +62,10 @@ class _MyAccessScreenState extends ConsumerState<MyAccessScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('My Access')),
+      appBar: AppBar(
+        title: const Text('My Access'),
+        actions: const [LanguageSwitchButton(), AccessibilityToggleButton()],
+      ),
       body: RefreshIndicator(onRefresh: _load, child: _buildBody()),
     );
   }

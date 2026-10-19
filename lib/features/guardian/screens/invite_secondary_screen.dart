@@ -4,6 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/network/api_exception.dart';
 import '../../../core/network/providers.dart';
+import '../../../shared/widgets/accessibility_toggle_button.dart';
+import '../../../shared/widgets/language_switch_button.dart';
 
 /// New screen for Task 2.5 Step E. A verified Primary Guardian invites a
 /// Secondary Guardian by phone: POST /dependents/{id}/guardians/invite
@@ -75,7 +77,10 @@ class _InviteSecondaryScreenState extends ConsumerState<InviteSecondaryScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Invite a Secondary Guardian')),
+      appBar: AppBar(
+        title: const Text('Invite a Secondary Guardian'),
+        actions: const [LanguageSwitchButton(), AccessibilityToggleButton()],
+      ),
       body: Padding(
         padding: const EdgeInsets.all(24.0),
         child: _inviteToken == null ? _buildForm() : _buildResult(),

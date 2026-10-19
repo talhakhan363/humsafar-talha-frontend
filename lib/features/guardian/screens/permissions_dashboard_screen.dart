@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/network/api_exception.dart';
 import '../../../core/network/providers.dart';
+import '../../../shared/widgets/accessibility_toggle_button.dart';
+import '../../../shared/widgets/language_switch_button.dart';
 
 /// New screen for Task 2.5 Step E. The Primary's permission dashboard:
 /// GET /dependents/{id}/permissions, then PUT
@@ -94,7 +96,10 @@ class _PermissionsDashboardScreenState extends ConsumerState<PermissionsDashboar
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Manage Permissions')),
+      appBar: AppBar(
+        title: const Text('Manage Permissions'),
+        actions: const [LanguageSwitchButton(), AccessibilityToggleButton()],
+      ),
       body: RefreshIndicator(onRefresh: _load, child: _buildBody()),
     );
   }
