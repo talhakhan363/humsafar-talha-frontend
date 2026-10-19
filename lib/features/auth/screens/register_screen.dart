@@ -10,10 +10,14 @@ import '../../../providers/app_mode_provider.dart';
 import '../../../shared/widgets/accessibility_toggle_button.dart';
 import '../../../shared/widgets/language_switch_button.dart';
 
-/// Task 1.11 built this UI against dummy data; Task 2.5 wires `_submit` to
-/// Abdullah's real /auth/register (+ an immediate /auth/login for
-/// Guardians, since register alone doesn't return tokens —
-/// auth_contract.md section 2). Fields/validators unchanged from 1.11.
+/// Task 1.11 built this UI against dummy data; Task 2.5 Step B wired
+/// `_submit` to the real /auth/register (+ an immediate /auth/login for
+/// Guardians, since register alone doesn't return tokens -
+/// auth_contract.md section 2). Step E adds an optional invite-code field
+/// for a brand-new person accepting a Secondary invitation in one step
+/// (linkage_contract.md section 2, path 1) - entering a code here forces
+/// the role to Guardian, since a Dependent can't be invited this way (the
+/// backend itself rejects that combination with 422).
 class RegisterScreen extends ConsumerStatefulWidget {
   const RegisterScreen({super.key});
 
@@ -30,8 +34,27 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   final _phoneController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
+  final _inviteTokenController = TextEditingController();
   AppMode _selectedRole = AppMode.guardian;
   bool _isSubmitting = false;
+
+  bool get _hasInvite => _inviteTokenController.text.trim().isNotEmpty;
+
+  @override
+  void initState() {
+    super.initState();
+    _inviteTokenController.addListener(_onInviteTokenChanged);
+  }
+
+  void _onInviteTokenChanged() {
+    if (_hasInvite && _selectedRole != AppMode.guardian) {
+      setState(() => _selectedRole = AppMode.guardian);
+    } else {
+      // Rebuild so the segmented control re-enables/disables as the field
+      // goes from empty to non-empty or back.
+      setState(() {});
+    }
+  }
 
   @override
   void dispose() {
@@ -40,6 +63,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
     _phoneController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
+    _inviteTokenController.dispose();
     super.dispose();
   }
 
@@ -57,6 +81,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
         phone: _phoneController.text.trim(),
         password: _passwordController.text,
         role: role,
+        inviteToken: _hasInvite ? _inviteTokenController.text.trim() : null,
       );
 
       ref.read(appModeProvider.notifier).state = _selectedRole;
@@ -92,6 +117,14 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
         return 'This phone number is already registered.';
       case 'ALREADY_REGISTERED':
         return 'This account already exists. Try logging in instead.';
+      case 'INVITE_INVALID':
+        return 'That invite code isn\'t valid.';
+      case 'INVITE_EXPIRED':
+        return 'That invite code has expired - ask for a new one.';
+      case 'INVITE_NOT_FOR_YOU':
+        return 'This invite was sent to a different phone number - use the exact number it was sent to.';
+      case 'GUARDIAN_CAP_REACHED':
+        return 'That Dependent already has the maximum of 3 Guardians.';
       case 'VALIDATION_ERROR':
         return 'Please check the fields and try again.';
       default:
@@ -163,6 +196,14 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                 decoration: InputDecoration(labelText: l10n.confirmPasswordLabel),
                 validator: (value) => value != _passwordController.text ? l10n.passwordsDoNotMatchError : null,
               ),
+              const SizedBox(height: 16),
+              TextFormField(
+                controller: _inviteTokenController,
+                decoration: const InputDecoration(
+                  labelText: 'Invite code (optional)',
+                  helperText: 'Only if a Primary Guardian invited you as a Secondary Guardian.',
+                ),
+              ),
               const SizedBox(height: 24),
               Text(l10n.registeringAsLabel, style: Theme.of(context).textTheme.bodyMedium),
               const SizedBox(height: 8),
@@ -172,8 +213,14 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                   ButtonSegment(value: AppMode.dependent, label: Text(l10n.roleDependentOption)),
                 ],
                 selected: {_selectedRole},
-                onSelectionChanged: _isSubmitting ? null : (selection) => setState(() => _selectedRole = selection.first),
+                onSelectionChanged: (_isSubmitting || _hasInvite)
+                    ? null
+                    : (selection) => setState(() => _selectedRole = selection.first),
               ),
+              if (_hasInvite) ...[
+                const SizedBox(height: 4),
+                const Text('Role locked to Guardian while an invite code is entered.', style: TextStyle(fontSize: 12)),
+              ],
               const SizedBox(height: 24),
               ElevatedButton(
                 onPressed: _isSubmitting ? null : _submit,
