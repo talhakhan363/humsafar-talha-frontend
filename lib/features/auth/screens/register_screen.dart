@@ -3,24 +3,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:humsafar_frontend/l10n/app_localizations.dart';
 
+import '../../../core/auth/pending_dependent_registration_provider.dart';
+import '../../../core/network/api_exception.dart';
+import '../../../core/network/providers.dart';
 import '../../../providers/app_mode_provider.dart';
 import '../../../shared/widgets/accessibility_toggle_button.dart';
 import '../../../shared/widgets/language_switch_button.dart';
 
-/// Task 1.11 — static registration screen (FR-A1: role-based registration).
-///
-/// UI only, dummy data — there's no backend yet (Abdullah's Auth API is
-/// Task 1.3). Submitting just validates the form locally and navigates to
-/// the correct role-specific KYC screen. Real API wiring happens at
-/// Task 2.5, once 1.3 exists — this screen's fields and validation logic
-/// shouldn't need to change then, only the submit handler's body.
-///
-/// Note what's deliberately NOT here: a Primary/Secondary Guardian picker.
-/// Per FR-A1, that designation isn't chosen at registration — it's decided
-/// by behavior (an account that independently creates its first Dependent
-/// becomes Primary; one created solely by accepting an invite becomes
-/// Secondary). That logic belongs in the linkage flow (Task 1.5 backend /
-/// its frontend counterpart), not here.
+/// Task 1.11 built this UI against dummy data; Task 2.5 wires `_submit` to
+/// Abdullah's real /auth/register (+ an immediate /auth/login for
+/// Guardians, since register alone doesn't return tokens —
+/// auth_contract.md section 2). Fields/validators unchanged from 1.11.
 class RegisterScreen extends ConsumerStatefulWidget {
   const RegisterScreen({super.key});
 
@@ -29,9 +22,6 @@ class RegisterScreen extends ConsumerStatefulWidget {
 }
 
 class _RegisterScreenState extends ConsumerState<RegisterScreen> {
-  // Pakistani mobile format: 03XXXXXXXXX or +923XXXXXXXXX (11 digits local,
-  // or +92 followed by 10 digits). Client-side format only — see the phone
-  // field's validator doc comment below for what's deliberately not here.
   static final _pakPhoneRegExp = RegExp(r'^(\+92|0)3\d{9}$');
 
   final _formKey = GlobalKey<FormState>();
@@ -41,6 +31,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
   AppMode _selectedRole = AppMode.guardian;
+  bool _isSubmitting = false;
 
   @override
   void dispose() {
@@ -52,17 +43,59 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
     super.dispose();
   }
 
-  void _submit() {
+  Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) return;
+    setState(() => _isSubmitting = true);
 
-    // Dummy data only — Task 1.11 scope. Real registration happens once
-    // Task 1.3 (Auth API) is wired in at Task 2.5.
-    ref.read(appModeProvider.notifier).state = _selectedRole;
+    final authRepository = ref.read(authRepositoryProvider);
+    final role = _selectedRole == AppMode.guardian ? 'guardian' : 'dependent';
 
-    if (_selectedRole == AppMode.guardian) {
-      context.go('/kyc/guardian');
-    } else {
-      context.go('/kyc/dependent');
+    try {
+      final user = await authRepository.register(
+        fullName: _nameController.text.trim(),
+        email: _emailController.text.trim(),
+        phone: _phoneController.text.trim(),
+        password: _passwordController.text,
+        role: role,
+      );
+
+      ref.read(appModeProvider.notifier).state = _selectedRole;
+      if (!mounted) return;
+
+      if (_selectedRole == AppMode.guardian) {
+        await authRepository.login(
+          email: _emailController.text.trim(),
+          password: _passwordController.text,
+        );
+        if (!mounted) return;
+        context.go('/kyc/guardian');
+      } else {
+        ref.read(pendingDependentRegistrationProvider.notifier).state = PendingDependentRegistration(
+          dependentId: user.userId,
+          password: _passwordController.text,
+        );
+        context.go('/kyc/dependent');
+      }
+    } on ApiException catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(_messageFor(e))));
+    } finally {
+      if (mounted) setState(() => _isSubmitting = false);
+    }
+  }
+
+  String _messageFor(ApiException e) {
+    switch (e.code) {
+      case 'EMAIL_ALREADY_REGISTERED':
+        return 'This email is already registered. Try logging in instead.';
+      case 'PHONE_ALREADY_REGISTERED':
+        return 'This phone number is already registered.';
+      case 'ALREADY_REGISTERED':
+        return 'This account already exists. Try logging in instead.';
+      case 'VALIDATION_ERROR':
+        return 'Please check the fields and try again.';
+      default:
+        return e.message;
     }
   }
 
@@ -85,9 +118,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
               TextFormField(
                 controller: _nameController,
                 decoration: InputDecoration(labelText: l10n.fullNameLabel),
-                validator: (value) => (value == null || value.trim().isEmpty)
-                    ? l10n.fieldRequiredError
-                    : null,
+                validator: (value) => (value == null || value.trim().isEmpty) ? l10n.fieldRequiredError : null,
               ),
               const SizedBox(height: 16),
               TextFormField(
@@ -95,12 +126,8 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                 keyboardType: TextInputType.emailAddress,
                 decoration: InputDecoration(labelText: l10n.emailLabel),
                 validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
-                    return l10n.fieldRequiredError;
-                  }
-                  if (!value.contains('@') || !value.contains('.')) {
-                    return l10n.invalidEmailError;
-                  }
+                  if (value == null || value.trim().isEmpty) return l10n.fieldRequiredError;
+                  if (!value.contains('@') || !value.contains('.')) return l10n.invalidEmailError;
                   return null;
                 },
               ),
@@ -109,16 +136,9 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                 controller: _phoneController,
                 keyboardType: TextInputType.phone,
                 decoration: InputDecoration(labelText: l10n.phoneLabel),
-                // Client-side format check only — Task 1.11 scope. Real
-                // uniqueness/OTP verification happens server-side at
-                // Task 2.5 once Abdullah's Auth API (1.3) exists.
                 validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
-                    return l10n.fieldRequiredError;
-                  }
-                  if (!_pakPhoneRegExp.hasMatch(value.trim())) {
-                    return l10n.invalidPhoneError;
-                  }
+                  if (value == null || value.trim().isEmpty) return l10n.fieldRequiredError;
+                  if (!_pakPhoneRegExp.hasMatch(value.trim())) return l10n.invalidPhoneError;
                   return null;
                 },
               ),
@@ -127,11 +147,6 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                 controller: _passwordController,
                 obscureText: true,
                 decoration: InputDecoration(labelText: l10n.passwordLabel),
-                // Length + basic letter/number mix, checked client-side only.
-                // This is a starting baseline, not a locked policy — real
-                // enforcement (and hashing) happens server-side at Task 1.3;
-                // this validator should just mirror whatever policy the team
-                // settles on there.
                 validator: (value) {
                   if (value == null || value.isEmpty) return l10n.fieldRequiredError;
                   if (value.length < 8) return l10n.passwordTooShortError;
@@ -145,40 +160,30 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
               TextFormField(
                 controller: _confirmPasswordController,
                 obscureText: true,
-                decoration:
-                    InputDecoration(labelText: l10n.confirmPasswordLabel),
-                validator: (value) => value != _passwordController.text
-                    ? l10n.passwordsDoNotMatchError
-                    : null,
+                decoration: InputDecoration(labelText: l10n.confirmPasswordLabel),
+                validator: (value) => value != _passwordController.text ? l10n.passwordsDoNotMatchError : null,
               ),
               const SizedBox(height: 24),
-              Text(l10n.registeringAsLabel,
-                  style: Theme.of(context).textTheme.bodyMedium),
+              Text(l10n.registeringAsLabel, style: Theme.of(context).textTheme.bodyMedium),
               const SizedBox(height: 8),
               SegmentedButton<AppMode>(
                 segments: [
-                  ButtonSegment(
-                    value: AppMode.guardian,
-                    label: Text(l10n.roleGuardianOption),
-                  ),
-                  ButtonSegment(
-                    value: AppMode.dependent,
-                    label: Text(l10n.roleDependentOption),
-                  ),
+                  ButtonSegment(value: AppMode.guardian, label: Text(l10n.roleGuardianOption)),
+                  ButtonSegment(value: AppMode.dependent, label: Text(l10n.roleDependentOption)),
                 ],
                 selected: {_selectedRole},
-                onSelectionChanged: (selection) {
-                  setState(() => _selectedRole = selection.first);
-                },
+                onSelectionChanged: _isSubmitting ? null : (selection) => setState(() => _selectedRole = selection.first),
               ),
               const SizedBox(height: 24),
               ElevatedButton(
-                onPressed: _submit,
-                child: Text(l10n.registerButton),
+                onPressed: _isSubmitting ? null : _submit,
+                child: _isSubmitting
+                    ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2))
+                    : Text(l10n.registerButton),
               ),
               const SizedBox(height: 12),
               TextButton(
-                onPressed: () => context.go('/login'),
+                onPressed: _isSubmitting ? null : () => context.go('/login'),
                 child: Text(l10n.alreadyHaveAccountPrompt),
               ),
             ],

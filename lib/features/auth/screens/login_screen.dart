@@ -1,42 +1,81 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:humsafar_frontend/l10n/app_localizations.dart';
 
+import '../../../core/network/api_exception.dart';
+import '../../../core/network/providers.dart';
 import '../../../shared/widgets/accessibility_toggle_button.dart';
 import '../../../shared/widgets/language_switch_button.dart';
 
-/// Task 1.11 — static login screen. UI only, dummy data.
-///
-/// There's no real backend yet, so a "successful" submit here can't
-/// actually know whether this user is a Guardian or a Dependent — that
-/// comes from the JWT once Task 1.3 (Auth API) + Task 2.5 (real wiring)
-/// land. Until then, submitting routes to the dev role-select screen as a
-/// stand-in for "here's your account" — Task 2.5 replaces this with a
-/// real role-based redirect and deletes the dev screen entirely.
-class LoginScreen extends StatefulWidget {
+/// Task 1.11 built this UI against dummy data; Task 2.5 wires `_submit` to
+/// the real /auth/login, then routes by the returned role — a Guardian
+/// goes to verification-or-home depending on status, a Dependent straight
+/// home (a Dependent only reaches a successful login once already active —
+/// ACCOUNT_NOT_ACTIVATED blocks it otherwise, per auth_contract.md).
+class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  ConsumerState<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginScreenState extends ConsumerState<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
-  final _identifierController = TextEditingController();
+  final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  bool _isSubmitting = false;
 
   @override
   void dispose() {
-    _identifierController.dispose();
+    _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
   }
 
-  void _submit() {
+  Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) return;
-    // Dummy data only — Task 1.11 scope. Real login happens once Task 1.3
-    // (Auth API) is wired in at Task 2.5, and will redirect by actual role.
-    context.go('/role-select');
+    setState(() => _isSubmitting = true);
+
+    try {
+      final user = await ref.read(authRepositoryProvider).login(
+            email: _emailController.text.trim(),
+            password: _passwordController.text,
+          );
+      if (!mounted) return;
+
+      if (user.isGuardian) {
+        bool verified = false;
+        try {
+          final response = await ref.read(apiClientProvider).get<Map<String, dynamic>>('/guardians/me/verification');
+          verified = (response.data?['verified'] as bool?) ?? false;
+        } on ApiException {
+          verified = false; // fail safe: treat a failed status check as unverified
+        }
+        if (!mounted) return;
+        context.go(verified ? '/guardian' : '/kyc/guardian');
+      } else {
+        context.go('/dependent');
+      }
+    } on ApiException catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(_messageFor(e))));
+    } finally {
+      if (mounted) setState(() => _isSubmitting = false);
+    }
+  }
+
+  String _messageFor(ApiException e) {
+    switch (e.code) {
+      case 'INVALID_CREDENTIALS':
+        return 'Incorrect email or password.';
+      case 'ACCOUNT_NOT_ACTIVATED':
+        return "Your account isn't active yet — complete KYC and wait for your guardian to link you.";
+      case 'VALIDATION_ERROR':
+        return 'Please check the fields and try again.';
+      default:
+        return e.message;
+    }
   }
 
   @override
@@ -56,29 +95,27 @@ class _LoginScreenState extends State<LoginScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               TextFormField(
-                controller: _identifierController,
+                controller: _emailController,
+                keyboardType: TextInputType.emailAddress,
                 decoration: InputDecoration(labelText: l10n.emailLabel),
-                validator: (value) => (value == null || value.trim().isEmpty)
-                    ? l10n.fieldRequiredError
-                    : null,
+                validator: (value) => (value == null || value.trim().isEmpty) ? l10n.fieldRequiredError : null,
               ),
               const SizedBox(height: 16),
               TextFormField(
                 controller: _passwordController,
                 obscureText: true,
                 decoration: InputDecoration(labelText: l10n.passwordLabel),
-                validator: (value) => (value == null || value.isEmpty)
-                    ? l10n.fieldRequiredError
-                    : null,
+                validator: (value) => (value == null || value.isEmpty) ? l10n.fieldRequiredError : null,
               ),
               const SizedBox(height: 24),
               ElevatedButton(
-                onPressed: _submit,
-                child: Text(l10n.loginButton),
+                onPressed: _isSubmitting ? null : _submit,
+                child:
+                    _isSubmitting ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2)) : Text(l10n.loginButton),
               ),
               const SizedBox(height: 12),
               TextButton(
-                onPressed: () => context.go('/register'),
+                onPressed: _isSubmitting ? null : () => context.go('/register'),
                 child: Text(l10n.dontHaveAccountPrompt),
               ),
             ],
