@@ -183,5 +183,20 @@
   "grantLocationPermissionButton": "اجازت دیں",
   "locationPermissionDeniedForeverMessage": "لوکیشن کی اجازت مستقل طور پر مسترد کر دی گئی ہے۔ براہ کرم اسے اپنے فون کی سیٹنگز سے فعال کریں۔",
   "locationServiceDisabledMessage": "اپنا مقام شیئر کرنے کے لیے براہ کرم اپنے فون کی سیٹنگز میں لوکیشن سروسز آن کریں۔",
-  "openSettingsButton": "سیٹنگز کھولیں"
+  "openSettingsButton": "سیٹنگز کھولیں",
+
+  "dependentHomeTitle": "ہوم",
+  "dependentHomeGreeting": "السلام علیکم، {name}",
+  "panicButtonLabel": "ایمرجنسی",
+  "panicButtonSubtitle": "مدد کے لیے دبائیں",
+  "iAmOkButtonLabel": "میں ٹھیک ہوں",
+  "myMedicineButtonLabel": "میری دوا",
+  "nextWellnessCheckMessage": "اگلا چیک: {time}",
+  "noWellnessCheckScheduledMessage": "کوئی ویلنیس چیک شیڈول نہیں ہے",
+  "nextMedicationMessage": "اگلی خوراک: {drug}, {time} پر",
+  "noMedicationScheduledMessage": "کوئی دوا شیڈول نہیں ہے",
+  "moreComingSoonLabel": "مزید: ریکارڈز · اپائنٹمنٹس · پیغامات (جلد آرہا ہے)",
+  "panicComingSoonMessage": "پینک موڈ ٹاسک 3.11 میں شامل ہوگا۔",
+  "wellnessCheckComingSoonMessage": "ویلنیس چیک کا جواب ٹاسک 3.12 میں شامل ہوگا۔",
+  "medicationComingSoonMessage": "دوا کی تصدیق ٹاسک 3.13 میں شامل ہوگی۔"
 }

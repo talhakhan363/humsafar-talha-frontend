@@ -201,5 +201,44 @@
   "grantLocationPermissionButton": "Grant Permission",
   "locationPermissionDeniedForeverMessage": "Location permission was permanently denied. Enable it from your phone's Settings.",
   "locationServiceDisabledMessage": "Turn on Location Services in your phone's Settings to share your location.",
-  "openSettingsButton": "Open Settings"
+  "openSettingsButton": "Open Settings",
+
+  "dependentHomeTitle": "Home",
+  "dependentHomeGreeting": "Assalam o Alaikum, {name}",
+  "@dependentHomeGreeting": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "panicButtonLabel": "PANIC",
+  "panicButtonSubtitle": "Press for help",
+  "iAmOkButtonLabel": "I am OK",
+  "myMedicineButtonLabel": "My medicine",
+  "nextWellnessCheckMessage": "Next check: {time}",
+  "@nextWellnessCheckMessage": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "noWellnessCheckScheduledMessage": "No wellness check scheduled",
+  "nextMedicationMessage": "Next: {drug} at {time}",
+  "@nextMedicationMessage": {
+    "placeholders": {
+      "drug": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "noMedicationScheduledMessage": "No medicine scheduled",
+  "moreComingSoonLabel": "More: records · appointments · messages (coming soon)",
+  "panicComingSoonMessage": "Panic Mode is coming in Task 3.11.",
+  "wellnessCheckComingSoonMessage": "Wellness check response is coming in Task 3.12.",
+  "medicationComingSoonMessage": "Medication confirmation is coming in Task 3.13."
 }

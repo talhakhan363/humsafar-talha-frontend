@@ -11,6 +11,7 @@ import '../../features/guardian/screens/permissions_dashboard_screen.dart';
 import '../../features/guardian/screens/my_access_screen.dart';
 import '../../features/guardian/screens/live_map_screen.dart';
 import '../../features/dependent/screens/dependent_home_screen.dart';
+import '../../features/dependent/screens/coming_soon_screen.dart';
 import '../../features/auth/screens/register_screen.dart';
 import '../../features/auth/screens/login_screen.dart';
 import '../../features/auth/screens/accept_invite_screen.dart';
@@ -131,6 +132,27 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: '/dependent',
         name: 'dependent-home',
         pageBuilder: (context, state) => NoTransitionPage(key: state.pageKey, child: const DependentHomeScreen()),
+      ),
+      // Task 3.10 — real destinations, but the screens themselves are
+      // separate tasks (3.11/3.12/3.13). ComingSoonScreen is a named
+      // placeholder, not a silent gap - see its doc comment.
+      GoRoute(
+        path: '/dependent/panic',
+        name: 'dependent-panic',
+        pageBuilder: (context, state) =>
+            NoTransitionPage(key: state.pageKey, child: const ComingSoonScreen(kind: ComingSoonKind.panic)),
+      ),
+      GoRoute(
+        path: '/dependent/wellness-check',
+        name: 'dependent-wellness-check',
+        pageBuilder: (context, state) =>
+            NoTransitionPage(key: state.pageKey, child: const ComingSoonScreen(kind: ComingSoonKind.wellnessCheck)),
+      ),
+      GoRoute(
+        path: '/dependent/medication',
+        name: 'dependent-medication',
+        pageBuilder: (context, state) =>
+            NoTransitionPage(key: state.pageKey, child: const ComingSoonScreen(kind: ComingSoonKind.medication)),
       ),
     ],
   );
