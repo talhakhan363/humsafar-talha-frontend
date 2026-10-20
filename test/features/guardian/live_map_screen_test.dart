@@ -56,11 +56,11 @@ class _ThrowingFakeApiClient extends ApiClient {
 Widget _wrap(ApiClient fakeClient) {
   return ProviderScope(
     overrides: [apiClientProvider.overrideWithValue(fakeClient)],
-    child: MaterialApp(
-      locale: const Locale('en'),
+    child: const MaterialApp(
+      locale: Locale('en'),
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
-      home: const LiveMapScreen(dependentId: 'dep-1', dependentLabel: 'Test Dependent'),
+      home: LiveMapScreen(dependentId: 'dep-1', dependentLabel: 'Test Dependent'),
     ),
   );
 }
