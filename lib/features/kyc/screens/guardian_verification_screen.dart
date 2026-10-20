@@ -55,7 +55,7 @@ class _GuardianVerificationScreenState extends ConsumerState<GuardianVerificatio
       if (!mounted) return;
       setState(() => _otpSent = true);
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('OTP sent to your registered phone number.')),
+        SnackBar(content: Text(AppLocalizations.of(context)!.otpSentSnackbar)),
       );
     } on ApiException catch (e) {
       if (!mounted) return;
@@ -79,7 +79,7 @@ class _GuardianVerificationScreenState extends ConsumerState<GuardianVerificatio
         context.go('/guardian');
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Not verified yet — try the CNIC check below instead.")),
+          SnackBar(content: Text(AppLocalizations.of(context)!.otpNotVerifiedYetSnackbar)),
         );
       }
     } on ApiException catch (e) {
@@ -104,7 +104,7 @@ class _GuardianVerificationScreenState extends ConsumerState<GuardianVerificatio
         context.go('/guardian');
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('CNIC check failed — try the phone OTP above instead.')),
+          SnackBar(content: Text(AppLocalizations.of(context)!.cnicCheckFailedSnackbar)),
         );
       }
     } on ApiException catch (e) {
@@ -116,7 +116,7 @@ class _GuardianVerificationScreenState extends ConsumerState<GuardianVerificatio
   }
 
   String _otpErrorMessage(ApiException e) {
-    if (e.code == 'OTP_INVALID') return 'That code is wrong or expired. Try again or resend.';
+    if (e.code == 'OTP_INVALID') return AppLocalizations.of(context)!.otpInvalidError;
     return e.message;
   }
 
@@ -139,15 +139,15 @@ class _GuardianVerificationScreenState extends ConsumerState<GuardianVerificatio
               style: TextStyle(color: Theme.of(context).colorScheme.secondary),
             ),
             const SizedBox(height: 8),
-            const Text("Either option below is enough to verify your account — you don't need to do both."),
+            Text(l10n.guardianVerifyEitherOptionNote),
             const Divider(height: 32),
-            Text('Option A: verify by phone OTP', style: Theme.of(context).textTheme.titleMedium),
+            Text(l10n.guardianVerifyOptionAHeader, style: Theme.of(context).textTheme.titleMedium),
             const SizedBox(height: 12),
             OutlinedButton(
               onPressed: _isSendingOtp ? null : _sendOtp,
               child: _isSendingOtp
                   ? const SizedBox(height: 18, width: 18, child: CircularProgressIndicator(strokeWidth: 2))
-                  : Text(_otpSent ? 'Resend OTP' : l10n.sendOtpButton),
+                  : Text(_otpSent ? l10n.resendOtpButton : l10n.sendOtpButton),
             ),
             if (_otpSent) ...[
               const SizedBox(height: 16),
@@ -169,7 +169,7 @@ class _GuardianVerificationScreenState extends ConsumerState<GuardianVerificatio
               ),
             ],
             const Divider(height: 32),
-            Text('Option B: verify by CNIC', style: Theme.of(context).textTheme.titleMedium),
+            Text(l10n.guardianVerifyOptionBHeader, style: Theme.of(context).textTheme.titleMedium),
             const SizedBox(height: 12),
             Form(
               key: _cnicFormKey,

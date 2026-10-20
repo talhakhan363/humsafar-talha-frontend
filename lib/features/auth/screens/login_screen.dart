@@ -66,13 +66,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   }
 
   String _messageFor(ApiException e) {
+    final l10n = AppLocalizations.of(context)!;
     switch (e.code) {
       case 'INVALID_CREDENTIALS':
-        return 'Incorrect email or password.';
+        return l10n.invalidCredentialsError;
       case 'ACCOUNT_NOT_ACTIVATED':
-        return "Your account isn't active yet — complete KYC and wait for your guardian to link you.";
+        return l10n.accountNotActivatedError;
       case 'VALIDATION_ERROR':
-        return 'Please check the fields and try again.';
+        return l10n.genericValidationError;
       default:
         return e.message;
     }

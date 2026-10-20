@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:humsafar_frontend/l10n/app_localizations.dart';
 
 import '../../../core/network/api_exception.dart';
 import '../../../core/network/providers.dart';
@@ -48,29 +49,64 @@ class _MyAccessScreenState extends ConsumerState<MyAccessScreen> {
       });
     } on ApiException catch (e) {
       if (!mounted) return;
-      setState(() => _loadError = e.code == 'NOT_LINKED_TO_DEPENDENT' ? 'You\'re not linked to this Dependent.' : e.message);
+      setState(() => _loadError = e.code == 'NOT_LINKED_TO_DEPENDENT'
+          ? AppLocalizations.of(context)!.notLinkedToDependentError
+          : e.message);
     } finally {
       if (mounted) setState(() => _isLoading = false);
     }
   }
 
-  String _moduleLabel(String module) => module
-      .split('_')
-      .map((word) => word.isEmpty ? word : '${word[0].toUpperCase()}${word.substring(1)}')
-      .join(' ');
+  /// Same documented-module mapping as permissions_dashboard_screen.dart's
+  /// own copy - kept local rather than shared since each screen's module
+  /// list arrives from a different endpoint shape.
+  String _moduleLabel(AppLocalizations l10n, String module) {
+    switch (module) {
+      case 'live_location':
+        return l10n.moduleLiveLocation;
+      case 'health_records':
+        return l10n.moduleHealthRecords;
+      case 'communication':
+        return l10n.moduleCommunication;
+      case 'emergency_alerts':
+        return l10n.moduleEmergencyAlerts;
+      case 'camera_viewing':
+        return l10n.moduleCameraViewing;
+      case 'medication_management':
+        return l10n.moduleMedicationManagement;
+      default:
+        return module
+            .split('_')
+            .map((word) => word.isEmpty ? word : '${word[0].toUpperCase()}${word.substring(1)}')
+            .join(' ');
+    }
+  }
+
+  String _roleLabel(AppLocalizations l10n, String role) {
+    switch (role) {
+      case 'primary':
+        return l10n.primaryGuardianFullLabel;
+      case 'secondary':
+        return l10n.secondaryGuardianFullLabel;
+      default:
+        return role;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('My Access'),
+        title: Text(l10n.myAccessButton),
         actions: const [LanguageSwitchButton(), AccessibilityToggleButton()],
       ),
-      body: RefreshIndicator(onRefresh: _load, child: _buildBody()),
+      body: RefreshIndicator(onRefresh: _load, child: _buildBody(l10n)),
     );
   }
 
-  Widget _buildBody() {
+  Widget _buildBody(AppLocalizations l10n) {
     if (_isLoading) return const Center(child: CircularProgressIndicator());
     if (_loadError != null) {
       return Center(
@@ -81,7 +117,7 @@ class _MyAccessScreenState extends ConsumerState<MyAccessScreen> {
             children: [
               Text(_loadError!, textAlign: TextAlign.center),
               const SizedBox(height: 12),
-              ElevatedButton(onPressed: _load, child: const Text('Retry')),
+              ElevatedButton(onPressed: _load, child: Text(l10n.retryButton)),
             ],
           ),
         ),
@@ -91,13 +127,17 @@ class _MyAccessScreenState extends ConsumerState<MyAccessScreen> {
     return ListView(
       padding: const EdgeInsets.all(16),
       children: [
-        if (_guardianRole != null) Text('Role: $_guardianRole', style: Theme.of(context).textTheme.titleMedium),
+        if (_guardianRole != null)
+          Text(
+            '${l10n.roleColonLabel} ${_roleLabel(l10n, _guardianRole!)}',
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
         const SizedBox(height: 12),
         ...modules.entries.map(
           (entry) => ListTile(
             leading: Icon(entry.value ? Icons.check_circle : Icons.cancel,
                 color: entry.value ? Colors.green : Colors.red),
-            title: Text(_moduleLabel(entry.key)),
+            title: Text(_moduleLabel(l10n, entry.key)),
           ),
         ),
       ],

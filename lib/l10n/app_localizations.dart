@@ -379,6 +379,576 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Submit for Verification'**
   String get submitForVerificationButton;
+
+  /// No description provided for @genericValidationError.
+  ///
+  /// In en, this message translates to:
+  /// **'Please check the fields and try again.'**
+  String get genericValidationError;
+
+  /// No description provided for @retryButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get retryButton;
+
+  /// No description provided for @tryAgainButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Try again'**
+  String get tryAgainButton;
+
+  /// No description provided for @goToLoginButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Go to login'**
+  String get goToLoginButton;
+
+  /// No description provided for @yesLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes'**
+  String get yesLabel;
+
+  /// No description provided for @notYetLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Not yet'**
+  String get notYetLabel;
+
+  /// No description provided for @primaryRoleLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Primary'**
+  String get primaryRoleLabel;
+
+  /// No description provided for @secondaryRoleLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Secondary'**
+  String get secondaryRoleLabel;
+
+  /// No description provided for @primaryGuardianFullLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Primary Guardian'**
+  String get primaryGuardianFullLabel;
+
+  /// No description provided for @secondaryGuardianFullLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Secondary Guardian'**
+  String get secondaryGuardianFullLabel;
+
+  /// No description provided for @verifiedLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Verified'**
+  String get verifiedLabel;
+
+  /// No description provided for @notVerifiedLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Not verified'**
+  String get notVerifiedLabel;
+
+  /// No description provided for @guardianVerifyEitherOptionNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Either option below is enough to verify your account — you don\'t need to do both.'**
+  String get guardianVerifyEitherOptionNote;
+
+  /// No description provided for @guardianVerifyOptionAHeader.
+  ///
+  /// In en, this message translates to:
+  /// **'Option A: verify by phone OTP'**
+  String get guardianVerifyOptionAHeader;
+
+  /// No description provided for @guardianVerifyOptionBHeader.
+  ///
+  /// In en, this message translates to:
+  /// **'Option B: verify by CNIC'**
+  String get guardianVerifyOptionBHeader;
+
+  /// No description provided for @resendOtpButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Resend OTP'**
+  String get resendOtpButton;
+
+  /// No description provided for @otpSentSnackbar.
+  ///
+  /// In en, this message translates to:
+  /// **'OTP sent to your registered phone number.'**
+  String get otpSentSnackbar;
+
+  /// No description provided for @otpNotVerifiedYetSnackbar.
+  ///
+  /// In en, this message translates to:
+  /// **'Not verified yet — try the CNIC check below instead.'**
+  String get otpNotVerifiedYetSnackbar;
+
+  /// No description provided for @otpInvalidError.
+  ///
+  /// In en, this message translates to:
+  /// **'That code is wrong or expired. Try again or resend.'**
+  String get otpInvalidError;
+
+  /// No description provided for @cnicCheckFailedSnackbar.
+  ///
+  /// In en, this message translates to:
+  /// **'CNIC check failed — try the phone OTP above instead.'**
+  String get cnicCheckFailedSnackbar;
+
+  /// No description provided for @openingCameraLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Opening camera...'**
+  String get openingCameraLabel;
+
+  /// No description provided for @lostRegistrationDetailsError.
+  ///
+  /// In en, this message translates to:
+  /// **'We lost track of your registration details (this happens if the app was closed). Please register again to continue.'**
+  String get lostRegistrationDetailsError;
+
+  /// No description provided for @kycInvalidCredentialsError.
+  ///
+  /// In en, this message translates to:
+  /// **'Something\'s wrong with your account details - please register again.'**
+  String get kycInvalidCredentialsError;
+
+  /// No description provided for @kycAlreadyVerifiedError.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re already verified. Try logging in once your guardian links you.'**
+  String get kycAlreadyVerifiedError;
+
+  /// No description provided for @cnicAlreadyRegisteredError.
+  ///
+  /// In en, this message translates to:
+  /// **'This CNIC is already registered to another account.'**
+  String get cnicAlreadyRegisteredError;
+
+  /// No description provided for @kycValidationError.
+  ///
+  /// In en, this message translates to:
+  /// **'Please check the CNIC and photo and try again.'**
+  String get kycValidationError;
+
+  /// No description provided for @kycVerifiedWaitingDefaultMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Verified. Waiting for your Primary Guardian to link you.'**
+  String get kycVerifiedWaitingDefaultMessage;
+
+  /// No description provided for @shareIdWithGuardianLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Share this ID with your Guardian so they can link you:'**
+  String get shareIdWithGuardianLabel;
+
+  /// No description provided for @kycVerifiedActiveDefaultMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re verified and active.'**
+  String get kycVerifiedActiveDefaultMessage;
+
+  /// No description provided for @kycPendingDefaultMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Still pending - please submit again.'**
+  String get kycPendingDefaultMessage;
+
+  /// No description provided for @kycFailedDefaultMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Verification failed - please try again.'**
+  String get kycFailedDefaultMessage;
+
+  /// No description provided for @inviteCodeOptionalLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Invite code (optional)'**
+  String get inviteCodeOptionalLabel;
+
+  /// No description provided for @inviteCodeHelperText.
+  ///
+  /// In en, this message translates to:
+  /// **'Only if a Primary Guardian invited you as a Secondary Guardian.'**
+  String get inviteCodeHelperText;
+
+  /// No description provided for @roleLockedToGuardianNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Role locked to Guardian while an invite code is entered.'**
+  String get roleLockedToGuardianNote;
+
+  /// No description provided for @inviteInvalidError.
+  ///
+  /// In en, this message translates to:
+  /// **'That invite code isn\'t valid.'**
+  String get inviteInvalidError;
+
+  /// No description provided for @inviteExpiredError.
+  ///
+  /// In en, this message translates to:
+  /// **'That invite code has expired - ask for a new one.'**
+  String get inviteExpiredError;
+
+  /// No description provided for @inviteNotForYouRegisterError.
+  ///
+  /// In en, this message translates to:
+  /// **'This invite was sent to a different phone number - use the exact number it was sent to.'**
+  String get inviteNotForYouRegisterError;
+
+  /// No description provided for @guardianCapReachedError.
+  ///
+  /// In en, this message translates to:
+  /// **'This Dependent already has the maximum of 3 Guardians.'**
+  String get guardianCapReachedError;
+
+  /// No description provided for @emailAlreadyRegisteredError.
+  ///
+  /// In en, this message translates to:
+  /// **'This email is already registered. Try logging in instead.'**
+  String get emailAlreadyRegisteredError;
+
+  /// No description provided for @phoneAlreadyRegisteredError.
+  ///
+  /// In en, this message translates to:
+  /// **'This phone number is already registered.'**
+  String get phoneAlreadyRegisteredError;
+
+  /// No description provided for @accountAlreadyRegisteredError.
+  ///
+  /// In en, this message translates to:
+  /// **'This account already exists. Try logging in instead.'**
+  String get accountAlreadyRegisteredError;
+
+  /// No description provided for @invalidCredentialsError.
+  ///
+  /// In en, this message translates to:
+  /// **'Incorrect email or password.'**
+  String get invalidCredentialsError;
+
+  /// No description provided for @accountNotActivatedError.
+  ///
+  /// In en, this message translates to:
+  /// **'Your account isn\'t active yet — complete KYC and wait for your guardian to link you.'**
+  String get accountNotActivatedError;
+
+  /// No description provided for @haveInviteCodeButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Have an invite code?'**
+  String get haveInviteCodeButton;
+
+  /// No description provided for @linkADependentLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Link a Dependent'**
+  String get linkADependentLabel;
+
+  /// No description provided for @noDependentsLinkedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re not linked to any Dependents yet. Use \"Link a Dependent\" below with their ID to get started.'**
+  String get noDependentsLinkedMessage;
+
+  /// No description provided for @kycStatusPrefixLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'KYC'**
+  String get kycStatusPrefixLabel;
+
+  /// No description provided for @accountActiveLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Active'**
+  String get accountActiveLabel;
+
+  /// No description provided for @accountNotActiveLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Not active yet'**
+  String get accountNotActiveLabel;
+
+  /// No description provided for @kycStatusPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending'**
+  String get kycStatusPending;
+
+  /// No description provided for @kycStatusVerified.
+  ///
+  /// In en, this message translates to:
+  /// **'Verified'**
+  String get kycStatusVerified;
+
+  /// No description provided for @kycStatusFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed'**
+  String get kycStatusFailed;
+
+  /// No description provided for @linkDependentInstructions.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask the Dependent for the ID shown on their verification screen, then enter it below.'**
+  String get linkDependentInstructions;
+
+  /// No description provided for @dependentIdLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Dependent\'s ID'**
+  String get dependentIdLabel;
+
+  /// No description provided for @linkButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Link'**
+  String get linkButton;
+
+  /// No description provided for @linkedSuccessSnackbar.
+  ///
+  /// In en, this message translates to:
+  /// **'Linked! You can now see this Dependent on your home screen.'**
+  String get linkedSuccessSnackbar;
+
+  /// No description provided for @guardianNotVerifiedLinkError.
+  ///
+  /// In en, this message translates to:
+  /// **'You need to verify your own account before you can link a Dependent.'**
+  String get guardianNotVerifiedLinkError;
+
+  /// No description provided for @secondaryCannotLinkError.
+  ///
+  /// In en, this message translates to:
+  /// **'Only a Primary Guardian can link a Dependent - your account is Secondary.'**
+  String get secondaryCannotLinkError;
+
+  /// No description provided for @dependentNotFoundError.
+  ///
+  /// In en, this message translates to:
+  /// **'No account found with that ID - double check it and try again.'**
+  String get dependentNotFoundError;
+
+  /// No description provided for @alreadyLinkedError.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re already linked to this Dependent.'**
+  String get alreadyLinkedError;
+
+  /// No description provided for @primaryAlreadyExistsError.
+  ///
+  /// In en, this message translates to:
+  /// **'This Dependent already has a Primary Guardian.'**
+  String get primaryAlreadyExistsError;
+
+  /// No description provided for @yourRoleLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Your role:'**
+  String get yourRoleLabel;
+
+  /// No description provided for @kycStatusColonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'KYC status:'**
+  String get kycStatusColonLabel;
+
+  /// No description provided for @accountActiveColonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Account active:'**
+  String get accountActiveColonLabel;
+
+  /// No description provided for @linkedGuardiansHeader.
+  ///
+  /// In en, this message translates to:
+  /// **'Linked Guardians'**
+  String get linkedGuardiansHeader;
+
+  /// No description provided for @inviteASecondaryButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Invite a Secondary Guardian'**
+  String get inviteASecondaryButton;
+
+  /// No description provided for @managePermissionsButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage Permissions'**
+  String get managePermissionsButton;
+
+  /// No description provided for @myAccessButton.
+  ///
+  /// In en, this message translates to:
+  /// **'My Access'**
+  String get myAccessButton;
+
+  /// No description provided for @invitePhoneInstructions.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the Secondary Guardian\'s phone number. They\'ll need the code this generates.'**
+  String get invitePhoneInstructions;
+
+  /// No description provided for @sendInviteButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Send invite'**
+  String get sendInviteButton;
+
+  /// No description provided for @guardianNotVerifiedGenericError.
+  ///
+  /// In en, this message translates to:
+  /// **'You need to verify your own account first.'**
+  String get guardianNotVerifiedGenericError;
+
+  /// No description provided for @notPrimaryGuardianError.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re not this Dependent\'s Primary Guardian.'**
+  String get notPrimaryGuardianError;
+
+  /// No description provided for @inviteeNotEligibleError.
+  ///
+  /// In en, this message translates to:
+  /// **'That number can\'t be invited (it may already belong to an account, or be the Dependent\'s own number).'**
+  String get inviteeNotEligibleError;
+
+  /// No description provided for @invitePhoneValidationError.
+  ///
+  /// In en, this message translates to:
+  /// **'Please check the phone number and try again.'**
+  String get invitePhoneValidationError;
+
+  /// No description provided for @inviteCreatedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Invite created - valid for {days} days. Share this code with them:'**
+  String inviteCreatedMessage(int days);
+
+  /// No description provided for @copyCodeButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy code'**
+  String get copyCodeButton;
+
+  /// No description provided for @copiedSnackbar.
+  ///
+  /// In en, this message translates to:
+  /// **'Copied.'**
+  String get copiedSnackbar;
+
+  /// No description provided for @inviteShareFooterNote.
+  ///
+  /// In en, this message translates to:
+  /// **'They enter this during registration (if they\'re new) or on the \"Have an invite code?\" screen (if they already have a Secondary account).'**
+  String get inviteShareFooterNote;
+
+  /// No description provided for @noSecondariesYetMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'No Secondary Guardians yet - invite one first.'**
+  String get noSecondariesYetMessage;
+
+  /// No description provided for @secondaryNotFoundError.
+  ///
+  /// In en, this message translates to:
+  /// **'That Guardian is no longer linked to this Dependent.'**
+  String get secondaryNotFoundError;
+
+  /// No description provided for @moduleLiveLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Live Location'**
+  String get moduleLiveLocation;
+
+  /// No description provided for @moduleHealthRecords.
+  ///
+  /// In en, this message translates to:
+  /// **'Health Records'**
+  String get moduleHealthRecords;
+
+  /// No description provided for @moduleCommunication.
+  ///
+  /// In en, this message translates to:
+  /// **'Communication'**
+  String get moduleCommunication;
+
+  /// No description provided for @moduleEmergencyAlerts.
+  ///
+  /// In en, this message translates to:
+  /// **'Emergency Alerts'**
+  String get moduleEmergencyAlerts;
+
+  /// No description provided for @moduleCameraViewing.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera Viewing'**
+  String get moduleCameraViewing;
+
+  /// No description provided for @moduleMedicationManagement.
+  ///
+  /// In en, this message translates to:
+  /// **'Medication Management'**
+  String get moduleMedicationManagement;
+
+  /// No description provided for @roleColonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Role:'**
+  String get roleColonLabel;
+
+  /// No description provided for @notLinkedToDependentError.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re not linked to this Dependent.'**
+  String get notLinkedToDependentError;
+
+  /// No description provided for @acceptAnInviteTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Accept an invite'**
+  String get acceptAnInviteTitle;
+
+  /// No description provided for @pasteInviteCodeInstructions.
+  ///
+  /// In en, this message translates to:
+  /// **'Paste the invite code a Primary Guardian shared with you.'**
+  String get pasteInviteCodeInstructions;
+
+  /// No description provided for @inviteCodeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Invite code'**
+  String get inviteCodeLabel;
+
+  /// No description provided for @acceptButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Accept'**
+  String get acceptButton;
+
+  /// No description provided for @inviteAcceptedSnackbar.
+  ///
+  /// In en, this message translates to:
+  /// **'Accepted! This Dependent now shows on your home screen.'**
+  String get inviteAcceptedSnackbar;
+
+  /// No description provided for @primaryCannotAcceptInviteError.
+  ///
+  /// In en, this message translates to:
+  /// **'A Primary Guardian account can\'t accept a Secondary invite.'**
+  String get primaryCannotAcceptInviteError;
+
+  /// No description provided for @inviteNotForYouAcceptError.
+  ///
+  /// In en, this message translates to:
+  /// **'This code was sent to a different phone number than the one on your account.'**
+  String get inviteNotForYouAcceptError;
 }
 
 class _AppLocalizationsDelegate

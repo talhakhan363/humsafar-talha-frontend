@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:humsafar_frontend/l10n/app_localizations.dart';
 
 import '../../../core/network/api_exception.dart';
 import '../../../core/network/providers.dart';
@@ -81,13 +82,14 @@ class _PermissionsDashboardScreenState extends ConsumerState<PermissionsDashboar
   }
 
   String _messageFor(ApiException e) {
+    final l10n = AppLocalizations.of(context)!;
     switch (e.code) {
       case 'GUARDIAN_NOT_VERIFIED':
-        return 'You need to verify your own account first.';
+        return l10n.guardianNotVerifiedGenericError;
       case 'NOT_PRIMARY_GUARDIAN':
-        return 'You\'re not this Dependent\'s Primary Guardian.';
+        return l10n.notPrimaryGuardianError;
       case 'SECONDARY_NOT_FOUND':
-        return 'That Guardian is no longer linked to this Dependent.';
+        return l10n.secondaryNotFoundError;
       default:
         return e.message;
     }
@@ -95,16 +97,18 @@ class _PermissionsDashboardScreenState extends ConsumerState<PermissionsDashboar
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Manage Permissions'),
+        title: Text(l10n.managePermissionsButton),
         actions: const [LanguageSwitchButton(), AccessibilityToggleButton()],
       ),
-      body: RefreshIndicator(onRefresh: _load, child: _buildBody()),
+      body: RefreshIndicator(onRefresh: _load, child: _buildBody(l10n)),
     );
   }
 
-  Widget _buildBody() {
+  Widget _buildBody(AppLocalizations l10n) {
     if (_isLoading) return const Center(child: CircularProgressIndicator());
     if (_loadError != null) {
       return Center(
@@ -115,17 +119,17 @@ class _PermissionsDashboardScreenState extends ConsumerState<PermissionsDashboar
             children: [
               Text(_loadError!, textAlign: TextAlign.center),
               const SizedBox(height: 12),
-              ElevatedButton(onPressed: _load, child: const Text('Retry')),
+              ElevatedButton(onPressed: _load, child: Text(l10n.retryButton)),
             ],
           ),
         ),
       );
     }
     if (_secondaries.isEmpty) {
-      return const Center(
+      return Center(
         child: Padding(
-          padding: EdgeInsets.all(24.0),
-          child: Text('No Secondary Guardians yet - invite one first.', textAlign: TextAlign.center),
+          padding: const EdgeInsets.all(24.0),
+          child: Text(l10n.noSecondariesYetMessage, textAlign: TextAlign.center),
         ),
       );
     }
@@ -147,7 +151,7 @@ class _PermissionsDashboardScreenState extends ConsumerState<PermissionsDashboar
                 ..._modules.map((module) {
                   final key = '${secondary.guardianId}:$module';
                   return SwitchListTile(
-                    title: Text(_moduleLabel(module)),
+                    title: Text(_moduleLabel(l10n, module)),
                     value: secondary.modules[module] ?? false,
                     onChanged: _pending.contains(key) ? null : (value) => _toggle(secondary, module, value),
                   );
@@ -160,10 +164,32 @@ class _PermissionsDashboardScreenState extends ConsumerState<PermissionsDashboar
     );
   }
 
-  String _moduleLabel(String module) => module
-      .split('_')
-      .map((word) => word.isEmpty ? word : '${word[0].toUpperCase()}${word.substring(1)}')
-      .join(' ');
+  /// Maps a known permission module (permissions_contract.md's documented
+  /// set) to its localized label. Falls back to a title-cased version of
+  /// the raw snake_case name for any module the contract adds later that
+  /// this screen doesn't have an Urdu translation for yet, rather than
+  /// crashing or showing a blank label.
+  String _moduleLabel(AppLocalizations l10n, String module) {
+    switch (module) {
+      case 'live_location':
+        return l10n.moduleLiveLocation;
+      case 'health_records':
+        return l10n.moduleHealthRecords;
+      case 'communication':
+        return l10n.moduleCommunication;
+      case 'emergency_alerts':
+        return l10n.moduleEmergencyAlerts;
+      case 'camera_viewing':
+        return l10n.moduleCameraViewing;
+      case 'medication_management':
+        return l10n.moduleMedicationManagement;
+      default:
+        return module
+            .split('_')
+            .map((word) => word.isEmpty ? word : '${word[0].toUpperCase()}${word.substring(1)}')
+            .join(' ');
+    }
+  }
 }
 
 class _SecondaryRow {

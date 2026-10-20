@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:humsafar_frontend/l10n/app_localizations.dart';
 
 import '../../../core/network/api_exception.dart';
 import '../../../core/network/providers.dart';
@@ -41,7 +42,7 @@ class _AcceptInviteScreenState extends ConsumerState<AcceptInviteScreen> {
           );
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Accepted! This Dependent now shows on your home screen.')),
+        SnackBar(content: Text(AppLocalizations.of(context)!.inviteAcceptedSnackbar)),
       );
       context.pop();
     } on ApiException catch (e) {
@@ -53,19 +54,20 @@ class _AcceptInviteScreenState extends ConsumerState<AcceptInviteScreen> {
   }
 
   String _messageFor(ApiException e) {
+    final l10n = AppLocalizations.of(context)!;
     switch (e.code) {
       case 'INVITE_INVALID':
-        return 'That code isn\'t valid.';
+        return l10n.inviteInvalidError;
       case 'INVITE_EXPIRED':
-        return 'That code has expired - ask for a new one.';
+        return l10n.inviteExpiredError;
       case 'PRIMARY_CANNOT_ACCEPT_INVITE':
-        return 'A Primary Guardian account can\'t accept a Secondary invite.';
+        return l10n.primaryCannotAcceptInviteError;
       case 'INVITE_NOT_FOR_YOU':
-        return 'This code was sent to a different phone number than the one on your account.';
+        return l10n.inviteNotForYouAcceptError;
       case 'ALREADY_LINKED':
-        return 'You\'re already linked to this Dependent.';
+        return l10n.alreadyLinkedError;
       case 'GUARDIAN_CAP_REACHED':
-        return 'This Dependent already has the maximum of 3 Guardians.';
+        return l10n.guardianCapReachedError;
       default:
         return e.message;
     }
@@ -73,9 +75,11 @@ class _AcceptInviteScreenState extends ConsumerState<AcceptInviteScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Accept an invite'),
+        title: Text(l10n.acceptAnInviteTitle),
         actions: const [LanguageSwitchButton(), AccessibilityToggleButton()],
       ),
       body: Padding(
@@ -85,19 +89,19 @@ class _AcceptInviteScreenState extends ConsumerState<AcceptInviteScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const Text('Paste the invite code a Primary Guardian shared with you.'),
+              Text(l10n.pasteInviteCodeInstructions),
               const SizedBox(height: 16),
               TextFormField(
                 controller: _inviteTokenController,
-                decoration: const InputDecoration(labelText: 'Invite code'),
-                validator: (value) => (value == null || value.trim().isEmpty) ? 'This field is required.' : null,
+                decoration: InputDecoration(labelText: l10n.inviteCodeLabel),
+                validator: (value) => (value == null || value.trim().isEmpty) ? l10n.fieldRequiredError : null,
               ),
               const SizedBox(height: 24),
               ElevatedButton(
                 onPressed: _isSubmitting ? null : _submit,
                 child: _isSubmitting
                     ? const SizedBox(height: 18, width: 18, child: CircularProgressIndicator(strokeWidth: 2))
-                    : const Text('Accept'),
+                    : Text(l10n.acceptButton),
               ),
             ],
           ),

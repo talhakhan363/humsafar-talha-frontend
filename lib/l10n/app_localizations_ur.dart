@@ -157,4 +157,335 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get submitForVerificationButton => 'تصدیق کے لیے جمع کروائیں';
+
+  @override
+  String get genericValidationError =>
+      'براہ کرم خانے چیک کریں اور دوبارہ کوشش کریں۔';
+
+  @override
+  String get retryButton => 'دوبارہ کوشش کریں';
+
+  @override
+  String get tryAgainButton => 'دوبارہ کوشش کریں';
+
+  @override
+  String get goToLoginButton => 'لاگ ان پر جائیں';
+
+  @override
+  String get yesLabel => 'جی ہاں';
+
+  @override
+  String get notYetLabel => 'ابھی نہیں';
+
+  @override
+  String get primaryRoleLabel => 'پرائمری';
+
+  @override
+  String get secondaryRoleLabel => 'سیکنڈری';
+
+  @override
+  String get primaryGuardianFullLabel => 'پرائمری گارڈین';
+
+  @override
+  String get secondaryGuardianFullLabel => 'سیکنڈری گارڈین';
+
+  @override
+  String get verifiedLabel => 'تصدیق شدہ';
+
+  @override
+  String get notVerifiedLabel => 'غیر تصدیق شدہ';
+
+  @override
+  String get guardianVerifyEitherOptionNote =>
+      'دونوں میں سے کوئی ایک طریقہ اپنانا کافی ہے — آپ کو دونوں کرنے کی ضرورت نہیں۔';
+
+  @override
+  String get guardianVerifyOptionAHeader =>
+      'طریقہ الف: فون OTP کے ذریعے تصدیق کریں';
+
+  @override
+  String get guardianVerifyOptionBHeader =>
+      'طریقہ ب: شناختی کارڈ (CNIC) کے ذریعے تصدیق کریں';
+
+  @override
+  String get resendOtpButton => 'OTP دوبارہ بھیجیں';
+
+  @override
+  String get otpSentSnackbar => 'آپ کے رجسٹرڈ فون نمبر پر OTP بھیج دیا گیا۔';
+
+  @override
+  String get otpNotVerifiedYetSnackbar =>
+      'ابھی تصدیق نہیں ہوئی — نیچے CNIC چیک آزمائیں۔';
+
+  @override
+  String get otpInvalidError =>
+      'یہ کوڈ غلط ہے یا میعاد ختم ہو چکی ہے۔ دوبارہ کوشش کریں یا دوبارہ بھیجیں۔';
+
+  @override
+  String get cnicCheckFailedSnackbar =>
+      'CNIC چیک ناکام ہوگیا — اوپر فون OTP آزمائیں۔';
+
+  @override
+  String get openingCameraLabel => 'کیمرہ کھل رہا ہے...';
+
+  @override
+  String get lostRegistrationDetailsError =>
+      'آپ کی رجسٹریشن کی تفصیلات محفوظ نہیں رہیں (یہ اس وقت ہوتا ہے جب ایپ بند ہو جائے)۔ جاری رکھنے کے لیے دوبارہ رجسٹر کریں۔';
+
+  @override
+  String get kycInvalidCredentialsError =>
+      'آپ کے اکاؤنٹ کی تفصیلات میں کچھ غلط ہے - براہ کرم دوبارہ رجسٹر کریں۔';
+
+  @override
+  String get kycAlreadyVerifiedError =>
+      'آپ کی تصدیق پہلے ہی ہو چکی ہے۔ گارڈین کے لنک کرنے کے بعد لاگ ان کرنے کی کوشش کریں۔';
+
+  @override
+  String get cnicAlreadyRegisteredError =>
+      'یہ شناختی کارڈ نمبر پہلے ہی کسی اور اکاؤنٹ سے رجسٹرڈ ہے۔';
+
+  @override
+  String get kycValidationError =>
+      'براہ کرم CNIC اور تصویر چیک کریں اور دوبارہ کوشش کریں۔';
+
+  @override
+  String get kycVerifiedWaitingDefaultMessage =>
+      'تصدیق ہوگئی۔ آپ کے پرائمری گارڈین کے لنک کرنے کا انتظار ہے۔';
+
+  @override
+  String get shareIdWithGuardianLabel =>
+      'یہ ID اپنے گارڈین کے ساتھ شیئر کریں تاکہ وہ آپ کو لنک کر سکیں:';
+
+  @override
+  String get kycVerifiedActiveDefaultMessage =>
+      'آپ کی تصدیق ہو چکی ہے اور اکاؤنٹ فعال ہے۔';
+
+  @override
+  String get kycPendingDefaultMessage =>
+      'ابھی زیرِ التوا ہے - براہ کرم دوبارہ جمع کروائیں۔';
+
+  @override
+  String get kycFailedDefaultMessage =>
+      'تصدیق ناکام ہوگئی - براہ کرم دوبارہ کوشش کریں۔';
+
+  @override
+  String get inviteCodeOptionalLabel => 'دعوتی کوڈ (اختیاری)';
+
+  @override
+  String get inviteCodeHelperText =>
+      'صرف اس صورت میں جب کسی پرائمری گارڈین نے آپ کو سیکنڈری گارڈین کے طور پر مدعو کیا ہو۔';
+
+  @override
+  String get roleLockedToGuardianNote =>
+      'دعوتی کوڈ درج ہونے پر کردار گارڈین تک محدود ہے۔';
+
+  @override
+  String get inviteInvalidError => 'یہ دعوتی کوڈ درست نہیں ہے۔';
+
+  @override
+  String get inviteExpiredError =>
+      'اس دعوتی کوڈ کی میعاد ختم ہو چکی ہے - نیا کوڈ طلب کریں۔';
+
+  @override
+  String get inviteNotForYouRegisterError =>
+      'یہ دعوت کسی اور فون نمبر پر بھیجی گئی تھی - وہی نمبر استعمال کریں جس پر یہ بھیجی گئی تھی۔';
+
+  @override
+  String get guardianCapReachedError =>
+      'اس ڈیپینڈنٹ کے پاس پہلے ہی زیادہ سے زیادہ 3 گارڈینز موجود ہیں۔';
+
+  @override
+  String get emailAlreadyRegisteredError =>
+      'یہ ای میل پہلے ہی رجسٹرڈ ہے۔ اس کے بجائے لاگ ان کرنے کی کوشش کریں۔';
+
+  @override
+  String get phoneAlreadyRegisteredError => 'یہ فون نمبر پہلے ہی رجسٹرڈ ہے۔';
+
+  @override
+  String get accountAlreadyRegisteredError =>
+      'یہ اکاؤنٹ پہلے سے موجود ہے۔ اس کے بجائے لاگ ان کرنے کی کوشش کریں۔';
+
+  @override
+  String get invalidCredentialsError => 'غلط ای میل یا پاس ورڈ۔';
+
+  @override
+  String get accountNotActivatedError =>
+      'آپ کا اکاؤنٹ ابھی فعال نہیں ہوا — KYC مکمل کریں اور اپنے گارڈین کے لنک کرنے کا انتظار کریں۔';
+
+  @override
+  String get haveInviteCodeButton => 'دعوتی کوڈ ہے؟';
+
+  @override
+  String get linkADependentLabel => 'ڈیپینڈنٹ لنک کریں';
+
+  @override
+  String get noDependentsLinkedMessage =>
+      'آپ ابھی تک کسی ڈیپینڈنٹ سے لنک نہیں ہیں۔ شروع کرنے کے لیے نیچے \"ڈیپینڈنٹ لنک کریں\" کا استعمال کریں۔';
+
+  @override
+  String get kycStatusPrefixLabel => 'KYC';
+
+  @override
+  String get accountActiveLabel => 'فعال';
+
+  @override
+  String get accountNotActiveLabel => 'ابھی فعال نہیں';
+
+  @override
+  String get kycStatusPending => 'زیرِ التوا';
+
+  @override
+  String get kycStatusVerified => 'تصدیق شدہ';
+
+  @override
+  String get kycStatusFailed => 'ناکام';
+
+  @override
+  String get linkDependentInstructions =>
+      'ڈیپینڈنٹ سے ان کی تصدیقی اسکرین پر دکھائی گئی ID مانگیں، پھر اسے نیچے درج کریں۔';
+
+  @override
+  String get dependentIdLabel => 'ڈیپینڈنٹ کی ID';
+
+  @override
+  String get linkButton => 'لنک کریں';
+
+  @override
+  String get linkedSuccessSnackbar =>
+      'لنک ہوگیا! اب آپ اپنی ہوم اسکرین پر یہ ڈیپینڈنٹ دیکھ سکتے ہیں۔';
+
+  @override
+  String get guardianNotVerifiedLinkError =>
+      'ڈیپینڈنٹ لنک کرنے سے پہلے آپ کو اپنے اکاؤنٹ کی تصدیق کرنی ہوگی۔';
+
+  @override
+  String get secondaryCannotLinkError =>
+      'صرف پرائمری گارڈین ہی ڈیپینڈنٹ لنک کر سکتا ہے - آپ کا اکاؤنٹ سیکنڈری ہے۔';
+
+  @override
+  String get dependentNotFoundError =>
+      'اس ID کے ساتھ کوئی اکاؤنٹ نہیں ملا - دوبارہ چیک کریں اور کوشش کریں۔';
+
+  @override
+  String get alreadyLinkedError => 'آپ پہلے ہی اس ڈیپینڈنٹ سے لنک ہیں۔';
+
+  @override
+  String get primaryAlreadyExistsError =>
+      'اس ڈیپینڈنٹ کا پہلے ہی ایک پرائمری گارڈین موجود ہے۔';
+
+  @override
+  String get yourRoleLabel => 'آپ کا کردار:';
+
+  @override
+  String get kycStatusColonLabel => 'KYC حیثیت:';
+
+  @override
+  String get accountActiveColonLabel => 'اکاؤنٹ فعال:';
+
+  @override
+  String get linkedGuardiansHeader => 'لنک شدہ گارڈینز';
+
+  @override
+  String get inviteASecondaryButton => 'سیکنڈری گارڈین کو مدعو کریں';
+
+  @override
+  String get managePermissionsButton => 'اجازتیں منظم کریں';
+
+  @override
+  String get myAccessButton => 'میری رسائی';
+
+  @override
+  String get invitePhoneInstructions =>
+      'سیکنڈری گارڈین کا فون نمبر درج کریں۔ انہیں اس سے بننے والا کوڈ درکار ہوگا۔';
+
+  @override
+  String get sendInviteButton => 'دعوت بھیجیں';
+
+  @override
+  String get guardianNotVerifiedGenericError =>
+      'پہلے اپنے اکاؤنٹ کی تصدیق کرنی ہوگی۔';
+
+  @override
+  String get notPrimaryGuardianError =>
+      'آپ اس ڈیپینڈنٹ کے پرائمری گارڈین نہیں ہیں۔';
+
+  @override
+  String get inviteeNotEligibleError =>
+      'اس نمبر کو مدعو نہیں کیا جا سکتا (یہ پہلے سے کسی اکاؤنٹ سے منسلک ہو سکتا ہے، یا یہ خود ڈیپینڈنٹ کا نمبر ہو سکتا ہے)۔';
+
+  @override
+  String get invitePhoneValidationError =>
+      'براہ کرم فون نمبر چیک کریں اور دوبارہ کوشش کریں۔';
+
+  @override
+  String inviteCreatedMessage(int days) {
+    return 'دعوت بن گئی - $days دن کے لیے درست ہے۔ یہ کوڈ ان کے ساتھ شیئر کریں:';
+  }
+
+  @override
+  String get copyCodeButton => 'کوڈ کاپی کریں';
+
+  @override
+  String get copiedSnackbar => 'کاپی ہوگیا۔';
+
+  @override
+  String get inviteShareFooterNote =>
+      'وہ رجسٹریشن کے دوران یہ درج کریں گے (اگر نئے ہیں) یا \"دعوتی کوڈ ہے؟\" اسکرین پر (اگر پہلے سے سیکنڈری اکاؤنٹ رکھتے ہیں)۔';
+
+  @override
+  String get noSecondariesYetMessage =>
+      'ابھی تک کوئی سیکنڈری گارڈین نہیں ہے - پہلے ایک کو مدعو کریں۔';
+
+  @override
+  String get secondaryNotFoundError =>
+      'وہ گارڈین اب اس ڈیپینڈنٹ سے لنک نہیں ہے۔';
+
+  @override
+  String get moduleLiveLocation => 'لائیو لوکیشن';
+
+  @override
+  String get moduleHealthRecords => 'صحت کے ریکارڈز';
+
+  @override
+  String get moduleCommunication => 'رابطہ';
+
+  @override
+  String get moduleEmergencyAlerts => 'ایمرجنسی الرٹس';
+
+  @override
+  String get moduleCameraViewing => 'کیمرہ ویو';
+
+  @override
+  String get moduleMedicationManagement => 'دوا کا انتظام';
+
+  @override
+  String get roleColonLabel => 'کردار:';
+
+  @override
+  String get notLinkedToDependentError => 'آپ اس ڈیپینڈنٹ سے لنک نہیں ہیں۔';
+
+  @override
+  String get acceptAnInviteTitle => 'دعوت قبول کریں';
+
+  @override
+  String get pasteInviteCodeInstructions =>
+      'وہ دعوتی کوڈ پیسٹ کریں جو پرائمری گارڈین نے آپ کے ساتھ شیئر کیا۔';
+
+  @override
+  String get inviteCodeLabel => 'دعوتی کوڈ';
+
+  @override
+  String get acceptButton => 'قبول کریں';
+
+  @override
+  String get inviteAcceptedSnackbar =>
+      'قبول ہوگیا! یہ ڈیپینڈنٹ اب آپ کی ہوم اسکرین پر نظر آئے گا۔';
+
+  @override
+  String get primaryCannotAcceptInviteError =>
+      'پرائمری گارڈین اکاؤنٹ سیکنڈری دعوت قبول نہیں کر سکتا۔';
+
+  @override
+  String get inviteNotForYouAcceptError =>
+      'یہ کوڈ آپ کے اکاؤنٹ کے نمبر سے مختلف نمبر پر بھیجا گیا تھا۔';
 }

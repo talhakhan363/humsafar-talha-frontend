@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:humsafar_frontend/l10n/app_localizations.dart';
 
 import '../../../core/network/api_exception.dart';
 import '../../../core/network/providers.dart';
@@ -58,17 +59,18 @@ class _InviteSecondaryScreenState extends ConsumerState<InviteSecondaryScreen> {
   }
 
   String _messageFor(ApiException e) {
+    final l10n = AppLocalizations.of(context)!;
     switch (e.code) {
       case 'GUARDIAN_NOT_VERIFIED':
-        return 'You need to verify your own account first.';
+        return l10n.guardianNotVerifiedGenericError;
       case 'NOT_PRIMARY_GUARDIAN':
-        return 'You\'re not this Dependent\'s Primary Guardian.';
+        return l10n.notPrimaryGuardianError;
       case 'GUARDIAN_CAP_REACHED':
-        return 'This Dependent already has the maximum of 3 Guardians.';
+        return l10n.guardianCapReachedError;
       case 'INVITEE_NOT_ELIGIBLE':
-        return 'That number can\'t be invited (it may already belong to an account, or be the Dependent\'s own number).';
+        return l10n.inviteeNotEligibleError;
       case 'VALIDATION_ERROR':
-        return 'Please check the phone number and try again.';
+        return l10n.invitePhoneValidationError;
       default:
         return e.message;
     }
@@ -76,33 +78,35 @@ class _InviteSecondaryScreenState extends ConsumerState<InviteSecondaryScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Invite a Secondary Guardian'),
+        title: Text(l10n.inviteASecondaryButton),
         actions: const [LanguageSwitchButton(), AccessibilityToggleButton()],
       ),
       body: Padding(
         padding: const EdgeInsets.all(24.0),
-        child: _inviteToken == null ? _buildForm() : _buildResult(),
+        child: _inviteToken == null ? _buildForm(l10n) : _buildResult(l10n),
       ),
     );
   }
 
-  Widget _buildForm() {
+  Widget _buildForm(AppLocalizations l10n) {
     return Form(
       key: _formKey,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const Text('Enter the Secondary Guardian\'s phone number. They\'ll need the code this generates.'),
+          Text(l10n.invitePhoneInstructions),
           const SizedBox(height: 16),
           TextFormField(
             controller: _phoneController,
             keyboardType: TextInputType.phone,
-            decoration: const InputDecoration(labelText: 'Phone number', hintText: '03XXXXXXXXX'),
+            decoration: InputDecoration(labelText: l10n.phoneLabel, hintText: '03XXXXXXXXX'),
             validator: (value) {
-              if (value == null || value.trim().isEmpty) return 'This field is required.';
-              if (!_pakPhoneRegExp.hasMatch(value.trim())) return 'Enter a valid Pakistani phone number.';
+              if (value == null || value.trim().isEmpty) return l10n.fieldRequiredError;
+              if (!_pakPhoneRegExp.hasMatch(value.trim())) return l10n.invalidPhoneError;
               return null;
             },
           ),
@@ -111,21 +115,21 @@ class _InviteSecondaryScreenState extends ConsumerState<InviteSecondaryScreen> {
             onPressed: _isSubmitting ? null : _submit,
             child: _isSubmitting
                 ? const SizedBox(height: 18, width: 18, child: CircularProgressIndicator(strokeWidth: 2))
-                : const Text('Send invite'),
+                : Text(l10n.sendInviteButton),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildResult() {
+  Widget _buildResult(AppLocalizations l10n) {
     final days = _expiresIn != null ? (_expiresIn! / 86400).round() : 7;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         const Icon(Icons.check_circle, size: 48, color: Colors.green),
         const SizedBox(height: 16),
-        Text('Invite created - valid for $days days. Share this code with them:', textAlign: TextAlign.center),
+        Text(l10n.inviteCreatedMessage(days), textAlign: TextAlign.center),
         const SizedBox(height: 12),
         SelectableText(
           _inviteToken ?? '',
@@ -136,14 +140,14 @@ class _InviteSecondaryScreenState extends ConsumerState<InviteSecondaryScreen> {
         OutlinedButton.icon(
           onPressed: () {
             Clipboard.setData(ClipboardData(text: _inviteToken ?? ''));
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Copied.')));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.copiedSnackbar)));
           },
           icon: const Icon(Icons.copy),
-          label: const Text('Copy code'),
+          label: Text(l10n.copyCodeButton),
         ),
         const SizedBox(height: 8),
-        const Text(
-          'They enter this during registration (if they\'re new) or on the "Have an invite code?" screen (if they already have a Secondary account).',
+        Text(
+          l10n.inviteShareFooterNote,
           textAlign: TextAlign.center,
         ),
       ],

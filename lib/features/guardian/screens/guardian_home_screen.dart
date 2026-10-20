@@ -20,10 +20,10 @@ import '../../../shared/widgets/language_switch_button.dart';
 /// permissions_dashboard_screen.dart, my_access_screen.dart, and
 /// accept_invite_screen.dart.
 ///
-/// Named gap: all text on this screen and the new screens below it is
-/// plain English, not run through the l10n system - this phase of the app
-/// (linkage/permissions) has no .arb keys yet. Same call as the earlier
-/// KYC screens: didn't want to guess key names or Urdu translations.
+/// Task 2.5 Step F closed the l10n gap this class comment used to flag:
+/// every string on this screen and the linkage/permissions screens below
+/// it now has an app_en.arb/app_ur.arb key pair, including the dynamic
+/// kyc_status value mapped in [_kycStatusLabel].
 class GuardianHomeScreen extends ConsumerStatefulWidget {
   const GuardianHomeScreen({super.key});
 
@@ -92,14 +92,14 @@ class _GuardianHomeScreenState extends ConsumerState<GuardianHomeScreen> {
             heroTag: 'accept-invite',
             onPressed: () => context.push('/invitations/accept'),
             icon: const Icon(Icons.mail_outline),
-            label: const Text('Have an invite code?'),
+            label: Text(l10n.haveInviteCodeButton),
           ),
           const SizedBox(height: 12),
           FloatingActionButton.extended(
             heroTag: 'link-dependent',
             onPressed: _linkDependent,
             icon: const Icon(Icons.person_add),
-            label: const Text('Link a Dependent'),
+            label: Text(l10n.linkADependentLabel),
           ),
         ],
       ),
@@ -107,6 +107,7 @@ class _GuardianHomeScreenState extends ConsumerState<GuardianHomeScreen> {
   }
 
   Widget _buildBody() {
+    final l10n = AppLocalizations.of(context)!;
     if (_isLoading) {
       return const Center(child: CircularProgressIndicator());
     }
@@ -119,7 +120,7 @@ class _GuardianHomeScreenState extends ConsumerState<GuardianHomeScreen> {
             children: [
               Text(_loadError!, textAlign: TextAlign.center),
               const SizedBox(height: 12),
-              ElevatedButton(onPressed: _loadDependents, child: const Text('Retry')),
+              ElevatedButton(onPressed: _loadDependents, child: Text(l10n.retryButton)),
             ],
           ),
         ),
@@ -127,11 +128,11 @@ class _GuardianHomeScreenState extends ConsumerState<GuardianHomeScreen> {
     }
     final dependents = _dependents ?? [];
     if (dependents.isEmpty) {
-      return const Center(
+      return Center(
         child: Padding(
-          padding: EdgeInsets.all(24.0),
+          padding: const EdgeInsets.all(24.0),
           child: Text(
-            'You\'re not linked to any Dependents yet. Use "Link a Dependent" below with their ID to get started.',
+            l10n.noDependentsLinkedMessage,
             textAlign: TextAlign.center,
           ),
         ),
@@ -147,8 +148,9 @@ class _GuardianHomeScreenState extends ConsumerState<GuardianHomeScreen> {
             leading: Icon(dependent.isPrimary ? Icons.shield : Icons.visibility),
             title: Text(dependent.email),
             subtitle: Text(
-              '${dependent.isPrimary ? 'Primary' : 'Secondary'} · KYC: ${dependent.kycStatus} · '
-              '${dependent.accountActive ? 'Active' : 'Not active yet'}',
+              '${dependent.isPrimary ? l10n.primaryRoleLabel : l10n.secondaryRoleLabel} · '
+              '${l10n.kycStatusPrefixLabel}: ${_kycStatusLabel(l10n, dependent.kycStatus)} · '
+              '${dependent.accountActive ? l10n.accountActiveLabel : l10n.accountNotActiveLabel}',
             ),
             trailing: const Icon(Icons.chevron_right),
             onTap: () => context.push('/guardian/dependent-detail', extra: dependent),
@@ -156,5 +158,22 @@ class _GuardianHomeScreenState extends ConsumerState<GuardianHomeScreen> {
         );
       },
     );
+  }
+
+  /// Maps the backend's raw kyc_status value (pending/verified/failed -
+  /// kyc_contract.md) to its Urdu-capable label. Falls back to the raw
+  /// value for anything the contract doesn't document yet, rather than
+  /// hiding an unexpected status.
+  String _kycStatusLabel(AppLocalizations l10n, String status) {
+    switch (status) {
+      case 'pending':
+        return l10n.kycStatusPending;
+      case 'verified':
+        return l10n.kycStatusVerified;
+      case 'failed':
+        return l10n.kycStatusFailed;
+      default:
+        return status;
+    }
   }
 }

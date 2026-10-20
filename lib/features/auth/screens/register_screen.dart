@@ -110,23 +110,24 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   }
 
   String _messageFor(ApiException e) {
+    final l10n = AppLocalizations.of(context)!;
     switch (e.code) {
       case 'EMAIL_ALREADY_REGISTERED':
-        return 'This email is already registered. Try logging in instead.';
+        return l10n.emailAlreadyRegisteredError;
       case 'PHONE_ALREADY_REGISTERED':
-        return 'This phone number is already registered.';
+        return l10n.phoneAlreadyRegisteredError;
       case 'ALREADY_REGISTERED':
-        return 'This account already exists. Try logging in instead.';
+        return l10n.accountAlreadyRegisteredError;
       case 'INVITE_INVALID':
-        return 'That invite code isn\'t valid.';
+        return l10n.inviteInvalidError;
       case 'INVITE_EXPIRED':
-        return 'That invite code has expired - ask for a new one.';
+        return l10n.inviteExpiredError;
       case 'INVITE_NOT_FOR_YOU':
-        return 'This invite was sent to a different phone number - use the exact number it was sent to.';
+        return l10n.inviteNotForYouRegisterError;
       case 'GUARDIAN_CAP_REACHED':
-        return 'That Dependent already has the maximum of 3 Guardians.';
+        return l10n.guardianCapReachedError;
       case 'VALIDATION_ERROR':
-        return 'Please check the fields and try again.';
+        return l10n.genericValidationError;
       default:
         return e.message;
     }
@@ -199,9 +200,9 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
               const SizedBox(height: 16),
               TextFormField(
                 controller: _inviteTokenController,
-                decoration: const InputDecoration(
-                  labelText: 'Invite code (optional)',
-                  helperText: 'Only if a Primary Guardian invited you as a Secondary Guardian.',
+                decoration: InputDecoration(
+                  labelText: l10n.inviteCodeOptionalLabel,
+                  helperText: l10n.inviteCodeHelperText,
                 ),
               ),
               const SizedBox(height: 24),
@@ -219,7 +220,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
               ),
               if (_hasInvite) ...[
                 const SizedBox(height: 4),
-                const Text('Role locked to Guardian while an invite code is entered.', style: TextStyle(fontSize: 12)),
+                Text(l10n.roleLockedToGuardianNote, style: const TextStyle(fontSize: 12)),
               ],
               const SizedBox(height: 24),
               ElevatedButton(

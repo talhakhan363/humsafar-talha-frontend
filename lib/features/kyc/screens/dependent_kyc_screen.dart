@@ -81,10 +81,8 @@ class _DependentKycScreenState extends ConsumerState<DependentKycScreen> {
     final pending = ref.read(pendingDependentRegistrationProvider);
     if (pending == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            "We lost track of your registration details (this happens if the app was closed). Please register again to continue.",
-          ),
+        SnackBar(
+          content: Text(AppLocalizations.of(context)!.lostRegistrationDetailsError),
         ),
       );
       return;
@@ -121,15 +119,16 @@ class _DependentKycScreenState extends ConsumerState<DependentKycScreen> {
   }
 
   String _messageFor(ApiException e) {
+    final l10n = AppLocalizations.of(context)!;
     switch (e.code) {
       case 'INVALID_CREDENTIALS':
-        return "Something's wrong with your account details - please register again.";
+        return l10n.kycInvalidCredentialsError;
       case 'ALREADY_VERIFIED':
-        return "You're already verified. Try logging in once your guardian links you.";
+        return l10n.kycAlreadyVerifiedError;
       case 'CNIC_ALREADY_REGISTERED':
-        return 'This CNIC is already registered to another account.';
+        return l10n.cnicAlreadyRegisteredError;
       case 'VALIDATION_ERROR':
-        return 'Please check the CNIC and photo and try again.';
+        return l10n.kycValidationError;
       default:
         return e.message;
     }
@@ -146,7 +145,7 @@ class _DependentKycScreenState extends ConsumerState<DependentKycScreen> {
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24.0),
-        child: _outcome == null ? _buildForm(l10n) : _buildOutcome(_outcome!),
+        child: _outcome == null ? _buildForm(l10n) : _buildOutcome(l10n, _outcome!),
       ),
     );
   }
@@ -172,7 +171,7 @@ class _DependentKycScreenState extends ConsumerState<DependentKycScreen> {
             icon: Icon(_livenessPhotoBytes != null ? Icons.check_circle : Icons.camera_alt),
             label: Text(
               _isCapturing
-                  ? 'Opening camera...'
+                  ? l10n.openingCameraLabel
                   : _livenessPhotoBytes != null
                       ? l10n.livenessCapturedConfirmation
                       : l10n.captureLivenessButton,
@@ -200,7 +199,7 @@ class _DependentKycScreenState extends ConsumerState<DependentKycScreen> {
     );
   }
 
-  Widget _buildOutcome(_KycOutcome outcome) {
+  Widget _buildOutcome(AppLocalizations l10n, _KycOutcome outcome) {
     final dependentId = ref.read(pendingDependentRegistrationProvider)?.dependentId;
 
     if (outcome.status == 'verified' && outcome.nextStep == 'link_primary_guardian') {
@@ -210,11 +209,11 @@ class _DependentKycScreenState extends ConsumerState<DependentKycScreen> {
           const Icon(Icons.hourglass_top, size: 48),
           const SizedBox(height: 16),
           Text(
-            outcome.message ?? 'Verified. Waiting for your Primary Guardian to link you.',
+            outcome.message ?? l10n.kycVerifiedWaitingDefaultMessage,
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 16),
-          const Text('Share this ID with your Guardian so they can link you:', textAlign: TextAlign.center),
+          Text(l10n.shareIdWithGuardianLabel, textAlign: TextAlign.center),
           const SizedBox(height: 8),
           SelectableText(
             dependentId ?? '',
@@ -231,11 +230,11 @@ class _DependentKycScreenState extends ConsumerState<DependentKycScreen> {
         children: [
           const Icon(Icons.check_circle, size: 48, color: Colors.green),
           const SizedBox(height: 16),
-          Text(outcome.message ?? "You're verified and active.", textAlign: TextAlign.center),
+          Text(outcome.message ?? l10n.kycVerifiedActiveDefaultMessage, textAlign: TextAlign.center),
           const SizedBox(height: 16),
           ElevatedButton(
             onPressed: () => context.go('/login'),
-            child: const Text('Go to login'),
+            child: Text(l10n.goToLoginButton),
           ),
         ],
       );
@@ -251,7 +250,7 @@ class _DependentKycScreenState extends ConsumerState<DependentKycScreen> {
         ),
         const SizedBox(height: 16),
         Text(
-          outcome.message ?? (outcome.status == 'pending' ? 'Still pending - please submit again.' : 'Verification failed - please try again.'),
+          outcome.message ?? (outcome.status == 'pending' ? l10n.kycPendingDefaultMessage : l10n.kycFailedDefaultMessage),
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: 16),
@@ -260,7 +259,7 @@ class _DependentKycScreenState extends ConsumerState<DependentKycScreen> {
             _outcome = null;
             _livenessPhotoBytes = null;
           }),
-          child: const Text('Try again'),
+          child: Text(l10n.tryAgainButton),
         ),
       ],
     );

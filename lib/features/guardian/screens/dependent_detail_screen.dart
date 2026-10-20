@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:humsafar_frontend/l10n/app_localizations.dart';
 
 import '../../../core/guardian/dependent_summary.dart';
 import '../../../core/network/api_exception.dart';
@@ -51,9 +52,23 @@ class _DependentDetailScreenState extends ConsumerState<DependentDetailScreen> {
     }
   }
 
+  String _kycStatusLabel(AppLocalizations l10n, String status) {
+    switch (status) {
+      case 'pending':
+        return l10n.kycStatusPending;
+      case 'verified':
+        return l10n.kycStatusVerified;
+      case 'failed':
+        return l10n.kycStatusFailed;
+      default:
+        return status;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final summary = widget.summary;
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       appBar: AppBar(
@@ -71,15 +86,17 @@ class _DependentDetailScreenState extends ConsumerState<DependentDetailScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Your role: ${summary.isPrimary ? 'Primary Guardian' : 'Secondary Guardian'}'),
-                    Text('KYC status: ${summary.kycStatus}'),
-                    Text('Account active: ${summary.accountActive ? 'Yes' : 'Not yet'}'),
+                    Text(
+                      '${l10n.yourRoleLabel} ${summary.isPrimary ? l10n.primaryGuardianFullLabel : l10n.secondaryGuardianFullLabel}',
+                    ),
+                    Text('${l10n.kycStatusColonLabel} ${_kycStatusLabel(l10n, summary.kycStatus)}'),
+                    Text('${l10n.accountActiveColonLabel} ${summary.accountActive ? l10n.yesLabel : l10n.notYetLabel}'),
                   ],
                 ),
               ),
             ),
             const SizedBox(height: 16),
-            Text('Linked Guardians', style: Theme.of(context).textTheme.titleMedium),
+            Text(l10n.linkedGuardiansHeader, style: Theme.of(context).textTheme.titleMedium),
             const SizedBox(height: 8),
             if (_isLoading) const Center(child: CircularProgressIndicator()),
             if (_loadError != null) Text(_loadError!),
@@ -90,7 +107,8 @@ class _DependentDetailScreenState extends ConsumerState<DependentDetailScreen> {
                     leading: Icon(guardian['guardian_role'] == 'primary' ? Icons.shield : Icons.visibility),
                     title: Text(guardian['email'] as String? ?? ''),
                     subtitle: Text(
-                      '${guardian['guardian_role']} · ${(guardian['verified'] as bool? ?? false) ? 'Verified' : 'Not verified'}',
+                      '${guardian['guardian_role'] == 'primary' ? l10n.primaryGuardianFullLabel : l10n.secondaryGuardianFullLabel} · '
+                      '${(guardian['verified'] as bool? ?? false) ? l10n.verifiedLabel : l10n.notVerifiedLabel}',
                     ),
                   ),
                 ),
@@ -100,19 +118,19 @@ class _DependentDetailScreenState extends ConsumerState<DependentDetailScreen> {
               ElevatedButton.icon(
                 onPressed: () => context.push('/guardian/invite-secondary', extra: summary.dependentId),
                 icon: const Icon(Icons.person_add_alt),
-                label: const Text('Invite a Secondary Guardian'),
+                label: Text(l10n.inviteASecondaryButton),
               ),
               const SizedBox(height: 12),
               ElevatedButton.icon(
                 onPressed: () => context.push('/guardian/permissions', extra: summary.dependentId),
                 icon: const Icon(Icons.admin_panel_settings),
-                label: const Text('Manage Permissions'),
+                label: Text(l10n.managePermissionsButton),
               ),
             ] else
               ElevatedButton.icon(
                 onPressed: () => context.push('/guardian/my-access', extra: summary.dependentId),
                 icon: const Icon(Icons.lock_outline),
-                label: const Text('My Access'),
+                label: Text(l10n.myAccessButton),
               ),
           ],
         ),
