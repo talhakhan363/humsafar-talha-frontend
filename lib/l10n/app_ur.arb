@@ -165,5 +165,16 @@
   "acceptButton": "قبول کریں",
   "inviteAcceptedSnackbar": "قبول ہوگیا! یہ ڈیپینڈنٹ اب آپ کی ہوم اسکرین پر نظر آئے گا۔",
   "primaryCannotAcceptInviteError": "پرائمری گارڈین اکاؤنٹ سیکنڈری دعوت قبول نہیں کر سکتا۔",
-  "inviteNotForYouAcceptError": "یہ کوڈ آپ کے اکاؤنٹ کے نمبر سے مختلف نمبر پر بھیجا گیا تھا۔"
+  "inviteNotForYouAcceptError": "یہ کوڈ آپ کے اکاؤنٹ کے نمبر سے مختلف نمبر پر بھیجا گیا تھا۔",
+
+  "liveMapButton": "لائیو میپ",
+  "noLocationYetMessage": "ابھی تک کوئی مقام موصول نہیں ہوا۔",
+  "justNowLabel": "ابھی ابھی",
+  "lastSeenMinutesMessage": "آخری بار {minutes} منٹ پہلے دیکھا گیا",
+  "locationStaleWarning": "یہ مقام پرانا ہو سکتا ہے۔",
+  "zoneStatusInside": "محفوظ زون کے اندر",
+  "zoneStatusOutside": "تمام محفوظ زونز سے باہر",
+  "zoneStatusNoZones": "ابھی تک کوئی محفوظ زون سیٹ اپ نہیں ہوا",
+  "zoneStatusUnknown": "مقام کی حیثیت نامعلوم ہے",
+  "moduleAccessDeniedLiveMapError": "آپ کو اس ڈیپینڈنٹ کا مقام دیکھنے کی اجازت نہیں ہے۔"
 }

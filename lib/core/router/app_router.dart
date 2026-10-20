@@ -9,6 +9,7 @@ import '../../features/guardian/screens/dependent_detail_screen.dart';
 import '../../features/guardian/screens/invite_secondary_screen.dart';
 import '../../features/guardian/screens/permissions_dashboard_screen.dart';
 import '../../features/guardian/screens/my_access_screen.dart';
+import '../../features/guardian/screens/live_map_screen.dart';
 import '../../features/dependent/screens/dependent_home_screen.dart';
 import '../../features/auth/screens/register_screen.dart';
 import '../../features/auth/screens/login_screen.dart';
@@ -114,6 +115,17 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           key: state.pageKey,
           child: MyAccessScreen(dependentId: state.extra as String),
         ),
+      ),
+      GoRoute(
+        path: '/guardian/live-map',
+        name: 'live-map',
+        pageBuilder: (context, state) {
+          final summary = state.extra as DependentSummary;
+          return NoTransitionPage(
+            key: state.pageKey,
+            child: LiveMapScreen(dependentId: summary.dependentId, dependentLabel: summary.email),
+          );
+        },
       ),
       GoRoute(
         path: '/dependent',

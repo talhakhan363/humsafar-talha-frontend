@@ -488,4 +488,37 @@ class AppLocalizationsUr extends AppLocalizations {
   @override
   String get inviteNotForYouAcceptError =>
       'یہ کوڈ آپ کے اکاؤنٹ کے نمبر سے مختلف نمبر پر بھیجا گیا تھا۔';
+
+  @override
+  String get liveMapButton => 'لائیو میپ';
+
+  @override
+  String get noLocationYetMessage => 'ابھی تک کوئی مقام موصول نہیں ہوا۔';
+
+  @override
+  String get justNowLabel => 'ابھی ابھی';
+
+  @override
+  String lastSeenMinutesMessage(int minutes) {
+    return 'آخری بار $minutes منٹ پہلے دیکھا گیا';
+  }
+
+  @override
+  String get locationStaleWarning => 'یہ مقام پرانا ہو سکتا ہے۔';
+
+  @override
+  String get zoneStatusInside => 'محفوظ زون کے اندر';
+
+  @override
+  String get zoneStatusOutside => 'تمام محفوظ زونز سے باہر';
+
+  @override
+  String get zoneStatusNoZones => 'ابھی تک کوئی محفوظ زون سیٹ اپ نہیں ہوا';
+
+  @override
+  String get zoneStatusUnknown => 'مقام کی حیثیت نامعلوم ہے';
+
+  @override
+  String get moduleAccessDeniedLiveMapError =>
+      'آپ کو اس ڈیپینڈنٹ کا مقام دیکھنے کی اجازت نہیں ہے۔';
 }

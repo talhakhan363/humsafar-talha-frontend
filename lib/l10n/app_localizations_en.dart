@@ -483,4 +483,37 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get inviteNotForYouAcceptError =>
       'This code was sent to a different phone number than the one on your account.';
+
+  @override
+  String get liveMapButton => 'Live Map';
+
+  @override
+  String get noLocationYetMessage => 'No location received yet.';
+
+  @override
+  String get justNowLabel => 'Just now';
+
+  @override
+  String lastSeenMinutesMessage(int minutes) {
+    return 'Last seen $minutes min ago';
+  }
+
+  @override
+  String get locationStaleWarning => 'This location may be out of date.';
+
+  @override
+  String get zoneStatusInside => 'Inside a safe zone';
+
+  @override
+  String get zoneStatusOutside => 'Outside all safe zones';
+
+  @override
+  String get zoneStatusNoZones => 'No safe zones set up yet';
+
+  @override
+  String get zoneStatusUnknown => 'Location status unknown';
+
+  @override
+  String get moduleAccessDeniedLiveMapError =>
+      'You don\'t have permission to view this Dependent\'s location.';
 }

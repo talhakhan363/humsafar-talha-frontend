@@ -114,6 +114,15 @@ class _DependentDetailScreenState extends ConsumerState<DependentDetailScreen> {
                 ),
               ),
             const SizedBox(height: 24),
+            // Viewing location is Primary-always / Secondary-with-permission
+            // (location_contract.md, geofence_contract.md) - not Primary-only
+            // like Invite/Permissions below, so this sits outside that branch.
+            ElevatedButton.icon(
+              onPressed: () => context.push('/guardian/live-map', extra: summary),
+              icon: const Icon(Icons.map_outlined),
+              label: Text(l10n.liveMapButton),
+            ),
+            const SizedBox(height: 12),
             if (summary.isPrimary) ...[
               ElevatedButton.icon(
                 onPressed: () => context.push('/guardian/invite-secondary', extra: summary.dependentId),

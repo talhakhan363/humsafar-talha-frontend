@@ -23,6 +23,13 @@ dependencies:
   flutter_secure_storage: ^10.3.1
   image_picker: ^1.1.2
 
+  # Task 2.6 — Live Map. flutter_map (OpenStreetMap tiles) instead of
+  # google_maps_flutter: no Google Cloud project, no billing-enabled API
+  # key, no account setup at all. Does everything 2.6 needs (a marker +
+  # circle overlays on a basemap) without the external-service detour.
+  flutter_map: ^7.0.2
+  latlong2: ^0.9.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

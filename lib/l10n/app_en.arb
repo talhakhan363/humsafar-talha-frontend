@@ -176,5 +176,23 @@
   "acceptButton": "Accept",
   "inviteAcceptedSnackbar": "Accepted! This Dependent now shows on your home screen.",
   "primaryCannotAcceptInviteError": "A Primary Guardian account can't accept a Secondary invite.",
-  "inviteNotForYouAcceptError": "This code was sent to a different phone number than the one on your account."
+  "inviteNotForYouAcceptError": "This code was sent to a different phone number than the one on your account.",
+
+  "liveMapButton": "Live Map",
+  "noLocationYetMessage": "No location received yet.",
+  "justNowLabel": "Just now",
+  "lastSeenMinutesMessage": "Last seen {minutes} min ago",
+  "@lastSeenMinutesMessage": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "locationStaleWarning": "This location may be out of date.",
+  "zoneStatusInside": "Inside a safe zone",
+  "zoneStatusOutside": "Outside all safe zones",
+  "zoneStatusNoZones": "No safe zones set up yet",
+  "zoneStatusUnknown": "Location status unknown",
+  "moduleAccessDeniedLiveMapError": "You don't have permission to view this Dependent's location."
 }

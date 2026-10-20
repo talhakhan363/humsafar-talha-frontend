@@ -949,6 +949,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'This code was sent to a different phone number than the one on your account.'**
   String get inviteNotForYouAcceptError;
+
+  /// No description provided for @liveMapButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Live Map'**
+  String get liveMapButton;
+
+  /// No description provided for @noLocationYetMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'No location received yet.'**
+  String get noLocationYetMessage;
+
+  /// No description provided for @justNowLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Just now'**
+  String get justNowLabel;
+
+  /// No description provided for @lastSeenMinutesMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Last seen {minutes} min ago'**
+  String lastSeenMinutesMessage(int minutes);
+
+  /// No description provided for @locationStaleWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'This location may be out of date.'**
+  String get locationStaleWarning;
+
+  /// No description provided for @zoneStatusInside.
+  ///
+  /// In en, this message translates to:
+  /// **'Inside a safe zone'**
+  String get zoneStatusInside;
+
+  /// No description provided for @zoneStatusOutside.
+  ///
+  /// In en, this message translates to:
+  /// **'Outside all safe zones'**
+  String get zoneStatusOutside;
+
+  /// No description provided for @zoneStatusNoZones.
+  ///
+  /// In en, this message translates to:
+  /// **'No safe zones set up yet'**
+  String get zoneStatusNoZones;
+
+  /// No description provided for @zoneStatusUnknown.
+  ///
+  /// In en, this message translates to:
+  /// **'Location status unknown'**
+  String get zoneStatusUnknown;
+
+  /// No description provided for @moduleAccessDeniedLiveMapError.
+  ///
+  /// In en, this message translates to:
+  /// **'You don\'t have permission to view this Dependent\'s location.'**
+  String get moduleAccessDeniedLiveMapError;
 }
 
 class _AppLocalizationsDelegate
