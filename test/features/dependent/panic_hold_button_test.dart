@@ -2,12 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:humsafar_frontend/features/dependent/widgets/panic_hold_button.dart';
 
+import '../../support/gesture_test_helpers.dart';
+
 /// TC-3.11-01..03 — widget tests for the hold-to-confirm gesture timing
 /// (Task 3.11). Pure widget: no ApiClient, no l10n (label/subtitle are
 /// passed in already resolved, same convention as PanicButton /
 /// SafetyActionButton), no device. `holdDuration` is overridden to a few
 /// milliseconds so the test doesn't need to wait out the real 2-second
 /// default.
+///
+/// Uses `startHoldGesture` (test/support/gesture_test_helpers.dart)
+/// instead of calling `tester.startGesture` directly — that helper
+/// bakes in the baseline `pump()` this kind of test needs; see its doc
+/// comment for why.
 void main() {
   testWidgets('TC-3.11-01: holding for the full duration fires onHoldComplete once', (tester) async {
     var completeCount = 0;
@@ -22,15 +29,7 @@ void main() {
       ),
     ));
 
-    final gesture = await tester.startGesture(tester.getCenter(find.byType(PanicHoldButton)));
-    // A bare pump() first establishes the AnimationController's t=0
-    // baseline frame; without it, a single pump(duration) right after
-    // forward() treats that already-advanced timestamp AS t=0, so the
-    // controller reads as having made no progress at all. This was the
-    // real bug behind TC-3.11-01/02/03/06/07 failing identically — not
-    // the gesture type (GestureDetector vs Listener), which was a red
-    // herring.
-    await tester.pump();
+    final gesture = await startHoldGesture(tester, find.byType(PanicHoldButton));
     await tester.pump(const Duration(milliseconds: 120));
     expect(completeCount, 1);
 
@@ -51,8 +50,7 @@ void main() {
       ),
     ));
 
-    final gesture = await tester.startGesture(tester.getCenter(find.byType(PanicHoldButton)));
-    await tester.pump(); // baseline frame — see TC-3.11-01's comment
+    final gesture = await startHoldGesture(tester, find.byType(PanicHoldButton));
     await tester.pump(const Duration(milliseconds: 30));
     await gesture.up();
     await tester.pump(const Duration(milliseconds: 200));
@@ -74,8 +72,7 @@ void main() {
       ),
     ));
 
-    final gesture = await tester.startGesture(tester.getCenter(find.byType(PanicHoldButton)));
-    await tester.pump(); // baseline frame — see TC-3.11-01's comment
+    final gesture = await startHoldGesture(tester, find.byType(PanicHoldButton));
     await tester.pump(const Duration(milliseconds: 80));
     await gesture.up();
 
