@@ -172,6 +172,9 @@ class AppLocalizationsUr extends AppLocalizations {
   String get goToLoginButton => 'لاگ ان پر جائیں';
 
   @override
+  String get cancelButton => 'منسوخ کریں';
+
+  @override
   String get yesLabel => 'جی ہاں';
 
   @override
@@ -521,4 +524,183 @@ class AppLocalizationsUr extends AppLocalizations {
   @override
   String get moduleAccessDeniedLiveMapError =>
       'آپ کو اس ڈیپینڈنٹ کا مقام دیکھنے کی اجازت نہیں ہے۔';
+
+  @override
+  String get locationSharingActiveLabel => 'مقام کا اشتراک: فعال';
+
+  @override
+  String get locationPermissionNeededMessage =>
+      'آپ کے گارڈین کو آپ کا مقام دیکھنے کے لیے لوکیشن کی اجازت درکار ہے۔';
+
+  @override
+  String get grantLocationPermissionButton => 'اجازت دیں';
+
+  @override
+  String get locationPermissionDeniedForeverMessage =>
+      'لوکیشن کی اجازت مستقل طور پر مسترد کر دی گئی ہے۔ براہ کرم اسے اپنے فون کی سیٹنگز سے فعال کریں۔';
+
+  @override
+  String get locationServiceDisabledMessage =>
+      'اپنا مقام شیئر کرنے کے لیے براہ کرم اپنے فون کی سیٹنگز میں لوکیشن سروسز آن کریں۔';
+
+  @override
+  String get openSettingsButton => 'سیٹنگز کھولیں';
+
+  @override
+  String get dependentHomeTitle => 'ہوم';
+
+  @override
+  String dependentHomeGreeting(String name) {
+    return 'السلام علیکم، $name';
+  }
+
+  @override
+  String get panicButtonLabel => 'ایمرجنسی';
+
+  @override
+  String get panicButtonSubtitle => 'مدد کے لیے دبائیں';
+
+  @override
+  String get iAmOkButtonLabel => 'میں ٹھیک ہوں';
+
+  @override
+  String get myMedicineButtonLabel => 'میری دوا';
+
+  @override
+  String nextWellnessCheckMessage(String time) {
+    return 'اگلا چیک: $time';
+  }
+
+  @override
+  String get noWellnessCheckScheduledMessage => 'کوئی ویلنیس چیک شیڈول نہیں ہے';
+
+  @override
+  String nextMedicationMessage(String drug, String time) {
+    return 'اگلی خوراک: $drug, $time پر';
+  }
+
+  @override
+  String get noMedicationScheduledMessage => 'کوئی دوا شیڈول نہیں ہے';
+
+  @override
+  String get moreComingSoonLabel =>
+      'مزید: ریکارڈز · اپائنٹمنٹس · پیغامات (جلد آرہا ہے)';
+
+  @override
+  String get medicationComingSoonMessage =>
+      'دوا کی تصدیق ٹاسک 3.13 میں شامل ہوگی۔';
+
+  @override
+  String get panicScreenTitle => 'ایمرجنسی';
+
+  @override
+  String get panicNeedHelpTitle => 'مدد چاہیے؟';
+
+  @override
+  String get panicHoldInstructions => 'بٹن کو 2 سیکنڈ تک دبائے رکھیں';
+
+  @override
+  String get panicHoldButtonLabel => 'دبائیں';
+
+  @override
+  String get panicHoldButtonSubtitle => 'مدد بھیجنے کے لیے';
+
+  @override
+  String get panicSendingLabel => 'الرٹ بھیجا جا رہا ہے...';
+
+  @override
+  String get panicAllGuardiansToldNote =>
+      'آپ کے تمام گارڈینز کو ایک ساتھ بتایا جائے گا۔';
+
+  @override
+  String get panicHoldStopsAccidentNote =>
+      'دبائے رکھنے سے غلطی سے الرٹ جانے سے بچا جاتا ہے۔';
+
+  @override
+  String get panicHelpIsComingTitle => 'مدد آ رہی ہے';
+
+  @override
+  String panicToldCountMessage(int count) {
+    return 'ہم نے $count گارڈین کو بتا دیا';
+  }
+
+  @override
+  String panicTriggeredAtMessage(String time) {
+    return 'بوقت $time';
+  }
+
+  @override
+  String panicAcknowledgedAtMessage(String time) {
+    return '$time پر گارڈین نے دیکھ لیا';
+  }
+
+  @override
+  String get panicWaitingForAckMessage => 'گارڈین کے دیکھنے کا انتظار ہے';
+
+  @override
+  String get panicEscalatedMessage => 'یہ آپ کے ایمرجنسی رابطے تک پہنچ گیا ہے۔';
+
+  @override
+  String get panicAutoEscalateNote =>
+      'اگر 5 منٹ میں کوئی جواب نہ دے تو آپ کے ایمرجنسی رابطے کو بتایا جائے گا۔';
+
+  @override
+  String get iAmSafeNowButton => 'میں اب محفوظ ہوں';
+
+  @override
+  String get panicResolvedSnackbar =>
+      'محفوظ کے طور پر نشان زد کر دیا گیا۔ خوشی ہوئی کہ آپ ٹھیک ہیں۔';
+
+  @override
+  String get panicTriggerFailedSnackbar =>
+      'الرٹ نہیں بھیجا جا سکا۔ اپنا کنکشن چیک کریں اور دوبارہ کوشش کریں۔';
+
+  @override
+  String get panicResolveFailedSnackbar =>
+      'آپ کو محفوظ نشان زد نہیں کیا جا سکا۔ دوبارہ کوشش کریں۔';
+
+  @override
+  String get wellnessCheckScreenTitle => 'ویلنیس چیک';
+
+  @override
+  String get areYouOkTitle => 'کیا آپ ٹھیک ہیں؟';
+
+  @override
+  String get familyCheckingOnYouMessage =>
+      'آپ کا خاندان آپ کی خیریت دریافت کر رہا ہے';
+
+  @override
+  String answerWithinMessage(String time) {
+    return '$time میں جواب دیں';
+  }
+
+  @override
+  String get yesIAmOkButton => 'جی ہاں، میں ٹھیک ہوں';
+
+  @override
+  String get iNeedHelpButton => 'مجھے مدد چاہیے';
+
+  @override
+  String get iNeedHelpOpensPanicNote =>
+      '\'مجھے مدد چاہیے\' ایمرجنسی اسکرین کھولتا ہے۔';
+
+  @override
+  String get noAnswerGuardianToldNote =>
+      'کوئی جواب نہ ملنے پر → آپ کے گارڈین کو بتایا جائے گا۔';
+
+  @override
+  String get noWellnessCheckPendingMessage =>
+      'ابھی کوئی ویلنیس چیک جواب کا منتظر نہیں ہے۔';
+
+  @override
+  String get wellnessCheckTimeUpNote =>
+      'وقت ختم ہوگیا — آپ کے گارڈین کو مطلع کیا جا سکتا ہے۔ آپ اب بھی نیچے جواب دے سکتے ہیں۔';
+
+  @override
+  String get wellnessCheckRespondedSnackbar =>
+      'شکریہ — ٹھیک کے طور پر نشان زد کر دیا گیا۔';
+
+  @override
+  String get wellnessCheckRespondFailedSnackbar =>
+      'آپ کا جواب نہیں بھیجا جا سکا۔ دوبارہ کوشش کریں۔';
 }

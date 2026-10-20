@@ -4,6 +4,9 @@ import 'package:humsafar_frontend/core/scheduling/schedule_helpers.dart';
 /// TC-3.10-01..09 — unit tests for the Dependent home screen's "what's
 /// next" scheduling math (Task 3.10). Pure Dart, no device, no network,
 /// no login.
+///
+/// TC-3.12-01..03 (added 2026-10-20) — unit tests for [formatCountdown],
+/// the Wellness Check screen's "Answer within mm:ss" formatting.
 void main() {
   group('nextOccurrenceForTime', () {
     test('TC-3.10-01: a daily time later today resolves to today', () {
@@ -106,6 +109,23 @@ void main() {
       expect(formatClockTime(DateTime(2026, 10, 20, 12, 0)), '12:00 PM');
       expect(formatClockTime(DateTime(2026, 10, 20, 14, 5)), '2:05 PM');
       expect(formatClockTime(DateTime(2026, 10, 20, 8, 0)), '8:00 AM');
+    });
+  });
+
+  group('formatCountdown', () {
+    test('TC-3.12-01: formats minutes and seconds with zero-padding', () {
+      expect(formatCountdown(const Duration(minutes: 29, seconds: 12)), '29:12');
+      expect(formatCountdown(const Duration(minutes: 5, seconds: 3)), '05:03');
+      expect(formatCountdown(const Duration(seconds: 45)), '00:45');
+    });
+
+    test('TC-3.12-02: exactly zero formats as 00:00', () {
+      expect(formatCountdown(Duration.zero), '00:00');
+    });
+
+    test('TC-3.12-03: a negative duration (deadline passed) clamps to 00:00, not a negative string', () {
+      expect(formatCountdown(const Duration(seconds: -1)), '00:00');
+      expect(formatCountdown(const Duration(minutes: -5)), '00:00');
     });
   });
 }

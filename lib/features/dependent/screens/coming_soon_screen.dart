@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:humsafar_frontend/l10n/app_localizations.dart';
 
-/// Task 3.10 — the three safety actions (Panic, Wellness Check,
-/// Medication) are real destinations as of this task, but their actual
-/// screens are separate tasks (3.11, 3.12, 3.13). Rather than leaving
-/// the Home screen's buttons pointing nowhere, each routes to this
-/// honest placeholder, matching the exact placeholder pattern already
-/// used for Guardian/Dependent home from Task 1.11 onward — named here,
-/// not a silent gap.
-enum ComingSoonKind { panic, wellnessCheck, medication }
+/// Task 3.10 — honest placeholder for a safety action whose real screen
+/// is a separate, not-yet-built task. Originally covered all three of
+/// Panic / Wellness Check / Medication; Tasks 3.11 and 3.12 (2026-10-20)
+/// replaced the first two with their real screens (`PanicScreen`,
+/// `WellnessCheckScreen`), so only `medication` is left here, waiting on
+/// Task 3.13. Kept as its own small screen/enum rather than deleted
+/// outright, since 3.13 will need the exact same pattern for its own
+/// placeholder-to-real swap.
+enum ComingSoonKind { medication }
 
 class ComingSoonScreen extends StatelessWidget {
   const ComingSoonScreen({super.key, required this.kind});
@@ -19,8 +20,6 @@ class ComingSoonScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final (title, message) = switch (kind) {
-      ComingSoonKind.panic => (l10n.panicButtonLabel, l10n.panicComingSoonMessage),
-      ComingSoonKind.wellnessCheck => (l10n.iAmOkButtonLabel, l10n.wellnessCheckComingSoonMessage),
       ComingSoonKind.medication => (l10n.myMedicineButtonLabel, l10n.medicationComingSoonMessage),
     };
 

@@ -2,6 +2,8 @@
 /// screen's "what's next" display (next medication dose, next wellness
 /// check). Kept free of any plugin/network dependency so the scheduling
 /// math itself is unit-testable without a device or widget harness.
+/// Task 3.12 adds [formatCountdown] for the Wellness Check screen's
+/// "Answer within mm:ss", same reasoning.
 
 library;
 
@@ -95,4 +97,17 @@ String formatClockTime(DateTime time) {
   final minute = time.minute.toString().padLeft(2, '0');
   final suffix = hour24 < 12 ? 'AM' : 'PM';
   return '$hour12:$minute $suffix';
+}
+
+/// Task 3.12 — formats a countdown as "mm:ss" for the Wellness Check
+/// screen's "Answer within mm:ss" chip (mockup screen 22). Clamped to
+/// "00:00" once [remaining] reaches zero or goes negative (the deadline
+/// has passed) rather than showing a negative time, since the screen
+/// still lets the Dependent answer late — the countdown going to zero is
+/// not an error state, just informational.
+String formatCountdown(Duration remaining) {
+  final clamped = remaining.isNegative ? Duration.zero : remaining;
+  final minutes = clamped.inMinutes;
+  final seconds = clamped.inSeconds % 60;
+  return '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
 }

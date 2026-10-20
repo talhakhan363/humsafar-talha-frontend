@@ -169,6 +169,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get goToLoginButton => 'Go to login';
 
   @override
+  String get cancelButton => 'Cancel';
+
+  @override
   String get yesLabel => 'Yes';
 
   @override
@@ -516,4 +519,178 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get moduleAccessDeniedLiveMapError =>
       'You don\'t have permission to view this Dependent\'s location.';
+
+  @override
+  String get locationSharingActiveLabel => 'Location sharing: Active';
+
+  @override
+  String get locationPermissionNeededMessage =>
+      'Location permission is needed so your Guardian can see where you are.';
+
+  @override
+  String get grantLocationPermissionButton => 'Grant Permission';
+
+  @override
+  String get locationPermissionDeniedForeverMessage =>
+      'Location permission was permanently denied. Enable it from your phone\'s Settings.';
+
+  @override
+  String get locationServiceDisabledMessage =>
+      'Turn on Location Services in your phone\'s Settings to share your location.';
+
+  @override
+  String get openSettingsButton => 'Open Settings';
+
+  @override
+  String get dependentHomeTitle => 'Home';
+
+  @override
+  String dependentHomeGreeting(String name) {
+    return 'Assalam o Alaikum, $name';
+  }
+
+  @override
+  String get panicButtonLabel => 'PANIC';
+
+  @override
+  String get panicButtonSubtitle => 'Press for help';
+
+  @override
+  String get iAmOkButtonLabel => 'I am OK';
+
+  @override
+  String get myMedicineButtonLabel => 'My medicine';
+
+  @override
+  String nextWellnessCheckMessage(String time) {
+    return 'Next check: $time';
+  }
+
+  @override
+  String get noWellnessCheckScheduledMessage => 'No wellness check scheduled';
+
+  @override
+  String nextMedicationMessage(String drug, String time) {
+    return 'Next: $drug at $time';
+  }
+
+  @override
+  String get noMedicationScheduledMessage => 'No medicine scheduled';
+
+  @override
+  String get moreComingSoonLabel =>
+      'More: records · appointments · messages (coming soon)';
+
+  @override
+  String get medicationComingSoonMessage =>
+      'Medication confirmation is coming in Task 3.13.';
+
+  @override
+  String get panicScreenTitle => 'Panic';
+
+  @override
+  String get panicNeedHelpTitle => 'Need help?';
+
+  @override
+  String get panicHoldInstructions => 'Press and hold the button for 2 seconds';
+
+  @override
+  String get panicHoldButtonLabel => 'HOLD';
+
+  @override
+  String get panicHoldButtonSubtitle => 'to send help';
+
+  @override
+  String get panicSendingLabel => 'Sending alert...';
+
+  @override
+  String get panicAllGuardiansToldNote =>
+      'All your Guardians will be told at once.';
+
+  @override
+  String get panicHoldStopsAccidentNote => 'Holding stops accidental alerts.';
+
+  @override
+  String get panicHelpIsComingTitle => 'Help is coming';
+
+  @override
+  String panicToldCountMessage(int count) {
+    return 'We told $count Guardian(s)';
+  }
+
+  @override
+  String panicTriggeredAtMessage(String time) {
+    return 'at $time';
+  }
+
+  @override
+  String panicAcknowledgedAtMessage(String time) {
+    return 'Seen by a Guardian at $time';
+  }
+
+  @override
+  String get panicWaitingForAckMessage => 'Waiting for a Guardian to see this';
+
+  @override
+  String get panicEscalatedMessage =>
+      'This has reached your emergency contact.';
+
+  @override
+  String get panicAutoEscalateNote =>
+      'If nobody answers within 5 minutes, your emergency contact is reached.';
+
+  @override
+  String get iAmSafeNowButton => 'I am safe now';
+
+  @override
+  String get panicResolvedSnackbar => 'Marked safe. Glad you\'re OK.';
+
+  @override
+  String get panicTriggerFailedSnackbar =>
+      'Couldn\'t send the alert. Check your connection and try again.';
+
+  @override
+  String get panicResolveFailedSnackbar =>
+      'Couldn\'t mark you safe. Try again.';
+
+  @override
+  String get wellnessCheckScreenTitle => 'Wellness check';
+
+  @override
+  String get areYouOkTitle => 'Are you OK?';
+
+  @override
+  String get familyCheckingOnYouMessage => 'Your family is checking on you';
+
+  @override
+  String answerWithinMessage(String time) {
+    return 'Answer within $time';
+  }
+
+  @override
+  String get yesIAmOkButton => 'Yes, I am OK';
+
+  @override
+  String get iNeedHelpButton => 'I need help';
+
+  @override
+  String get iNeedHelpOpensPanicNote => '\'I need help\' opens Panic.';
+
+  @override
+  String get noAnswerGuardianToldNote => 'No answer → your Guardian is told.';
+
+  @override
+  String get noWellnessCheckPendingMessage =>
+      'There\'s no wellness check waiting for a response right now.';
+
+  @override
+  String get wellnessCheckTimeUpNote =>
+      'Time\'s up — your Guardian may be notified. You can still answer below.';
+
+  @override
+  String get wellnessCheckRespondedSnackbar => 'Thanks — marked as OK.';
+
+  @override
+  String get wellnessCheckRespondFailedSnackbar =>
+      'Couldn\'t send your answer. Try again.';
 }

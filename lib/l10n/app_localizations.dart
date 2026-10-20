@@ -404,6 +404,12 @@ abstract class AppLocalizations {
   /// **'Go to login'**
   String get goToLoginButton;
 
+  /// No description provided for @cancelButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancelButton;
+
   /// No description provided for @yesLabel.
   ///
   /// In en, this message translates to:
@@ -1009,6 +1015,300 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'You don\'t have permission to view this Dependent\'s location.'**
   String get moduleAccessDeniedLiveMapError;
+
+  /// No description provided for @locationSharingActiveLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Location sharing: Active'**
+  String get locationSharingActiveLabel;
+
+  /// No description provided for @locationPermissionNeededMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Location permission is needed so your Guardian can see where you are.'**
+  String get locationPermissionNeededMessage;
+
+  /// No description provided for @grantLocationPermissionButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Grant Permission'**
+  String get grantLocationPermissionButton;
+
+  /// No description provided for @locationPermissionDeniedForeverMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Location permission was permanently denied. Enable it from your phone\'s Settings.'**
+  String get locationPermissionDeniedForeverMessage;
+
+  /// No description provided for @locationServiceDisabledMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn on Location Services in your phone\'s Settings to share your location.'**
+  String get locationServiceDisabledMessage;
+
+  /// No description provided for @openSettingsButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Settings'**
+  String get openSettingsButton;
+
+  /// No description provided for @dependentHomeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Home'**
+  String get dependentHomeTitle;
+
+  /// No description provided for @dependentHomeGreeting.
+  ///
+  /// In en, this message translates to:
+  /// **'Assalam o Alaikum, {name}'**
+  String dependentHomeGreeting(String name);
+
+  /// No description provided for @panicButtonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'PANIC'**
+  String get panicButtonLabel;
+
+  /// No description provided for @panicButtonSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Press for help'**
+  String get panicButtonSubtitle;
+
+  /// No description provided for @iAmOkButtonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'I am OK'**
+  String get iAmOkButtonLabel;
+
+  /// No description provided for @myMedicineButtonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'My medicine'**
+  String get myMedicineButtonLabel;
+
+  /// No description provided for @nextWellnessCheckMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Next check: {time}'**
+  String nextWellnessCheckMessage(String time);
+
+  /// No description provided for @noWellnessCheckScheduledMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'No wellness check scheduled'**
+  String get noWellnessCheckScheduledMessage;
+
+  /// No description provided for @nextMedicationMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Next: {drug} at {time}'**
+  String nextMedicationMessage(String drug, String time);
+
+  /// No description provided for @noMedicationScheduledMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'No medicine scheduled'**
+  String get noMedicationScheduledMessage;
+
+  /// No description provided for @moreComingSoonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'More: records · appointments · messages (coming soon)'**
+  String get moreComingSoonLabel;
+
+  /// No description provided for @medicationComingSoonMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Medication confirmation is coming in Task 3.13.'**
+  String get medicationComingSoonMessage;
+
+  /// No description provided for @panicScreenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Panic'**
+  String get panicScreenTitle;
+
+  /// No description provided for @panicNeedHelpTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Need help?'**
+  String get panicNeedHelpTitle;
+
+  /// No description provided for @panicHoldInstructions.
+  ///
+  /// In en, this message translates to:
+  /// **'Press and hold the button for 2 seconds'**
+  String get panicHoldInstructions;
+
+  /// No description provided for @panicHoldButtonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'HOLD'**
+  String get panicHoldButtonLabel;
+
+  /// No description provided for @panicHoldButtonSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'to send help'**
+  String get panicHoldButtonSubtitle;
+
+  /// No description provided for @panicSendingLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Sending alert...'**
+  String get panicSendingLabel;
+
+  /// No description provided for @panicAllGuardiansToldNote.
+  ///
+  /// In en, this message translates to:
+  /// **'All your Guardians will be told at once.'**
+  String get panicAllGuardiansToldNote;
+
+  /// No description provided for @panicHoldStopsAccidentNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Holding stops accidental alerts.'**
+  String get panicHoldStopsAccidentNote;
+
+  /// No description provided for @panicHelpIsComingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Help is coming'**
+  String get panicHelpIsComingTitle;
+
+  /// No description provided for @panicToldCountMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'We told {count} Guardian(s)'**
+  String panicToldCountMessage(int count);
+
+  /// No description provided for @panicTriggeredAtMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'at {time}'**
+  String panicTriggeredAtMessage(String time);
+
+  /// No description provided for @panicAcknowledgedAtMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Seen by a Guardian at {time}'**
+  String panicAcknowledgedAtMessage(String time);
+
+  /// No description provided for @panicWaitingForAckMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for a Guardian to see this'**
+  String get panicWaitingForAckMessage;
+
+  /// No description provided for @panicEscalatedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'This has reached your emergency contact.'**
+  String get panicEscalatedMessage;
+
+  /// No description provided for @panicAutoEscalateNote.
+  ///
+  /// In en, this message translates to:
+  /// **'If nobody answers within 5 minutes, your emergency contact is reached.'**
+  String get panicAutoEscalateNote;
+
+  /// No description provided for @iAmSafeNowButton.
+  ///
+  /// In en, this message translates to:
+  /// **'I am safe now'**
+  String get iAmSafeNowButton;
+
+  /// No description provided for @panicResolvedSnackbar.
+  ///
+  /// In en, this message translates to:
+  /// **'Marked safe. Glad you\'re OK.'**
+  String get panicResolvedSnackbar;
+
+  /// No description provided for @panicTriggerFailedSnackbar.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t send the alert. Check your connection and try again.'**
+  String get panicTriggerFailedSnackbar;
+
+  /// No description provided for @panicResolveFailedSnackbar.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t mark you safe. Try again.'**
+  String get panicResolveFailedSnackbar;
+
+  /// No description provided for @wellnessCheckScreenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Wellness check'**
+  String get wellnessCheckScreenTitle;
+
+  /// No description provided for @areYouOkTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you OK?'**
+  String get areYouOkTitle;
+
+  /// No description provided for @familyCheckingOnYouMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Your family is checking on you'**
+  String get familyCheckingOnYouMessage;
+
+  /// No description provided for @answerWithinMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Answer within {time}'**
+  String answerWithinMessage(String time);
+
+  /// No description provided for @yesIAmOkButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes, I am OK'**
+  String get yesIAmOkButton;
+
+  /// No description provided for @iNeedHelpButton.
+  ///
+  /// In en, this message translates to:
+  /// **'I need help'**
+  String get iNeedHelpButton;
+
+  /// No description provided for @iNeedHelpOpensPanicNote.
+  ///
+  /// In en, this message translates to:
+  /// **'\'I need help\' opens Panic.'**
+  String get iNeedHelpOpensPanicNote;
+
+  /// No description provided for @noAnswerGuardianToldNote.
+  ///
+  /// In en, this message translates to:
+  /// **'No answer → your Guardian is told.'**
+  String get noAnswerGuardianToldNote;
+
+  /// No description provided for @noWellnessCheckPendingMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'There\'s no wellness check waiting for a response right now.'**
+  String get noWellnessCheckPendingMessage;
+
+  /// No description provided for @wellnessCheckTimeUpNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Time\'s up — your Guardian may be notified. You can still answer below.'**
+  String get wellnessCheckTimeUpNote;
+
+  /// No description provided for @wellnessCheckRespondedSnackbar.
+  ///
+  /// In en, this message translates to:
+  /// **'Thanks — marked as OK.'**
+  String get wellnessCheckRespondedSnackbar;
+
+  /// No description provided for @wellnessCheckRespondFailedSnackbar.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t send your answer. Try again.'**
+  String get wellnessCheckRespondFailedSnackbar;
 }
 
 class _AppLocalizationsDelegate

@@ -5,6 +5,11 @@ import 'package:humsafar_frontend/l10n/app_localizations.dart';
 
 /// TC-3.10-14 — widget test for ComingSoonScreen (Task 3.10). Pure
 /// widget: no ApiClient, no plugin, no device.
+///
+/// Updated 2026-10-20 (Tasks 3.11/3.12): `ComingSoonKind` dropped `panic`
+/// and `wellnessCheck` once their real screens shipped — only
+/// `medication` is left, waiting on Task 3.13. See the enum's doc
+/// comment in coming_soon_screen.dart.
 Widget _wrap(ComingSoonKind kind) => MaterialApp(
       locale: const Locale('en'),
       localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -13,15 +18,7 @@ Widget _wrap(ComingSoonKind kind) => MaterialApp(
     );
 
 void main() {
-  testWidgets('TC-3.10-14: each kind shows its own title and "coming in Task X" message', (tester) async {
-    await tester.pumpWidget(_wrap(ComingSoonKind.panic));
-    expect(find.text('PANIC'), findsOneWidget);
-    expect(find.text('Panic Mode is coming in Task 3.11.'), findsOneWidget);
-
-    await tester.pumpWidget(_wrap(ComingSoonKind.wellnessCheck));
-    expect(find.text('I am OK'), findsOneWidget);
-    expect(find.text('Wellness check response is coming in Task 3.12.'), findsOneWidget);
-
+  testWidgets('TC-3.10-14: shows the right title and "coming in Task 3.13" message', (tester) async {
     await tester.pumpWidget(_wrap(ComingSoonKind.medication));
     expect(find.text('My medicine'), findsOneWidget);
     expect(find.text('Medication confirmation is coming in Task 3.13.'), findsOneWidget);

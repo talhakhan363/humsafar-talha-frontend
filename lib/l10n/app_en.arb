@@ -68,6 +68,7 @@
   "retryButton": "Retry",
   "tryAgainButton": "Try again",
   "goToLoginButton": "Go to login",
+  "cancelButton": "Cancel",
   "yesLabel": "Yes",
   "notYetLabel": "Not yet",
   "primaryRoleLabel": "Primary",
@@ -238,7 +239,66 @@
   },
   "noMedicationScheduledMessage": "No medicine scheduled",
   "moreComingSoonLabel": "More: records · appointments · messages (coming soon)",
-  "panicComingSoonMessage": "Panic Mode is coming in Task 3.11.",
-  "wellnessCheckComingSoonMessage": "Wellness check response is coming in Task 3.12.",
-  "medicationComingSoonMessage": "Medication confirmation is coming in Task 3.13."
+  "medicationComingSoonMessage": "Medication confirmation is coming in Task 3.13.",
+
+  "panicScreenTitle": "Panic",
+  "panicNeedHelpTitle": "Need help?",
+  "panicHoldInstructions": "Press and hold the button for 2 seconds",
+  "panicHoldButtonLabel": "HOLD",
+  "panicHoldButtonSubtitle": "to send help",
+  "panicSendingLabel": "Sending alert...",
+  "panicAllGuardiansToldNote": "All your Guardians will be told at once.",
+  "panicHoldStopsAccidentNote": "Holding stops accidental alerts.",
+  "panicHelpIsComingTitle": "Help is coming",
+  "panicToldCountMessage": "We told {count} Guardian(s)",
+  "@panicToldCountMessage": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "panicTriggeredAtMessage": "at {time}",
+  "@panicTriggeredAtMessage": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "panicAcknowledgedAtMessage": "Seen by a Guardian at {time}",
+  "@panicAcknowledgedAtMessage": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "panicWaitingForAckMessage": "Waiting for a Guardian to see this",
+  "panicEscalatedMessage": "This has reached your emergency contact.",
+  "panicAutoEscalateNote": "If nobody answers within 5 minutes, your emergency contact is reached.",
+  "iAmSafeNowButton": "I am safe now",
+  "panicResolvedSnackbar": "Marked safe. Glad you're OK.",
+  "panicTriggerFailedSnackbar": "Couldn't send the alert. Check your connection and try again.",
+  "panicResolveFailedSnackbar": "Couldn't mark you safe. Try again.",
+
+  "wellnessCheckScreenTitle": "Wellness check",
+  "areYouOkTitle": "Are you OK?",
+  "familyCheckingOnYouMessage": "Your family is checking on you",
+  "answerWithinMessage": "Answer within {time}",
+  "@answerWithinMessage": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "yesIAmOkButton": "Yes, I am OK",
+  "iNeedHelpButton": "I need help",
+  "iNeedHelpOpensPanicNote": "'I need help' opens Panic.",
+  "noAnswerGuardianToldNote": "No answer → your Guardian is told.",
+  "noWellnessCheckPendingMessage": "There's no wellness check waiting for a response right now.",
+  "wellnessCheckTimeUpNote": "Time's up — your Guardian may be notified. You can still answer below.",
+  "wellnessCheckRespondedSnackbar": "Thanks — marked as OK.",
+  "wellnessCheckRespondFailedSnackbar": "Couldn't send your answer. Try again."
 }
