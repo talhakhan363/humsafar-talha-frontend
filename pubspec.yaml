@@ -30,6 +30,15 @@ dependencies:
   flutter_map: ^7.0.2
   latlong2: ^0.9.1
 
+  # Task 2.7 — background location service. geolocator handles permission
+  # requests + reading GPS fixes; battery_plus reads the battery level the
+  # location_contract.md POST body optionally carries (feeds Task 2.3's
+  # low-battery alert on the backend). Both are wrapped behind
+  # DeviceLocationSource (lib/core/location/) so the polling logic itself
+  # stays unit-testable without a real device.
+  geolocator: ^13.0.2
+  battery_plus: ^6.2.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

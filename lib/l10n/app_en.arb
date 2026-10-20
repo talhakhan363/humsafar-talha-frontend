@@ -194,5 +194,12 @@
   "zoneStatusOutside": "Outside all safe zones",
   "zoneStatusNoZones": "No safe zones set up yet",
   "zoneStatusUnknown": "Location status unknown",
-  "moduleAccessDeniedLiveMapError": "You don't have permission to view this Dependent's location."
+  "moduleAccessDeniedLiveMapError": "You don't have permission to view this Dependent's location.",
+
+  "locationSharingActiveLabel": "Location sharing: Active",
+  "locationPermissionNeededMessage": "Location permission is needed so your Guardian can see where you are.",
+  "grantLocationPermissionButton": "Grant Permission",
+  "locationPermissionDeniedForeverMessage": "Location permission was permanently denied. Enable it from your phone's Settings.",
+  "locationServiceDisabledMessage": "Turn on Location Services in your phone's Settings to share your location.",
+  "openSettingsButton": "Open Settings"
 }

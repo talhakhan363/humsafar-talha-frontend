@@ -1,5 +1,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <uses-permission android:name="android.permission.CAMERA" />
+    <!-- Task 2.7 — background location service. Foreground-only location
+         (FR-C1 / the handbook both scope this to "while the app is
+         active"), so this deliberately does NOT request
+         ACCESS_BACKGROUND_LOCATION, which would need Android's separate
+         "Allow all the time" flow and a lot more plumbing than this task
+         calls for. -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <application
         android:label="humsafar_talha_frontend"
         android:name="${applicationName}"

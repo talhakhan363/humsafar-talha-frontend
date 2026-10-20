@@ -176,5 +176,12 @@
   "zoneStatusOutside": "تمام محفوظ زونز سے باہر",
   "zoneStatusNoZones": "ابھی تک کوئی محفوظ زون سیٹ اپ نہیں ہوا",
   "zoneStatusUnknown": "مقام کی حیثیت نامعلوم ہے",
-  "moduleAccessDeniedLiveMapError": "آپ کو اس ڈیپینڈنٹ کا مقام دیکھنے کی اجازت نہیں ہے۔"
+  "moduleAccessDeniedLiveMapError": "آپ کو اس ڈیپینڈنٹ کا مقام دیکھنے کی اجازت نہیں ہے۔",
+
+  "locationSharingActiveLabel": "مقام کا اشتراک: فعال",
+  "locationPermissionNeededMessage": "آپ کے گارڈین کو آپ کا مقام دیکھنے کے لیے لوکیشن کی اجازت درکار ہے۔",
+  "grantLocationPermissionButton": "اجازت دیں",
+  "locationPermissionDeniedForeverMessage": "لوکیشن کی اجازت مستقل طور پر مسترد کر دی گئی ہے۔ براہ کرم اسے اپنے فون کی سیٹنگز سے فعال کریں۔",
+  "locationServiceDisabledMessage": "اپنا مقام شیئر کرنے کے لیے براہ کرم اپنے فون کی سیٹنگز میں لوکیشن سروسز آن کریں۔",
+  "openSettingsButton": "سیٹنگز کھولیں"
 }
