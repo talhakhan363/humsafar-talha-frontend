@@ -3,7 +3,9 @@
 /// check). Kept free of any plugin/network dependency so the scheduling
 /// math itself is unit-testable without a device or widget harness.
 /// Task 3.12 adds [formatCountdown] for the Wellness Check screen's
-/// "Answer within mm:ss", same reasoning.
+/// "Answer within mm:ss", same reasoning. Task 3.15 adds [formatHHMM]
+/// and [weekdayAbbreviations] for the Guardian-side schedule
+/// configuration screens.
 
 library;
 
@@ -100,14 +102,38 @@ String formatClockTime(DateTime time) {
 }
 
 /// Task 3.12 — formats a countdown as "mm:ss" for the Wellness Check
-/// screen's "Answer within mm:ss" chip (mockup screen 22). Clamped to
-/// "00:00" once [remaining] reaches zero or goes negative (the deadline
-/// has passed) rather than showing a negative time, since the screen
-/// still lets the Dependent answer late — the countdown going to zero is
-/// not an error state, just informational.
+/// screen's "Answer within mm:ss" chip (mockup screen 22), and also
+/// used by Task 3.13's Medication Confirmation screen for its
+/// step-2 token-expiry countdown. Clamped to "00:00" once [remaining]
+/// reaches zero or goes negative (the deadline has passed) rather than
+/// showing a negative time, since both screens still let the Dependent
+/// act after the countdown hits zero — it's informational, not an
+/// error state.
 String formatCountdown(Duration remaining) {
   final clamped = remaining.isNegative ? Duration.zero : remaining;
   final minutes = clamped.inMinutes;
   final seconds = clamped.inSeconds % 60;
   return '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
 }
+
+/// Task 3.15 — formats an "HH:MM" (24-hour) string the same way
+/// [formatClockTime] formats a `DateTime`, for the Guardian-side
+/// schedule screens where a schedule's `time` is a raw string, not yet
+/// resolved against any particular date. Returns [time] unchanged if
+/// it isn't a valid "HH:MM" string, rather than throwing — a schedule
+/// row should still render something sensible even if a future
+/// contract change ever sends a shape this doesn't expect.
+String formatHHMM(String time) {
+  final parts = time.split(':');
+  if (parts.length != 2) return time;
+  final hour = int.tryParse(parts[0]);
+  final minute = int.tryParse(parts[1]);
+  if (hour == null || minute == null || hour < 0 || hour > 23 || minute < 0 || minute > 59) return time;
+  return formatClockTime(DateTime(2000, 1, 1, hour, minute));
+}
+
+/// Task 3.15 — the seven day abbreviations `medication_contract.md`'s
+/// `days` field uses, in week order. Exported so the Guardian-side
+/// medication schedule form can build its day-picker from one place
+/// instead of hardcoding this list a second time.
+const weekdayAbbreviations = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];

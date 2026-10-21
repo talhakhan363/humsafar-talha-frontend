@@ -7,6 +7,9 @@ import 'package:humsafar_frontend/core/scheduling/schedule_helpers.dart';
 ///
 /// TC-3.12-01..03 (added 2026-10-20) — unit tests for [formatCountdown],
 /// the Wellness Check screen's "Answer within mm:ss" formatting.
+///
+/// TC-3.15-01..02 (added 2026-10-21) — unit tests for [formatHHMM], used
+/// by the Guardian-side schedule configuration screens.
 void main() {
   group('nextOccurrenceForTime', () {
     test('TC-3.10-01: a daily time later today resolves to today', () {
@@ -126,6 +129,21 @@ void main() {
     test('TC-3.12-03: a negative duration (deadline passed) clamps to 00:00, not a negative string', () {
       expect(formatCountdown(const Duration(seconds: -1)), '00:00');
       expect(formatCountdown(const Duration(minutes: -5)), '00:00');
+    });
+  });
+
+  group('formatHHMM', () {
+    test('TC-3.15-01: formats a raw "HH:MM" string the same way formatClockTime does', () {
+      expect(formatHHMM('00:00'), '12:00 AM');
+      expect(formatHHMM('12:00'), '12:00 PM');
+      expect(formatHHMM('14:05'), '2:05 PM');
+      expect(formatHHMM('08:00'), '8:00 AM');
+    });
+
+    test('TC-3.15-02: a malformed string is returned unchanged instead of throwing', () {
+      expect(formatHHMM('not-a-time'), 'not-a-time');
+      expect(formatHHMM('25:00'), '25:00');
+      expect(formatHHMM('08:70'), '08:70');
     });
   });
 }

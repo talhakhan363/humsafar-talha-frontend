@@ -13,6 +13,13 @@ import '../../../shared/widgets/language_switch_button.dart';
 /// (GET /dependents/{id}/guardians, linkage_contract.md section 2) and the
 /// role-gated next actions: a Primary can invite a Secondary or manage
 /// permissions; a Secondary can view their own access.
+///
+/// Task 3.15 (2026-10-21): added the "Medication schedule" and
+/// "Wellness check schedule" buttons. Both sit outside the
+/// Primary/Secondary branch below (unlike Invite/Permissions, which are
+/// Primary-only) because both contracts say "any Guardian can read" —
+/// a Secondary can always open these screens to see the schedule; the
+/// screens themselves gate whether that Secondary can also edit it.
 class DependentDetailScreen extends ConsumerStatefulWidget {
   const DependentDetailScreen({super.key, required this.summary});
 
@@ -121,6 +128,21 @@ class _DependentDetailScreenState extends ConsumerState<DependentDetailScreen> {
               onPressed: () => context.push('/guardian/live-map', extra: summary),
               icon: const Icon(Icons.map_outlined),
               label: Text(l10n.liveMapButton),
+            ),
+            const SizedBox(height: 12),
+            // Task 3.15 — same "any Guardian can read, permission only
+            // gates editing" shape as Live Map above, so these two also
+            // sit outside the Primary/Secondary branch.
+            ElevatedButton.icon(
+              onPressed: () => context.push('/guardian/medication-schedule', extra: summary),
+              icon: const Icon(Icons.medication_outlined),
+              label: Text(l10n.medicationScheduleButton),
+            ),
+            const SizedBox(height: 12),
+            ElevatedButton.icon(
+              onPressed: () => context.push('/guardian/wellness-schedule', extra: summary),
+              icon: const Icon(Icons.health_and_safety_outlined),
+              label: Text(l10n.wellnessScheduleButton),
             ),
             const SizedBox(height: 12),
             if (summary.isPrimary) ...[
