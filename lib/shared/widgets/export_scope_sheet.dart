@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:humsafar_frontend/l10n/app_localizations.dart';
 
+import '../../core/files/file_providers.dart';
 import '../../core/network/api_exception.dart';
 import '../../core/network/providers.dart';
-import '../../core/sharing/share_source.dart';
 
 /// Tasks 5.6/5.7 — the "export" action both `records_contract.md` and
 /// `vitals_contract.md` describe identically: `GET .../export?scope=

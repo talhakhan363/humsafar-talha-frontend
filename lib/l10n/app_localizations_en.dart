@@ -581,10 +581,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get noMedicationScheduledMessage => 'No medicine scheduled';
 
   @override
-  String get moreComingSoonLabel =>
-      'More: records · appointments · messages (coming soon)';
-
-  @override
   String get panicScreenTitle => 'Panic';
 
   @override
@@ -1201,4 +1197,533 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get audioDownloadFailedMessage =>
       'Couldn\'t load the voice message. Try again.';
+
+  @override
+  String get activityBookingCancelled => 'Booking cancelled';
+
+  @override
+  String get activityBookingCompleted => 'Booking completed';
+
+  @override
+  String get activityBookingConfirmed => 'Booking confirmed';
+
+  @override
+  String get activityBookingRequested => 'Visit requested';
+
+  @override
+  String get activityLogMenuItem => 'Activity log';
+
+  @override
+  String get activityLogScreenTitle => 'Activity Log';
+
+  @override
+  String get activityOrgContact => 'Called organization';
+
+  @override
+  String get addAppointmentTitle => 'Add Appointment';
+
+  @override
+  String get addRecordTitle => 'Add Record';
+
+  @override
+  String get addVitalReadingTitle => 'Add Reading';
+
+  @override
+  String get allCategoriesLabel => 'All';
+
+  @override
+  String get appointmentCancelledError =>
+      'This appointment has already been cancelled.';
+
+  @override
+  String get appointmentCancelledLabel => 'Cancelled';
+
+  @override
+  String get appointmentExistsError =>
+      'You already have an appointment at this time.';
+
+  @override
+  String get appointmentInPastError =>
+      'Appointments can\'t be scheduled in the past.';
+
+  @override
+  String get appointmentNotesFieldLabel => 'Notes';
+
+  @override
+  String get appointmentSavedSnackbar => 'Appointment saved';
+
+  @override
+  String get appointmentsButton => 'Appointments';
+
+  @override
+  String get appointmentsHistoryTabLabel => 'History';
+
+  @override
+  String get appointmentsLimitError =>
+      'You\'ve reached the limit of upcoming appointments.';
+
+  @override
+  String get appointmentsScreenTitle => 'Appointments';
+
+  @override
+  String get appointmentsUpcomingTabLabel => 'Upcoming';
+
+  @override
+  String get askForPriceLabel => 'Ask for price';
+
+  @override
+  String get attachFileButtonLabel => 'Attach File';
+
+  @override
+  String get bandAddressFieldLabel => 'Bluetooth Address';
+
+  @override
+  String get bandAlreadyPairedMessage =>
+      'This Dependent already has a band paired.';
+
+  @override
+  String get bandNameFieldLabel => 'Band Name (optional)';
+
+  @override
+  String get bandNoDataBanner =>
+      'No readings have come in recently. Check that the band is powered on and nearby.';
+
+  @override
+  String get bandStatusLabel => 'Status';
+
+  @override
+  String get bandStatusNoData => 'No recent data';
+
+  @override
+  String get bandStatusNotPaired => 'Not paired';
+
+  @override
+  String get bandStatusReceiving => 'Receiving data';
+
+  @override
+  String get bandStatusWaitingForFirstData => 'Waiting for first data';
+
+  @override
+  String get bloodSugarFieldLabel => 'Blood Sugar';
+
+  @override
+  String get bookingAlreadyOpenError =>
+      'You already have an open request with this provider.';
+
+  @override
+  String get bookingStatusCancelled => 'Cancelled';
+
+  @override
+  String get bookingStatusCompleted => 'Completed';
+
+  @override
+  String get bookingStatusConfirmed => 'Confirmed';
+
+  @override
+  String get bookingStatusConflictMessage =>
+      'This booking\'s status has already changed.';
+
+  @override
+  String get bookingStatusPending => 'Pending';
+
+  @override
+  String get callToArrangeButtonLabel => 'Call to Arrange';
+
+  @override
+  String get cancelAppointmentMenuItem => 'Cancel appointment';
+
+  @override
+  String get cancelBookingButtonLabel => 'Cancel';
+
+  @override
+  String get cancelLinkButtonLabel => 'Cancel Link';
+
+  @override
+  String get categoryNotAllowedMessage =>
+      'This category isn\'t allowed for records.';
+
+  @override
+  String get completeBookingButtonLabel => 'Mark Completed';
+
+  @override
+  String get confirmBookingButtonLabel => 'Confirm';
+
+  @override
+  String get connectBandButtonLabel => 'Connect Band';
+
+  @override
+  String get connectBandInstructions =>
+      'Turn on your band\'s Bluetooth and enter its address below to pair it.';
+
+  @override
+  String get connectBandScreenTitle => 'Connect Band';
+
+  @override
+  String get createDoctorLinkBody =>
+      'Create a link anyone can open without logging in. It expires automatically.';
+
+  @override
+  String get createDoctorLinkTitle => 'Create Doctor Link';
+
+  @override
+  String get createLinkButtonLabel => 'Create Link';
+
+  @override
+  String get dateFieldLabel => 'Date';
+
+  @override
+  String get deleteAppointmentConfirmTitle => 'Delete this appointment?';
+
+  @override
+  String get deleteButtonLabel => 'Delete';
+
+  @override
+  String get deleteRecordConfirmBody =>
+      'This record will be permanently removed.';
+
+  @override
+  String get deleteRecordConfirmTitle => 'Delete this record?';
+
+  @override
+  String get demoDataDisabledMessage =>
+      'Demo data isn\'t available for this band.';
+
+  @override
+  String get diastolicFieldLabel => 'Diastolic';
+
+  @override
+  String get directoryButton => 'Directory & Services';
+
+  @override
+  String get directoryOrganizationsTabLabel => 'Organizations';
+
+  @override
+  String get directoryProvidersTabLabel => 'Home Care';
+
+  @override
+  String get directoryScreenTitle => 'Directory';
+
+  @override
+  String get doctorLinkShareIntro =>
+      'Here is a secure link to view the medical records:';
+
+  @override
+  String get doctorLinksMenuItem => 'Doctor links';
+
+  @override
+  String get doctorLinksScreenTitle => 'Doctor Links';
+
+  @override
+  String get doneButtonLabel => 'Done';
+
+  @override
+  String get downloadFileTooltip => 'Download';
+
+  @override
+  String get editAppointmentTitle => 'Edit Appointment';
+
+  @override
+  String get editRecordTitle => 'Edit Record';
+
+  @override
+  String get exportButtonLabel => 'Export';
+
+  @override
+  String get exportFailedMessage =>
+      'Couldn\'t prepare the export. Please try again.';
+
+  @override
+  String get exportRecordsMenuItem => 'Export records';
+
+  @override
+  String get exportScopeCompleteLabel => 'Everything';
+
+  @override
+  String get exportScopeMonthLabel => 'This month';
+
+  @override
+  String get exportScopeYearLabel => 'This year';
+
+  @override
+  String get exportSheetTitle => 'Export';
+
+  @override
+  String get fileCannotBeReplacedNote =>
+      'The file can\'t be replaced. Delete this record and add a new one instead.';
+
+  @override
+  String get fileTooLargeMessage =>
+      'This file is too large. The limit is 10 MB.';
+
+  @override
+  String get fromBandNote => 'From band';
+
+  @override
+  String get generateDemoDataButtonLabel => 'Generate Demo Data';
+
+  @override
+  String get healthRecordsAccessDeniedMessage =>
+      'You don\'t have access to health records for this Dependent.';
+
+  @override
+  String get healthRecordsNotGrantedNote =>
+      'Health records access isn\'t granted yet.';
+
+  @override
+  String get includeVitalsFieldLabel => 'Include Vitals';
+
+  @override
+  String get latestHeartRateLabel => 'Latest Heart Rate';
+
+  @override
+  String get linkExpiresInFieldLabel => 'Link Expires In';
+
+  @override
+  String get loadMoreButtonLabel => 'Load More';
+
+  @override
+  String get medicalRecordsButton => 'Medical Records';
+
+  @override
+  String get medicalVaultScreenTitle => 'Medical Vault';
+
+  @override
+  String get metricBloodPressure => 'Blood Pressure';
+
+  @override
+  String get metricBloodSugar => 'Blood Sugar';
+
+  @override
+  String get metricHeartRate => 'Heart Rate';
+
+  @override
+  String get metricSpo2 => 'SpO2';
+
+  @override
+  String get metricTemperature => 'Temperature';
+
+  @override
+  String get moreSectionHeader => 'More';
+
+  @override
+  String get myBandScreenTitle => 'My Band';
+
+  @override
+  String get nearMeButtonLabel => 'Near Me';
+
+  @override
+  String get noActivityMessage => 'No activity yet.';
+
+  @override
+  String get noDirectoryResultsMessage => 'No results found.';
+
+  @override
+  String get noDoctorLinksMessage => 'No doctor links yet.';
+
+  @override
+  String get noPastAppointmentsMessage => 'No past appointments.';
+
+  @override
+  String get noPreferenceLabel => 'No preference';
+
+  @override
+  String get noRecordsMessage => 'No records yet.';
+
+  @override
+  String get noSecondariesMessage => 'No Secondary Guardians yet.';
+
+  @override
+  String get noUpcomingAppointmentsMessage => 'No upcoming appointments.';
+
+  @override
+  String get noVitalsReadingsMessage => 'No readings yet.';
+
+  @override
+  String get notPrimaryGuardianMessage =>
+      'Only the Primary Guardian can do this.';
+
+  @override
+  String get noteTooLongError =>
+      'The note is too long. Keep it under 300 characters.';
+
+  @override
+  String get nothingSentToProviderNote =>
+      'Nothing is sent to the provider — this is just a note for your own records.';
+
+  @override
+  String openedCountLabel(int count) {
+    return 'Opened $count time(s)';
+  }
+
+  @override
+  String get pairButtonLabel => 'Pair';
+
+  @override
+  String get pickTimeButtonLabel => 'Pick Time';
+
+  @override
+  String get preferredTimeFieldLabel => 'Preferred Time';
+
+  @override
+  String get preparingExportMessage => 'Preparing your export…';
+
+  @override
+  String get providerNameFieldLabel => 'Provider Name';
+
+  @override
+  String get recordAccessMenuItem => 'Record access';
+
+  @override
+  String get recordAccessScreenTitle => 'Record Access';
+
+  @override
+  String get recordCategoryAll => 'All';
+
+  @override
+  String get recordCategoryFieldLabel => 'Category';
+
+  @override
+  String get recordCategoryLabReport => 'Lab Report';
+
+  @override
+  String get recordCategoryOther => 'Other';
+
+  @override
+  String get recordCategoryPrescription => 'Prescription';
+
+  @override
+  String get recordCategoryXray => 'X-ray';
+
+  @override
+  String get recordDateFieldLabel => 'Record Date';
+
+  @override
+  String get recordModifyDeniedMessage =>
+      'You don\'t have permission to modify this record.';
+
+  @override
+  String get recordNeedsContentError =>
+      'Add a file or some notes before saving.';
+
+  @override
+  String get recordNotFoundMessage => 'This record could not be found.';
+
+  @override
+  String get recordNotesFieldLabel => 'Notes';
+
+  @override
+  String get recordTitleFieldLabel => 'Title';
+
+  @override
+  String get recordValidationErrorMessage =>
+      'Please check the details and try again.';
+
+  @override
+  String get recordsLimitMessage =>
+      'You\'ve reached the limit of medical records.';
+
+  @override
+  String get requestVisitButtonLabel => 'Request Visit';
+
+  @override
+  String get requestVisitScreenTitle => 'Request a Visit';
+
+  @override
+  String get requestedByLabel => 'Requested by';
+
+  @override
+  String get sampleEntryLabel => 'Sample';
+
+  @override
+  String get saveRequestButtonLabel => 'Save Request';
+
+  @override
+  String get searchDirectoryHint => 'Search by name or specialization';
+
+  @override
+  String get shareLimitError =>
+      'You\'ve reached the limit of active doctor links.';
+
+  @override
+  String get shareStatusActive => 'Active';
+
+  @override
+  String get shareStatusExpired => 'Expired';
+
+  @override
+  String get shareStatusRevoked => 'Cancelled';
+
+  @override
+  String get spo2FieldLabel => 'SpO2 (%)';
+
+  @override
+  String get sugarContextAfterMeal => 'After meal';
+
+  @override
+  String get sugarContextFasting => 'Fasting';
+
+  @override
+  String get sugarContextFieldLabel => 'Context (optional)';
+
+  @override
+  String get sugarContextNone => 'None';
+
+  @override
+  String get sugarContextRandom => 'Random';
+
+  @override
+  String get systolicFieldLabel => 'Systolic';
+
+  @override
+  String get temperatureFieldLabel => 'Temperature';
+
+  @override
+  String get tooManyOpenBookingsError =>
+      'You have too many open requests already. Cancel one first.';
+
+  @override
+  String get unitFieldLabel => 'Unit';
+
+  @override
+  String get unpairBandConfirmBody =>
+      'This band will be unpaired from this Dependent.';
+
+  @override
+  String get unpairBandConfirmTitle => 'Unpair this band?';
+
+  @override
+  String get unpairButtonLabel => 'Unpair';
+
+  @override
+  String get unsupportedFileMessage =>
+      'This file type isn\'t supported. Use PDF, JPG, or PNG.';
+
+  @override
+  String get visitNoteFieldLabel => 'Note (optional)';
+
+  @override
+  String get visitRequestSavedMessage => 'Your visit request has been saved.';
+
+  @override
+  String get vitalNoteFieldLabel => 'Note (optional)';
+
+  @override
+  String get vitalOutOfRangeMessage =>
+      'This value looks out of range. Please check it.';
+
+  @override
+  String get vitalsButton => 'Vitals';
+
+  @override
+  String get vitalsHistoryHeader => 'History';
+
+  @override
+  String get vitalsLimitMessage =>
+      'You\'ve reached the limit of vitals readings.';
+
+  @override
+  String get vitalsScreenTitle => 'Vitals';
+
+  @override
+  String get wearableBandButton => 'Wearable Band';
 }

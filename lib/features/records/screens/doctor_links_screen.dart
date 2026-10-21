@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:humsafar_frontend/l10n/app_localizations.dart';
 
+import '../../../core/files/file_providers.dart';
 import '../../../core/network/api_exception.dart';
 import '../../../core/network/providers.dart';
-import '../../../core/sharing/share_source.dart';
 import '../../../shared/widgets/accessibility_toggle_button.dart';
 import '../../../shared/widgets/language_switch_button.dart';
 import 'medical_vault_screen.dart' show categoryLabel;

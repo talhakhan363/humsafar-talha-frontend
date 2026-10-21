@@ -586,10 +586,6 @@ class AppLocalizationsUr extends AppLocalizations {
   String get noMedicationScheduledMessage => 'کوئی دوا شیڈول نہیں ہے';
 
   @override
-  String get moreComingSoonLabel =>
-      'مزید: ریکارڈز · اپائنٹمنٹس · پیغامات (جلد آرہا ہے)';
-
-  @override
   String get panicScreenTitle => 'ایمرجنسی';
 
   @override
@@ -1223,4 +1219,526 @@ class AppLocalizationsUr extends AppLocalizations {
   @override
   String get audioDownloadFailedMessage =>
       'صوتی پیغام لوڈ نہیں ہو سکا۔ دوبارہ کوشش کریں۔';
+
+  @override
+  String get activityBookingCancelled => 'بکنگ منسوخ';
+
+  @override
+  String get activityBookingCompleted => 'بکنگ مکمل';
+
+  @override
+  String get activityBookingConfirmed => 'بکنگ کی تصدیق';
+
+  @override
+  String get activityBookingRequested => 'وزٹ کی درخواست';
+
+  @override
+  String get activityLogMenuItem => 'سرگرمی لاگ';
+
+  @override
+  String get activityLogScreenTitle => 'سرگرمی لاگ';
+
+  @override
+  String get activityOrgContact => 'ادارے کو کال کی';
+
+  @override
+  String get addAppointmentTitle => 'اپائنٹمنٹ شامل کریں';
+
+  @override
+  String get addRecordTitle => 'ریکارڈ شامل کریں';
+
+  @override
+  String get addVitalReadingTitle => 'ریڈنگ شامل کریں';
+
+  @override
+  String get allCategoriesLabel => 'تمام';
+
+  @override
+  String get appointmentCancelledError =>
+      'یہ اپائنٹمنٹ پہلے ہی منسوخ ہو چکی ہے۔';
+
+  @override
+  String get appointmentCancelledLabel => 'منسوخ';
+
+  @override
+  String get appointmentExistsError =>
+      'اس وقت آپ کی ایک اپائنٹمنٹ پہلے سے موجود ہے۔';
+
+  @override
+  String get appointmentInPastError =>
+      'گزرے ہوئے وقت کے لیے اپائنٹمنٹ شیڈول نہیں کی جا سکتی۔';
+
+  @override
+  String get appointmentNotesFieldLabel => 'نوٹس';
+
+  @override
+  String get appointmentSavedSnackbar => 'اپائنٹمنٹ محفوظ ہو گئی';
+
+  @override
+  String get appointmentsButton => 'اپائنٹمنٹس';
+
+  @override
+  String get appointmentsHistoryTabLabel => 'ماضی کی';
+
+  @override
+  String get appointmentsLimitError =>
+      'آپ آنے والی اپائنٹمنٹس کی حد تک پہنچ گئے ہیں۔';
+
+  @override
+  String get appointmentsScreenTitle => 'اپائنٹمنٹس';
+
+  @override
+  String get appointmentsUpcomingTabLabel => 'آنے والی';
+
+  @override
+  String get askForPriceLabel => 'قیمت دریافت کریں';
+
+  @override
+  String get attachFileButtonLabel => 'فائل منسلک کریں';
+
+  @override
+  String get bandAddressFieldLabel => 'بلوٹوتھ ایڈریس';
+
+  @override
+  String get bandAlreadyPairedMessage =>
+      'اس ڈیپینڈنٹ کے ساتھ ایک بینڈ پہلے سے جوڑا جا چکا ہے۔';
+
+  @override
+  String get bandNameFieldLabel => 'بینڈ کا نام (اختیاری)';
+
+  @override
+  String get bandNoDataBanner =>
+      'حال ہی میں کوئی ریڈنگ موصول نہیں ہوئی۔ چیک کریں کہ بینڈ آن ہے اور قریب موجود ہے۔';
+
+  @override
+  String get bandStatusLabel => 'صورتحال';
+
+  @override
+  String get bandStatusNoData => 'حالیہ ڈیٹا موجود نہیں';
+
+  @override
+  String get bandStatusNotPaired => 'جوڑا نہیں گیا';
+
+  @override
+  String get bandStatusReceiving => 'ڈیٹا موصول ہو رہا ہے';
+
+  @override
+  String get bandStatusWaitingForFirstData => 'پہلے ڈیٹا کا انتظار';
+
+  @override
+  String get bloodSugarFieldLabel => 'بلڈ شوگر';
+
+  @override
+  String get bookingAlreadyOpenError =>
+      'اس فراہم کنندہ کے ساتھ آپ کی ایک درخواست پہلے سے کھلی ہے۔';
+
+  @override
+  String get bookingStatusCancelled => 'منسوخ';
+
+  @override
+  String get bookingStatusCompleted => 'مکمل';
+
+  @override
+  String get bookingStatusConfirmed => 'تصدیق شدہ';
+
+  @override
+  String get bookingStatusConflictMessage =>
+      'اس بکنگ کی صورتحال پہلے ہی تبدیل ہو چکی ہے۔';
+
+  @override
+  String get bookingStatusPending => 'زیر التواء';
+
+  @override
+  String get callToArrangeButtonLabel => 'انتظام کے لیے کال کریں';
+
+  @override
+  String get cancelAppointmentMenuItem => 'اپائنٹمنٹ منسوخ کریں';
+
+  @override
+  String get cancelBookingButtonLabel => 'منسوخ کریں';
+
+  @override
+  String get cancelLinkButtonLabel => 'لنک منسوخ کریں';
+
+  @override
+  String get categoryNotAllowedMessage => 'یہ قسم ریکارڈز کے لیے جائز نہیں ہے۔';
+
+  @override
+  String get completeBookingButtonLabel => 'مکمل شدہ نشان زد کریں';
+
+  @override
+  String get confirmBookingButtonLabel => 'تصدیق کریں';
+
+  @override
+  String get connectBandButtonLabel => 'بینڈ جوڑیں';
+
+  @override
+  String get connectBandInstructions =>
+      'اپنے بینڈ کا بلوٹوتھ آن کریں اور اسے جوڑنے کے لیے نیچے اس کا ایڈریس درج کریں۔';
+
+  @override
+  String get connectBandScreenTitle => 'بینڈ جوڑیں';
+
+  @override
+  String get createDoctorLinkBody =>
+      'ایک لنک بنائیں جسے کوئی بھی لاگ ان کے بغیر کھول سکے۔ یہ خود بخود ختم ہو جائے گا۔';
+
+  @override
+  String get createDoctorLinkTitle => 'ڈاکٹر لنک بنائیں';
+
+  @override
+  String get createLinkButtonLabel => 'لنک بنائیں';
+
+  @override
+  String get dateFieldLabel => 'تاریخ';
+
+  @override
+  String get deleteAppointmentConfirmTitle => 'کیا یہ اپائنٹمنٹ حذف کر دیں؟';
+
+  @override
+  String get deleteButtonLabel => 'حذف کریں';
+
+  @override
+  String get deleteRecordConfirmBody =>
+      'یہ ریکارڈ مستقل طور پر حذف ہو جائے گا۔';
+
+  @override
+  String get deleteRecordConfirmTitle => 'کیا یہ ریکارڈ حذف کر دیں؟';
+
+  @override
+  String get demoDataDisabledMessage =>
+      'اس بینڈ کے لیے ڈیمو ڈیٹا دستیاب نہیں ہے۔';
+
+  @override
+  String get diastolicFieldLabel => 'ڈایاسٹولک';
+
+  @override
+  String get directoryButton => 'ڈائریکٹری اور خدمات';
+
+  @override
+  String get directoryOrganizationsTabLabel => 'ادارے';
+
+  @override
+  String get directoryProvidersTabLabel => 'گھریلو نگہداشت';
+
+  @override
+  String get directoryScreenTitle => 'ڈائریکٹری';
+
+  @override
+  String get doctorLinkShareIntro =>
+      'طبی ریکارڈز دیکھنے کے لیے یہ ایک محفوظ لنک ہے:';
+
+  @override
+  String get doctorLinksMenuItem => 'ڈاکٹر لنکس';
+
+  @override
+  String get doctorLinksScreenTitle => 'ڈاکٹر لنکس';
+
+  @override
+  String get doneButtonLabel => 'ہو گیا';
+
+  @override
+  String get downloadFileTooltip => 'ڈاؤن لوڈ کریں';
+
+  @override
+  String get editAppointmentTitle => 'اپائنٹمنٹ میں ترمیم کریں';
+
+  @override
+  String get editRecordTitle => 'ریکارڈ میں ترمیم کریں';
+
+  @override
+  String get exportButtonLabel => 'ایکسپورٹ';
+
+  @override
+  String get exportFailedMessage =>
+      'ایکسپورٹ تیار نہیں ہو سکا۔ براہ کرم دوبارہ کوشش کریں۔';
+
+  @override
+  String get exportRecordsMenuItem => 'ریکارڈز ایکسپورٹ کریں';
+
+  @override
+  String get exportScopeCompleteLabel => 'سب کچھ';
+
+  @override
+  String get exportScopeMonthLabel => 'اس مہینے';
+
+  @override
+  String get exportScopeYearLabel => 'اس سال';
+
+  @override
+  String get exportSheetTitle => 'ایکسپورٹ';
+
+  @override
+  String get fileCannotBeReplacedNote =>
+      'فائل کو تبدیل نہیں کیا جا سکتا۔ اس کے بجائے یہ ریکارڈ حذف کر کے نیا شامل کریں۔';
+
+  @override
+  String get fileTooLargeMessage => 'یہ فائل بہت بڑی ہے۔ حد 10 MB ہے۔';
+
+  @override
+  String get fromBandNote => 'بینڈ سے';
+
+  @override
+  String get generateDemoDataButtonLabel => 'ڈیمو ڈیٹا بنائیں';
+
+  @override
+  String get healthRecordsAccessDeniedMessage =>
+      'آپ کو اس ڈیپینڈنٹ کے طبی ریکارڈز تک رسائی حاصل نہیں ہے۔';
+
+  @override
+  String get healthRecordsNotGrantedNote =>
+      'طبی ریکارڈز تک رسائی ابھی نہیں دی گئی۔';
+
+  @override
+  String get includeVitalsFieldLabel => 'وائٹلز شامل کریں';
+
+  @override
+  String get latestHeartRateLabel => 'تازہ ترین دل کی دھڑکن';
+
+  @override
+  String get linkExpiresInFieldLabel => 'لنک کی میعاد';
+
+  @override
+  String get loadMoreButtonLabel => 'مزید لوڈ کریں';
+
+  @override
+  String get medicalRecordsButton => 'طبی ریکارڈز';
+
+  @override
+  String get medicalVaultScreenTitle => 'طبی والٹ';
+
+  @override
+  String get metricBloodPressure => 'بلڈ پریشر';
+
+  @override
+  String get metricBloodSugar => 'بلڈ شوگر';
+
+  @override
+  String get metricHeartRate => 'دل کی دھڑکن';
+
+  @override
+  String get metricSpo2 => 'ایس پی او 2';
+
+  @override
+  String get metricTemperature => 'درجہ حرارت';
+
+  @override
+  String get moreSectionHeader => 'مزید';
+
+  @override
+  String get myBandScreenTitle => 'میرا بینڈ';
+
+  @override
+  String get nearMeButtonLabel => 'میرے قریب';
+
+  @override
+  String get noActivityMessage => 'ابھی تک کوئی سرگرمی نہیں۔';
+
+  @override
+  String get noDirectoryResultsMessage => 'کوئی نتیجہ نہیں ملا۔';
+
+  @override
+  String get noDoctorLinksMessage => 'ابھی تک کوئی ڈاکٹر لنک نہیں۔';
+
+  @override
+  String get noPastAppointmentsMessage => 'کوئی گزشتہ اپائنٹمنٹ نہیں۔';
+
+  @override
+  String get noPreferenceLabel => 'کوئی ترجیح نہیں';
+
+  @override
+  String get noRecordsMessage => 'ابھی تک کوئی ریکارڈ نہیں۔';
+
+  @override
+  String get noSecondariesMessage => 'ابھی تک کوئی سیکنڈری گارڈین نہیں۔';
+
+  @override
+  String get noUpcomingAppointmentsMessage => 'کوئی آنے والی اپائنٹمنٹ نہیں۔';
+
+  @override
+  String get noVitalsReadingsMessage => 'ابھی تک کوئی ریڈنگ نہیں۔';
+
+  @override
+  String get notPrimaryGuardianMessage => 'یہ صرف پرائمری گارڈین کر سکتا ہے۔';
+
+  @override
+  String get noteTooLongError => 'نوٹ بہت طویل ہے۔ اسے 300 حروف سے کم رکھیں۔';
+
+  @override
+  String get nothingSentToProviderNote =>
+      'فراہم کنندہ کو کچھ نہیں بھیجا جاتا — یہ صرف آپ کے اپنے ریکارڈ کے لیے ایک نوٹ ہے۔';
+
+  @override
+  String openedCountLabel(int count) {
+    return '$count بار کھولا گیا';
+  }
+
+  @override
+  String get pairButtonLabel => 'جوڑیں';
+
+  @override
+  String get pickTimeButtonLabel => 'وقت منتخب کریں';
+
+  @override
+  String get preferredTimeFieldLabel => 'ترجیحی وقت';
+
+  @override
+  String get preparingExportMessage => 'آپ کا ایکسپورٹ تیار ہو رہا ہے…';
+
+  @override
+  String get providerNameFieldLabel => 'فراہم کنندہ کا نام';
+
+  @override
+  String get recordAccessMenuItem => 'ریکارڈ تک رسائی';
+
+  @override
+  String get recordAccessScreenTitle => 'ریکارڈ تک رسائی';
+
+  @override
+  String get recordCategoryAll => 'تمام';
+
+  @override
+  String get recordCategoryFieldLabel => 'قسم';
+
+  @override
+  String get recordCategoryLabReport => 'لیب رپورٹ';
+
+  @override
+  String get recordCategoryOther => 'دیگر';
+
+  @override
+  String get recordCategoryPrescription => 'نسخہ';
+
+  @override
+  String get recordCategoryXray => 'ایکسرے';
+
+  @override
+  String get recordDateFieldLabel => 'ریکارڈ کی تاریخ';
+
+  @override
+  String get recordModifyDeniedMessage =>
+      'آپ کو اس ریکارڈ میں ترمیم کرنے کی اجازت نہیں ہے۔';
+
+  @override
+  String get recordNeedsContentError =>
+      'محفوظ کرنے سے پہلے فائل یا کچھ نوٹس شامل کریں۔';
+
+  @override
+  String get recordNotFoundMessage => 'یہ ریکارڈ نہیں ملا۔';
+
+  @override
+  String get recordNotesFieldLabel => 'نوٹس';
+
+  @override
+  String get recordTitleFieldLabel => 'عنوان';
+
+  @override
+  String get recordValidationErrorMessage =>
+      'براہ کرم تفصیلات چیک کریں اور دوبارہ کوشش کریں۔';
+
+  @override
+  String get recordsLimitMessage => 'آپ طبی ریکارڈز کی حد تک پہنچ گئے ہیں۔';
+
+  @override
+  String get requestVisitButtonLabel => 'وزٹ کی درخواست دیں';
+
+  @override
+  String get requestVisitScreenTitle => 'وزٹ کی درخواست دیں';
+
+  @override
+  String get requestedByLabel => 'درخواست دہندہ';
+
+  @override
+  String get sampleEntryLabel => 'نمونہ';
+
+  @override
+  String get saveRequestButtonLabel => 'درخواست محفوظ کریں';
+
+  @override
+  String get searchDirectoryHint => 'نام یا مہارت سے تلاش کریں';
+
+  @override
+  String get shareLimitError => 'آپ فعال ڈاکٹر لنکس کی حد تک پہنچ گئے ہیں۔';
+
+  @override
+  String get shareStatusActive => 'فعال';
+
+  @override
+  String get shareStatusExpired => 'ختم شدہ';
+
+  @override
+  String get shareStatusRevoked => 'منسوخ شدہ';
+
+  @override
+  String get spo2FieldLabel => 'ایس پی او 2 (%)';
+
+  @override
+  String get sugarContextAfterMeal => 'کھانے کے بعد';
+
+  @override
+  String get sugarContextFasting => 'روزہ';
+
+  @override
+  String get sugarContextFieldLabel => 'سیاق و سباق (اختیاری)';
+
+  @override
+  String get sugarContextNone => 'کوئی نہیں';
+
+  @override
+  String get sugarContextRandom => 'بے ترتیب';
+
+  @override
+  String get systolicFieldLabel => 'سسٹولک';
+
+  @override
+  String get temperatureFieldLabel => 'درجہ حرارت';
+
+  @override
+  String get tooManyOpenBookingsError =>
+      'آپ کی پہلے سے بہت سی کھلی درخواستیں ہیں۔ پہلے ایک منسوخ کریں۔';
+
+  @override
+  String get unitFieldLabel => 'یونٹ';
+
+  @override
+  String get unpairBandConfirmBody => 'یہ بینڈ اس ڈیپینڈنٹ سے الگ ہو جائے گا۔';
+
+  @override
+  String get unpairBandConfirmTitle => 'کیا یہ بینڈ الگ کر دیں؟';
+
+  @override
+  String get unpairButtonLabel => 'الگ کریں';
+
+  @override
+  String get unsupportedFileMessage =>
+      'یہ فائل کی قسم قابل قبول نہیں ہے۔ PDF, JPG یا PNG استعمال کریں۔';
+
+  @override
+  String get visitNoteFieldLabel => 'نوٹ (اختیاری)';
+
+  @override
+  String get visitRequestSavedMessage =>
+      'آپ کی وزٹ کی درخواست محفوظ ہو گئی ہے۔';
+
+  @override
+  String get vitalNoteFieldLabel => 'نوٹ (اختیاری)';
+
+  @override
+  String get vitalOutOfRangeMessage =>
+      'یہ قدر حد سے باہر لگتی ہے۔ براہ کرم چیک کریں۔';
+
+  @override
+  String get vitalsButton => 'وائٹلز';
+
+  @override
+  String get vitalsHistoryHeader => 'ماضی کی ریڈنگز';
+
+  @override
+  String get vitalsLimitMessage => 'آپ وائٹلز ریڈنگز کی حد تک پہنچ گئے ہیں۔';
+
+  @override
+  String get vitalsScreenTitle => 'وائٹلز';
+
+  @override
+  String get wearableBandButton => 'پہننے والا بینڈ';
 }

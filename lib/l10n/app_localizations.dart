@@ -1118,12 +1118,6 @@ abstract class AppLocalizations {
   /// **'No medicine scheduled'**
   String get noMedicationScheduledMessage;
 
-  /// No description provided for @moreComingSoonLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'More: records · appointments · messages (coming soon)'**
-  String get moreComingSoonLabel;
-
   /// No description provided for @panicScreenTitle.
   ///
   /// In en, this message translates to:
@@ -2227,6 +2221,996 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Couldn\'t load the voice message. Try again.'**
   String get audioDownloadFailedMessage;
+
+  /// No description provided for @activityBookingCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Booking cancelled'**
+  String get activityBookingCancelled;
+
+  /// No description provided for @activityBookingCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Booking completed'**
+  String get activityBookingCompleted;
+
+  /// No description provided for @activityBookingConfirmed.
+  ///
+  /// In en, this message translates to:
+  /// **'Booking confirmed'**
+  String get activityBookingConfirmed;
+
+  /// No description provided for @activityBookingRequested.
+  ///
+  /// In en, this message translates to:
+  /// **'Visit requested'**
+  String get activityBookingRequested;
+
+  /// No description provided for @activityLogMenuItem.
+  ///
+  /// In en, this message translates to:
+  /// **'Activity log'**
+  String get activityLogMenuItem;
+
+  /// No description provided for @activityLogScreenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Activity Log'**
+  String get activityLogScreenTitle;
+
+  /// No description provided for @activityOrgContact.
+  ///
+  /// In en, this message translates to:
+  /// **'Called organization'**
+  String get activityOrgContact;
+
+  /// No description provided for @addAppointmentTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Appointment'**
+  String get addAppointmentTitle;
+
+  /// No description provided for @addRecordTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Record'**
+  String get addRecordTitle;
+
+  /// No description provided for @addVitalReadingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Reading'**
+  String get addVitalReadingTitle;
+
+  /// No description provided for @allCategoriesLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get allCategoriesLabel;
+
+  /// No description provided for @appointmentCancelledError.
+  ///
+  /// In en, this message translates to:
+  /// **'This appointment has already been cancelled.'**
+  String get appointmentCancelledError;
+
+  /// No description provided for @appointmentCancelledLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancelled'**
+  String get appointmentCancelledLabel;
+
+  /// No description provided for @appointmentExistsError.
+  ///
+  /// In en, this message translates to:
+  /// **'You already have an appointment at this time.'**
+  String get appointmentExistsError;
+
+  /// No description provided for @appointmentInPastError.
+  ///
+  /// In en, this message translates to:
+  /// **'Appointments can\'t be scheduled in the past.'**
+  String get appointmentInPastError;
+
+  /// No description provided for @appointmentNotesFieldLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Notes'**
+  String get appointmentNotesFieldLabel;
+
+  /// No description provided for @appointmentSavedSnackbar.
+  ///
+  /// In en, this message translates to:
+  /// **'Appointment saved'**
+  String get appointmentSavedSnackbar;
+
+  /// No description provided for @appointmentsButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Appointments'**
+  String get appointmentsButton;
+
+  /// No description provided for @appointmentsHistoryTabLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'History'**
+  String get appointmentsHistoryTabLabel;
+
+  /// No description provided for @appointmentsLimitError.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'ve reached the limit of upcoming appointments.'**
+  String get appointmentsLimitError;
+
+  /// No description provided for @appointmentsScreenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Appointments'**
+  String get appointmentsScreenTitle;
+
+  /// No description provided for @appointmentsUpcomingTabLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Upcoming'**
+  String get appointmentsUpcomingTabLabel;
+
+  /// No description provided for @askForPriceLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask for price'**
+  String get askForPriceLabel;
+
+  /// No description provided for @attachFileButtonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Attach File'**
+  String get attachFileButtonLabel;
+
+  /// No description provided for @bandAddressFieldLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Bluetooth Address'**
+  String get bandAddressFieldLabel;
+
+  /// No description provided for @bandAlreadyPairedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'This Dependent already has a band paired.'**
+  String get bandAlreadyPairedMessage;
+
+  /// No description provided for @bandNameFieldLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Band Name (optional)'**
+  String get bandNameFieldLabel;
+
+  /// No description provided for @bandNoDataBanner.
+  ///
+  /// In en, this message translates to:
+  /// **'No readings have come in recently. Check that the band is powered on and nearby.'**
+  String get bandNoDataBanner;
+
+  /// No description provided for @bandStatusLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Status'**
+  String get bandStatusLabel;
+
+  /// No description provided for @bandStatusNoData.
+  ///
+  /// In en, this message translates to:
+  /// **'No recent data'**
+  String get bandStatusNoData;
+
+  /// No description provided for @bandStatusNotPaired.
+  ///
+  /// In en, this message translates to:
+  /// **'Not paired'**
+  String get bandStatusNotPaired;
+
+  /// No description provided for @bandStatusReceiving.
+  ///
+  /// In en, this message translates to:
+  /// **'Receiving data'**
+  String get bandStatusReceiving;
+
+  /// No description provided for @bandStatusWaitingForFirstData.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for first data'**
+  String get bandStatusWaitingForFirstData;
+
+  /// No description provided for @bloodSugarFieldLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Blood Sugar'**
+  String get bloodSugarFieldLabel;
+
+  /// No description provided for @bookingAlreadyOpenError.
+  ///
+  /// In en, this message translates to:
+  /// **'You already have an open request with this provider.'**
+  String get bookingAlreadyOpenError;
+
+  /// No description provided for @bookingStatusCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancelled'**
+  String get bookingStatusCancelled;
+
+  /// No description provided for @bookingStatusCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed'**
+  String get bookingStatusCompleted;
+
+  /// No description provided for @bookingStatusConfirmed.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirmed'**
+  String get bookingStatusConfirmed;
+
+  /// No description provided for @bookingStatusConflictMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'This booking\'s status has already changed.'**
+  String get bookingStatusConflictMessage;
+
+  /// No description provided for @bookingStatusPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending'**
+  String get bookingStatusPending;
+
+  /// No description provided for @callToArrangeButtonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Call to Arrange'**
+  String get callToArrangeButtonLabel;
+
+  /// No description provided for @cancelAppointmentMenuItem.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel appointment'**
+  String get cancelAppointmentMenuItem;
+
+  /// No description provided for @cancelBookingButtonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancelBookingButtonLabel;
+
+  /// No description provided for @cancelLinkButtonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel Link'**
+  String get cancelLinkButtonLabel;
+
+  /// No description provided for @categoryNotAllowedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'This category isn\'t allowed for records.'**
+  String get categoryNotAllowedMessage;
+
+  /// No description provided for @completeBookingButtonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark Completed'**
+  String get completeBookingButtonLabel;
+
+  /// No description provided for @confirmBookingButtonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm'**
+  String get confirmBookingButtonLabel;
+
+  /// No description provided for @connectBandButtonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Connect Band'**
+  String get connectBandButtonLabel;
+
+  /// No description provided for @connectBandInstructions.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn on your band\'s Bluetooth and enter its address below to pair it.'**
+  String get connectBandInstructions;
+
+  /// No description provided for @connectBandScreenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Connect Band'**
+  String get connectBandScreenTitle;
+
+  /// No description provided for @createDoctorLinkBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Create a link anyone can open without logging in. It expires automatically.'**
+  String get createDoctorLinkBody;
+
+  /// No description provided for @createDoctorLinkTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Create Doctor Link'**
+  String get createDoctorLinkTitle;
+
+  /// No description provided for @createLinkButtonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Create Link'**
+  String get createLinkButtonLabel;
+
+  /// No description provided for @dateFieldLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Date'**
+  String get dateFieldLabel;
+
+  /// No description provided for @deleteAppointmentConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this appointment?'**
+  String get deleteAppointmentConfirmTitle;
+
+  /// No description provided for @deleteButtonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get deleteButtonLabel;
+
+  /// No description provided for @deleteRecordConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'This record will be permanently removed.'**
+  String get deleteRecordConfirmBody;
+
+  /// No description provided for @deleteRecordConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this record?'**
+  String get deleteRecordConfirmTitle;
+
+  /// No description provided for @demoDataDisabledMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Demo data isn\'t available for this band.'**
+  String get demoDataDisabledMessage;
+
+  /// No description provided for @diastolicFieldLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Diastolic'**
+  String get diastolicFieldLabel;
+
+  /// No description provided for @directoryButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Directory & Services'**
+  String get directoryButton;
+
+  /// No description provided for @directoryOrganizationsTabLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Organizations'**
+  String get directoryOrganizationsTabLabel;
+
+  /// No description provided for @directoryProvidersTabLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Home Care'**
+  String get directoryProvidersTabLabel;
+
+  /// No description provided for @directoryScreenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Directory'**
+  String get directoryScreenTitle;
+
+  /// No description provided for @doctorLinkShareIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'Here is a secure link to view the medical records:'**
+  String get doctorLinkShareIntro;
+
+  /// No description provided for @doctorLinksMenuItem.
+  ///
+  /// In en, this message translates to:
+  /// **'Doctor links'**
+  String get doctorLinksMenuItem;
+
+  /// No description provided for @doctorLinksScreenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Doctor Links'**
+  String get doctorLinksScreenTitle;
+
+  /// No description provided for @doneButtonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get doneButtonLabel;
+
+  /// No description provided for @downloadFileTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Download'**
+  String get downloadFileTooltip;
+
+  /// No description provided for @editAppointmentTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Appointment'**
+  String get editAppointmentTitle;
+
+  /// No description provided for @editRecordTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Record'**
+  String get editRecordTitle;
+
+  /// No description provided for @exportButtonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Export'**
+  String get exportButtonLabel;
+
+  /// No description provided for @exportFailedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t prepare the export. Please try again.'**
+  String get exportFailedMessage;
+
+  /// No description provided for @exportRecordsMenuItem.
+  ///
+  /// In en, this message translates to:
+  /// **'Export records'**
+  String get exportRecordsMenuItem;
+
+  /// No description provided for @exportScopeCompleteLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Everything'**
+  String get exportScopeCompleteLabel;
+
+  /// No description provided for @exportScopeMonthLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'This month'**
+  String get exportScopeMonthLabel;
+
+  /// No description provided for @exportScopeYearLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'This year'**
+  String get exportScopeYearLabel;
+
+  /// No description provided for @exportSheetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Export'**
+  String get exportSheetTitle;
+
+  /// No description provided for @fileCannotBeReplacedNote.
+  ///
+  /// In en, this message translates to:
+  /// **'The file can\'t be replaced. Delete this record and add a new one instead.'**
+  String get fileCannotBeReplacedNote;
+
+  /// No description provided for @fileTooLargeMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'This file is too large. The limit is 10 MB.'**
+  String get fileTooLargeMessage;
+
+  /// No description provided for @fromBandNote.
+  ///
+  /// In en, this message translates to:
+  /// **'From band'**
+  String get fromBandNote;
+
+  /// No description provided for @generateDemoDataButtonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Generate Demo Data'**
+  String get generateDemoDataButtonLabel;
+
+  /// No description provided for @healthRecordsAccessDeniedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'You don\'t have access to health records for this Dependent.'**
+  String get healthRecordsAccessDeniedMessage;
+
+  /// No description provided for @healthRecordsNotGrantedNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Health records access isn\'t granted yet.'**
+  String get healthRecordsNotGrantedNote;
+
+  /// No description provided for @includeVitalsFieldLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Include Vitals'**
+  String get includeVitalsFieldLabel;
+
+  /// No description provided for @latestHeartRateLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Latest Heart Rate'**
+  String get latestHeartRateLabel;
+
+  /// No description provided for @linkExpiresInFieldLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Link Expires In'**
+  String get linkExpiresInFieldLabel;
+
+  /// No description provided for @loadMoreButtonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Load More'**
+  String get loadMoreButtonLabel;
+
+  /// No description provided for @medicalRecordsButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Medical Records'**
+  String get medicalRecordsButton;
+
+  /// No description provided for @medicalVaultScreenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Medical Vault'**
+  String get medicalVaultScreenTitle;
+
+  /// No description provided for @metricBloodPressure.
+  ///
+  /// In en, this message translates to:
+  /// **'Blood Pressure'**
+  String get metricBloodPressure;
+
+  /// No description provided for @metricBloodSugar.
+  ///
+  /// In en, this message translates to:
+  /// **'Blood Sugar'**
+  String get metricBloodSugar;
+
+  /// No description provided for @metricHeartRate.
+  ///
+  /// In en, this message translates to:
+  /// **'Heart Rate'**
+  String get metricHeartRate;
+
+  /// No description provided for @metricSpo2.
+  ///
+  /// In en, this message translates to:
+  /// **'SpO2'**
+  String get metricSpo2;
+
+  /// No description provided for @metricTemperature.
+  ///
+  /// In en, this message translates to:
+  /// **'Temperature'**
+  String get metricTemperature;
+
+  /// No description provided for @moreSectionHeader.
+  ///
+  /// In en, this message translates to:
+  /// **'More'**
+  String get moreSectionHeader;
+
+  /// No description provided for @myBandScreenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'My Band'**
+  String get myBandScreenTitle;
+
+  /// No description provided for @nearMeButtonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Near Me'**
+  String get nearMeButtonLabel;
+
+  /// No description provided for @noActivityMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'No activity yet.'**
+  String get noActivityMessage;
+
+  /// No description provided for @noDirectoryResultsMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'No results found.'**
+  String get noDirectoryResultsMessage;
+
+  /// No description provided for @noDoctorLinksMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'No doctor links yet.'**
+  String get noDoctorLinksMessage;
+
+  /// No description provided for @noPastAppointmentsMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'No past appointments.'**
+  String get noPastAppointmentsMessage;
+
+  /// No description provided for @noPreferenceLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'No preference'**
+  String get noPreferenceLabel;
+
+  /// No description provided for @noRecordsMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'No records yet.'**
+  String get noRecordsMessage;
+
+  /// No description provided for @noSecondariesMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'No Secondary Guardians yet.'**
+  String get noSecondariesMessage;
+
+  /// No description provided for @noUpcomingAppointmentsMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'No upcoming appointments.'**
+  String get noUpcomingAppointmentsMessage;
+
+  /// No description provided for @noVitalsReadingsMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'No readings yet.'**
+  String get noVitalsReadingsMessage;
+
+  /// No description provided for @notPrimaryGuardianMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Only the Primary Guardian can do this.'**
+  String get notPrimaryGuardianMessage;
+
+  /// No description provided for @noteTooLongError.
+  ///
+  /// In en, this message translates to:
+  /// **'The note is too long. Keep it under 300 characters.'**
+  String get noteTooLongError;
+
+  /// No description provided for @nothingSentToProviderNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing is sent to the provider — this is just a note for your own records.'**
+  String get nothingSentToProviderNote;
+
+  /// No description provided for @openedCountLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Opened {count} time(s)'**
+  String openedCountLabel(int count);
+
+  /// No description provided for @pairButtonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Pair'**
+  String get pairButtonLabel;
+
+  /// No description provided for @pickTimeButtonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick Time'**
+  String get pickTimeButtonLabel;
+
+  /// No description provided for @preferredTimeFieldLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Preferred Time'**
+  String get preferredTimeFieldLabel;
+
+  /// No description provided for @preparingExportMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Preparing your export…'**
+  String get preparingExportMessage;
+
+  /// No description provided for @providerNameFieldLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Provider Name'**
+  String get providerNameFieldLabel;
+
+  /// No description provided for @recordAccessMenuItem.
+  ///
+  /// In en, this message translates to:
+  /// **'Record access'**
+  String get recordAccessMenuItem;
+
+  /// No description provided for @recordAccessScreenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Record Access'**
+  String get recordAccessScreenTitle;
+
+  /// No description provided for @recordCategoryAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get recordCategoryAll;
+
+  /// No description provided for @recordCategoryFieldLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Category'**
+  String get recordCategoryFieldLabel;
+
+  /// No description provided for @recordCategoryLabReport.
+  ///
+  /// In en, this message translates to:
+  /// **'Lab Report'**
+  String get recordCategoryLabReport;
+
+  /// No description provided for @recordCategoryOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get recordCategoryOther;
+
+  /// No description provided for @recordCategoryPrescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Prescription'**
+  String get recordCategoryPrescription;
+
+  /// No description provided for @recordCategoryXray.
+  ///
+  /// In en, this message translates to:
+  /// **'X-ray'**
+  String get recordCategoryXray;
+
+  /// No description provided for @recordDateFieldLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Record Date'**
+  String get recordDateFieldLabel;
+
+  /// No description provided for @recordModifyDeniedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'You don\'t have permission to modify this record.'**
+  String get recordModifyDeniedMessage;
+
+  /// No description provided for @recordNeedsContentError.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a file or some notes before saving.'**
+  String get recordNeedsContentError;
+
+  /// No description provided for @recordNotFoundMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'This record could not be found.'**
+  String get recordNotFoundMessage;
+
+  /// No description provided for @recordNotesFieldLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Notes'**
+  String get recordNotesFieldLabel;
+
+  /// No description provided for @recordTitleFieldLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Title'**
+  String get recordTitleFieldLabel;
+
+  /// No description provided for @recordValidationErrorMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Please check the details and try again.'**
+  String get recordValidationErrorMessage;
+
+  /// No description provided for @recordsLimitMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'ve reached the limit of medical records.'**
+  String get recordsLimitMessage;
+
+  /// No description provided for @requestVisitButtonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Request Visit'**
+  String get requestVisitButtonLabel;
+
+  /// No description provided for @requestVisitScreenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Request a Visit'**
+  String get requestVisitScreenTitle;
+
+  /// No description provided for @requestedByLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Requested by'**
+  String get requestedByLabel;
+
+  /// No description provided for @sampleEntryLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Sample'**
+  String get sampleEntryLabel;
+
+  /// No description provided for @saveRequestButtonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Save Request'**
+  String get saveRequestButtonLabel;
+
+  /// No description provided for @searchDirectoryHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search by name or specialization'**
+  String get searchDirectoryHint;
+
+  /// No description provided for @shareLimitError.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'ve reached the limit of active doctor links.'**
+  String get shareLimitError;
+
+  /// No description provided for @shareStatusActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Active'**
+  String get shareStatusActive;
+
+  /// No description provided for @shareStatusExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'Expired'**
+  String get shareStatusExpired;
+
+  /// No description provided for @shareStatusRevoked.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancelled'**
+  String get shareStatusRevoked;
+
+  /// No description provided for @spo2FieldLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'SpO2 (%)'**
+  String get spo2FieldLabel;
+
+  /// No description provided for @sugarContextAfterMeal.
+  ///
+  /// In en, this message translates to:
+  /// **'After meal'**
+  String get sugarContextAfterMeal;
+
+  /// No description provided for @sugarContextFasting.
+  ///
+  /// In en, this message translates to:
+  /// **'Fasting'**
+  String get sugarContextFasting;
+
+  /// No description provided for @sugarContextFieldLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Context (optional)'**
+  String get sugarContextFieldLabel;
+
+  /// No description provided for @sugarContextNone.
+  ///
+  /// In en, this message translates to:
+  /// **'None'**
+  String get sugarContextNone;
+
+  /// No description provided for @sugarContextRandom.
+  ///
+  /// In en, this message translates to:
+  /// **'Random'**
+  String get sugarContextRandom;
+
+  /// No description provided for @systolicFieldLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Systolic'**
+  String get systolicFieldLabel;
+
+  /// No description provided for @temperatureFieldLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Temperature'**
+  String get temperatureFieldLabel;
+
+  /// No description provided for @tooManyOpenBookingsError.
+  ///
+  /// In en, this message translates to:
+  /// **'You have too many open requests already. Cancel one first.'**
+  String get tooManyOpenBookingsError;
+
+  /// No description provided for @unitFieldLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Unit'**
+  String get unitFieldLabel;
+
+  /// No description provided for @unpairBandConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'This band will be unpaired from this Dependent.'**
+  String get unpairBandConfirmBody;
+
+  /// No description provided for @unpairBandConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Unpair this band?'**
+  String get unpairBandConfirmTitle;
+
+  /// No description provided for @unpairButtonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Unpair'**
+  String get unpairButtonLabel;
+
+  /// No description provided for @unsupportedFileMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'This file type isn\'t supported. Use PDF, JPG, or PNG.'**
+  String get unsupportedFileMessage;
+
+  /// No description provided for @visitNoteFieldLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Note (optional)'**
+  String get visitNoteFieldLabel;
+
+  /// No description provided for @visitRequestSavedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Your visit request has been saved.'**
+  String get visitRequestSavedMessage;
+
+  /// No description provided for @vitalNoteFieldLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Note (optional)'**
+  String get vitalNoteFieldLabel;
+
+  /// No description provided for @vitalOutOfRangeMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'This value looks out of range. Please check it.'**
+  String get vitalOutOfRangeMessage;
+
+  /// No description provided for @vitalsButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Vitals'**
+  String get vitalsButton;
+
+  /// No description provided for @vitalsHistoryHeader.
+  ///
+  /// In en, this message translates to:
+  /// **'History'**
+  String get vitalsHistoryHeader;
+
+  /// No description provided for @vitalsLimitMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'ve reached the limit of vitals readings.'**
+  String get vitalsLimitMessage;
+
+  /// No description provided for @vitalsScreenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Vitals'**
+  String get vitalsScreenTitle;
+
+  /// No description provided for @wearableBandButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Wearable Band'**
+  String get wearableBandButton;
 }
 
 class _AppLocalizationsDelegate

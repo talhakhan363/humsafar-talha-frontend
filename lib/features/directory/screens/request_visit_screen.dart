@@ -133,7 +133,7 @@ class _RequestVisitScreenState extends ConsumerState<RequestVisitScreen> {
           title: Text(l10n.preferredTimeFieldLabel),
           subtitle: _preferredAt == null
               ? Text(l10n.noPreferenceLabel)
-              : Text('${formatDateDisplay(_preferredAt!, languageCode)}'),
+              : Text(formatDateDisplay(_preferredAt!, languageCode)),
           trailing: TextButton(onPressed: _pickPreferredAt, child: Text(l10n.pickTimeButtonLabel)),
         ),
         const SizedBox(height: 12),
