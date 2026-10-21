@@ -175,6 +175,9 @@ class AppLocalizationsUr extends AppLocalizations {
   String get cancelButton => 'منسوخ کریں';
 
   @override
+  String get saveButtonLabel => 'محفوظ کریں';
+
+  @override
   String get yesLabel => 'جی ہاں';
 
   @override
@@ -587,10 +590,6 @@ class AppLocalizationsUr extends AppLocalizations {
       'مزید: ریکارڈز · اپائنٹمنٹس · پیغامات (جلد آرہا ہے)';
 
   @override
-  String get medicationComingSoonMessage =>
-      'دوا کی تصدیق ٹاسک 3.13 میں شامل ہوگی۔';
-
-  @override
   String get panicScreenTitle => 'ایمرجنسی';
 
   @override
@@ -703,4 +702,178 @@ class AppLocalizationsUr extends AppLocalizations {
   @override
   String get wellnessCheckRespondFailedSnackbar =>
       'آپ کا جواب نہیں بھیجا جا سکا۔ دوبارہ کوشش کریں۔';
+
+  @override
+  String get medicationScreenTitle => 'میری دوا';
+
+  @override
+  String get medicineStep1OfTwoLabel => 'میں نے دوا لے لی · مرحلہ 1 از 2';
+
+  @override
+  String get noMedicineDueMessage => 'ابھی کوئی دوا کا وقت نہیں ہے۔';
+
+  @override
+  String get medicineTimePromptTitle => 'آپ کی دوا کا وقت ہوگیا ہے';
+
+  @override
+  String medicineTimePromptMessage(String drug, String dosage) {
+    return '$drug ($dosage) — کیا آپ نے لے لی؟';
+  }
+
+  @override
+  String get medicineTookItButtonLabel => 'میں نے لے لی';
+
+  @override
+  String get medicineConfirmTitle => 'تصدیق کریں کہ آپ نے لی ہے';
+
+  @override
+  String medicineConfirmMessage(String drug, String dosage) {
+    return 'براہ کرم تصدیق کریں: $drug ($dosage)';
+  }
+
+  @override
+  String medicineConfirmExpiresNote(String time) {
+    return 'یہ تصدیق $time میں ختم ہوجائے گی';
+  }
+
+  @override
+  String get medicineConfirmButtonLabel => 'جی ہاں، لے لی';
+
+  @override
+  String get medicineConfirmExpiredMessage => 'تصدیق کا وقت ختم ہوگیا۔';
+
+  @override
+  String get medicineTryAgainButtonLabel => 'دوبارہ کوشش کریں';
+
+  @override
+  String get medicineTakenTitle => 'لی گئی کے طور پر نشان زد';
+
+  @override
+  String medicineTakenMessage(String drug) {
+    return '$drug کو لی گئی کے طور پر نشان زد کر دیا گیا ہے۔';
+  }
+
+  @override
+  String get medicineDoneButtonLabel => 'ہوگیا';
+
+  @override
+  String get medicineConfirmRequestFailedSnackbar =>
+      'تصدیق شروع نہیں ہو سکی۔ دوبارہ کوشش کریں۔';
+
+  @override
+  String get medicineConfirmFailedSnackbar =>
+      'تصدیق نہیں ہو سکی۔ دوبارہ کوشش کریں۔';
+
+  @override
+  String get medicationScheduleButton => 'دوا کا شیڈول';
+
+  @override
+  String get wellnessScheduleButton => 'ویلنیس چیک شیڈول';
+
+  @override
+  String get medicationScheduleScreenTitle => 'دوا کا شیڈول';
+
+  @override
+  String get wellnessScheduleScreenTitle => 'ویلنیس چیک شیڈول';
+
+  @override
+  String get noMedicationSchedulesMessage =>
+      'ابھی تک کوئی دوا شیڈول نہیں کی گئی۔';
+
+  @override
+  String get noWellnessSchedulesMessage =>
+      'ابھی تک کوئی ویلنیس چیک کا وقت شیڈول نہیں کیا گیا۔';
+
+  @override
+  String get useDefaultScheduleButton =>
+      'ڈیفالٹ شیڈول استعمال کریں (صبح 8، دوپہر 2، رات 8)';
+
+  @override
+  String get medicationManagementDeniedNote =>
+      'آپ کو دوا کا انتظام کرنے کی اجازت نہیں ہے۔ پرائمری گارڈین سے پوچھیں۔';
+
+  @override
+  String get wellnessManagementDeniedNote =>
+      'آپ کو ویلنیس چیک کا انتظام کرنے کی اجازت نہیں ہے۔ پرائمری گارڈین سے پوچھیں۔';
+
+  @override
+  String get drugNameFieldLabel => 'دوا کا نام';
+
+  @override
+  String get dosageFieldLabel => 'خوراک';
+
+  @override
+  String get timeFieldLabel => 'وقت';
+
+  @override
+  String get frequencyFieldLabel => 'تکرار';
+
+  @override
+  String get dailyLabel => 'روزانہ';
+
+  @override
+  String get weeklyLabel => 'ہفتہ وار';
+
+  @override
+  String get gracePeriodFieldLabel => 'رعایتی وقت (منٹ)';
+
+  @override
+  String gracePeriodMinutesMessage(int minutes) {
+    return 'رعایتی وقت: $minutes منٹ';
+  }
+
+  @override
+  String get addMedicationScheduleTitle => 'دوا شامل کریں';
+
+  @override
+  String get editMedicationScheduleTitle => 'دوا میں ترمیم کریں';
+
+  @override
+  String get addWellnessCheckTitle => 'چیک کا وقت شامل کریں';
+
+  @override
+  String get editWellnessCheckTitle => 'چیک کے وقت میں ترمیم کریں';
+
+  @override
+  String get scheduleSavedSnackbar => 'محفوظ ہوگیا۔';
+
+  @override
+  String get scheduleSaveFailedSnackbar =>
+      'محفوظ نہیں ہو سکا۔ دوبارہ کوشش کریں۔';
+
+  @override
+  String get scheduleUpdateFailedSnackbar =>
+      'اپڈیٹ نہیں ہو سکا۔ دوبارہ کوشش کریں۔';
+
+  @override
+  String get weeklyDaysRequiredError =>
+      'ہفتہ وار شیڈول کے لیے کم از کم ایک دن منتخب کریں۔';
+
+  @override
+  String get wellnessLimitReachedError =>
+      'آپ زیادہ سے زیادہ 3 ویلنیس چیک کے اوقات رکھ سکتے ہیں۔';
+
+  @override
+  String get wellnessTimeExistsError => 'اس وقت پر پہلے سے ایک چیک موجود ہے۔';
+
+  @override
+  String get dayMonLabel => 'پیر';
+
+  @override
+  String get dayTueLabel => 'منگل';
+
+  @override
+  String get dayWedLabel => 'بدھ';
+
+  @override
+  String get dayThuLabel => 'جمعرات';
+
+  @override
+  String get dayFriLabel => 'جمعہ';
+
+  @override
+  String get daySatLabel => 'ہفتہ';
+
+  @override
+  String get daySunLabel => 'اتوار';
 }

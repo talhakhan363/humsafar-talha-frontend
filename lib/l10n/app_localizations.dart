@@ -410,6 +410,12 @@ abstract class AppLocalizations {
   /// **'Cancel'**
   String get cancelButton;
 
+  /// No description provided for @saveButtonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get saveButtonLabel;
+
   /// No description provided for @yesLabel.
   ///
   /// In en, this message translates to:
@@ -1118,12 +1124,6 @@ abstract class AppLocalizations {
   /// **'More: records · appointments · messages (coming soon)'**
   String get moreComingSoonLabel;
 
-  /// No description provided for @medicationComingSoonMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Medication confirmation is coming in Task 3.13.'**
-  String get medicationComingSoonMessage;
-
   /// No description provided for @panicScreenTitle.
   ///
   /// In en, this message translates to:
@@ -1309,6 +1309,312 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Couldn\'t send your answer. Try again.'**
   String get wellnessCheckRespondFailedSnackbar;
+
+  /// No description provided for @medicationScreenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'My medicine'**
+  String get medicationScreenTitle;
+
+  /// No description provided for @medicineStep1OfTwoLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'I took my medicine · Step 1 of 2'**
+  String get medicineStep1OfTwoLabel;
+
+  /// No description provided for @noMedicineDueMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'There\'s no medicine due right now.'**
+  String get noMedicineDueMessage;
+
+  /// No description provided for @medicineTimePromptTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'It\'s time for your medicine'**
+  String get medicineTimePromptTitle;
+
+  /// No description provided for @medicineTimePromptMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'{drug} ({dosage}) — did you take it?'**
+  String medicineTimePromptMessage(String drug, String dosage);
+
+  /// No description provided for @medicineTookItButtonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'I took it'**
+  String get medicineTookItButtonLabel;
+
+  /// No description provided for @medicineConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm you took it'**
+  String get medicineConfirmTitle;
+
+  /// No description provided for @medicineConfirmMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Please confirm: {drug} ({dosage})'**
+  String medicineConfirmMessage(String drug, String dosage);
+
+  /// No description provided for @medicineConfirmExpiresNote.
+  ///
+  /// In en, this message translates to:
+  /// **'This confirmation expires in {time}'**
+  String medicineConfirmExpiresNote(String time);
+
+  /// No description provided for @medicineConfirmButtonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes, I took it'**
+  String get medicineConfirmButtonLabel;
+
+  /// No description provided for @medicineConfirmExpiredMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'This confirmation window expired.'**
+  String get medicineConfirmExpiredMessage;
+
+  /// No description provided for @medicineTryAgainButtonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Try again'**
+  String get medicineTryAgainButtonLabel;
+
+  /// No description provided for @medicineTakenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Marked as taken'**
+  String get medicineTakenTitle;
+
+  /// No description provided for @medicineTakenMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'{drug} is marked as taken.'**
+  String medicineTakenMessage(String drug);
+
+  /// No description provided for @medicineDoneButtonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get medicineDoneButtonLabel;
+
+  /// No description provided for @medicineConfirmRequestFailedSnackbar.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t start the confirmation. Try again.'**
+  String get medicineConfirmRequestFailedSnackbar;
+
+  /// No description provided for @medicineConfirmFailedSnackbar.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t confirm. Try again.'**
+  String get medicineConfirmFailedSnackbar;
+
+  /// No description provided for @medicationScheduleButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Medication schedule'**
+  String get medicationScheduleButton;
+
+  /// No description provided for @wellnessScheduleButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Wellness check schedule'**
+  String get wellnessScheduleButton;
+
+  /// No description provided for @medicationScheduleScreenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Medication schedule'**
+  String get medicationScheduleScreenTitle;
+
+  /// No description provided for @wellnessScheduleScreenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Wellness check schedule'**
+  String get wellnessScheduleScreenTitle;
+
+  /// No description provided for @noMedicationSchedulesMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'No medicines scheduled yet.'**
+  String get noMedicationSchedulesMessage;
+
+  /// No description provided for @noWellnessSchedulesMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'No wellness check times scheduled yet.'**
+  String get noWellnessSchedulesMessage;
+
+  /// No description provided for @useDefaultScheduleButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Use default schedule (8am, 2pm, 8pm)'**
+  String get useDefaultScheduleButton;
+
+  /// No description provided for @medicationManagementDeniedNote.
+  ///
+  /// In en, this message translates to:
+  /// **'You don\'t have permission to manage medicines. Ask the Primary Guardian.'**
+  String get medicationManagementDeniedNote;
+
+  /// No description provided for @wellnessManagementDeniedNote.
+  ///
+  /// In en, this message translates to:
+  /// **'You don\'t have permission to manage wellness checks. Ask the Primary Guardian.'**
+  String get wellnessManagementDeniedNote;
+
+  /// No description provided for @drugNameFieldLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Medicine name'**
+  String get drugNameFieldLabel;
+
+  /// No description provided for @dosageFieldLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Dosage'**
+  String get dosageFieldLabel;
+
+  /// No description provided for @timeFieldLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Time'**
+  String get timeFieldLabel;
+
+  /// No description provided for @frequencyFieldLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Frequency'**
+  String get frequencyFieldLabel;
+
+  /// No description provided for @dailyLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily'**
+  String get dailyLabel;
+
+  /// No description provided for @weeklyLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Weekly'**
+  String get weeklyLabel;
+
+  /// No description provided for @gracePeriodFieldLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Grace period (minutes)'**
+  String get gracePeriodFieldLabel;
+
+  /// No description provided for @gracePeriodMinutesMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Grace period: {minutes} min'**
+  String gracePeriodMinutesMessage(int minutes);
+
+  /// No description provided for @addMedicationScheduleTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add medicine'**
+  String get addMedicationScheduleTitle;
+
+  /// No description provided for @editMedicationScheduleTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit medicine'**
+  String get editMedicationScheduleTitle;
+
+  /// No description provided for @addWellnessCheckTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add check time'**
+  String get addWellnessCheckTitle;
+
+  /// No description provided for @editWellnessCheckTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit check time'**
+  String get editWellnessCheckTitle;
+
+  /// No description provided for @scheduleSavedSnackbar.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved.'**
+  String get scheduleSavedSnackbar;
+
+  /// No description provided for @scheduleSaveFailedSnackbar.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t save. Try again.'**
+  String get scheduleSaveFailedSnackbar;
+
+  /// No description provided for @scheduleUpdateFailedSnackbar.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t update. Try again.'**
+  String get scheduleUpdateFailedSnackbar;
+
+  /// No description provided for @weeklyDaysRequiredError.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick at least one day for a weekly schedule.'**
+  String get weeklyDaysRequiredError;
+
+  /// No description provided for @wellnessLimitReachedError.
+  ///
+  /// In en, this message translates to:
+  /// **'You can have at most 3 wellness check times.'**
+  String get wellnessLimitReachedError;
+
+  /// No description provided for @wellnessTimeExistsError.
+  ///
+  /// In en, this message translates to:
+  /// **'There\'s already a check at that time.'**
+  String get wellnessTimeExistsError;
+
+  /// No description provided for @dayMonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Mon'**
+  String get dayMonLabel;
+
+  /// No description provided for @dayTueLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Tue'**
+  String get dayTueLabel;
+
+  /// No description provided for @dayWedLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Wed'**
+  String get dayWedLabel;
+
+  /// No description provided for @dayThuLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Thu'**
+  String get dayThuLabel;
+
+  /// No description provided for @dayFriLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Fri'**
+  String get dayFriLabel;
+
+  /// No description provided for @daySatLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Sat'**
+  String get daySatLabel;
+
+  /// No description provided for @daySunLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Sun'**
+  String get daySunLabel;
 }
 
 class _AppLocalizationsDelegate

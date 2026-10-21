@@ -10,10 +10,12 @@ import '../../features/guardian/screens/invite_secondary_screen.dart';
 import '../../features/guardian/screens/permissions_dashboard_screen.dart';
 import '../../features/guardian/screens/my_access_screen.dart';
 import '../../features/guardian/screens/live_map_screen.dart';
+import '../../features/guardian/screens/medication_schedule_screen.dart';
+import '../../features/guardian/screens/wellness_schedule_screen.dart';
 import '../../features/dependent/screens/dependent_home_screen.dart';
-import '../../features/dependent/screens/coming_soon_screen.dart';
 import '../../features/dependent/screens/panic_screen.dart';
 import '../../features/dependent/screens/wellness_check_screen.dart';
+import '../../features/dependent/screens/medication_confirm_screen.dart';
 import '../../features/auth/screens/register_screen.dart';
 import '../../features/auth/screens/login_screen.dart';
 import '../../features/auth/screens/accept_invite_screen.dart';
@@ -37,6 +39,21 @@ import '../guardian/dependent_summary.dart';
 // transition, it triggered a "GlobalKey used multiple times" crash in
 // Flutter's internal ink-rendering code. Removing the transition removes
 // the overlap window entirely.
+//
+// Task 3.13 (2026-10-21): `/dependent/medication` now opens the real
+// MedicationConfirmScreen instead of ComingSoonScreen — the last of the
+// three Task 3.10 placeholders is gone, so ComingSoonScreen itself (and
+// its test) was deleted as dead code rather than left unused. `extra`
+// here is a plain `bool?` ("did Home already establish a dose is due
+// right now and skip straight to step 2?") - see
+// dependent_home_screen.dart's doc comment and
+// medication_confirm_screen.dart's `skipPrompt`.
+//
+// Task 3.15 (2026-10-21): added the two Guardian-side schedule
+// configuration routes, following the same `extra: DependentSummary`
+// pattern as `/guardian/live-map` (both need `dependentId` plus
+// `isPrimary` for permission gating, not just the raw id string the
+// permissions/my-access routes take).
 final appRouterProvider = Provider<GoRouter>((ref) {
   return GoRouter(
     initialLocation: '/',
@@ -131,16 +148,26 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         },
       ),
       GoRoute(
+        path: '/guardian/medication-schedule',
+        name: 'medication-schedule',
+        pageBuilder: (context, state) => NoTransitionPage(
+          key: state.pageKey,
+          child: MedicationScheduleScreen(summary: state.extra as DependentSummary),
+        ),
+      ),
+      GoRoute(
+        path: '/guardian/wellness-schedule',
+        name: 'wellness-schedule',
+        pageBuilder: (context, state) => NoTransitionPage(
+          key: state.pageKey,
+          child: WellnessScheduleScreen(summary: state.extra as DependentSummary),
+        ),
+      ),
+      GoRoute(
         path: '/dependent',
         name: 'dependent-home',
         pageBuilder: (context, state) => NoTransitionPage(key: state.pageKey, child: const DependentHomeScreen()),
       ),
-      // Task 3.10 named these as real destinations with a placeholder
-      // screen each, to be swapped for the real thing task by task.
-      // Task 3.11 (2026-10-20) swapped Panic in; Task 3.12 (same day)
-      // swapped Wellness Check in. Medication (3.13) is still the
-      // placeholder — not a silent gap, see ComingSoonScreen's doc
-      // comment.
       GoRoute(
         path: '/dependent/panic',
         name: 'dependent-panic',
@@ -154,8 +181,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/dependent/medication',
         name: 'dependent-medication',
-        pageBuilder: (context, state) =>
-            NoTransitionPage(key: state.pageKey, child: const ComingSoonScreen(kind: ComingSoonKind.medication)),
+        pageBuilder: (context, state) => NoTransitionPage(
+          key: state.pageKey,
+          child: MedicationConfirmScreen(skipPrompt: state.extra as bool? ?? false),
+        ),
       ),
     ],
   );

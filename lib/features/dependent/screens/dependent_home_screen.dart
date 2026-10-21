@@ -31,16 +31,31 @@ import '../widgets/safety_action_buttons.dart';
 /// away. The schedule's own `time`/`frequency`/`days` can, via
 /// `schedule_helpers.dart`'s `earliestUpcoming`.
 ///
-/// Panic / "I am OK" / "My medicine" route to a real destination now,
-/// but that destination is a named placeholder (ComingSoonScreen) until
-/// Tasks 3.11/3.12/3.13 build the real screens — not a silent gap.
+/// Panic / "I am OK" route to their real destinations (Tasks 3.11/3.12).
+///
+/// Task 3.13 (medicine button, mockup 20 v0.2, Sarim 2026-10-21):
+/// alongside the schedule-based "next dose" lookup above, this screen
+/// also checks `GET .../medication-doses?status=pending` — the
+/// *currently due* dose, if any exists right now. When one does, the
+/// button itself becomes the first half of the dual confirmation:
+/// its label switches to "I took my medicine · Step 1 of 2" and tapping
+/// it opens MedicationConfirmScreen with `skipPrompt: true`, which
+/// immediately fires step 1 and lands straight on the step-2 UI
+/// (mockup 23b) — matching NFR-07's "every safety action within 2 taps
+/// from Home." When nothing is currently due, the button falls back to
+/// its previous behaviour: generic label + the schedule-based "next
+/// dose" subtitle, opening the screen with nothing attached (it
+/// self-resolves, same as before — see MedicationConfirmScreen's doc
+/// comment). Mockup 23 (the step-1 prompt) is still reachable this way
+/// and will also be reachable from Task 3.14's FCM reminder once that
+/// ships.
 ///
 /// Not automated-tested as a full screen, same reasoning as the old
 /// placeholder: `_startLocationSharing` calls through to the real
 /// Geolocator plugin, which has no platform channel under `flutter
 /// test`. What IS tested without a device: `schedule_helpers.dart`'s
 /// pure scheduling math, `PanicButton`/`SafetyActionButton`'s rendering,
-/// and `ComingSoonScreen`'s per-kind text — see test/.
+/// and the real Panic/Wellness/Medication screens' own test files.
 class DependentHomeScreen extends ConsumerStatefulWidget {
   const DependentHomeScreen({super.key});
 
@@ -56,6 +71,7 @@ class _DependentHomeScreenState extends ConsumerState<DependentHomeScreen> with 
   String? _scheduleLoadError;
   ({Map<String, dynamic> item, DateTime at})? _nextMedication;
   ({Map<String, dynamic> item, DateTime at})? _nextWellnessCheck;
+  Map<String, dynamic>? _duePendingDose;
 
   @override
   void initState() {
@@ -110,6 +126,10 @@ class _DependentHomeScreenState extends ConsumerState<DependentHomeScreen> with 
       final apiClient = ref.read(apiClientProvider);
       final medsResponse = await apiClient.get<Map<String, dynamic>>('/dependents/${user.userId}/medications');
       final wellnessResponse = await apiClient.get<Map<String, dynamic>>('/dependents/${user.userId}/wellness-checks');
+      final dueDosesResponse = await apiClient.get<Map<String, dynamic>>(
+        '/dependents/${user.userId}/medication-doses',
+        queryParameters: {'status': 'pending'},
+      );
 
       final medItems = (medsResponse.data?['items'] as List<dynamic>? ?? [])
           .cast<Map<String, dynamic>>()
@@ -119,6 +139,8 @@ class _DependentHomeScreenState extends ConsumerState<DependentHomeScreen> with 
           .cast<Map<String, dynamic>>()
           .where((w) => w['active'] == true)
           .toList();
+      final dueDoses = (dueDosesResponse.data?['items'] as List<dynamic>? ?? []).cast<Map<String, dynamic>>()
+        ..sort((a, b) => (a['scheduled_for'] as String).compareTo(b['scheduled_for'] as String));
 
       final nextMed = earliestUpcoming<Map<String, dynamic>>(
         items: medItems,
@@ -136,6 +158,7 @@ class _DependentHomeScreenState extends ConsumerState<DependentHomeScreen> with 
       setState(() {
         _nextMedication = nextMed;
         _nextWellnessCheck = nextWellness;
+        _duePendingDose = dueDoses.isEmpty ? null : dueDoses.first;
         _isLoadingSchedules = false;
       });
     } on ApiException catch (e) {
@@ -153,6 +176,7 @@ class _DependentHomeScreenState extends ConsumerState<DependentHomeScreen> with 
     final user = ref.watch(currentUserProvider);
     final languageCode = Localizations.localeOf(context).languageCode;
     final now = DateTime.now();
+    final doseDue = _duePendingDose;
 
     return Scaffold(
       appBar: AppBar(
@@ -198,13 +222,17 @@ class _DependentHomeScreenState extends ConsumerState<DependentHomeScreen> with 
             ),
             const SizedBox(height: 16),
             SafetyActionButton(
-              onTap: () => context.push('/dependent/medication'),
-              label: l10n.myMedicineButtonLabel,
-              subtitle: _isLoadingSchedules
+              onTap: () => doseDue != null
+                  ? context.push('/dependent/medication', extra: true)
+                  : context.push('/dependent/medication'),
+              label: doseDue != null ? l10n.medicineStep1OfTwoLabel : l10n.myMedicineButtonLabel,
+              subtitle: doseDue != null
                   ? ''
-                  : (_nextMedication != null
-                      ? l10n.nextMedicationMessage(_nextMedication!.item['drug_name'] as String, formatClockTime(_nextMedication!.at))
-                      : l10n.noMedicationScheduledMessage),
+                  : (_isLoadingSchedules
+                      ? ''
+                      : (_nextMedication != null
+                          ? l10n.nextMedicationMessage(_nextMedication!.item['drug_name'] as String, formatClockTime(_nextMedication!.at))
+                          : l10n.noMedicationScheduledMessage)),
             ),
             if (_scheduleLoadError != null) ...[
               const SizedBox(height: 12),

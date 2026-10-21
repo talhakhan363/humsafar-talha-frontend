@@ -172,6 +172,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cancelButton => 'Cancel';
 
   @override
+  String get saveButtonLabel => 'Save';
+
+  @override
   String get yesLabel => 'Yes';
 
   @override
@@ -582,10 +585,6 @@ class AppLocalizationsEn extends AppLocalizations {
       'More: records · appointments · messages (coming soon)';
 
   @override
-  String get medicationComingSoonMessage =>
-      'Medication confirmation is coming in Task 3.13.';
-
-  @override
   String get panicScreenTitle => 'Panic';
 
   @override
@@ -693,4 +692,175 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get wellnessCheckRespondFailedSnackbar =>
       'Couldn\'t send your answer. Try again.';
+
+  @override
+  String get medicationScreenTitle => 'My medicine';
+
+  @override
+  String get medicineStep1OfTwoLabel => 'I took my medicine · Step 1 of 2';
+
+  @override
+  String get noMedicineDueMessage => 'There\'s no medicine due right now.';
+
+  @override
+  String get medicineTimePromptTitle => 'It\'s time for your medicine';
+
+  @override
+  String medicineTimePromptMessage(String drug, String dosage) {
+    return '$drug ($dosage) — did you take it?';
+  }
+
+  @override
+  String get medicineTookItButtonLabel => 'I took it';
+
+  @override
+  String get medicineConfirmTitle => 'Confirm you took it';
+
+  @override
+  String medicineConfirmMessage(String drug, String dosage) {
+    return 'Please confirm: $drug ($dosage)';
+  }
+
+  @override
+  String medicineConfirmExpiresNote(String time) {
+    return 'This confirmation expires in $time';
+  }
+
+  @override
+  String get medicineConfirmButtonLabel => 'Yes, I took it';
+
+  @override
+  String get medicineConfirmExpiredMessage =>
+      'This confirmation window expired.';
+
+  @override
+  String get medicineTryAgainButtonLabel => 'Try again';
+
+  @override
+  String get medicineTakenTitle => 'Marked as taken';
+
+  @override
+  String medicineTakenMessage(String drug) {
+    return '$drug is marked as taken.';
+  }
+
+  @override
+  String get medicineDoneButtonLabel => 'Done';
+
+  @override
+  String get medicineConfirmRequestFailedSnackbar =>
+      'Couldn\'t start the confirmation. Try again.';
+
+  @override
+  String get medicineConfirmFailedSnackbar => 'Couldn\'t confirm. Try again.';
+
+  @override
+  String get medicationScheduleButton => 'Medication schedule';
+
+  @override
+  String get wellnessScheduleButton => 'Wellness check schedule';
+
+  @override
+  String get medicationScheduleScreenTitle => 'Medication schedule';
+
+  @override
+  String get wellnessScheduleScreenTitle => 'Wellness check schedule';
+
+  @override
+  String get noMedicationSchedulesMessage => 'No medicines scheduled yet.';
+
+  @override
+  String get noWellnessSchedulesMessage =>
+      'No wellness check times scheduled yet.';
+
+  @override
+  String get useDefaultScheduleButton => 'Use default schedule (8am, 2pm, 8pm)';
+
+  @override
+  String get medicationManagementDeniedNote =>
+      'You don\'t have permission to manage medicines. Ask the Primary Guardian.';
+
+  @override
+  String get wellnessManagementDeniedNote =>
+      'You don\'t have permission to manage wellness checks. Ask the Primary Guardian.';
+
+  @override
+  String get drugNameFieldLabel => 'Medicine name';
+
+  @override
+  String get dosageFieldLabel => 'Dosage';
+
+  @override
+  String get timeFieldLabel => 'Time';
+
+  @override
+  String get frequencyFieldLabel => 'Frequency';
+
+  @override
+  String get dailyLabel => 'Daily';
+
+  @override
+  String get weeklyLabel => 'Weekly';
+
+  @override
+  String get gracePeriodFieldLabel => 'Grace period (minutes)';
+
+  @override
+  String gracePeriodMinutesMessage(int minutes) {
+    return 'Grace period: $minutes min';
+  }
+
+  @override
+  String get addMedicationScheduleTitle => 'Add medicine';
+
+  @override
+  String get editMedicationScheduleTitle => 'Edit medicine';
+
+  @override
+  String get addWellnessCheckTitle => 'Add check time';
+
+  @override
+  String get editWellnessCheckTitle => 'Edit check time';
+
+  @override
+  String get scheduleSavedSnackbar => 'Saved.';
+
+  @override
+  String get scheduleSaveFailedSnackbar => 'Couldn\'t save. Try again.';
+
+  @override
+  String get scheduleUpdateFailedSnackbar => 'Couldn\'t update. Try again.';
+
+  @override
+  String get weeklyDaysRequiredError =>
+      'Pick at least one day for a weekly schedule.';
+
+  @override
+  String get wellnessLimitReachedError =>
+      'You can have at most 3 wellness check times.';
+
+  @override
+  String get wellnessTimeExistsError =>
+      'There\'s already a check at that time.';
+
+  @override
+  String get dayMonLabel => 'Mon';
+
+  @override
+  String get dayTueLabel => 'Tue';
+
+  @override
+  String get dayWedLabel => 'Wed';
+
+  @override
+  String get dayThuLabel => 'Thu';
+
+  @override
+  String get dayFriLabel => 'Fri';
+
+  @override
+  String get daySatLabel => 'Sat';
+
+  @override
+  String get daySunLabel => 'Sun';
 }

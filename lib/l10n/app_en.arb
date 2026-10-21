@@ -69,6 +69,7 @@
   "tryAgainButton": "Try again",
   "goToLoginButton": "Go to login",
   "cancelButton": "Cancel",
+  "saveButtonLabel": "Save",
   "yesLabel": "Yes",
   "notYetLabel": "Not yet",
   "primaryRoleLabel": "Primary",
@@ -239,7 +240,6 @@
   },
   "noMedicationScheduledMessage": "No medicine scheduled",
   "moreComingSoonLabel": "More: records · appointments · messages (coming soon)",
-  "medicationComingSoonMessage": "Medication confirmation is coming in Task 3.13.",
 
   "panicScreenTitle": "Panic",
   "panicNeedHelpTitle": "Need help?",
@@ -300,5 +300,99 @@
   "noWellnessCheckPendingMessage": "There's no wellness check waiting for a response right now.",
   "wellnessCheckTimeUpNote": "Time's up — your Guardian may be notified. You can still answer below.",
   "wellnessCheckRespondedSnackbar": "Thanks — marked as OK.",
-  "wellnessCheckRespondFailedSnackbar": "Couldn't send your answer. Try again."
+  "wellnessCheckRespondFailedSnackbar": "Couldn't send your answer. Try again.",
+
+  "medicationScreenTitle": "My medicine",
+  "medicineStep1OfTwoLabel": "I took my medicine · Step 1 of 2",
+  "noMedicineDueMessage": "There's no medicine due right now.",
+  "medicineTimePromptTitle": "It's time for your medicine",
+  "medicineTimePromptMessage": "{drug} ({dosage}) — did you take it?",
+  "@medicineTimePromptMessage": {
+    "placeholders": {
+      "drug": {
+        "type": "String"
+      },
+      "dosage": {
+        "type": "String"
+      }
+    }
+  },
+  "medicineTookItButtonLabel": "I took it",
+  "medicineConfirmTitle": "Confirm you took it",
+  "medicineConfirmMessage": "Please confirm: {drug} ({dosage})",
+  "@medicineConfirmMessage": {
+    "placeholders": {
+      "drug": {
+        "type": "String"
+      },
+      "dosage": {
+        "type": "String"
+      }
+    }
+  },
+  "medicineConfirmExpiresNote": "This confirmation expires in {time}",
+  "@medicineConfirmExpiresNote": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "medicineConfirmButtonLabel": "Yes, I took it",
+  "medicineConfirmExpiredMessage": "This confirmation window expired.",
+  "medicineTryAgainButtonLabel": "Try again",
+  "medicineTakenTitle": "Marked as taken",
+  "medicineTakenMessage": "{drug} is marked as taken.",
+  "@medicineTakenMessage": {
+    "placeholders": {
+      "drug": {
+        "type": "String"
+      }
+    }
+  },
+  "medicineDoneButtonLabel": "Done",
+  "medicineConfirmRequestFailedSnackbar": "Couldn't start the confirmation. Try again.",
+  "medicineConfirmFailedSnackbar": "Couldn't confirm. Try again.",
+
+  "medicationScheduleButton": "Medication schedule",
+  "wellnessScheduleButton": "Wellness check schedule",
+  "medicationScheduleScreenTitle": "Medication schedule",
+  "wellnessScheduleScreenTitle": "Wellness check schedule",
+  "noMedicationSchedulesMessage": "No medicines scheduled yet.",
+  "noWellnessSchedulesMessage": "No wellness check times scheduled yet.",
+  "useDefaultScheduleButton": "Use default schedule (8am, 2pm, 8pm)",
+  "medicationManagementDeniedNote": "You don't have permission to manage medicines. Ask the Primary Guardian.",
+  "wellnessManagementDeniedNote": "You don't have permission to manage wellness checks. Ask the Primary Guardian.",
+  "drugNameFieldLabel": "Medicine name",
+  "dosageFieldLabel": "Dosage",
+  "timeFieldLabel": "Time",
+  "frequencyFieldLabel": "Frequency",
+  "dailyLabel": "Daily",
+  "weeklyLabel": "Weekly",
+  "gracePeriodFieldLabel": "Grace period (minutes)",
+  "gracePeriodMinutesMessage": "Grace period: {minutes} min",
+  "@gracePeriodMinutesMessage": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "addMedicationScheduleTitle": "Add medicine",
+  "editMedicationScheduleTitle": "Edit medicine",
+  "addWellnessCheckTitle": "Add check time",
+  "editWellnessCheckTitle": "Edit check time",
+  "scheduleSavedSnackbar": "Saved.",
+  "scheduleSaveFailedSnackbar": "Couldn't save. Try again.",
+  "scheduleUpdateFailedSnackbar": "Couldn't update. Try again.",
+  "weeklyDaysRequiredError": "Pick at least one day for a weekly schedule.",
+  "wellnessLimitReachedError": "You can have at most 3 wellness check times.",
+  "wellnessTimeExistsError": "There's already a check at that time.",
+  "dayMonLabel": "Mon",
+  "dayTueLabel": "Tue",
+  "dayWedLabel": "Wed",
+  "dayThuLabel": "Thu",
+  "dayFriLabel": "Fri",
+  "daySatLabel": "Sat",
+  "daySunLabel": "Sun"
 }
