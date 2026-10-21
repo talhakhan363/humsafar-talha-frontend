@@ -1,49 +1,38 @@
 {
   "@@locale": "en",
-
   "appTitle": "Humsafar",
   "@appTitle": {
     "description": "App name shown on the splash screen and window title."
   },
-
   "guardianAppTitle": "Guardian App",
   "dependentAppTitle": "Dependent App",
-
   "devRoleSwitcherTitle": "Humsafar — Dev Role Switcher",
   "devRoleSwitcherBody": "Temporary screen — will be replaced by real login (Task 1.11 / 2.5).",
   "continueAsGuardian": "Continue as Guardian",
   "continueAsDependent": "Continue as Dependent",
-
   "guardianHomePlaceholder": "Guardian home screen placeholder.\nReal dashboard content lands from Phase 2 onward.",
   "dependentHomePlaceholder": "Dependent home screen placeholder.\nThe 3 safety actions (Panic Mode, Wellness Check, Medication) land here from Task 3.10 onward.",
-
   "switchModeTooltip": "Switch mode (dev only)",
   "switchToStandardView": "Switch to standard view",
   "switchToAccessibleView": "Switch to large-text, high-contrast view",
-
   "previewLoginLink": "Preview: Login screen (Task 1.11)",
   "previewRegisterLink": "Preview: Register screen (Task 1.11)",
-
   "registerScreenTitle": "Create Account",
   "loginScreenTitle": "Login",
   "guardianVerificationTitle": "Guardian Verification",
   "dependentKycTitle": "Dependent Verification (KYC)",
-
   "fullNameLabel": "Full Name",
   "emailLabel": "Email",
   "phoneLabel": "Phone Number",
   "passwordLabel": "Password",
   "confirmPasswordLabel": "Confirm Password",
-
   "registeringAsLabel": "Registering as",
   "roleGuardianOption": "Guardian",
   "roleDependentOption": "Dependent",
-
   "registerButton": "Register",
   "loginButton": "Login",
   "alreadyHaveAccountPrompt": "Already have an account? Login",
   "dontHaveAccountPrompt": "Don't have an account? Register",
-
   "fieldRequiredError": "This field is required",
   "invalidEmailError": "Enter a valid email address",
   "passwordTooShortError": "Password must be at least 8 characters",
@@ -51,7 +40,6 @@
   "passwordsDoNotMatchError": "Passwords do not match",
   "invalidPhoneError": "Enter a valid Pakistani phone number (e.g. 03XXXXXXXXX)",
   "invalidCnicError": "Enter CNIC in the format XXXXX-XXXXXXX-X",
-
   "cnicLabel": "CNIC Number",
   "cnicHint": "XXXXX-XXXXXXX-X",
   "sendOtpButton": "Send OTP",
@@ -59,11 +47,9 @@
   "otpLabel": "Enter OTP",
   "verifyAndContinueButton": "Verify & Continue",
   "noLivenessRequiredNote": "Guardian verification does not require a liveness photo.",
-
   "captureLivenessButton": "Capture Liveness Photo",
   "livenessCapturedConfirmation": "Liveness photo captured (mock)",
   "submitForVerificationButton": "Submit for Verification",
-
   "genericValidationError": "Please check the fields and try again.",
   "retryButton": "Retry",
   "tryAgainButton": "Try again",
@@ -78,7 +64,6 @@
   "secondaryGuardianFullLabel": "Secondary Guardian",
   "verifiedLabel": "Verified",
   "notVerifiedLabel": "Not verified",
-
   "guardianVerifyEitherOptionNote": "Either option below is enough to verify your account — you don't need to do both.",
   "guardianVerifyOptionAHeader": "Option A: verify by phone OTP",
   "guardianVerifyOptionBHeader": "Option B: verify by CNIC",
@@ -87,7 +72,6 @@
   "otpNotVerifiedYetSnackbar": "Not verified yet — try the CNIC check below instead.",
   "otpInvalidError": "That code is wrong or expired. Try again or resend.",
   "cnicCheckFailedSnackbar": "CNIC check failed — try the phone OTP above instead.",
-
   "openingCameraLabel": "Opening camera...",
   "lostRegistrationDetailsError": "We lost track of your registration details (this happens if the app was closed). Please register again to continue.",
   "kycInvalidCredentialsError": "Something's wrong with your account details - please register again.",
@@ -99,7 +83,6 @@
   "kycVerifiedActiveDefaultMessage": "You're verified and active.",
   "kycPendingDefaultMessage": "Still pending - please submit again.",
   "kycFailedDefaultMessage": "Verification failed - please try again.",
-
   "inviteCodeOptionalLabel": "Invite code (optional)",
   "inviteCodeHelperText": "Only if a Primary Guardian invited you as a Secondary Guardian.",
   "roleLockedToGuardianNote": "Role locked to Guardian while an invite code is entered.",
@@ -110,10 +93,8 @@
   "emailAlreadyRegisteredError": "This email is already registered. Try logging in instead.",
   "phoneAlreadyRegisteredError": "This phone number is already registered.",
   "accountAlreadyRegisteredError": "This account already exists. Try logging in instead.",
-
   "invalidCredentialsError": "Incorrect email or password.",
   "accountNotActivatedError": "Your account isn't active yet — complete KYC and wait for your guardian to link you.",
-
   "haveInviteCodeButton": "Have an invite code?",
   "linkADependentLabel": "Link a Dependent",
   "noDependentsLinkedMessage": "You're not linked to any Dependents yet. Use \"Link a Dependent\" below with their ID to get started.",
@@ -123,7 +104,6 @@
   "kycStatusPending": "Pending",
   "kycStatusVerified": "Verified",
   "kycStatusFailed": "Failed",
-
   "linkDependentInstructions": "Ask the Dependent for the ID shown on their verification screen, then enter it below.",
   "dependentIdLabel": "Dependent's ID",
   "linkButton": "Link",
@@ -133,7 +113,6 @@
   "dependentNotFoundError": "No account found with that ID - double check it and try again.",
   "alreadyLinkedError": "You're already linked to this Dependent.",
   "primaryAlreadyExistsError": "This Dependent already has a Primary Guardian.",
-
   "yourRoleLabel": "Your role:",
   "kycStatusColonLabel": "KYC status:",
   "accountActiveColonLabel": "Account active:",
@@ -141,7 +120,6 @@
   "inviteASecondaryButton": "Invite a Secondary Guardian",
   "managePermissionsButton": "Manage Permissions",
   "myAccessButton": "My Access",
-
   "invitePhoneInstructions": "Enter the Secondary Guardian's phone number. They'll need the code this generates.",
   "sendInviteButton": "Send invite",
   "guardianNotVerifiedGenericError": "You need to verify your own account first.",
@@ -159,7 +137,6 @@
   "copyCodeButton": "Copy code",
   "copiedSnackbar": "Copied.",
   "inviteShareFooterNote": "They enter this during registration (if they're new) or on the \"Have an invite code?\" screen (if they already have a Secondary account).",
-
   "noSecondariesYetMessage": "No Secondary Guardians yet - invite one first.",
   "secondaryNotFoundError": "That Guardian is no longer linked to this Dependent.",
   "moduleLiveLocation": "Live Location",
@@ -168,10 +145,8 @@
   "moduleEmergencyAlerts": "Emergency Alerts",
   "moduleCameraViewing": "Camera Viewing",
   "moduleMedicationManagement": "Medication Management",
-
   "roleColonLabel": "Role:",
   "notLinkedToDependentError": "You're not linked to this Dependent.",
-
   "acceptAnInviteTitle": "Accept an invite",
   "pasteInviteCodeInstructions": "Paste the invite code a Primary Guardian shared with you.",
   "inviteCodeLabel": "Invite code",
@@ -179,7 +154,6 @@
   "inviteAcceptedSnackbar": "Accepted! This Dependent now shows on your home screen.",
   "primaryCannotAcceptInviteError": "A Primary Guardian account can't accept a Secondary invite.",
   "inviteNotForYouAcceptError": "This code was sent to a different phone number than the one on your account.",
-
   "liveMapButton": "Live Map",
   "noLocationYetMessage": "No location received yet.",
   "justNowLabel": "Just now",
@@ -197,14 +171,12 @@
   "zoneStatusNoZones": "No safe zones set up yet",
   "zoneStatusUnknown": "Location status unknown",
   "moduleAccessDeniedLiveMapError": "You don't have permission to view this Dependent's location.",
-
   "locationSharingActiveLabel": "Location sharing: Active",
   "locationPermissionNeededMessage": "Location permission is needed so your Guardian can see where you are.",
   "grantLocationPermissionButton": "Grant Permission",
   "locationPermissionDeniedForeverMessage": "Location permission was permanently denied. Enable it from your phone's Settings.",
   "locationServiceDisabledMessage": "Turn on Location Services in your phone's Settings to share your location.",
   "openSettingsButton": "Open Settings",
-
   "dependentHomeTitle": "Home",
   "dependentHomeGreeting": "Assalam o Alaikum, {name}",
   "@dependentHomeGreeting": {
@@ -240,7 +212,6 @@
   },
   "noMedicationScheduledMessage": "No medicine scheduled",
   "moreComingSoonLabel": "More: records · appointments · messages (coming soon)",
-
   "panicScreenTitle": "Panic",
   "panicNeedHelpTitle": "Need help?",
   "panicHoldInstructions": "Press and hold the button for 2 seconds",
@@ -281,7 +252,6 @@
   "panicResolvedSnackbar": "Marked safe. Glad you're OK.",
   "panicTriggerFailedSnackbar": "Couldn't send the alert. Check your connection and try again.",
   "panicResolveFailedSnackbar": "Couldn't mark you safe. Try again.",
-
   "wellnessCheckScreenTitle": "Wellness check",
   "areYouOkTitle": "Are you OK?",
   "familyCheckingOnYouMessage": "Your family is checking on you",
@@ -301,7 +271,6 @@
   "wellnessCheckTimeUpNote": "Time's up — your Guardian may be notified. You can still answer below.",
   "wellnessCheckRespondedSnackbar": "Thanks — marked as OK.",
   "wellnessCheckRespondFailedSnackbar": "Couldn't send your answer. Try again.",
-
   "medicationScreenTitle": "My medicine",
   "medicineStep1OfTwoLabel": "I took my medicine · Step 1 of 2",
   "noMedicineDueMessage": "There's no medicine due right now.",
@@ -353,7 +322,6 @@
   "medicineDoneButtonLabel": "Done",
   "medicineConfirmRequestFailedSnackbar": "Couldn't start the confirmation. Try again.",
   "medicineConfirmFailedSnackbar": "Couldn't confirm. Try again.",
-
   "medicationScheduleButton": "Medication schedule",
   "wellnessScheduleButton": "Wellness check schedule",
   "medicationScheduleScreenTitle": "Medication schedule",
@@ -395,9 +363,7 @@
   "dayFriLabel": "Fri",
   "daySatLabel": "Sat",
   "daySunLabel": "Sun",
-
   "goBackButtonLabel": "Go back",
-
   "alertTypePanic": "Panic alert",
   "alertTypeMissedDose": "Missed dose",
   "alertTypeWellnessCheck": "Wellness check missed",
@@ -409,7 +375,6 @@
   "tierLevel1PrimaryLabel": "Level 1 · Primary",
   "tierLevel2SecondaryLabel": "Level 2 · Secondary",
   "tierLevel3SmsLabel": "Level 3 · SMS sent",
-
   "alertsScreenTitle": "Alerts",
   "alertsOpenTabLabel": "Open ({count})",
   "@alertsOpenTabLabel": {
@@ -426,7 +391,6 @@
   "seenStopsChainTitle": "Seen stops the chain",
   "seenStopsChainBody": "Primary → Secondary (5 min) → SMS (5 min)",
   "acknowledgeFailedSnackbar": "Couldn't mark as seen. Try again.",
-
   "needsAttentionHeader": "Needs attention",
   "seeAllLabel": "See all",
   "panicBannerTitle": "PANIC ALERT",
@@ -442,7 +406,6 @@
     }
   },
   "openButtonLabel": "Open",
-
   "missedDoseScreenTitle": "Missed dose",
   "missedDoseBannerTitle": "{name} has not taken {drug}",
   "@missedDoseBannerTitle": {
@@ -483,7 +446,6 @@
   "doseAlreadyResolvedMessage": "This alert has already been resolved.",
   "alreadyEscalatedMessage": "Already told the other Guardians.",
   "callFailedSnackbar": "Couldn't start the call.",
-
   "emergencySettingsScreenTitle": "Emergency settings",
   "emergencySettingsButton": "Emergency settings",
   "remoteAlarmSectionTitle": "Remote alarm",
@@ -514,7 +476,6 @@
   "contactRemovedSnackbar": "Contact removed.",
   "contactRemoveFailedSnackbar": "Couldn't remove the contact. Try again.",
   "emergencyContactDeniedNote": "You can view this but only the Primary Guardian can change it.",
-
   "alarmScreenTitle": "Alarm",
   "alarmLookingForYouTitle": "Your Guardian is looking for you",
   "alarmScreenSubtitle": "Alarm from your Guardian · {remaining} left",
@@ -527,5 +488,57 @@
   },
   "stopAlarmButtonLabel": "Stop alarm",
   "stopAlarmFailedSnackbar": "Couldn't stop the alarm. Try again.",
-  "noActiveAlarmMessage": "No alarm is sounding right now."
+  "noActiveAlarmMessage": "No alarm is sounding right now.",
+  "messagesScreenTitle": "Messages",
+  "noConversationsYetMessage": "No conversations yet.",
+  "noMessagesYetPreview": "No messages yet",
+  "urgentVoiceMessageLabel": "Urgent voice message",
+  "loadEarlierMessagesButton": "Load earlier messages",
+  "startConversationMessage": "No messages yet. Say hello!",
+  "messageInputHint": "Type a message",
+  "messageSendTooltip": "Send",
+  "sendingLabel": "Sending…",
+  "notSentTapToRetryLabel": "Not sent · Tap to retry",
+  "readLabel": "Read",
+  "communicationAccessDeniedMessage": "Only Guardians with Communication access can message right now.",
+  "messagesButtonLabel": "Messages",
+  "messageButtonLabel": "Message",
+  "unreadMessagesSubtitle": "{count} new message(s)",
+  "@unreadMessagesSubtitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "quickReplyIAmFine": "I am fine",
+  "quickReplyCallMe": "Call me",
+  "quickReplyYes": "Yes",
+  "quickReplyNo": "No",
+  "recordUrgentVoiceSheetTitle": "Record an urgent voice message",
+  "urgentVoiceWarningMessage": "This will ring as a critical alert on {peerName}'s phone, even on silent.",
+  "@urgentVoiceWarningMessage": {
+    "placeholders": {
+      "peerName": {
+        "type": "String"
+      }
+    }
+  },
+  "tapToStartRecordingLabel": "Tap to start recording",
+  "recordingInProgressLabel": "Recording… {time}",
+  "@recordingInProgressLabel": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "maxLengthReachedMessage": "Maximum length reached (2:00).",
+  "stopRecordingButtonLabel": "Stop",
+  "discardRecordingButtonLabel": "Discard",
+  "playPreviewButtonLabel": "Play",
+  "sendUrgentVoiceButtonLabel": "Send",
+  "micPermissionDeniedMessage": "Microphone permission is needed to record a voice message.",
+  "voiceSendFailedGenericMessage": "Couldn't send the voice message. Try again.",
+  "audioDownloadFailedMessage": "Couldn't load the voice message. Try again."
 }

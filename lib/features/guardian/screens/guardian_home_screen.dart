@@ -48,6 +48,15 @@ import '../notification_display.dart';
 ///    new Emergency settings (Alarm) action are both already one tap away
 ///    on DependentDetailScreen; Camera has no screen built in any task
 ///    yet.
+///
+/// Task 4.6 (2026-10-22) adds a Messages icon in the AppBar (mockup 07's
+/// own bottom-nav "Chat" tab, built here as an AppBar action instead
+/// since this app has no bottom-nav shell at all — see
+/// `app_router.dart`'s Task 4.6 doc comment) with a best-effort unread
+/// badge from `GET /messages/conversations`'s own `total_unread`, loaded
+/// the same best-effort way as the alerts preview below: a Guardian
+/// offline or with zero conversations still sees their Dependent list
+/// normally.
 class GuardianHomeScreen extends ConsumerStatefulWidget {
   const GuardianHomeScreen({super.key});
 
@@ -60,12 +69,14 @@ class _GuardianHomeScreenState extends ConsumerState<GuardianHomeScreen> {
   String? _loadError;
   bool _isLoading = true;
   List<Map<String, dynamic>> _criticalAlerts = [];
+  int _unreadMessages = 0;
 
   @override
   void initState() {
     super.initState();
     _loadDependents();
     _loadAlerts();
+    _loadUnreadMessages();
   }
 
   Future<void> _loadDependents() async {
@@ -104,8 +115,21 @@ class _GuardianHomeScreenState extends ConsumerState<GuardianHomeScreen> {
     }
   }
 
+  /// Same best-effort reasoning as [_loadAlerts], for the Messages icon's
+  /// badge (Task 4.6). `MessagesScreen` is the real inbox — this is only
+  /// a count.
+  Future<void> _loadUnreadMessages() async {
+    try {
+      final response = await ref.read(apiClientProvider).get<Map<String, dynamic>>('/messages/conversations');
+      if (!mounted) return;
+      setState(() => _unreadMessages = response.data?['total_unread'] as int? ?? 0);
+    } on ApiException {
+      // best-effort, see doc comment above
+    }
+  }
+
   Future<void> _refreshAll() async {
-    await Future.wait([_loadDependents(), _loadAlerts()]);
+    await Future.wait([_loadDependents(), _loadAlerts(), _loadUnreadMessages()]);
   }
 
   Future<void> _linkDependent() async {
@@ -129,6 +153,31 @@ class _GuardianHomeScreenState extends ConsumerState<GuardianHomeScreen> {
         actions: [
           const LanguageSwitchButton(),
           const AccessibilityToggleButton(),
+          Stack(
+            alignment: Alignment.center,
+            children: [
+              IconButton(
+                icon: const Icon(Icons.chat_bubble_outline),
+                tooltip: l10n.messagesScreenTitle,
+                onPressed: () => context.push('/messages'),
+              ),
+              if (_unreadMessages > 0)
+                Positioned(
+                  right: 6,
+                  top: 6,
+                  child: Container(
+                    padding: const EdgeInsets.all(2),
+                    constraints: const BoxConstraints(minWidth: 16, minHeight: 16),
+                    decoration: const BoxDecoration(color: Colors.red, shape: BoxShape.circle),
+                    child: Text(
+                      '$_unreadMessages',
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(color: Colors.white, fontSize: 10),
+                    ),
+                  ),
+                ),
+            ],
+          ),
           IconButton(
             icon: const Icon(Icons.swap_horiz),
             tooltip: l10n.switchModeTooltip,

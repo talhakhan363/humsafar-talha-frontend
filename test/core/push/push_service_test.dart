@@ -7,12 +7,19 @@
 // it's exercised manually on a real device instead (see the delivery
 // notes' manual QA checklist), same as camera/location plugin wrappers
 // elsewhere in this codebase.
+//
+// Modified for Task 4.6 (2026-10-22) — TC-3.14-03's old assertion that
+// `message`/`voice_message` return null is no longer true: those two
+// types now route to `/messages` (the new inbox, see
+// push_service.dart's updated doc comment). Moved out of TC-3.14-03 and
+// into a new TC-4.6-01, rather than quietly deleting the old assertion —
+// the test case log's Task 4.6 section notes this change explicitly.
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:humsafar_frontend/core/push/push_service.dart';
 
 void main() {
-  group('routeForNotificationType (TC-3.14-01..03)', () {
+  group('routeForNotificationType (TC-3.14-01..03, TC-4.6-01)', () {
     test('TC-3.14-01: Guardian-facing alert types all route to the Alerts inbox', () {
       for (final type in [
         'geofence_breach',
@@ -36,14 +43,17 @@ void main() {
       expect(routeForNotificationType('remote_alarm_stop'), '/dependent/alarm');
     });
 
-    test('TC-3.14-03: unbuilt-screen types and null return null (open the app normally)', () {
-      expect(routeForNotificationType('message'), null);
-      expect(routeForNotificationType('voice_message'), null);
+    test('TC-3.14-03: still-unbuilt-screen types and null return null (open the app normally)', () {
       expect(routeForNotificationType('incoming_call'), null);
       expect(routeForNotificationType('appointment_update'), null);
       expect(routeForNotificationType('appointment_reminder'), null);
       expect(routeForNotificationType(null), null);
       expect(routeForNotificationType('something_unexpected'), null);
+    });
+
+    test('TC-4.6-01: message/voice_message push taps now open the Messages inbox', () {
+      expect(routeForNotificationType('message'), '/messages');
+      expect(routeForNotificationType('voice_message'), '/messages');
     });
   });
 }

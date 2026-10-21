@@ -1119,4 +1119,108 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get noActiveAlarmMessage => 'ابھی کوئی الارم نہیں بج رہا۔';
+
+  @override
+  String get messagesScreenTitle => 'پیغامات';
+
+  @override
+  String get noConversationsYetMessage => 'ابھی تک کوئی گفتگو نہیں۔';
+
+  @override
+  String get noMessagesYetPreview => 'ابھی تک کوئی پیغام نہیں';
+
+  @override
+  String get urgentVoiceMessageLabel => 'فوری صوتی پیغام';
+
+  @override
+  String get loadEarlierMessagesButton => 'پرانے پیغامات دیکھیں';
+
+  @override
+  String get startConversationMessage => 'ابھی تک کوئی پیغام نہیں۔ سلام کہیں!';
+
+  @override
+  String get messageInputHint => 'پیغام لکھیں';
+
+  @override
+  String get messageSendTooltip => 'بھیجیں';
+
+  @override
+  String get sendingLabel => 'بھیجا جا رہا ہے…';
+
+  @override
+  String get notSentTapToRetryLabel =>
+      'نہیں بھیجا گیا · دوبارہ کوشش کے لیے دبائیں';
+
+  @override
+  String get readLabel => 'پڑھ لیا گیا';
+
+  @override
+  String get communicationAccessDeniedMessage =>
+      'صرف وہ گارڈینز جن کے پاس Communication تک رسائی ہے ابھی پیغام بھیج سکتے ہیں۔';
+
+  @override
+  String get messagesButtonLabel => 'پیغامات';
+
+  @override
+  String get messageButtonLabel => 'پیغام بھیجیں';
+
+  @override
+  String unreadMessagesSubtitle(int count) {
+    return '$count نئے پیغام';
+  }
+
+  @override
+  String get quickReplyIAmFine => 'میں ٹھیک ہوں';
+
+  @override
+  String get quickReplyCallMe => 'مجھے کال کریں';
+
+  @override
+  String get quickReplyYes => 'جی ہاں';
+
+  @override
+  String get quickReplyNo => 'نہیں';
+
+  @override
+  String get recordUrgentVoiceSheetTitle => 'فوری صوتی پیغام ریکارڈ کریں';
+
+  @override
+  String urgentVoiceWarningMessage(String peerName) {
+    return 'یہ $peerName کے فون پر اہم الرٹ کی طرح بجے گا، خاموش موڈ میں بھی۔';
+  }
+
+  @override
+  String get tapToStartRecordingLabel => 'ریکارڈنگ شروع کرنے کے لیے دبائیں';
+
+  @override
+  String recordingInProgressLabel(String time) {
+    return 'ریکارڈ ہو رہا ہے… $time';
+  }
+
+  @override
+  String get maxLengthReachedMessage => 'زیادہ سے زیادہ وقت ختم ہو گیا (2:00)۔';
+
+  @override
+  String get stopRecordingButtonLabel => 'روکیں';
+
+  @override
+  String get discardRecordingButtonLabel => 'حذف کریں';
+
+  @override
+  String get playPreviewButtonLabel => 'چلائیں';
+
+  @override
+  String get sendUrgentVoiceButtonLabel => 'بھیجیں';
+
+  @override
+  String get micPermissionDeniedMessage =>
+      'صوتی پیغام ریکارڈ کرنے کے لیے مائیکروفون کی اجازت درکار ہے۔';
+
+  @override
+  String get voiceSendFailedGenericMessage =>
+      'صوتی پیغام نہیں بھیجا جا سکا۔ دوبارہ کوشش کریں۔';
+
+  @override
+  String get audioDownloadFailedMessage =>
+      'صوتی پیغام لوڈ نہیں ہو سکا۔ دوبارہ کوشش کریں۔';
 }

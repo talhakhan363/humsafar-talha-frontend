@@ -16,6 +16,8 @@ import '../../features/guardian/screens/wellness_schedule_screen.dart';
 import '../../features/guardian/screens/alerts_screen.dart';
 import '../../features/guardian/screens/missed_dose_screen.dart';
 import '../../features/guardian/screens/emergency_settings_screen.dart';
+import '../../features/messaging/screens/messages_screen.dart';
+import '../../features/messaging/screens/chat_screen.dart';
 import '../../features/dependent/screens/dependent_home_screen.dart';
 import '../../features/dependent/screens/panic_screen.dart';
 import '../../features/dependent/screens/wellness_check_screen.dart';
@@ -78,6 +80,17 @@ import '../guardian/dependent_summary.dart';
 // check/medication, reached only via a remote_alarm push tap for now —
 // see alarm_screen.dart's doc comment for the named scope cut on waking
 // a locked screen).
+//
+// Task 4.6/4.8 (2026-10-22): added `/messages` (the cross-peer inbox,
+// mockups 17/25 — deliberately NOT scoped to one DependentSummary, same
+// reasoning as `/guardian/alerts`: `GET /messages/conversations` is
+// already cross-peer, one list regardless of role) and `/messages/chat`
+// (mockups 17b/25b, `extra` is a `{peerId, peerName}` map — one screen
+// for both roles, see chat_screen.dart's doc comment for why). Both
+// paths are role-neutral (no `/guardian/`/`/dependent/` prefix) because
+// the same `MessagesScreen`/`ChatScreen` widgets serve either role by
+// reading `currentUserProvider` themselves — there's nothing left for
+// the route itself to disambiguate.
 final rootNavigatorKey = GlobalKey<NavigatorState>();
 
 final appRouterProvider = Provider<GoRouter>((ref) {
@@ -217,6 +230,22 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           key: state.pageKey,
           child: EmergencySettingsScreen(summary: state.extra as DependentSummary),
         ),
+      ),
+      GoRoute(
+        path: '/messages',
+        name: 'messages',
+        pageBuilder: (context, state) => NoTransitionPage(key: state.pageKey, child: const MessagesScreen()),
+      ),
+      GoRoute(
+        path: '/messages/chat',
+        name: 'messages-chat',
+        pageBuilder: (context, state) {
+          final args = state.extra as Map<String, String>;
+          return NoTransitionPage(
+            key: state.pageKey,
+            child: ChatScreen(peerId: args['peerId']!, peerName: args['peerName']!),
+          );
+        },
       ),
       GoRoute(
         path: '/dependent',

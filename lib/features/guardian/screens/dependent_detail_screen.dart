@@ -27,6 +27,15 @@ import '../../../shared/widgets/language_switch_button.dart';
 /// so this isn't Primary-only at the navigation level either; the
 /// Remote Alarm half of that screen (Primary-only, no exceptions, per
 /// `alarm_contract.md`) is gated inside emergency_settings_screen.dart.
+///
+/// Task 4.6 (2026-10-22): added "Message" — same placement reasoning
+/// again (`messaging_contract.md`: "the Primary can always talk; a
+/// Secondary needs the `communication` permission", not Primary-only at
+/// the navigation level; `ChatScreen` itself attempts the send and maps
+/// a `403 MODULE_ACCESS_DENIED` rather than this screen pre-checking).
+/// Goes straight to `ChatScreen` with this Dependent as the peer,
+/// skipping the Messages inbox entirely — the peer is already known
+/// here, so there's nothing the inbox would add.
 class DependentDetailScreen extends ConsumerStatefulWidget {
   const DependentDetailScreen({super.key, required this.summary});
 
@@ -135,6 +144,14 @@ class _DependentDetailScreenState extends ConsumerState<DependentDetailScreen> {
               onPressed: () => context.push('/guardian/live-map', extra: summary),
               icon: const Icon(Icons.map_outlined),
               label: Text(l10n.liveMapButton),
+            ),
+            const SizedBox(height: 12),
+            // Task 4.6 — same "any Guardian can attempt, the screen gates
+            // the actual write" shape as Live Map above.
+            ElevatedButton.icon(
+              onPressed: () => context.push('/messages/chat', extra: {'peerId': summary.dependentId, 'peerName': summary.email}),
+              icon: const Icon(Icons.chat_bubble_outline),
+              label: Text(l10n.messageButtonLabel),
             ),
             const SizedBox(height: 12),
             // Task 3.15 — same "any Guardian can read, permission only

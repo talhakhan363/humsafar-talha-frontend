@@ -13,6 +13,12 @@
          33 it's a no-op permission granted automatically. Requested at
          runtime by PushService, not assumed from the manifest alone. -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <!-- Task 4.8 — priority voice messages. The `record` plugin's
+         AudioRecorder.start() needs this at runtime (requested via its
+         own hasPermission(), not assumed from the manifest alone, same
+         as POST_NOTIFICATIONS above); without the manifest entry the OS
+         would refuse the runtime grant outright. -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <application
         android:label="humsafar_talha_frontend"
         android:name="${applicationName}"

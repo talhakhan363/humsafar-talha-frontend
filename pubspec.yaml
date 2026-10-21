@@ -59,6 +59,19 @@ dependencies:
   # person still has to press the dial button themselves.
   url_launcher: ^6.3.1
 
+  # Task 4.8 — priority voice messages. `record` captures the Guardian's
+  # mic input to a file (wrapped behind AudioRecorderSource,
+  # lib/core/audio/, so the recording UI stays unit-testable without a
+  # real microphone — same seam shape as `DeviceLocationSource`, Task
+  # 2.7); `audioplayers` plays back both the pre-send preview and a
+  # received voice message's downloaded bytes (wrapped behind
+  # AudioPlayerSource, same reasoning). `path_provider` is what both of
+  # those use to get a real temp-file path for the plugins to read from/
+  # write to — this app's first use of on-device temp files.
+  record: ^6.2.1
+  audioplayers: ^6.6.0
+  path_provider: ^2.1.4
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

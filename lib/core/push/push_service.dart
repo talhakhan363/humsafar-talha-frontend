@@ -128,9 +128,22 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 /// real `confirmation_id` — not guessed from whatever happened to be in
 /// the push's `data` map.
 ///
-/// Types with no screen yet (`message`, `voice_message`, `incoming_call`,
-/// `appointment_update`, `appointment_reminder` — Phase 4/5, not built)
-/// return null: the app still opens normally, just without a deep link.
+/// Task 4.6 (2026-10-22): `message`/`voice_message` now route to
+/// `/messages` (the inbox, same role-neutral screen either direction —
+/// see chat_screen.dart's doc comment), rather than returning null as
+/// they did before this task shipped (there was simply no screen to
+/// send them to yet). Deliberately the inbox, not a direct deep-link
+/// into the specific thread: the payload's `data.from_user_id` would be
+/// enough to know *who*, but not their display name, and this function
+/// stays a pure `String?` (no second lookup, no role check) rather than
+/// growing a signature just for these two cases — same "self-resolving
+/// list over trusting push payload data" reasoning as the Alerts inbox
+/// above. One extra tap from the inbox to the right thread is well
+/// within NFR-07's budget.
+///
+/// Types with no screen yet (`incoming_call`, `appointment_update`,
+/// `appointment_reminder` — Phase 4.7/5, not built) still return null:
+/// the app still opens normally, just without a deep link.
 String? routeForNotificationType(String? type) {
   switch (type) {
     case 'geofence_breach':
@@ -150,6 +163,9 @@ String? routeForNotificationType(String? type) {
     case 'remote_alarm':
     case 'remote_alarm_stop':
       return '/dependent/alarm';
+    case 'message':
+    case 'voice_message':
+      return '/messages';
     default:
       return null;
   }

@@ -1,45 +1,35 @@
 {
   "@@locale": "ur",
-
   "appTitle": "ہمسفر",
   "guardianAppTitle": "گارڈین ایپ",
   "dependentAppTitle": "ڈیپینڈنٹ ایپ",
-
   "devRoleSwitcherTitle": "ہمسفر — ڈیو رول سوئچر",
   "devRoleSwitcherBody": "عارضی اسکرین — اسے اصل لاگ ان (ٹاسک 1.11 / 2.5) سے تبدیل کیا جائے گا۔",
   "continueAsGuardian": "بطور گارڈین جاری رکھیں",
   "continueAsDependent": "بطور ڈیپینڈنٹ جاری رکھیں",
-
   "guardianHomePlaceholder": "گارڈین ہوم اسکرین کی جگہ نما۔\nاصل ڈیش بورڈ مواد فیز 2 سے شامل ہوگا۔",
   "dependentHomePlaceholder": "ڈیپینڈنٹ ہوم اسکرین کی جگہ نما۔\nتین حفاظتی اقدامات (پینک موڈ، ویلنیس چیک، دوا) ٹاسک 3.10 سے یہاں شامل ہوں گے۔",
-
   "switchModeTooltip": "موڈ تبدیل کریں (صرف ڈیو)",
   "switchToStandardView": "معیاری ویو پر جائیں",
   "switchToAccessibleView": "بڑے حروف، ہائی کنٹراسٹ ویو پر جائیں",
-
   "previewLoginLink": "پیش منظر: لاگ ان اسکرین (ٹاسک 1.11)",
   "previewRegisterLink": "پیش منظر: رجسٹر اسکرین (ٹاسک 1.11)",
-
   "registerScreenTitle": "اکاؤنٹ بنائیں",
   "loginScreenTitle": "لاگ ان",
   "guardianVerificationTitle": "گارڈین کی تصدیق",
   "dependentKycTitle": "ڈیپینڈنٹ کی تصدیق (KYC)",
-
   "fullNameLabel": "پورا نام",
   "emailLabel": "ای میل",
   "phoneLabel": "فون نمبر",
   "passwordLabel": "پاس ورڈ",
   "confirmPasswordLabel": "پاس ورڈ کی تصدیق کریں",
-
   "registeringAsLabel": "بطور رجسٹر ہو رہے ہیں",
   "roleGuardianOption": "گارڈین",
   "roleDependentOption": "ڈیپینڈنٹ",
-
   "registerButton": "رجسٹر کریں",
   "loginButton": "لاگ ان کریں",
   "alreadyHaveAccountPrompt": "پہلے سے اکاؤنٹ ہے؟ لاگ ان کریں",
   "dontHaveAccountPrompt": "اکاؤنٹ نہیں ہے؟ رجسٹر کریں",
-
   "fieldRequiredError": "یہ خانہ ضروری ہے",
   "invalidEmailError": "درست ای میل ایڈریس درج کریں",
   "passwordTooShortError": "پاس ورڈ کم از کم 8 حروف کا ہونا چاہیے",
@@ -47,7 +37,6 @@
   "passwordsDoNotMatchError": "پاس ورڈ مماثل نہیں ہیں",
   "invalidPhoneError": "درست پاکستانی فون نمبر درج کریں (مثلاً 03XXXXXXXXX)",
   "invalidCnicError": "شناختی کارڈ نمبر اس فارمیٹ میں درج کریں: XXXXX-XXXXXXX-X",
-
   "cnicLabel": "شناختی کارڈ نمبر (CNIC)",
   "cnicHint": "XXXXX-XXXXXXX-X",
   "sendOtpButton": "OTP بھیجیں",
@@ -55,11 +44,9 @@
   "otpLabel": "OTP درج کریں",
   "verifyAndContinueButton": "تصدیق کریں اور جاری رکھیں",
   "noLivenessRequiredNote": "گارڈین کی تصدیق کے لیے لائیونیس تصویر درکار نہیں۔",
-
   "captureLivenessButton": "لائیونیس تصویر لیں",
   "livenessCapturedConfirmation": "لائیونیس تصویر لے لی گئی (نمائشی)",
   "submitForVerificationButton": "تصدیق کے لیے جمع کروائیں",
-
   "genericValidationError": "براہ کرم خانے چیک کریں اور دوبارہ کوشش کریں۔",
   "retryButton": "دوبارہ کوشش کریں",
   "tryAgainButton": "دوبارہ کوشش کریں",
@@ -74,7 +61,6 @@
   "secondaryGuardianFullLabel": "سیکنڈری گارڈین",
   "verifiedLabel": "تصدیق شدہ",
   "notVerifiedLabel": "غیر تصدیق شدہ",
-
   "guardianVerifyEitherOptionNote": "دونوں میں سے کوئی ایک طریقہ اپنانا کافی ہے — آپ کو دونوں کرنے کی ضرورت نہیں۔",
   "guardianVerifyOptionAHeader": "طریقہ الف: فون OTP کے ذریعے تصدیق کریں",
   "guardianVerifyOptionBHeader": "طریقہ ب: شناختی کارڈ (CNIC) کے ذریعے تصدیق کریں",
@@ -83,7 +69,6 @@
   "otpNotVerifiedYetSnackbar": "ابھی تصدیق نہیں ہوئی — نیچے CNIC چیک آزمائیں۔",
   "otpInvalidError": "یہ کوڈ غلط ہے یا میعاد ختم ہو چکی ہے۔ دوبارہ کوشش کریں یا دوبارہ بھیجیں۔",
   "cnicCheckFailedSnackbar": "CNIC چیک ناکام ہوگیا — اوپر فون OTP آزمائیں۔",
-
   "openingCameraLabel": "کیمرہ کھل رہا ہے...",
   "lostRegistrationDetailsError": "آپ کی رجسٹریشن کی تفصیلات محفوظ نہیں رہیں (یہ اس وقت ہوتا ہے جب ایپ بند ہو جائے)۔ جاری رکھنے کے لیے دوبارہ رجسٹر کریں۔",
   "kycInvalidCredentialsError": "آپ کے اکاؤنٹ کی تفصیلات میں کچھ غلط ہے - براہ کرم دوبارہ رجسٹر کریں۔",
@@ -95,7 +80,6 @@
   "kycVerifiedActiveDefaultMessage": "آپ کی تصدیق ہو چکی ہے اور اکاؤنٹ فعال ہے۔",
   "kycPendingDefaultMessage": "ابھی زیرِ التوا ہے - براہ کرم دوبارہ جمع کروائیں۔",
   "kycFailedDefaultMessage": "تصدیق ناکام ہوگئی - براہ کرم دوبارہ کوشش کریں۔",
-
   "inviteCodeOptionalLabel": "دعوتی کوڈ (اختیاری)",
   "inviteCodeHelperText": "صرف اس صورت میں جب کسی پرائمری گارڈین نے آپ کو سیکنڈری گارڈین کے طور پر مدعو کیا ہو۔",
   "roleLockedToGuardianNote": "دعوتی کوڈ درج ہونے پر کردار گارڈین تک محدود ہے۔",
@@ -106,10 +90,8 @@
   "emailAlreadyRegisteredError": "یہ ای میل پہلے ہی رجسٹرڈ ہے۔ اس کے بجائے لاگ ان کرنے کی کوشش کریں۔",
   "phoneAlreadyRegisteredError": "یہ فون نمبر پہلے ہی رجسٹرڈ ہے۔",
   "accountAlreadyRegisteredError": "یہ اکاؤنٹ پہلے سے موجود ہے۔ اس کے بجائے لاگ ان کرنے کی کوشش کریں۔",
-
   "invalidCredentialsError": "غلط ای میل یا پاس ورڈ۔",
   "accountNotActivatedError": "آپ کا اکاؤنٹ ابھی فعال نہیں ہوا — KYC مکمل کریں اور اپنے گارڈین کے لنک کرنے کا انتظار کریں۔",
-
   "haveInviteCodeButton": "دعوتی کوڈ ہے؟",
   "linkADependentLabel": "ڈیپینڈنٹ لنک کریں",
   "noDependentsLinkedMessage": "آپ ابھی تک کسی ڈیپینڈنٹ سے لنک نہیں ہیں۔ شروع کرنے کے لیے نیچے \"ڈیپینڈنٹ لنک کریں\" کا استعمال کریں۔",
@@ -119,7 +101,6 @@
   "kycStatusPending": "زیرِ التوا",
   "kycStatusVerified": "تصدیق شدہ",
   "kycStatusFailed": "ناکام",
-
   "linkDependentInstructions": "ڈیپینڈنٹ سے ان کی تصدیقی اسکرین پر دکھائی گئی ID مانگیں، پھر اسے نیچے درج کریں۔",
   "dependentIdLabel": "ڈیپینڈنٹ کی ID",
   "linkButton": "لنک کریں",
@@ -129,7 +110,6 @@
   "dependentNotFoundError": "اس ID کے ساتھ کوئی اکاؤنٹ نہیں ملا - دوبارہ چیک کریں اور کوشش کریں۔",
   "alreadyLinkedError": "آپ پہلے ہی اس ڈیپینڈنٹ سے لنک ہیں۔",
   "primaryAlreadyExistsError": "اس ڈیپینڈنٹ کا پہلے ہی ایک پرائمری گارڈین موجود ہے۔",
-
   "yourRoleLabel": "آپ کا کردار:",
   "kycStatusColonLabel": "KYC حیثیت:",
   "accountActiveColonLabel": "اکاؤنٹ فعال:",
@@ -137,7 +117,6 @@
   "inviteASecondaryButton": "سیکنڈری گارڈین کو مدعو کریں",
   "managePermissionsButton": "اجازتیں منظم کریں",
   "myAccessButton": "میری رسائی",
-
   "invitePhoneInstructions": "سیکنڈری گارڈین کا فون نمبر درج کریں۔ انہیں اس سے بننے والا کوڈ درکار ہوگا۔",
   "sendInviteButton": "دعوت بھیجیں",
   "guardianNotVerifiedGenericError": "پہلے اپنے اکاؤنٹ کی تصدیق کرنی ہوگی۔",
@@ -148,7 +127,6 @@
   "copyCodeButton": "کوڈ کاپی کریں",
   "copiedSnackbar": "کاپی ہوگیا۔",
   "inviteShareFooterNote": "وہ رجسٹریشن کے دوران یہ درج کریں گے (اگر نئے ہیں) یا \"دعوتی کوڈ ہے؟\" اسکرین پر (اگر پہلے سے سیکنڈری اکاؤنٹ رکھتے ہیں)۔",
-
   "noSecondariesYetMessage": "ابھی تک کوئی سیکنڈری گارڈین نہیں ہے - پہلے ایک کو مدعو کریں۔",
   "secondaryNotFoundError": "وہ گارڈین اب اس ڈیپینڈنٹ سے لنک نہیں ہے۔",
   "moduleLiveLocation": "لائیو لوکیشن",
@@ -157,10 +135,8 @@
   "moduleEmergencyAlerts": "ایمرجنسی الرٹس",
   "moduleCameraViewing": "کیمرہ ویو",
   "moduleMedicationManagement": "دوا کا انتظام",
-
   "roleColonLabel": "کردار:",
   "notLinkedToDependentError": "آپ اس ڈیپینڈنٹ سے لنک نہیں ہیں۔",
-
   "acceptAnInviteTitle": "دعوت قبول کریں",
   "pasteInviteCodeInstructions": "وہ دعوتی کوڈ پیسٹ کریں جو پرائمری گارڈین نے آپ کے ساتھ شیئر کیا۔",
   "inviteCodeLabel": "دعوتی کوڈ",
@@ -168,7 +144,6 @@
   "inviteAcceptedSnackbar": "قبول ہوگیا! یہ ڈیپینڈنٹ اب آپ کی ہوم اسکرین پر نظر آئے گا۔",
   "primaryCannotAcceptInviteError": "پرائمری گارڈین اکاؤنٹ سیکنڈری دعوت قبول نہیں کر سکتا۔",
   "inviteNotForYouAcceptError": "یہ کوڈ آپ کے اکاؤنٹ کے نمبر سے مختلف نمبر پر بھیجا گیا تھا۔",
-
   "liveMapButton": "لائیو میپ",
   "noLocationYetMessage": "ابھی تک کوئی مقام موصول نہیں ہوا۔",
   "justNowLabel": "ابھی ابھی",
@@ -179,14 +154,12 @@
   "zoneStatusNoZones": "ابھی تک کوئی محفوظ زون سیٹ اپ نہیں ہوا",
   "zoneStatusUnknown": "مقام کی حیثیت نامعلوم ہے",
   "moduleAccessDeniedLiveMapError": "آپ کو اس ڈیپینڈنٹ کا مقام دیکھنے کی اجازت نہیں ہے۔",
-
   "locationSharingActiveLabel": "مقام کا اشتراک: فعال",
   "locationPermissionNeededMessage": "آپ کے گارڈین کو آپ کا مقام دیکھنے کے لیے لوکیشن کی اجازت درکار ہے۔",
   "grantLocationPermissionButton": "اجازت دیں",
   "locationPermissionDeniedForeverMessage": "لوکیشن کی اجازت مستقل طور پر مسترد کر دی گئی ہے۔ براہ کرم اسے اپنے فون کی سیٹنگز سے فعال کریں۔",
   "locationServiceDisabledMessage": "اپنا مقام شیئر کرنے کے لیے براہ کرم اپنے فون کی سیٹنگز میں لوکیشن سروسز آن کریں۔",
   "openSettingsButton": "سیٹنگز کھولیں",
-
   "dependentHomeTitle": "ہوم",
   "dependentHomeGreeting": "السلام علیکم، {name}",
   "panicButtonLabel": "ایمرجنسی",
@@ -198,7 +171,6 @@
   "nextMedicationMessage": "اگلی خوراک: {drug}, {time} پر",
   "noMedicationScheduledMessage": "کوئی دوا شیڈول نہیں ہے",
   "moreComingSoonLabel": "مزید: ریکارڈز · اپائنٹمنٹس · پیغامات (جلد آرہا ہے)",
-
   "panicScreenTitle": "ایمرجنسی",
   "panicNeedHelpTitle": "مدد چاہیے؟",
   "panicHoldInstructions": "بٹن کو 2 سیکنڈ تک دبائے رکھیں",
@@ -218,7 +190,6 @@
   "panicResolvedSnackbar": "محفوظ کے طور پر نشان زد کر دیا گیا۔ خوشی ہوئی کہ آپ ٹھیک ہیں۔",
   "panicTriggerFailedSnackbar": "الرٹ نہیں بھیجا جا سکا۔ اپنا کنکشن چیک کریں اور دوبارہ کوشش کریں۔",
   "panicResolveFailedSnackbar": "آپ کو محفوظ نشان زد نہیں کیا جا سکا۔ دوبارہ کوشش کریں۔",
-
   "wellnessCheckScreenTitle": "ویلنیس چیک",
   "areYouOkTitle": "کیا آپ ٹھیک ہیں؟",
   "familyCheckingOnYouMessage": "آپ کا خاندان آپ کی خیریت دریافت کر رہا ہے",
@@ -231,7 +202,6 @@
   "wellnessCheckTimeUpNote": "وقت ختم ہوگیا — آپ کے گارڈین کو مطلع کیا جا سکتا ہے۔ آپ اب بھی نیچے جواب دے سکتے ہیں۔",
   "wellnessCheckRespondedSnackbar": "شکریہ — ٹھیک کے طور پر نشان زد کر دیا گیا۔",
   "wellnessCheckRespondFailedSnackbar": "آپ کا جواب نہیں بھیجا جا سکا۔ دوبارہ کوشش کریں۔",
-
   "medicationScreenTitle": "میری دوا",
   "medicineStep1OfTwoLabel": "میں نے دوا لے لی · مرحلہ 1 از 2",
   "noMedicineDueMessage": "ابھی کوئی دوا کا وقت نہیں ہے۔",
@@ -249,7 +219,6 @@
   "medicineDoneButtonLabel": "ہوگیا",
   "medicineConfirmRequestFailedSnackbar": "تصدیق شروع نہیں ہو سکی۔ دوبارہ کوشش کریں۔",
   "medicineConfirmFailedSnackbar": "تصدیق نہیں ہو سکی۔ دوبارہ کوشش کریں۔",
-
   "medicationScheduleButton": "دوا کا شیڈول",
   "wellnessScheduleButton": "ویلنیس چیک شیڈول",
   "medicationScheduleScreenTitle": "دوا کا شیڈول",
@@ -284,9 +253,7 @@
   "dayFriLabel": "جمعہ",
   "daySatLabel": "ہفتہ",
   "daySunLabel": "اتوار",
-
   "goBackButtonLabel": "واپس جائیں",
-
   "alertTypePanic": "پینک الرٹ",
   "alertTypeMissedDose": "دوا چھوٹ گئی",
   "alertTypeWellnessCheck": "ویلنیس چیک چھوٹ گیا",
@@ -298,7 +265,6 @@
   "tierLevel1PrimaryLabel": "سطح 1 · پرائمری",
   "tierLevel2SecondaryLabel": "سطح 2 · سیکنڈری",
   "tierLevel3SmsLabel": "سطح 3 · ایس ایم ایس بھیج دیا گیا",
-
   "alertsScreenTitle": "الرٹس",
   "alertsOpenTabLabel": "کھلے ({count})",
   "alertsSeenTabLabel": "دیکھے گئے",
@@ -308,13 +274,11 @@
   "seenStopsChainTitle": "دیکھنا سلسلہ روک دیتا ہے",
   "seenStopsChainBody": "پرائمری → سیکنڈری (5 منٹ) → ایس ایم ایس (5 منٹ)",
   "acknowledgeFailedSnackbar": "دیکھا گیا کے طور پر نشان زد نہیں ہو سکا۔ دوبارہ کوشش کریں۔",
-
   "needsAttentionHeader": "توجہ درکار ہے",
   "seeAllLabel": "سب دیکھیں",
   "panicBannerTitle": "پینک الرٹ",
   "panicBannerBody": "{name} نے پینک دبایا · {time}",
   "openButtonLabel": "کھولیں",
-
   "missedDoseScreenTitle": "چھوٹی ہوئی دوا",
   "missedDoseBannerTitle": "{name} نے {drug} نہیں لی",
   "whatHappensNextHeader": "اب آگے کیا ہوگا",
@@ -331,7 +295,6 @@
   "doseAlreadyResolvedMessage": "یہ الرٹ پہلے ہی حل ہو چکا ہے۔",
   "alreadyEscalatedMessage": "دوسرے گارڈینز کو پہلے ہی بتا دیا گیا ہے۔",
   "callFailedSnackbar": "کال شروع نہیں ہو سکی۔",
-
   "emergencySettingsScreenTitle": "ایمرجنسی ترتیبات",
   "emergencySettingsButton": "ایمرجنسی ترتیبات",
   "remoteAlarmSectionTitle": "ریموٹ الارم",
@@ -355,11 +318,41 @@
   "contactRemovedSnackbar": "رابطہ ہٹا دیا گیا۔",
   "contactRemoveFailedSnackbar": "رابطہ نہیں ہٹایا جا سکا۔ دوبارہ کوشش کریں۔",
   "emergencyContactDeniedNote": "آپ یہ دیکھ سکتے ہیں لیکن صرف پرائمری گارڈین اسے تبدیل کر سکتا ہے۔",
-
   "alarmScreenTitle": "الارم",
   "alarmLookingForYouTitle": "آپ کا گارڈین آپ کو ڈھونڈ رہا ہے",
   "alarmScreenSubtitle": "آپ کے گارڈین کا الارم · {remaining} باقی",
   "stopAlarmButtonLabel": "الارم بند کریں",
   "stopAlarmFailedSnackbar": "الارم بند نہیں ہو سکا۔ دوبارہ کوشش کریں۔",
-  "noActiveAlarmMessage": "ابھی کوئی الارم نہیں بج رہا۔"
+  "noActiveAlarmMessage": "ابھی کوئی الارم نہیں بج رہا۔",
+  "messagesScreenTitle": "پیغامات",
+  "noConversationsYetMessage": "ابھی تک کوئی گفتگو نہیں۔",
+  "noMessagesYetPreview": "ابھی تک کوئی پیغام نہیں",
+  "urgentVoiceMessageLabel": "فوری صوتی پیغام",
+  "loadEarlierMessagesButton": "پرانے پیغامات دیکھیں",
+  "startConversationMessage": "ابھی تک کوئی پیغام نہیں۔ سلام کہیں!",
+  "messageInputHint": "پیغام لکھیں",
+  "messageSendTooltip": "بھیجیں",
+  "sendingLabel": "بھیجا جا رہا ہے…",
+  "notSentTapToRetryLabel": "نہیں بھیجا گیا · دوبارہ کوشش کے لیے دبائیں",
+  "readLabel": "پڑھ لیا گیا",
+  "communicationAccessDeniedMessage": "صرف وہ گارڈینز جن کے پاس Communication تک رسائی ہے ابھی پیغام بھیج سکتے ہیں۔",
+  "messagesButtonLabel": "پیغامات",
+  "messageButtonLabel": "پیغام بھیجیں",
+  "unreadMessagesSubtitle": "{count} نئے پیغام",
+  "quickReplyIAmFine": "میں ٹھیک ہوں",
+  "quickReplyCallMe": "مجھے کال کریں",
+  "quickReplyYes": "جی ہاں",
+  "quickReplyNo": "نہیں",
+  "recordUrgentVoiceSheetTitle": "فوری صوتی پیغام ریکارڈ کریں",
+  "urgentVoiceWarningMessage": "یہ {peerName} کے فون پر اہم الرٹ کی طرح بجے گا، خاموش موڈ میں بھی۔",
+  "tapToStartRecordingLabel": "ریکارڈنگ شروع کرنے کے لیے دبائیں",
+  "recordingInProgressLabel": "ریکارڈ ہو رہا ہے… {time}",
+  "maxLengthReachedMessage": "زیادہ سے زیادہ وقت ختم ہو گیا (2:00)۔",
+  "stopRecordingButtonLabel": "روکیں",
+  "discardRecordingButtonLabel": "حذف کریں",
+  "playPreviewButtonLabel": "چلائیں",
+  "sendUrgentVoiceButtonLabel": "بھیجیں",
+  "micPermissionDeniedMessage": "صوتی پیغام ریکارڈ کرنے کے لیے مائیکروفون کی اجازت درکار ہے۔",
+  "voiceSendFailedGenericMessage": "صوتی پیغام نہیں بھیجا جا سکا۔ دوبارہ کوشش کریں۔",
+  "audioDownloadFailedMessage": "صوتی پیغام لوڈ نہیں ہو سکا۔ دوبارہ کوشش کریں۔"
 }

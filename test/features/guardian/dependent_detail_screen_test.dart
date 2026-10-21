@@ -3,6 +3,10 @@
 // the new "Emergency settings" button and the screen's basic load, not a
 // full backfill of every existing button's own navigation (those already
 // have each destination screen's own direct tests).
+//
+// Extended for Task 4.6 (2026-10-22) — TC-4.6-21..22, for the new
+// "Message" button, same "just this one new button" scope as the
+// 3.14 extension above.
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
@@ -27,6 +31,7 @@ List<GoRoute> _routes() => [
         builder: (_, __) => const DependentDetailScreen(summary: _summary),
       ),
       GoRoute(path: '/guardian/emergency-settings', builder: (_, __) => stubScreen('EMERGENCY_SETTINGS_STUB')),
+      GoRoute(path: '/messages/chat', builder: (_, __) => stubScreen('CHAT_STUB')),
     ];
 
 void main() {
@@ -55,5 +60,32 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('EMERGENCY_SETTINGS_STUB'), findsOneWidget);
+  });
+
+  testWidgets('TC-4.6-21: the screen shows a Message button', (tester) async {
+    final fakeClient = FakeApiClient(getHandler: (_) => <dynamic>[]);
+    await tester.pumpWidget(wrapWithRouter(
+      fakeClient: fakeClient,
+      initialLocation: '/guardian/dependent-detail',
+      routes: _routes(),
+    ));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Message'), findsOneWidget);
+  });
+
+  testWidgets('TC-4.6-22: tapping Message opens the chat with this Dependent as the peer', (tester) async {
+    final fakeClient = FakeApiClient(getHandler: (_) => <dynamic>[]);
+    await tester.pumpWidget(wrapWithRouter(
+      fakeClient: fakeClient,
+      initialLocation: '/guardian/dependent-detail',
+      routes: _routes(),
+    ));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Message'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('CHAT_STUB'), findsOneWidget);
   });
 }

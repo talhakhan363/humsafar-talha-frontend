@@ -1098,4 +1098,107 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get noActiveAlarmMessage => 'No alarm is sounding right now.';
+
+  @override
+  String get messagesScreenTitle => 'Messages';
+
+  @override
+  String get noConversationsYetMessage => 'No conversations yet.';
+
+  @override
+  String get noMessagesYetPreview => 'No messages yet';
+
+  @override
+  String get urgentVoiceMessageLabel => 'Urgent voice message';
+
+  @override
+  String get loadEarlierMessagesButton => 'Load earlier messages';
+
+  @override
+  String get startConversationMessage => 'No messages yet. Say hello!';
+
+  @override
+  String get messageInputHint => 'Type a message';
+
+  @override
+  String get messageSendTooltip => 'Send';
+
+  @override
+  String get sendingLabel => 'Sending…';
+
+  @override
+  String get notSentTapToRetryLabel => 'Not sent · Tap to retry';
+
+  @override
+  String get readLabel => 'Read';
+
+  @override
+  String get communicationAccessDeniedMessage =>
+      'Only Guardians with Communication access can message right now.';
+
+  @override
+  String get messagesButtonLabel => 'Messages';
+
+  @override
+  String get messageButtonLabel => 'Message';
+
+  @override
+  String unreadMessagesSubtitle(int count) {
+    return '$count new message(s)';
+  }
+
+  @override
+  String get quickReplyIAmFine => 'I am fine';
+
+  @override
+  String get quickReplyCallMe => 'Call me';
+
+  @override
+  String get quickReplyYes => 'Yes';
+
+  @override
+  String get quickReplyNo => 'No';
+
+  @override
+  String get recordUrgentVoiceSheetTitle => 'Record an urgent voice message';
+
+  @override
+  String urgentVoiceWarningMessage(String peerName) {
+    return 'This will ring as a critical alert on $peerName\'s phone, even on silent.';
+  }
+
+  @override
+  String get tapToStartRecordingLabel => 'Tap to start recording';
+
+  @override
+  String recordingInProgressLabel(String time) {
+    return 'Recording… $time';
+  }
+
+  @override
+  String get maxLengthReachedMessage => 'Maximum length reached (2:00).';
+
+  @override
+  String get stopRecordingButtonLabel => 'Stop';
+
+  @override
+  String get discardRecordingButtonLabel => 'Discard';
+
+  @override
+  String get playPreviewButtonLabel => 'Play';
+
+  @override
+  String get sendUrgentVoiceButtonLabel => 'Send';
+
+  @override
+  String get micPermissionDeniedMessage =>
+      'Microphone permission is needed to record a voice message.';
+
+  @override
+  String get voiceSendFailedGenericMessage =>
+      'Couldn\'t send the voice message. Try again.';
+
+  @override
+  String get audioDownloadFailedMessage =>
+      'Couldn\'t load the voice message. Try again.';
 }

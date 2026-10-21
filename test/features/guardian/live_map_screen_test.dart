@@ -31,7 +31,7 @@ class _FakeApiClient extends ApiClient {
   final Map<String, dynamic> Function(String path) handler;
 
   @override
-  Future<Response<T>> get<T>(String path, {Map<String, dynamic>? queryParameters}) async {
+  Future<Response<T>> get<T>(String path, {Map<String, dynamic>? queryParameters, ResponseType? responseType}) async {
     final body = handler(path);
     return Response<T>(requestOptions: RequestOptions(path: path), data: body as T, statusCode: 200);
   }
@@ -48,7 +48,7 @@ class _ThrowingFakeApiClient extends ApiClient {
   final ApiException exception;
 
   @override
-  Future<Response<T>> get<T>(String path, {Map<String, dynamic>? queryParameters}) async {
+  Future<Response<T>> get<T>(String path, {Map<String, dynamic>? queryParameters, ResponseType? responseType}) async {
     throw exception;
   }
 }

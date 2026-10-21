@@ -2041,6 +2041,192 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No alarm is sounding right now.'**
   String get noActiveAlarmMessage;
+
+  /// No description provided for @messagesScreenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Messages'**
+  String get messagesScreenTitle;
+
+  /// No description provided for @noConversationsYetMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'No conversations yet.'**
+  String get noConversationsYetMessage;
+
+  /// No description provided for @noMessagesYetPreview.
+  ///
+  /// In en, this message translates to:
+  /// **'No messages yet'**
+  String get noMessagesYetPreview;
+
+  /// No description provided for @urgentVoiceMessageLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Urgent voice message'**
+  String get urgentVoiceMessageLabel;
+
+  /// No description provided for @loadEarlierMessagesButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Load earlier messages'**
+  String get loadEarlierMessagesButton;
+
+  /// No description provided for @startConversationMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'No messages yet. Say hello!'**
+  String get startConversationMessage;
+
+  /// No description provided for @messageInputHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Type a message'**
+  String get messageInputHint;
+
+  /// No description provided for @messageSendTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Send'**
+  String get messageSendTooltip;
+
+  /// No description provided for @sendingLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Sending…'**
+  String get sendingLabel;
+
+  /// No description provided for @notSentTapToRetryLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Not sent · Tap to retry'**
+  String get notSentTapToRetryLabel;
+
+  /// No description provided for @readLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Read'**
+  String get readLabel;
+
+  /// No description provided for @communicationAccessDeniedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Only Guardians with Communication access can message right now.'**
+  String get communicationAccessDeniedMessage;
+
+  /// No description provided for @messagesButtonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Messages'**
+  String get messagesButtonLabel;
+
+  /// No description provided for @messageButtonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Message'**
+  String get messageButtonLabel;
+
+  /// No description provided for @unreadMessagesSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} new message(s)'**
+  String unreadMessagesSubtitle(int count);
+
+  /// No description provided for @quickReplyIAmFine.
+  ///
+  /// In en, this message translates to:
+  /// **'I am fine'**
+  String get quickReplyIAmFine;
+
+  /// No description provided for @quickReplyCallMe.
+  ///
+  /// In en, this message translates to:
+  /// **'Call me'**
+  String get quickReplyCallMe;
+
+  /// No description provided for @quickReplyYes.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes'**
+  String get quickReplyYes;
+
+  /// No description provided for @quickReplyNo.
+  ///
+  /// In en, this message translates to:
+  /// **'No'**
+  String get quickReplyNo;
+
+  /// No description provided for @recordUrgentVoiceSheetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Record an urgent voice message'**
+  String get recordUrgentVoiceSheetTitle;
+
+  /// No description provided for @urgentVoiceWarningMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'This will ring as a critical alert on {peerName}\'s phone, even on silent.'**
+  String urgentVoiceWarningMessage(String peerName);
+
+  /// No description provided for @tapToStartRecordingLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to start recording'**
+  String get tapToStartRecordingLabel;
+
+  /// No description provided for @recordingInProgressLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Recording… {time}'**
+  String recordingInProgressLabel(String time);
+
+  /// No description provided for @maxLengthReachedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Maximum length reached (2:00).'**
+  String get maxLengthReachedMessage;
+
+  /// No description provided for @stopRecordingButtonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop'**
+  String get stopRecordingButtonLabel;
+
+  /// No description provided for @discardRecordingButtonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Discard'**
+  String get discardRecordingButtonLabel;
+
+  /// No description provided for @playPreviewButtonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Play'**
+  String get playPreviewButtonLabel;
+
+  /// No description provided for @sendUrgentVoiceButtonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Send'**
+  String get sendUrgentVoiceButtonLabel;
+
+  /// No description provided for @micPermissionDeniedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Microphone permission is needed to record a voice message.'**
+  String get micPermissionDeniedMessage;
+
+  /// No description provided for @voiceSendFailedGenericMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t send the voice message. Try again.'**
+  String get voiceSendFailedGenericMessage;
+
+  /// No description provided for @audioDownloadFailedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load the voice message. Try again.'**
+  String get audioDownloadFailedMessage;
 }
 
 class _AppLocalizationsDelegate

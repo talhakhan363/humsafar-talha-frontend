@@ -33,9 +33,28 @@ class ApiClient {
   final Future<String?> Function() _readRefreshToken;
   final Future<void> Function({required String accessToken, required String refreshToken}) _saveTokens;
 
-  Future<Response<T>> get<T>(String path, {Map<String, dynamic>? queryParameters}) =>
-      _wrap(() => _dio.get<T>(path, queryParameters: queryParameters));
+  // Task 4.8 — `responseType` is new, used by the voice-message
+  // playback flow (`GET /messages/{id}/audio`, messaging_contract.md):
+  // that endpoint returns raw audio bytes, not JSON, and needs the auth
+  // header, so it goes through this same client with
+  // `responseType: ResponseType.bytes` rather than being handed to the
+  // audio plugin as a bare URL (which would carry no auth header at
+  // all — the contract is explicit that "a plain audio player URL will
+  // not work"). Optional and defaults to null (Dio's own JSON default),
+  // so every existing call site is unaffected.
+  Future<Response<T>> get<T>(String path, {Map<String, dynamic>? queryParameters, ResponseType? responseType}) =>
+      _wrap(() => _dio.get<T>(
+            path,
+            queryParameters: queryParameters,
+            options: responseType == null ? null : Options(responseType: responseType),
+          ));
 
+  // Task 4.8 — `post` already accepted any `Object? data`, which Dio
+  // happily sends as multipart/form-data when it's a `FormData`
+  // instance (sets the content type itself based on the data's runtime
+  // type) — so `POST /messages/voice`'s multipart upload needs no new
+  // method here, just `post('/messages/voice', data: FormData.fromMap(...))`
+  // at the call site (voice_recorder_sheet.dart).
   Future<Response<T>> post<T>(String path, {Object? data}) => _wrap(() => _dio.post<T>(path, data: data));
 
   Future<Response<T>> put<T>(String path, {Object? data}) => _wrap(() => _dio.put<T>(path, data: data));

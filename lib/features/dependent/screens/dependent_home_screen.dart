@@ -50,12 +50,24 @@ import '../widgets/safety_action_buttons.dart';
 /// and will also be reachable from Task 3.14's FCM reminder once that
 /// ships.
 ///
+/// Task 4.6 (2026-10-22): added a fourth action button, "Messages"
+/// (mockup 20's "More" area graduates its first real destination out of
+/// the placeholder footer — see the test case log's resolved note on
+/// this), with a best-effort unread-count subtitle from
+/// `GET /messages/conversations`'s own `total_unread`. Deliberately a
+/// `SafetyActionButton` like "I am OK"/"My medicine" rather than a
+/// smaller link, matching mockup 25's "one big row" sizing rule for
+/// Dependent screens (NFR-07/22-38px text, 96-200px buttons) — messaging
+/// a Guardian is a normal, frequent action here, not a rare "more"
+/// destination.
+///
 /// Not automated-tested as a full screen, same reasoning as the old
 /// placeholder: `_startLocationSharing` calls through to the real
 /// Geolocator plugin, which has no platform channel under `flutter
 /// test`. What IS tested without a device: `schedule_helpers.dart`'s
 /// pure scheduling math, `PanicButton`/`SafetyActionButton`'s rendering,
-/// and the real Panic/Wellness/Medication screens' own test files.
+/// and the real Panic/Wellness/Medication/Messages screens' own test
+/// files.
 class DependentHomeScreen extends ConsumerStatefulWidget {
   const DependentHomeScreen({super.key});
 
@@ -72,6 +84,7 @@ class _DependentHomeScreenState extends ConsumerState<DependentHomeScreen> with 
   ({Map<String, dynamic> item, DateTime at})? _nextMedication;
   ({Map<String, dynamic> item, DateTime at})? _nextWellnessCheck;
   Map<String, dynamic>? _duePendingDose;
+  int _unreadMessages = 0;
 
   @override
   void initState() {
@@ -79,6 +92,7 @@ class _DependentHomeScreenState extends ConsumerState<DependentHomeScreen> with 
     WidgetsBinding.instance.addObserver(this);
     _startLocationSharing();
     _loadUpcoming();
+    _loadUnreadMessages();
   }
 
   @override
@@ -170,6 +184,24 @@ class _DependentHomeScreenState extends ConsumerState<DependentHomeScreen> with 
     }
   }
 
+  /// Best-effort, same reasoning as the schedule load above but never
+  /// allowed to block it: a Dependent with no conversations yet, or
+  /// temporarily offline, still sees Home normally. `MessagesScreen` is
+  /// the real inbox — this is only a count.
+  Future<void> _loadUnreadMessages() async {
+    try {
+      final response = await ref.read(apiClientProvider).get<Map<String, dynamic>>('/messages/conversations');
+      if (!mounted) return;
+      setState(() => _unreadMessages = response.data?['total_unread'] as int? ?? 0);
+    } on ApiException {
+      // best-effort, see doc comment above
+    }
+  }
+
+  Future<void> _refreshAll() async {
+    await Future.wait([_loadUpcoming(), _loadUnreadMessages()]);
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -192,7 +224,7 @@ class _DependentHomeScreenState extends ConsumerState<DependentHomeScreen> with 
         ],
       ),
       body: RefreshIndicator(
-        onRefresh: _loadUpcoming,
+        onRefresh: _refreshAll,
         child: ListView(
           padding: const EdgeInsets.all(16),
           children: [
@@ -233,6 +265,12 @@ class _DependentHomeScreenState extends ConsumerState<DependentHomeScreen> with 
                       : (_nextMedication != null
                           ? l10n.nextMedicationMessage(_nextMedication!.item['drug_name'] as String, formatClockTime(_nextMedication!.at))
                           : l10n.noMedicationScheduledMessage)),
+            ),
+            const SizedBox(height: 16),
+            SafetyActionButton(
+              onTap: () => context.push('/messages'),
+              label: l10n.messagesButtonLabel,
+              subtitle: _unreadMessages > 0 ? l10n.unreadMessagesSubtitle(_unreadMessages) : '',
             ),
             if (_scheduleLoadError != null) ...[
               const SizedBox(height: 12),
