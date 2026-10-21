@@ -59,6 +59,14 @@ class ApiClient {
 
   Future<Response<T>> put<T>(String path, {Object? data}) => _wrap(() => _dio.put<T>(path, data: data));
 
+  // Task 5.6 — first callers are PATCH .../records/{record_id} and
+  // PATCH .../appointments/{appointment_id} (records_contract.md,
+  // appointment_contract.md): both contracts are explicit about the
+  // PATCH verb (distinct from medication_contract.md's PUT for the
+  // same "edit some fields" shape), so this isn't just `put` under a
+  // different name — the real backend only accepts a PATCH here.
+  Future<Response<T>> patch<T>(String path, {Object? data}) => _wrap(() => _dio.patch<T>(path, data: data));
+
   // Task 3.14 — first caller is PUT/DELETE .../devices/push-token
   // (notification_contract.md): registering/forgetting an FCM token on
   // login/logout. Nothing used DELETE before this (the Task 3.15 schedule

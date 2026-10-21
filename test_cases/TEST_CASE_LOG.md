@@ -384,6 +384,147 @@ Grounded in `messaging_contract.md`'s "Priority voice messages" section and mock
 
 ---
 
+## Task 5.6 — Medical records UI
+
+Grounded in `docs/api/records_contract.md` and `docs/api/appointment_contract.md` (`dev` branch), mockups 15/15b-f. Delivered together with Tasks 5.7/5.8/6.8 in one batch, per the team's own instruction — one zip, one `flutter pub get` → `flutter gen-l10n` → `flutter analyze` → `flutter test` pass by Talha at the end, same as every prior batch.
+
+| Test ID | Test Case | Expected Result | Status | Notes |
+|---|---|---|---|---|
+| TC-5.6-01 | Automated widget test (`test/features/records/medical_vault_screen_test.dart`) — a record loads | Title and category show | Not Run | Written this delivery — awaiting `flutter test` |
+| TC-5.6-02 | Automated widget test (same file) — empty vault | "No records yet." shown | Not Run | Written this delivery — awaiting `flutter test` |
+| TC-5.6-03 | Automated widget test (same file) — tap a category chip | Re-queries the server with that category | Not Run | Written this delivery — awaiting `flutter test` |
+| TC-5.6-04 | Automated widget test (same file) — load fails with `MODULE_ACCESS_DENIED` | Mapped message + Retry shown | Not Run | Written this delivery — awaiting `flutter test` |
+| TC-5.6-05 | Automated widget test (same file) — `canManageAccess: false` | "Record access" menu item hidden | Not Run | Written this delivery — awaiting `flutter test` |
+| TC-5.6-06 | Automated widget test (same file) — tap Doctor links in the menu | Navigates to Doctor Links | Not Run | Written this delivery — awaiting `flutter test` |
+| TC-5.6-07 | Automated widget test (same file) — delete a record | Confirm dialog first, then `DELETE`, row removed | Not Run | Written this delivery — awaiting `flutter test` |
+| TC-5.6-08 | Automated widget test (same file) — tap + | Opens Add Record | Not Run | Written this delivery — awaiting `flutter test` |
+| TC-5.6-09 | Automated widget test (`test/features/records/add_record_screen_test.dart`) — empty title | Save blocked, inline error, no POST | Not Run | Written this delivery — awaiting `flutter test` |
+| TC-5.6-10 | Automated widget test (same file) — title with no file and no notes | Save blocked with `recordNeedsContentError` | Not Run | Written this delivery — awaiting `flutter test` |
+| TC-5.6-11 | Automated widget test (same file) — notes alone, no file | Saves; multipart POST sent | Not Run | Written this delivery — awaiting `flutter test` |
+| TC-5.6-12 | Automated widget test (same file) — picked file over 10 MB | `fileTooLargeMessage` shown, not attached | Not Run | Written this delivery — awaiting `flutter test` |
+| TC-5.6-13 | Automated widget test (same file) — a valid file | Attaches and is sent as the `file` multipart field on save | Not Run | Written this delivery — awaiting `flutter test` |
+| TC-5.6-14 | Automated widget test (same file) — edit mode (`existing` passed) | File picker hidden; cannot-replace note shown; save PATCHes | Not Run | Written this delivery — awaiting `flutter test` |
+| TC-5.6-15 | Automated widget test (`test/features/records/appointments_screen_test.dart`) — loads | Upcoming tab selected by default; shows a scheduled appointment | Not Run | Written this delivery — awaiting `flutter test` |
+| TC-5.6-16 | Automated widget test (same file) — switch to History | Re-queries with `when=past`; empty state and no FAB shown | Not Run | Written this delivery — awaiting `flutter test` |
+| TC-5.6-17 | Automated widget test (same file) — add form, empty provider name | Save blocked | Not Run | Written this delivery — awaiting `flutter test` |
+| TC-5.6-18 | Automated widget test (same file) — valid new appointment | POSTs; "Appointment saved" snackbar shown | Not Run | Written this delivery — awaiting `flutter test` |
+| TC-5.6-19 | Automated widget test (same file) — menu's "Cancel appointment" | POSTs to `.../cancel` | Not Run | Written this delivery — awaiting `flutter test` |
+| TC-5.6-20 | Automated widget test (`test/features/guardian/dependent_detail_screen_test.dart`) — screen loads | Shows the new "Medical Records" button | Not Run | Written this delivery — awaiting `flutter test` |
+| TC-5.6-21 | Automated widget test (same file) — tap Appointments | Navigates to `/appointments` with this Dependent's id | Not Run | Written this delivery — awaiting `flutter test` |
+| TC-5.6-22 | Automated widget test (`test/features/records/record_access_screen_test.dart`) — a Secondary without `health_records_granted` | Not-granted note shown, switches disabled | Not Run | Written this delivery — awaiting `flutter test` |
+| TC-5.6-23 | Automated widget test (same file) — a granted Secondary | Four category switches shown, all enabled | Not Run | Written this delivery — awaiting `flutter test` |
+| TC-5.6-24 | Automated widget test (same file) — toggle a category | `PUT`s the right path/body | Not Run | Written this delivery — awaiting `flutter test` |
+| TC-5.6-25 | Automated widget test (same file) — a failed toggle | Switch reverts optimistically; error shown | Not Run | Written this delivery — awaiting `flutter test` |
+| TC-5.6-26 | Automated widget test (same file) — `NOT_PRIMARY_GUARDIAN` on load | Mapped message shown | Not Run | Written this delivery — awaiting `flutter test` |
+| TC-5.6-27 | Automated widget test (`test/features/records/doctor_links_screen_test.dart`) — empty list | "No doctor links yet." shown | Not Run | Written this delivery — awaiting `flutter test` |
+| TC-5.6-28 | Automated widget test (same file) — an active link | Shows categories and opened count | Not Run | Written this delivery — awaiting `flutter test` |
+| TC-5.6-29 | Automated widget test (same file) — create a link | POSTs hours/vitals choice; shares the full URL via `ShareSource`, not just a display | Not Run | Written this delivery — awaiting `flutter test` |
+| TC-5.6-30 | Automated widget test (same file) — `SHARE_LIMIT` on create | Mapped message shown | Not Run | Written this delivery — awaiting `flutter test` |
+| TC-5.6-31 | Automated widget test (same file) — cancel an active link | `DELETE`s and refreshes | Not Run | Written this delivery — awaiting `flutter test` |
+| TC-5.6-32 | Automated widget test (`test/shared/widgets/export_scope_sheet_test.dart`) — "Everything" scope | `GET .../export?scope=complete` as bytes; shared with no filename suffix | Not Run | Written this delivery — awaiting `flutter test` |
+| TC-5.6-33 | Automated widget test (same file) — "This year" scope | Filename suffixed with the chosen year | Not Run | Written this delivery — awaiting `flutter test` |
+| TC-5.6-34 | Automated widget test (same file) — empty byte response | `exportFailedMessage` shown, no share | Not Run | Written this delivery — awaiting `flutter test` |
+| TC-5.6-35 | Automated widget test (same file) — `MODULE_ACCESS_DENIED` | Mapped message shown | Not Run | Written this delivery — awaiting `flutter test` |
+| TC-5.6-36 | Automated unit test (`test/core/formatting/format_helpers_test.dart`) — `formatFileSize`/`formatDateYmd`/`formatDateDisplay`/`formatPkrOrAsk`/`formatDistanceKm` | Each pure function's boundary cases (sub-1KB, en/ur month names, null price/distance, thousands separators) match expected strings | Not Run | Written this delivery — awaiting `flutter test` |
+| TC-5.6-37 | Real device: Guardian uploads a real PDF/photo record, downloads it back, opens it via the OS share sheet | File round-trips correctly; share sheet offers a real viewer app | Not Run | Deferred to full team pass |
+| TC-5.6-38 | Native Urdu speaker reads this task's new Urdu strings (see cross-cutting note below) | Phrasing reads naturally, no mistranslation | Not Run | Same standing flag as every prior task's Urdu batch |
+
+**Named scope decisions for 5.6:**
+- **No in-app PDF/photo viewer.** Tapping a record's file icon downloads it and hands it straight to the OS share sheet (`ShareSource`) rather than rendering it in-app. The task is literally titled "list, upload, export" — viewing was never asked for — and adding a PDF-rendering dependency on top of `file_picker`/`share_plus` would have meant a third new, unvetted plugin in one delivery.
+- **`file_picker`/`share_plus` are wrapped behind `FilePickerSource`/`ShareSource`** (`lib/core/files/`, `lib/core/sharing/`), same bytes-in/bytes-out seam pattern as `AudioRecorderSource` (Task 4.8) — screens stay unit-testable without a real file chooser or OS share sheet.
+- **`ApiClient.patch<T>()` is new** (first PATCH caller in this codebase) — both `records_contract.md` and `appointment_contract.md` specify PATCH for edits, not PUT (which this app already uses for the different "toggle one field" shape in `medication_contract.md`/record access). `FakeApiClient` was extended with full patch support (`patchHandler`/`patchError`/`patchCalls`/`lastPatchPath`/`lastPatchData`), mirroring the existing `put`/`delete` extensions.
+- **`file_picker: ^11.0.3` and `share_plus: ^12.0.1`** were chosen after checking each version's own Flutter-SDK floor against Talha's installed Flutter 3.32.1 (`file_picker` 12.0.0+ needs Flutter ≥3.38.0; `share_plus` 13.0.0+ needs Flutter ≥3.41.0 — both too new). Same version-floor discipline as the `record`/`audioplayers` incident from Task 4.8.
+- **The Export action (mockup 15c) is shared with Task 5.7's Vitals screen** via one `showExportScopeSheet()` function (`lib/shared/widgets/export_scope_sheet.dart`) rather than built twice — both contracts define an identical `GET .../export?scope=complete|year|month` shape.
+- **Every new records/appointments/wearable/directory/vitals route is role-neutral** (`/records`, `/appointments`, `/vitals`, `/wearable`, `/directory` — no `/guardian/`/`/dependent/` prefix), taking a plain `dependentId: String` rather than a Guardian-only `DependentSummary`, so the exact same screen serves a Guardian acting on a linked Dependent and a Dependent acting on themselves (same pattern as `/messages`, Task 4.6).
+
+---
+
+## Task 5.7 — Vitals entry UI
+
+Grounded in `docs/api/vitals_contract.md` (`dev` branch), mockups 26/26b/28.
+
+| Test ID | Test Case | Expected Result | Status | Notes |
+|---|---|---|---|---|
+| TC-5.7-01 | Automated widget test (`test/features/vitals/vitals_screen_test.dart`) — latest values loaded | Blood pressure tile shows "120/80 mmHg"; heart rate tile shows the "From band" note | Not Run | Written this delivery — awaiting `flutter test` |
+| TC-5.7-02 | Automated widget test (same file) — a manual reading in history | Note icon shown (not the band icon) | Not Run | Written this delivery — awaiting `flutter test` |
+| TC-5.7-03 | Automated widget test (same file) — tap a metric filter chip | Re-queries history with that `metric_type` | Not Run | Written this delivery — awaiting `flutter test` |
+| TC-5.7-04 | Automated widget test (same file) — delete a reading (`can_delete: true`) | `DELETE`s and removes the row | Not Run | Written this delivery — awaiting `flutter test` |
+| TC-5.7-05 | Automated widget test (same file) — tap + | Opens Add Reading | Not Run | Written this delivery — awaiting `flutter test` |
+| TC-5.7-06 | Automated widget test (same file) — `MODULE_ACCESS_DENIED` on load | Mapped message shown | Not Run | Written this delivery — awaiting `flutter test` |
+| TC-5.7-07 | Automated widget test (`test/features/vitals/add_vital_reading_screen_test.dart`) — the metric chips | Heart rate is never offered (band-only, per the contract) | Not Run | Written this delivery — awaiting `flutter test` |
+| TC-5.7-08 | Automated widget test (same file) — blood pressure, empty fields | Save blocked, no POST | Not Run | Written this delivery — awaiting `flutter test` |
+| TC-5.7-09 | Automated widget test (same file) — valid blood pressure reading | POSTs top/bottom as `value`/`diastolic` | Not Run | Written this delivery — awaiting `flutter test` |
+| TC-5.7-10 | Automated widget test (same file) — switch to blood sugar, pick Fasting | Unit + context dropdowns shown and sent in the body (also exercises the `DropdownButtonFormField value:` fix below) | Not Run | Written this delivery — awaiting `flutter test` |
+| TC-5.7-11 | Automated widget test (same file) — `VITAL_OUT_OF_RANGE` on save | Mapped message shown | Not Run | Written this delivery — awaiting `flutter test` |
+| TC-5.7-12 | Automated widget test (`test/features/guardian/dependent_detail_screen_test.dart`) — tap Vitals | Navigates to `/vitals` with this Dependent's id | Not Run | Written this delivery — awaiting `flutter test` |
+| TC-5.7-13 | Real device: enter a real blood-pressure reading, then export the PDF and open it | Reading appears in history; exported PDF contains it | Not Run | Deferred to full team pass |
+
+**Named scope decisions for 5.7:**
+- **No charts/trend lines.** `vitals_contract.md` itself says there is no high/low/normal judgement on screen, and a trend visualization is a design call nothing in this task's own wording ("vitals entry UI") asked for.
+- **`DropdownButtonFormField(initialValue: ...)` was caught and fixed to `value:`** in `add_vital_reading_screen.dart` before delivery — `initialValue` was only added in Flutter 3.35 per Flutter's own breaking-changes documentation; Talha's installed Flutter is 3.32.1, which only supports `value:`. Found via the same version-floor discipline as the `record`/`audioplayers` incident, not by running a real compiler (not available in this delivery environment — see the general delivery notes).
+- **Export (mockup 26's PDF) reuses Task 5.6's `showExportScopeSheet()`** rather than a second implementation — see 5.6's section above.
+
+---
+
+## Task 5.8 — Wearable pairing UI
+
+Grounded in `docs/api/wearable_contract.md` (`dev` branch), mockups 27/27b (+26c folded in as a status variant, not a separate screen).
+
+| Test ID | Test Case | Expected Result | Status | Notes |
+|---|---|---|---|---|
+| TC-5.8-01 | Automated widget test (`test/features/wearable/connect_band_screen_test.dart`) — empty address | Pair blocked, no POST | Not Run | Written this delivery — awaiting `flutter test` |
+| TC-5.8-02 | Automated widget test (same file) — valid address + name | POSTs `ble_address` and `name` | Not Run | Written this delivery — awaiting `flutter test` |
+| TC-5.8-03 | Automated widget test (same file) — no name entered | POSTs with no `name` key | Not Run | Written this delivery — awaiting `flutter test` |
+| TC-5.8-04 | Automated widget test (same file) — `BAND_ALREADY_PAIRED` | Mapped message shown | Not Run | Written this delivery — awaiting `flutter test` |
+| TC-5.8-05 | Automated widget test (`test/features/wearable/my_band_screen_test.dart`) — `not_paired` status | Connect Band button shown | Not Run | Written this delivery — awaiting `flutter test` |
+| TC-5.8-06 | Automated widget test (same file) — tap Connect Band | Navigates to Connect Band | Not Run | Written this delivery — awaiting `flutter test` |
+| TC-5.8-07 | Automated widget test (same file) — `receiving` status | Device name, status, and latest heart rate shown | Not Run | Written this delivery — awaiting `flutter test` |
+| TC-5.8-08 | Automated widget test (same file) — `no_data` status | Warning banner shown | Not Run | Written this delivery — awaiting `flutter test` |
+| TC-5.8-09 | Automated widget test (same file) — Unpair | Confirm dialog first, then `DELETE`s | Not Run | Written this delivery — awaiting `flutter test` |
+| TC-5.8-10 | Automated widget test (same file) — Generate Demo Data | POSTs to `.../wearable/mock` and refreshes | Not Run | Written this delivery — awaiting `flutter test` |
+| TC-5.8-11 | Automated widget test (`test/features/guardian/dependent_detail_screen_test.dart`) — tap Wearable Band | Navigates to `/wearable` with this Dependent's id | Not Run | Written this delivery — awaiting `flutter test` |
+| TC-5.8-12 | Real device: pair a real Humsafar band over Bluetooth once Task 5.5 ships | Band pairs and streams real heart-rate data | Not Run | Blocked on Task 5.5 (band purchase), not just a test-pass gap |
+
+**Named scope decisions for 5.8:**
+- **No real BLE scan.** Task 2.4 (the BLE spike) and Task 5.5 (the real band) aren't built yet, so this screen offers manual entry of the band's Bluetooth address — `wearable_contract.md` itself allows this ("the phone knows the band's Bluetooth address from its scan"; typing it in is a legitimate stand-in for the scan step specifically, not for the pairing flow as a whole).
+- **"Band not sending" (mockup 26c) is folded into `MyBandScreen` as a `no_data` status variant**, not a separate screen/route — same "don't build a second screen for one state" reasoning as `alerts_screen.dart`'s tab split.
+- **"Generate demo data" (`POST .../wearable/mock`) exists only because the real band isn't built yet** — per the handbook's own instruction not to block this screen on the hardware purchase. Remove this button once Task 5.5 ships a real device.
+
+---
+
+## Task 6.8 — Directory/marketplace UI
+
+Grounded in `docs/api/directory_contract.md` and `docs/api/booking_contract.md` (`dev` branch), mockups 18/18b/18c/18d/18e.
+
+| Test ID | Test Case | Expected Result | Status | Notes |
+|---|---|---|---|---|
+| TC-6.8-01 | Automated widget test (`test/features/directory/directory_screen_test.dart`) — loads | Organizations tab selected by default; a real org shows a Call button | Not Run | Written this delivery — awaiting `flutter test` |
+| TC-6.8-02 | Automated widget test (same file) — a sample org (`is_sample: true`) | "Sample" label shown; no Call button | Not Run | Written this delivery — awaiting `flutter test` |
+| TC-6.8-03 | Automated widget test (same file) — call a real org | Logs the contact (`POST .../directory/contacts`) before dialing | Not Run | Written this delivery — awaiting `flutter test` |
+| TC-6.8-04 | Automated widget test (same file) — empty Organizations list | "No results found." shown | Not Run | Written this delivery — awaiting `flutter test` |
+| TC-6.8-05 | Automated widget test (same file) — switch to Home Care | Re-queries providers; Request Visit button shown | Not Run | Written this delivery — awaiting `flutter test` |
+| TC-6.8-06 | Automated widget test (same file) — tap Request Visit | Navigates with the provider payload | Not Run | Written this delivery — awaiting `flutter test` |
+| TC-6.8-07 | Automated widget test (same file) — tap the Activity log icon | Navigates to Activity Log | Not Run | Written this delivery — awaiting `flutter test` |
+| TC-6.8-08 | Automated widget test (`test/features/directory/request_visit_screen_test.dart`) — note over 300 characters | Save blocked, no POST | Not Run | Written this delivery — awaiting `flutter test` |
+| TC-6.8-09 | Automated widget test (same file) — save with no preferred time | POSTs without `preferred_at`; success view shown; no Call button since the contact was null | Not Run | Written this delivery — awaiting `flutter test` |
+| TC-6.8-10 | Automated widget test (same file) — server returns a contact | Call to Arrange button appears | Not Run | Written this delivery — awaiting `flutter test` |
+| TC-6.8-11 | Automated widget test (same file) — `TOO_MANY_OPEN_BOOKINGS` | Mapped message shown | Not Run | Written this delivery — awaiting `flutter test` |
+| TC-6.8-12 | Automated widget test (`test/features/directory/activity_log_screen_test.dart`) — empty log | "No activity yet." shown | Not Run | Written this delivery — awaiting `flutter test` |
+| TC-6.8-13 | Automated widget test (same file) — a non-booking entry | Not tappable, no chevron | Not Run | Written this delivery — awaiting `flutter test` |
+| TC-6.8-14 | Automated widget test (same file) — tap a booking entry | Opens the detail sheet (mockup 18e) with Confirm/Cancel | Not Run | Written this delivery — awaiting `flutter test` |
+| TC-6.8-15 | Automated widget test (same file) — Confirm | POSTs to `.../confirm`, sheet closes and the list refreshes | Not Run | Written this delivery — awaiting `flutter test` |
+| TC-6.8-16 | Automated widget test (same file) — `BOOKING_STATUS_CONFLICT` on an action | Mapped conflict message shown | Not Run | Written this delivery — awaiting `flutter test` |
+| TC-6.8-17 | Automated widget test (`test/features/guardian/dependent_detail_screen_test.dart`) — tap Directory & Services | Navigates to `/directory` with this Dependent's id | Not Run | Written this delivery — awaiting `flutter test` |
+| TC-6.8-18 | Real device: use real GPS for "Near me" sorting | Organizations list re-sorts by actual distance | Not Run | Deferred to full team pass — `Geolocator` has no platform channel under `flutter test`, so this can't be automated |
+| TC-6.8-19 | Real device: call a real organization, then confirm/complete a real home-care booking end to end | Call connects; booking status updates correctly on both the request list and Activity log | Not Run | Deferred to full team pass |
+
+**Named scope decisions for 6.8:**
+- **Mockup 18e's "Visit request" detail is a bottom sheet inside `ActivityLogScreen`, not a fifth route.** Same data and actions the mockup shows (status, who asked, Call, Confirm/Complete/Cancel) — a named simplification to keep this already-large four-task batch's route/test count down, not a missing feature.
+- **"Near me" is not covered by an automated test** — `Geolocator.getCurrentPosition()` has no platform channel under `flutter test`; `_useNearMe()` already swallows any failure so the button is simply never tapped in `directory_screen_test.dart` rather than being stubbed out. Same category of gap as `dependent_home_screen.dart`'s own location-sharing (not test-covered for the identical reason, flagged in that screen's own doc comment since Task 3.10).
+- **Organizations and Home-care providers are two tabs on one screen**, not two separate routes — both are read-only lists sharing the same search/near-me/Call shape, and splitting them would mean two nearly-identical screens for no behavioural difference.
+
+---
+
 ## Open cross-cutting items
 
 - Router has no redirect-guard hardening against direct/deep-link access to protected routes.
@@ -391,7 +532,9 @@ Grounded in `messaging_contract.md`'s "Priority voice messages" section and mock
 - Layout mismatch against Sarim's wireframes 05 ("Share my ID") and 09 ("Link a Dependent") — functional but doesn't match her design. Flagged to Sarim 2026-10-20, not yet fixed.
 - Safe-zone create/edit/delete UI — deliberately deferred out of Task 2.6.
 - **Resolved by Task 4.6, 2026-10-22:** the "More" footer links (records, appointments, messages) note below used to flag "messages" as a non-functional placeholder on the Dependent home screen — Messages is now a real, working destination (its own `SafetyActionButton`, not a footer link at all). The original note is kept below, trimmed to what's actually still true.
-- "More" footer link placeholders remaining on the Dependent home screen: records, appointments — real destinations land in Phase 5 and later.
+- **Resolved by Tasks 5.6/5.7/5.8/6.8, 2026-10-22:** the "More" footer placeholder note below used to flag "records, appointments" as non-functional on the Dependent home screen — records, vitals, wearable band, and directory are now real, working destinations there (their own `ListTile` rows under a "More" header, not a dead-end footer). The original note is kept below, trimmed to what's actually still true (nothing — Appointments is reached from inside Medical Records' sibling `AppointmentsScreen` via `DependentDetailScreen`/`DirectoryScreen`'s Activity log on the Guardian side; the Dependent home screen's own four rows cover records/vitals/wearable/directory, and a fifth "Appointments" row was deliberately not added to the Dependent home screen's footer since nothing in mockup 20's "More" area calls for it — a Dependent reaches Appointments from within the Medical Vault's sibling screen if routed there directly, e.g. a future push notification).
+- "More" footer link placeholders remaining on the Dependent home screen: none as of this delivery.
+- **`dependent_home_screen.dart`'s four new "More" row destinations (Medical Records/Vitals/Wearable Band/Directory) are not covered by a dedicated widget test** — this screen has never had automated widget-test coverage at all (see its own doc comment, standing since Task 3.10): `_startLocationSharing()` calls through to the real `Geolocator` plugin unconditionally in `initState`, which has no platform channel under `flutter test`. The four destination screens themselves are fully tested (`medical_vault_screen_test.dart`, `vitals_screen_test.dart`, `my_band_screen_test.dart`, `directory_screen_test.dart`); only this screen's own four `ListTile`s (visible, correct route, correct `extra`) are unverified by an automated test. Flagged rather than silently skipped — the same gap `DirectoryScreen`'s own "Near me" button has, for the identical reason.
 - **New Urdu strings from Tasks 3.11/3.12 (Panic + Wellness Check, ~26 keys) were drafted by Claude, not reviewed by a native Urdu speaker.** Same caveat applies to every other Urdu string in this app so far, but flagging these specifically since Panic/Wellness Check are the highest-stakes screens in the app to get wrong — worth a deliberate read-through by Talha or Sarim before the final demo, not just a "looks fine" skim.
 - **Guardian-side confirmation that Panic/Wellness Check alerts actually reach a person is Postman/backend-log only until Task 3.14 (FCM) ships** — there is no Guardian-facing push notification UI yet, so TC-3.11-11 and TC-3.12-11 can't be fully end-to-end confirmed on a real device until then.
 - **New Urdu strings from Tasks 3.13/3.15 (~37 keys total) were drafted by Claude, not reviewed by a native Urdu speaker** — same standing caveat as the 3.11/3.12 note above, now applying to the Medication Confirmation and both schedule screens too.
@@ -405,4 +548,8 @@ Grounded in `messaging_contract.md`'s "Priority voice messages" section and mock
 - **New, 2026-10-22 — a received urgent voice message's critical notification cannot be acknowledged from the chat screen itself.** `GET /messages` doesn't expose a `notification_id` on the message object, only `data.message_id`/`data.from_user_id` on the *notification* side — there's no reverse lookup. Flagged for Abdullah the same way the Panic per-Guardian-ack gap (item above, from 3.11) and the AlarmScreen call-button gap (item above, from 3.14) were: a real contract gap, not an oversight, not blocking this task's delivery.
 - **New, 2026-10-22 — neither the Dependent inbox's per-row "Call" button (mockup 25) nor the in-chat "Call" bar (mockup 25b) are built.** Both need Task 4.7 (calls), which was deliberately swapped out of this batch — see Task 4.6's section above for why. Not a gap to chase separately; 4.7 is already next.
 - **New Urdu strings from Task 4.6/4.8 (31 keys: `messagesScreenTitle` through `audioDownloadFailedMessage`) are Claude-drafted, not reviewed by a native Urdu speaker** — same standing caveat as every prior batch (3.11/3.12 ~26 keys, 3.13/3.15 ~37 keys, 3.14 ~65 keys). Running total across the app is now ~159 Claude-drafted Urdu keys awaiting one deliberate native-speaker read-through before the final demo — still worth doing in stages, Alerts/Alarm (3.14) first per the standing priority note, these 31 next.
+- **New, 2026-10-22 — Tasks 5.6/5.7/5.8/6.8 (Medical records, Vitals entry, Wearable pairing, Directory/marketplace) are now built, all four together in one batch.** `file_picker`/`share_plus` are this app's first file-chooser and OS-share-sheet integrations; `ApiClient.patch<T>()` is this app's first PATCH caller. See each task's own section above for details and named scope decisions.
+- **New Urdu strings from Tasks 5.6/5.7/5.8/6.8 (165 keys: `activityBookingCancelled` through `wearableBandButton`) are Claude-drafted, not reviewed by a native Urdu speaker** — same standing caveat as every prior batch, and by far the largest single batch yet (more than double Task 3.14's ~65). Running total across the app is now ~324 Claude-drafted Urdu keys awaiting one deliberate native-speaker read-through before the final demo. Given the size, worth asking Sarim to split this specific batch across the team rather than reading all 165 alone.
+- **This delivery's test files were written and reviewed by hand, without a real Flutter toolchain available to this delivery environment** (confirmed: its network egress proxy blocks `storage.googleapis.com`, the Flutter SDK's download host — the same "can't run `flutter analyze`/`flutter test` from this side" constraint as every prior batch, not something new to this one). Every new/changed `.arb` key was cross-checked programmatically against every `l10n.<key>` usage across the *entire* `lib/`+`test/` tree (not just this batch's own files) to catch any from an earlier batch too, and every new test file's braces/parens were balance-checked — but neither replaces Talha's own `flutter analyze`/`flutter test` pass after `flutter pub get`/`flutter gen-l10n`. Please report back anything it catches so this note can be resolved like the others above.
+- **`moreComingSoonLabel` was removed from both `.arb` files** (dead since Task 4.6 already replaced Messages' slot in that footer, and this batch replaced the rest) — its two generated-`.dart` counterparts are regenerated automatically by `flutter gen-l10n`, so nothing else needed hand-editing for this removal.
 - **Full team test pass still required before final submission.** Every "Deferred to full team pass" row above has zero real/device/multi-account confirmation yet. Needs scheduling with Abdullah and Sarim before the project is actually done.

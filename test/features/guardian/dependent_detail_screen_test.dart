@@ -7,6 +7,23 @@
 // Extended for Task 4.6 (2026-10-22) — TC-4.6-21..22, for the new
 // "Message" button, same "just this one new button" scope as the
 // 3.14 extension above.
+//
+// Extended for Tasks 5.6/5.7/5.8/6.8 (2026-10-22) — TC-5.6-20..21,
+// TC-5.7-12, TC-5.8-11, TC-6.8-17: the five new buttons (Medical
+// records, Appointments, Vitals, Wearable band, Directory). Appointments
+// gets its own id (TC-5.6-21) under 5.6's range rather than a sixth
+// task id of its own, since `appointments_screen.dart` is grounded in
+// the same `appointment_contract.md` family as the Medical records
+// screen it sits beside on this screen. Each button's own id is the
+// next free number after that screen's dedicated test file (e.g.
+// `vitals_screen_test.dart`/`add_vital_reading_screen_test.dart` use
+// up through TC-5.7-11, so this file's Vitals-button test is
+// TC-5.7-12) — picked only after those files were written, to avoid
+// colliding with their own numbering. Each test checks the button
+// shows AND that tapping it navigates — one test per button, not two,
+// to keep this already-large batch's test count proportional (same
+// compacting judgement call as `activity_log_screen.dart`'s
+// booking-detail sheet).
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
@@ -32,6 +49,11 @@ List<GoRoute> _routes() => [
       ),
       GoRoute(path: '/guardian/emergency-settings', builder: (_, __) => stubScreen('EMERGENCY_SETTINGS_STUB')),
       GoRoute(path: '/messages/chat', builder: (_, __) => stubScreen('CHAT_STUB')),
+      GoRoute(path: '/records', builder: (_, __) => stubScreen('RECORDS_STUB')),
+      GoRoute(path: '/appointments', builder: (_, __) => stubScreen('APPOINTMENTS_STUB')),
+      GoRoute(path: '/vitals', builder: (_, __) => stubScreen('VITALS_STUB')),
+      GoRoute(path: '/wearable', builder: (_, __) => stubScreen('WEARABLE_STUB')),
+      GoRoute(path: '/directory', builder: (_, __) => stubScreen('DIRECTORY_STUB')),
     ];
 
 void main() {
@@ -87,5 +109,85 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('CHAT_STUB'), findsOneWidget);
+  });
+
+  testWidgets('TC-5.6-20: Medical records shows and navigates to /records', (tester) async {
+    final fakeClient = FakeApiClient(getHandler: (_) => <dynamic>[]);
+    await tester.pumpWidget(wrapWithRouter(
+      fakeClient: fakeClient,
+      initialLocation: '/guardian/dependent-detail',
+      routes: _routes(),
+    ));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Medical Records'), findsOneWidget);
+    await tester.tap(find.text('Medical Records'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('RECORDS_STUB'), findsOneWidget);
+  });
+
+  testWidgets('TC-5.6-21: Appointments shows and navigates to /appointments', (tester) async {
+    final fakeClient = FakeApiClient(getHandler: (_) => <dynamic>[]);
+    await tester.pumpWidget(wrapWithRouter(
+      fakeClient: fakeClient,
+      initialLocation: '/guardian/dependent-detail',
+      routes: _routes(),
+    ));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Appointments'), findsOneWidget);
+    await tester.tap(find.text('Appointments'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('APPOINTMENTS_STUB'), findsOneWidget);
+  });
+
+  testWidgets('TC-5.7-12: Vitals shows and navigates to /vitals', (tester) async {
+    final fakeClient = FakeApiClient(getHandler: (_) => <dynamic>[]);
+    await tester.pumpWidget(wrapWithRouter(
+      fakeClient: fakeClient,
+      initialLocation: '/guardian/dependent-detail',
+      routes: _routes(),
+    ));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Vitals'), findsOneWidget);
+    await tester.tap(find.text('Vitals'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('VITALS_STUB'), findsOneWidget);
+  });
+
+  testWidgets('TC-5.8-11: Wearable band shows and navigates to /wearable', (tester) async {
+    final fakeClient = FakeApiClient(getHandler: (_) => <dynamic>[]);
+    await tester.pumpWidget(wrapWithRouter(
+      fakeClient: fakeClient,
+      initialLocation: '/guardian/dependent-detail',
+      routes: _routes(),
+    ));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Wearable Band'), findsOneWidget);
+    await tester.tap(find.text('Wearable Band'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('WEARABLE_STUB'), findsOneWidget);
+  });
+
+  testWidgets('TC-6.8-17: Directory & Services shows and navigates to /directory', (tester) async {
+    final fakeClient = FakeApiClient(getHandler: (_) => <dynamic>[]);
+    await tester.pumpWidget(wrapWithRouter(
+      fakeClient: fakeClient,
+      initialLocation: '/guardian/dependent-detail',
+      routes: _routes(),
+    ));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Directory & Services'), findsOneWidget);
+    await tester.tap(find.text('Directory & Services'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('DIRECTORY_STUB'), findsOneWidget);
   });
 }

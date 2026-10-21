@@ -16,6 +16,18 @@ import '../../features/guardian/screens/wellness_schedule_screen.dart';
 import '../../features/guardian/screens/alerts_screen.dart';
 import '../../features/guardian/screens/missed_dose_screen.dart';
 import '../../features/guardian/screens/emergency_settings_screen.dart';
+import '../../features/records/screens/medical_vault_screen.dart';
+import '../../features/records/screens/add_record_screen.dart';
+import '../../features/records/screens/appointments_screen.dart';
+import '../../features/records/screens/record_access_screen.dart';
+import '../../features/records/screens/doctor_links_screen.dart';
+import '../../features/vitals/screens/vitals_screen.dart';
+import '../../features/vitals/screens/add_vital_reading_screen.dart';
+import '../../features/wearable/screens/my_band_screen.dart';
+import '../../features/wearable/screens/connect_band_screen.dart';
+import '../../features/directory/screens/directory_screen.dart';
+import '../../features/directory/screens/request_visit_screen.dart';
+import '../../features/directory/screens/activity_log_screen.dart';
 import '../../features/messaging/screens/messages_screen.dart';
 import '../../features/messaging/screens/chat_screen.dart';
 import '../../features/dependent/screens/dependent_home_screen.dart';
@@ -230,6 +242,117 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           key: state.pageKey,
           child: EmergencySettingsScreen(summary: state.extra as DependentSummary),
         ),
+      ),
+      // Tasks 5.6/5.7/5.8/6.8 (2026-10-22): records/appointments/vitals/
+      // wearable/directory routes are role-neutral (no `/guardian/` or
+      // `/dependent/` prefix), same reasoning as `/messages` above — each
+      // screen takes a plain `dependentId`, not a `DependentSummary`, so
+      // either a Guardian (reached via DependentDetailScreen, passing that
+      // Dependent's id) or the Dependent themselves (reached via Home,
+      // passing their own id) can open the identical screen; the backend
+      // contracts already gate who may read/write per-id, same
+      // "attempt it, map the denial" pattern as every screen above.
+      GoRoute(
+        path: '/records',
+        name: 'medical-vault',
+        pageBuilder: (context, state) {
+          final args = state.extra as Map<String, dynamic>;
+          return NoTransitionPage(
+            key: state.pageKey,
+            child: MedicalVaultScreen(
+              dependentId: args['dependentId'] as String,
+              canManageAccess: args['canManageAccess'] as bool? ?? false,
+            ),
+          );
+        },
+      ),
+      GoRoute(
+        path: '/records/add',
+        name: 'add-record',
+        pageBuilder: (context, state) =>
+            NoTransitionPage(key: state.pageKey, child: AddRecordScreen(dependentId: state.extra as String)),
+      ),
+      GoRoute(
+        path: '/records/edit',
+        name: 'edit-record',
+        pageBuilder: (context, state) {
+          final args = state.extra as Map<String, dynamic>;
+          return NoTransitionPage(
+            key: state.pageKey,
+            child: AddRecordScreen(
+              dependentId: args['dependentId'] as String,
+              existing: args['record'] as Map<String, dynamic>,
+            ),
+          );
+        },
+      ),
+      GoRoute(
+        path: '/records/doctor-links',
+        name: 'doctor-links',
+        pageBuilder: (context, state) =>
+            NoTransitionPage(key: state.pageKey, child: DoctorLinksScreen(dependentId: state.extra as String)),
+      ),
+      GoRoute(
+        path: '/records/access',
+        name: 'record-access',
+        pageBuilder: (context, state) =>
+            NoTransitionPage(key: state.pageKey, child: RecordAccessScreen(dependentId: state.extra as String)),
+      ),
+      GoRoute(
+        path: '/appointments',
+        name: 'appointments',
+        pageBuilder: (context, state) =>
+            NoTransitionPage(key: state.pageKey, child: AppointmentsScreen(dependentId: state.extra as String)),
+      ),
+      GoRoute(
+        path: '/vitals',
+        name: 'vitals',
+        pageBuilder: (context, state) =>
+            NoTransitionPage(key: state.pageKey, child: VitalsScreen(dependentId: state.extra as String)),
+      ),
+      GoRoute(
+        path: '/vitals/add',
+        name: 'add-vital-reading',
+        pageBuilder: (context, state) =>
+            NoTransitionPage(key: state.pageKey, child: AddVitalReadingScreen(dependentId: state.extra as String)),
+      ),
+      GoRoute(
+        path: '/wearable',
+        name: 'my-band',
+        pageBuilder: (context, state) =>
+            NoTransitionPage(key: state.pageKey, child: MyBandScreen(dependentId: state.extra as String)),
+      ),
+      GoRoute(
+        path: '/wearable/connect',
+        name: 'connect-band',
+        pageBuilder: (context, state) =>
+            NoTransitionPage(key: state.pageKey, child: ConnectBandScreen(dependentId: state.extra as String)),
+      ),
+      GoRoute(
+        path: '/directory',
+        name: 'directory',
+        pageBuilder: (context, state) =>
+            NoTransitionPage(key: state.pageKey, child: DirectoryScreen(dependentId: state.extra as String)),
+      ),
+      GoRoute(
+        path: '/directory/request-visit',
+        name: 'request-visit',
+        pageBuilder: (context, state) {
+          final args = state.extra as Map<String, dynamic>;
+          return NoTransitionPage(
+            key: state.pageKey,
+            child: RequestVisitScreen(
+              dependentId: args['dependentId'] as String,
+              provider: args['provider'] as Map<String, dynamic>,
+            ),
+          );
+        },
+      ),
+      GoRoute(
+        path: '/directory/activity',
+        name: 'activity-log',
+        pageBuilder: (context, state) =>
+            NoTransitionPage(key: state.pageKey, child: ActivityLogScreen(dependentId: state.extra as String)),
       ),
       GoRoute(
         path: '/messages',

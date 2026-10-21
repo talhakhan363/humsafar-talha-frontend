@@ -175,6 +175,42 @@ class _DependentDetailScreenState extends ConsumerState<DependentDetailScreen> {
               label: Text(l10n.emergencySettingsButton),
             ),
             const SizedBox(height: 12),
+            // Tasks 5.6/5.7/5.8/6.8 (2026-10-22) — same "any health-data
+            // reader can open, the screen itself maps a MODULE_ACCESS_
+            // DENIED" shape as the buttons above. "Record access" is
+            // Primary-only, so only the Medical records button carries
+            // `canManageAccess: summary.isPrimary` — the records screen
+            // decides whether to show that menu item, not this screen.
+            ElevatedButton.icon(
+              onPressed: () => context.push('/records', extra: {'dependentId': summary.dependentId, 'canManageAccess': summary.isPrimary}),
+              icon: const Icon(Icons.folder_shared_outlined),
+              label: Text(l10n.medicalRecordsButton),
+            ),
+            const SizedBox(height: 12),
+            ElevatedButton.icon(
+              onPressed: () => context.push('/appointments', extra: summary.dependentId),
+              icon: const Icon(Icons.event_outlined),
+              label: Text(l10n.appointmentsButton),
+            ),
+            const SizedBox(height: 12),
+            ElevatedButton.icon(
+              onPressed: () => context.push('/vitals', extra: summary.dependentId),
+              icon: const Icon(Icons.monitor_heart_outlined),
+              label: Text(l10n.vitalsButton),
+            ),
+            const SizedBox(height: 12),
+            ElevatedButton.icon(
+              onPressed: () => context.push('/wearable', extra: summary.dependentId),
+              icon: const Icon(Icons.watch_outlined),
+              label: Text(l10n.wearableBandButton),
+            ),
+            const SizedBox(height: 12),
+            ElevatedButton.icon(
+              onPressed: () => context.push('/directory', extra: summary.dependentId),
+              icon: const Icon(Icons.local_hospital_outlined),
+              label: Text(l10n.directoryButton),
+            ),
+            const SizedBox(height: 12),
             if (summary.isPrimary) ...[
               ElevatedButton.icon(
                 onPressed: () => context.push('/guardian/invite-secondary', extra: summary.dependentId),

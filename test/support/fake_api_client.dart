@@ -45,6 +45,12 @@
 // test for the voice-message download (`GET /messages/{id}/audio`) can
 // just return a `List<int>` of fake bytes; the fake doesn't need to care
 // that the real client would have asked for `ResponseType.bytes`.
+//
+// Extended for Tasks 5.6/5.7 (2026-10-22): added `patch` support
+// (patchHandler/patchError/patchCalls/lastPatchPath/lastPatchData), since
+// editing a medical record or an appointment are the first real PATCH
+// callers (`ApiClient.patch`, added the same day). Purely additive, same
+// shape as the `put`/`delete` extensions above it.
 
 import 'package:dio/dio.dart';
 import 'package:humsafar_frontend/core/network/api_client.dart';
@@ -55,10 +61,12 @@ class FakeApiClient extends ApiClient {
     this.getHandler,
     this.postHandler,
     this.putHandler,
+    this.patchHandler,
     this.deleteHandler,
     this.getError,
     this.postError,
     this.putError,
+    this.patchError,
     this.deleteError,
   }) : super(
           readAccessToken: () async => 'fake-token',
@@ -85,6 +93,11 @@ class FakeApiClient extends ApiClient {
   /// "handler may throw itself" note as [postHandler] applies.
   final Map<String, dynamic> Function(String path)? putHandler;
 
+  /// Called for every PATCH that doesn't throw [patchError]; return the
+  /// decoded JSON body. If null, PATCH returns an empty map. Same
+  /// "handler may throw itself" note as [postHandler] applies.
+  final Map<String, dynamic> Function(String path)? patchHandler;
+
   /// Called for every DELETE that doesn't throw [deleteError]; return the
   /// decoded JSON body. If null, DELETE returns an empty map. Same
   /// "handler may throw itself" note as [postHandler] applies.
@@ -99,6 +112,9 @@ class FakeApiClient extends ApiClient {
   /// If set, every PUT throws this instead of calling [putHandler].
   final ApiException? putError;
 
+  /// If set, every PATCH throws this instead of calling [patchHandler].
+  final ApiException? patchError;
+
   /// If set, every DELETE throws this instead of calling [deleteHandler].
   final ApiException? deleteError;
 
@@ -111,6 +127,9 @@ class FakeApiClient extends ApiClient {
   /// How many times PUT has been called.
   int putCalls = 0;
 
+  /// How many times PATCH has been called.
+  int patchCalls = 0;
+
   /// How many times DELETE has been called.
   int deleteCalls = 0;
 
@@ -122,6 +141,10 @@ class FakeApiClient extends ApiClient {
 
   /// The path of the most recent PUT, or null if PUT hasn't been called yet.
   String? lastPutPath;
+
+  /// The path of the most recent PATCH, or null if PATCH hasn't been
+  /// called yet.
+  String? lastPatchPath;
 
   /// The path of the most recent DELETE, or null if DELETE hasn't been
   /// called yet.
@@ -140,6 +163,10 @@ class FakeApiClient extends ApiClient {
   /// The `data` argument of the most recent PUT, or null if PUT hasn't
   /// been called yet (or was called with no body).
   dynamic lastPutData;
+
+  /// The `data` argument of the most recent PATCH, or null if PATCH
+  /// hasn't been called yet (or was called with no body).
+  dynamic lastPatchData;
 
   @override
   Future<Response<T>> get<T>(String path, {Map<String, dynamic>? queryParameters, ResponseType? responseType}) async {
@@ -167,6 +194,16 @@ class FakeApiClient extends ApiClient {
     lastPutData = data;
     if (putError != null) throw putError!;
     final body = putHandler?.call(path) ?? <String, dynamic>{};
+    return Response<T>(requestOptions: RequestOptions(path: path), data: body as T, statusCode: 200);
+  }
+
+  @override
+  Future<Response<T>> patch<T>(String path, {Object? data}) async {
+    patchCalls++;
+    lastPatchPath = path;
+    lastPatchData = data;
+    if (patchError != null) throw patchError!;
+    final body = patchHandler?.call(path) ?? <String, dynamic>{};
     return Response<T>(requestOptions: RequestOptions(path: path), data: body as T, statusCode: 200);
   }
 

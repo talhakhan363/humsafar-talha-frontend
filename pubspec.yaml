@@ -72,6 +72,29 @@ dependencies:
   audioplayers: ^6.6.0
   path_provider: ^2.1.4
 
+  # Task 5.6 — Medical records upload (records_contract.md: PDF, JPEG or
+  # PNG). `file_picker` is what actually opens the system's file/photo
+  # chooser; wrapped behind FilePickerSource (lib/core/files/) for the
+  # same unit-testability reason as every other native plugin here.
+  # Pinned to 11.0.3, not the newest release — checked against pub.dev's
+  # own version history the same way `record`/`audioplayers` were
+  # corrected for Task 4.6/4.8: 12.0.0+ needs Flutter >=3.38.0, too new
+  # for Talha's installed 3.32.1; 11.0.3 only needs >=3.22.0 and exposes
+  # the identical pickFiles API this code uses.
+  file_picker: ^11.0.3
+
+  # Tasks 5.6/5.7 — sharing the exported records/vitals PDF and the
+  # doctor-link URL through the OS share sheet, instead of building an
+  # in-app PDF/image viewer (named scope cut, see medical_vault_screen.dart).
+  # Wrapped behind ShareSource (lib/core/sharing/), same reasoning as
+  # file_picker above. Pinned to 12.0.1 for the same reason: 13.0.0+
+  # needs Flutter >=3.41.0; 12.0.1 only needs >=3.22.0 and uses the same
+  # SharePlus.instance.share(ShareParams(...)) API this code calls (the
+  # pre-12 Share.share()/Share.shareXFiles() statics are deprecated but
+  # would also have worked — 12.0.1 was picked for its iOS 26 crash fix,
+  # not because the newer API was required).
+  share_plus: ^12.0.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

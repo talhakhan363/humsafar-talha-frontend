@@ -277,13 +277,45 @@ class _DependentHomeScreenState extends ConsumerState<DependentHomeScreen> with 
               Text(_scheduleLoadError!, style: TextStyle(color: Colors.red.shade700)),
             ],
             const SizedBox(height: 24),
-            Center(
-              child: Text(
-                l10n.moreComingSoonLabel,
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.grey.shade500),
-                textAlign: TextAlign.center,
+            // Tasks 5.6/5.7/5.8/6.8 (2026-10-22): the first four real
+            // destinations to graduate out of this "More" footer (same
+            // move 4.6's Messages button already made) — a Dependent's
+            // own records/vitals/band/directory, each opening the exact
+            // same role-neutral screen a Guardian reaches via
+            // DependentDetailScreen, just with `user.userId` as the
+            // dependentId instead of a linked Dependent's.
+            Text(l10n.moreSectionHeader, style: Theme.of(context).textTheme.titleMedium),
+            const SizedBox(height: 4),
+            if (user != null) ...[
+              ListTile(
+                contentPadding: EdgeInsets.zero,
+                leading: const Icon(Icons.folder_shared_outlined),
+                title: Text(l10n.medicalRecordsButton),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () => context.push('/records', extra: {'dependentId': user.userId, 'canManageAccess': false}),
               ),
-            ),
+              ListTile(
+                contentPadding: EdgeInsets.zero,
+                leading: const Icon(Icons.monitor_heart_outlined),
+                title: Text(l10n.vitalsButton),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () => context.push('/vitals', extra: user.userId),
+              ),
+              ListTile(
+                contentPadding: EdgeInsets.zero,
+                leading: const Icon(Icons.watch_outlined),
+                title: Text(l10n.wearableBandButton),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () => context.push('/wearable', extra: user.userId),
+              ),
+              ListTile(
+                contentPadding: EdgeInsets.zero,
+                leading: const Icon(Icons.local_hospital_outlined),
+                title: Text(l10n.directoryButton),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () => context.push('/directory', extra: user.userId),
+              ),
+            ],
           ],
         ),
       ),
