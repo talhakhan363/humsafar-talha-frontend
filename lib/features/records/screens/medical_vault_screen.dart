@@ -13,7 +13,6 @@ import '../../../core/network/providers.dart';
 import '../../../shared/widgets/accessibility_toggle_button.dart';
 import '../../../shared/widgets/export_scope_sheet.dart';
 import '../../../shared/widgets/language_switch_button.dart';
-import 'add_record_screen.dart';
 
 const _categories = ['prescription', 'lab_report', 'xray', 'other'];
 
@@ -100,9 +99,9 @@ class _MedicalVaultScreenState extends ConsumerState<MedicalVaultScreen> {
     });
     try {
       final response = await ref.read(apiClientProvider).get<Map<String, dynamic>>(
-            '/dependents/${widget.dependentId}/records',
-            queryParameters: {if (_categoryFilter != null) 'category': _categoryFilter, 'limit': _pageSize, 'offset': 0},
-          );
+        '/dependents/${widget.dependentId}/records',
+        queryParameters: {if (_categoryFilter != null) 'category': _categoryFilter, 'limit': _pageSize, 'offset': 0},
+      );
       if (!mounted) return;
       setState(() {
         _records = (response.data?['items'] as List<dynamic>? ?? []).cast<Map<String, dynamic>>();
@@ -120,13 +119,13 @@ class _MedicalVaultScreenState extends ConsumerState<MedicalVaultScreen> {
     setState(() => _isLoadingMore = true);
     try {
       final response = await ref.read(apiClientProvider).get<Map<String, dynamic>>(
-            '/dependents/${widget.dependentId}/records',
-            queryParameters: {
-              if (_categoryFilter != null) 'category': _categoryFilter,
-              'limit': _pageSize,
-              'offset': _records.length,
-            },
-          );
+        '/dependents/${widget.dependentId}/records',
+        queryParameters: {
+          if (_categoryFilter != null) 'category': _categoryFilter,
+          'limit': _pageSize,
+          'offset': _records.length,
+        },
+      );
       if (!mounted) return;
       setState(() => _records = [..._records, ...(response.data?['items'] as List<dynamic>? ?? []).cast<Map<String, dynamic>>()]);
     } on ApiException catch (e) {
@@ -348,9 +347,7 @@ class _MedicalVaultScreenState extends ConsumerState<MedicalVaultScreen> {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 12),
             child: Center(
-              child: _isLoadingMore
-                  ? const CircularProgressIndicator()
-                  : OutlinedButton(onPressed: _loadMore, child: Text(l10n.loadMoreButtonLabel)),
+              child: _isLoadingMore ? const CircularProgressIndicator() : OutlinedButton(onPressed: _loadMore, child: Text(l10n.loadMoreButtonLabel)),
             ),
           ),
       ],
