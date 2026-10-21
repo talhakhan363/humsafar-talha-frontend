@@ -39,6 +39,26 @@ dependencies:
   geolocator: ^13.0.2
   battery_plus: ^6.2.1
 
+  # Task 3.14 — Firebase Cloud Messaging. firebase_core bootstraps the app
+  # against google-services.json; firebase_messaging is the actual push
+  # client (token, foreground/background/terminated message streams).
+  # flutter_local_notifications displays the local heads-up/standard
+  # notification while the app is in the foreground — FCM's own
+  # `notification` payload is only auto-displayed by the OS when the app
+  # is backgrounded or terminated, never while it's open and in front of
+  # the person, so a foreground critical alert needs this to be visible
+  # at all.
+  firebase_core: ^3.8.0
+  firebase_messaging: ^15.1.6
+  flutter_local_notifications: ^18.0.1
+
+  # Task 3.14 — the Alerts/Missed-dose/Alarm screens' "Call" buttons
+  # (mockups 08b, 24) are this app's first phone-dialing feature. Opens
+  # the device's own dialer via a tel: URI (ACTION_DIAL) rather than
+  # placing the call directly — no CALL_PHONE permission needed, and the
+  # person still has to press the dial button themselves.
+  url_launcher: ^6.3.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

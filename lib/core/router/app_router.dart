@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -12,10 +13,14 @@ import '../../features/guardian/screens/my_access_screen.dart';
 import '../../features/guardian/screens/live_map_screen.dart';
 import '../../features/guardian/screens/medication_schedule_screen.dart';
 import '../../features/guardian/screens/wellness_schedule_screen.dart';
+import '../../features/guardian/screens/alerts_screen.dart';
+import '../../features/guardian/screens/missed_dose_screen.dart';
+import '../../features/guardian/screens/emergency_settings_screen.dart';
 import '../../features/dependent/screens/dependent_home_screen.dart';
 import '../../features/dependent/screens/panic_screen.dart';
 import '../../features/dependent/screens/wellness_check_screen.dart';
 import '../../features/dependent/screens/medication_confirm_screen.dart';
+import '../../features/dependent/screens/alarm_screen.dart';
 import '../../features/auth/screens/register_screen.dart';
 import '../../features/auth/screens/login_screen.dart';
 import '../../features/auth/screens/accept_invite_screen.dart';
@@ -54,8 +59,30 @@ import '../guardian/dependent_summary.dart';
 // pattern as `/guardian/live-map` (both need `dependentId` plus
 // `isPrimary` for permission gating, not just the raw id string the
 // permissions/my-access routes take).
+//
+// Task 3.14 (2026-10-21): added `rootNavigatorKey`, used by
+// PushService's notification-tap handler (lib/core/push/push_service.dart
+// + main.dart) to navigate from outside the widget tree — a push can be
+// tapped from a background or cold-started app, where there's no
+// existing BuildContext to call GoRouter.of(context) from. Also added:
+// `/guardian/alerts` (mockup 08, the cross-Dependent notification inbox —
+// deliberately NOT scoped to one DependentSummary like the routes above
+// it, since `GET /notifications` itself is cross-Dependent, one list per
+// Guardian covering every linked Dependent); `/guardian/missed-dose`
+// (mockup 08b, reached by tapping a missed_dose row in Alerts, `extra` is
+// a `{confirmationId, dependentId}` map taken straight from that
+// notification's own `data`, not re-fetched); `/guardian/emergency-
+// settings` (mockup 14, same `extra: DependentSummary` pattern as the
+// 3.15 schedule screens, reached from DependentDetailScreen); and
+// `/dependent/alarm` (mockup 24, self-resolving like panic/wellness-
+// check/medication, reached only via a remote_alarm push tap for now —
+// see alarm_screen.dart's doc comment for the named scope cut on waking
+// a locked screen).
+final rootNavigatorKey = GlobalKey<NavigatorState>();
+
 final appRouterProvider = Provider<GoRouter>((ref) {
   return GoRouter(
+    navigatorKey: rootNavigatorKey,
     initialLocation: '/',
     routes: [
       GoRoute(
@@ -164,6 +191,34 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         ),
       ),
       GoRoute(
+        path: '/guardian/alerts',
+        name: 'guardian-alerts',
+        pageBuilder: (context, state) => NoTransitionPage(key: state.pageKey, child: const AlertsScreen()),
+      ),
+      GoRoute(
+        path: '/guardian/missed-dose',
+        name: 'missed-dose',
+        pageBuilder: (context, state) {
+          final args = state.extra as Map<String, String>;
+          return NoTransitionPage(
+            key: state.pageKey,
+            child: MissedDoseScreen(
+              confirmationId: args['confirmationId']!,
+              dependentId: args['dependentId']!,
+              notificationId: args['notificationId'],
+            ),
+          );
+        },
+      ),
+      GoRoute(
+        path: '/guardian/emergency-settings',
+        name: 'emergency-settings',
+        pageBuilder: (context, state) => NoTransitionPage(
+          key: state.pageKey,
+          child: EmergencySettingsScreen(summary: state.extra as DependentSummary),
+        ),
+      ),
+      GoRoute(
         path: '/dependent',
         name: 'dependent-home',
         pageBuilder: (context, state) => NoTransitionPage(key: state.pageKey, child: const DependentHomeScreen()),
@@ -185,6 +240,11 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           key: state.pageKey,
           child: MedicationConfirmScreen(skipPrompt: state.extra as bool? ?? false),
         ),
+      ),
+      GoRoute(
+        path: '/dependent/alarm',
+        name: 'dependent-alarm',
+        pageBuilder: (context, state) => NoTransitionPage(key: state.pageKey, child: const AlarmScreen()),
       ),
     ],
   );

@@ -1,14 +1,29 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:humsafar_frontend/l10n/app_localizations.dart';
 
+import 'core/auth/current_user_provider.dart';
 import 'core/localization/app_locale_provider.dart';
+import 'core/push/push_service.dart';
 import 'core/router/app_router.dart';
 import 'core/theme/accessibility_mode.dart';
 import 'core/theme/accessibility_mode_provider.dart';
 import 'core/theme/app_theme.dart';
 
-void main() {
+Future<void> main() async {
+  // Task 3.14 — Firebase must be initialized before anything touches
+  // FirebaseMessaging, and the background message handler must be
+  // registered before runApp (it has to be in place even if the app is
+  // killed moments later — that's the whole point of a background
+  // handler). See push_service.dart's doc comments for why both of these
+  // are otherwise minimal.
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+
   runApp(
     const ProviderScope(
       child: HumsafarApp(),
@@ -16,11 +31,64 @@ void main() {
   );
 }
 
-class HumsafarApp extends ConsumerWidget {
+class HumsafarApp extends ConsumerStatefulWidget {
   const HumsafarApp({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<HumsafarApp> createState() => _HumsafarAppState();
+}
+
+class _HumsafarAppState extends ConsumerState<HumsafarApp> {
+  @override
+  void initState() {
+    super.initState();
+    // Task 3.14 — one-time push wiring. Done here (not in SplashScreen)
+    // because a notification tap can cold-start the app straight into
+    // this widget before SplashScreen's own session check has run, and
+    // the channels/permission-request need to exist regardless of which
+    // screen ends up on top.
+    WidgetsBinding.instance.addPostFrameCallback((_) => _initializePush());
+  }
+
+  /// Wrapped in a try/catch for the same "push must never break core app
+  /// flows" reasoning as `registerPushToken`/`unregisterPushToken` (see
+  /// push_service.dart's doc comments) — if `Firebase.initializeApp()`
+  /// hasn't run (or the platform has no Google Play Services), the rest
+  /// of the app must still work. This is also what keeps
+  /// `test/widget_test.dart`'s plain `pumpWidget(HumsafarApp())` smoke
+  /// test passing: that test never bootstraps Firebase at all (nor does
+  /// it override `apiClientProvider` the way the real screens' own
+  /// tests do), so without this catch, every widget test that pumps
+  /// `HumsafarApp` itself (not just push-specific tests) would crash on
+  /// `FirebaseMessaging.instance` with "No Firebase App '[DEFAULT]' has
+  /// been created".
+  Future<void> _initializePush() async {
+    try {
+      final pushService = ref.read(pushServiceProvider);
+      await pushService.initializeChannelsAndHandlers(onMessageTapped: _handleNotificationTap);
+      // "Whenever Firebase gives the app a new token" (notification_contract.md)
+      // — only re-register while someone is actually signed in; a token
+      // refresh with nobody logged in has nothing to register it against.
+      pushService.onTokenRefresh.listen((_) {
+        if (ref.read(currentUserProvider) != null) {
+          registerPushToken(ref.read);
+        }
+      });
+    } catch (_) {
+      // best-effort, see doc comment above
+    }
+  }
+
+  void _handleNotificationTap(RemoteMessage message) {
+    final route = routeForNotificationType(message.data['type'] as String?);
+    if (route == null) return;
+    final context = rootNavigatorKey.currentContext;
+    if (context == null) return;
+    GoRouter.of(context).push(route);
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final router = ref.watch(appRouterProvider);
     final accessibilityMode = ref.watch(accessibilityModeProvider);
     final chosenLocale = ref.watch(appLocaleProvider);

@@ -863,4 +863,239 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get daySunLabel => 'Sun';
+
+  @override
+  String get goBackButtonLabel => 'Go back';
+
+  @override
+  String get alertTypePanic => 'Panic alert';
+
+  @override
+  String get alertTypeMissedDose => 'Missed dose';
+
+  @override
+  String get alertTypeWellnessCheck => 'Wellness check missed';
+
+  @override
+  String get alertTypeGeofenceBreach => 'Left the safe zone';
+
+  @override
+  String get alertTypeLowBattery => 'Low battery';
+
+  @override
+  String get alertTypeDeviceOffline => 'Phone offline';
+
+  @override
+  String get alertTypeExternalContact => 'Emergency contact alert';
+
+  @override
+  String get alertTypeGeneric => 'Alert';
+
+  @override
+  String get tierLevel1PrimaryLabel => 'Level 1 · Primary';
+
+  @override
+  String get tierLevel2SecondaryLabel => 'Level 2 · Secondary';
+
+  @override
+  String get tierLevel3SmsLabel => 'Level 3 · SMS sent';
+
+  @override
+  String get alertsScreenTitle => 'Alerts';
+
+  @override
+  String alertsOpenTabLabel(int count) {
+    return 'Open ($count)';
+  }
+
+  @override
+  String get alertsSeenTabLabel => 'Seen';
+
+  @override
+  String get alertsEmptyOpenMessage => 'No open alerts.';
+
+  @override
+  String get alertsEmptySeenMessage => 'No seen alerts yet.';
+
+  @override
+  String get iveSeenItButton => 'I\'ve seen it';
+
+  @override
+  String get seenStopsChainTitle => 'Seen stops the chain';
+
+  @override
+  String get seenStopsChainBody => 'Primary → Secondary (5 min) → SMS (5 min)';
+
+  @override
+  String get acknowledgeFailedSnackbar => 'Couldn\'t mark as seen. Try again.';
+
+  @override
+  String get needsAttentionHeader => 'Needs attention';
+
+  @override
+  String get seeAllLabel => 'See all';
+
+  @override
+  String get panicBannerTitle => 'PANIC ALERT';
+
+  @override
+  String panicBannerBody(String name, String time) {
+    return '$name pressed panic · $time';
+  }
+
+  @override
+  String get openButtonLabel => 'Open';
+
+  @override
+  String get missedDoseScreenTitle => 'Missed dose';
+
+  @override
+  String missedDoseBannerTitle(String name, String drug) {
+    return '$name has not taken $drug';
+  }
+
+  @override
+  String get whatHappensNextHeader => 'What happens next';
+
+  @override
+  String get missedDoseStepYouToldLabel => 'You are told (Primary)';
+
+  @override
+  String get missedDoseStepSecondaryLabel => 'Secondaries told if unseen';
+
+  @override
+  String get missedDoseStepSmsLabel => 'SMS to emergency contact if unseen';
+
+  @override
+  String get giveMoreTimeButton => 'Give more time (+30 min)';
+
+  @override
+  String get tellOtherGuardiansButton => 'Tell other Guardians now';
+
+  @override
+  String callButtonLabel(String name) {
+    return 'Call $name';
+  }
+
+  @override
+  String get tappingCountsAsSeenNote => 'Tapping any option counts as seen.';
+
+  @override
+  String get extendSuccessSnackbar => 'Given 30 more minutes.';
+
+  @override
+  String escalateSuccessSnackbar(int count) {
+    return '$count Secondary Guardian(s) notified.';
+  }
+
+  @override
+  String get escalateNoSecondarySnackbar =>
+      'No Secondary Guardian can see alerts yet.';
+
+  @override
+  String get doseAlreadyResolvedMessage =>
+      'This alert has already been resolved.';
+
+  @override
+  String get alreadyEscalatedMessage => 'Already told the other Guardians.';
+
+  @override
+  String get callFailedSnackbar => 'Couldn\'t start the call.';
+
+  @override
+  String get emergencySettingsScreenTitle => 'Emergency settings';
+
+  @override
+  String get emergencySettingsButton => 'Emergency settings';
+
+  @override
+  String get remoteAlarmSectionTitle => 'Remote alarm';
+
+  @override
+  String get primaryOnlyBadge => 'Primary only';
+
+  @override
+  String remoteAlarmDescription(String name) {
+    return 'Rings $name\'s phone loudly, even on silent. Use it to find them nearby.';
+  }
+
+  @override
+  String get ringAlarmButton => 'Ring alarm (60 s)';
+
+  @override
+  String get stopAlarmButton => 'Stop alarm';
+
+  @override
+  String get alarmAlreadyActiveMessage => 'Alarm is already sounding.';
+
+  @override
+  String get alarmStartFailedSnackbar =>
+      'Couldn\'t start the alarm. Try again.';
+
+  @override
+  String get alarmStopFailedSnackbar => 'Couldn\'t stop the alarm. Try again.';
+
+  @override
+  String get notPrimaryGuardianNote =>
+      'Only the Primary Guardian can use the remote alarm and set the emergency contact.';
+
+  @override
+  String get emergencyContactSectionTitle => 'Emergency contact';
+
+  @override
+  String get emergencyContactDescription =>
+      'Gets one SMS if no Guardian answers an alert in 10 minutes.';
+
+  @override
+  String get contactNameFieldLabel => 'Name';
+
+  @override
+  String get contactPhoneFieldLabel => 'Phone';
+
+  @override
+  String get saveContactButton => 'Save contact';
+
+  @override
+  String get contactSavedSnackbar => 'Contact saved.';
+
+  @override
+  String get contactSaveFailedSnackbar =>
+      'Couldn\'t save the contact. Try again.';
+
+  @override
+  String get noEmergencyContactMessage => 'No emergency contact set yet.';
+
+  @override
+  String get removeContactButton => 'Remove contact';
+
+  @override
+  String get contactRemovedSnackbar => 'Contact removed.';
+
+  @override
+  String get contactRemoveFailedSnackbar =>
+      'Couldn\'t remove the contact. Try again.';
+
+  @override
+  String get emergencyContactDeniedNote =>
+      'You can view this but only the Primary Guardian can change it.';
+
+  @override
+  String get alarmScreenTitle => 'Alarm';
+
+  @override
+  String get alarmLookingForYouTitle => 'Your Guardian is looking for you';
+
+  @override
+  String alarmScreenSubtitle(String remaining) {
+    return 'Alarm from your Guardian · $remaining left';
+  }
+
+  @override
+  String get stopAlarmButtonLabel => 'Stop alarm';
+
+  @override
+  String get stopAlarmFailedSnackbar => 'Couldn\'t stop the alarm. Try again.';
+
+  @override
+  String get noActiveAlarmMessage => 'No alarm is sounding right now.';
 }

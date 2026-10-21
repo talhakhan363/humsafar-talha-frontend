@@ -394,5 +394,138 @@
   "dayThuLabel": "Thu",
   "dayFriLabel": "Fri",
   "daySatLabel": "Sat",
-  "daySunLabel": "Sun"
+  "daySunLabel": "Sun",
+
+  "goBackButtonLabel": "Go back",
+
+  "alertTypePanic": "Panic alert",
+  "alertTypeMissedDose": "Missed dose",
+  "alertTypeWellnessCheck": "Wellness check missed",
+  "alertTypeGeofenceBreach": "Left the safe zone",
+  "alertTypeLowBattery": "Low battery",
+  "alertTypeDeviceOffline": "Phone offline",
+  "alertTypeExternalContact": "Emergency contact alert",
+  "alertTypeGeneric": "Alert",
+  "tierLevel1PrimaryLabel": "Level 1 · Primary",
+  "tierLevel2SecondaryLabel": "Level 2 · Secondary",
+  "tierLevel3SmsLabel": "Level 3 · SMS sent",
+
+  "alertsScreenTitle": "Alerts",
+  "alertsOpenTabLabel": "Open ({count})",
+  "@alertsOpenTabLabel": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "alertsSeenTabLabel": "Seen",
+  "alertsEmptyOpenMessage": "No open alerts.",
+  "alertsEmptySeenMessage": "No seen alerts yet.",
+  "iveSeenItButton": "I've seen it",
+  "seenStopsChainTitle": "Seen stops the chain",
+  "seenStopsChainBody": "Primary → Secondary (5 min) → SMS (5 min)",
+  "acknowledgeFailedSnackbar": "Couldn't mark as seen. Try again.",
+
+  "needsAttentionHeader": "Needs attention",
+  "seeAllLabel": "See all",
+  "panicBannerTitle": "PANIC ALERT",
+  "panicBannerBody": "{name} pressed panic · {time}",
+  "@panicBannerBody": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "openButtonLabel": "Open",
+
+  "missedDoseScreenTitle": "Missed dose",
+  "missedDoseBannerTitle": "{name} has not taken {drug}",
+  "@missedDoseBannerTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "drug": {
+        "type": "String"
+      }
+    }
+  },
+  "whatHappensNextHeader": "What happens next",
+  "missedDoseStepYouToldLabel": "You are told (Primary)",
+  "missedDoseStepSecondaryLabel": "Secondaries told if unseen",
+  "missedDoseStepSmsLabel": "SMS to emergency contact if unseen",
+  "giveMoreTimeButton": "Give more time (+30 min)",
+  "tellOtherGuardiansButton": "Tell other Guardians now",
+  "callButtonLabel": "Call {name}",
+  "@callButtonLabel": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "tappingCountsAsSeenNote": "Tapping any option counts as seen.",
+  "extendSuccessSnackbar": "Given 30 more minutes.",
+  "escalateSuccessSnackbar": "{count} Secondary Guardian(s) notified.",
+  "@escalateSuccessSnackbar": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "escalateNoSecondarySnackbar": "No Secondary Guardian can see alerts yet.",
+  "doseAlreadyResolvedMessage": "This alert has already been resolved.",
+  "alreadyEscalatedMessage": "Already told the other Guardians.",
+  "callFailedSnackbar": "Couldn't start the call.",
+
+  "emergencySettingsScreenTitle": "Emergency settings",
+  "emergencySettingsButton": "Emergency settings",
+  "remoteAlarmSectionTitle": "Remote alarm",
+  "primaryOnlyBadge": "Primary only",
+  "remoteAlarmDescription": "Rings {name}'s phone loudly, even on silent. Use it to find them nearby.",
+  "@remoteAlarmDescription": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "ringAlarmButton": "Ring alarm (60 s)",
+  "stopAlarmButton": "Stop alarm",
+  "alarmAlreadyActiveMessage": "Alarm is already sounding.",
+  "alarmStartFailedSnackbar": "Couldn't start the alarm. Try again.",
+  "alarmStopFailedSnackbar": "Couldn't stop the alarm. Try again.",
+  "notPrimaryGuardianNote": "Only the Primary Guardian can use the remote alarm and set the emergency contact.",
+  "emergencyContactSectionTitle": "Emergency contact",
+  "emergencyContactDescription": "Gets one SMS if no Guardian answers an alert in 10 minutes.",
+  "contactNameFieldLabel": "Name",
+  "contactPhoneFieldLabel": "Phone",
+  "saveContactButton": "Save contact",
+  "contactSavedSnackbar": "Contact saved.",
+  "contactSaveFailedSnackbar": "Couldn't save the contact. Try again.",
+  "noEmergencyContactMessage": "No emergency contact set yet.",
+  "removeContactButton": "Remove contact",
+  "contactRemovedSnackbar": "Contact removed.",
+  "contactRemoveFailedSnackbar": "Couldn't remove the contact. Try again.",
+  "emergencyContactDeniedNote": "You can view this but only the Primary Guardian can change it.",
+
+  "alarmScreenTitle": "Alarm",
+  "alarmLookingForYouTitle": "Your Guardian is looking for you",
+  "alarmScreenSubtitle": "Alarm from your Guardian · {remaining} left",
+  "@alarmScreenSubtitle": {
+    "placeholders": {
+      "remaining": {
+        "type": "String"
+      }
+    }
+  },
+  "stopAlarmButtonLabel": "Stop alarm",
+  "stopAlarmFailedSnackbar": "Couldn't stop the alarm. Try again.",
+  "noActiveAlarmMessage": "No alarm is sounding right now."
 }

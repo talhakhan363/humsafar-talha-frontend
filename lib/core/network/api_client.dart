@@ -40,6 +40,16 @@ class ApiClient {
 
   Future<Response<T>> put<T>(String path, {Object? data}) => _wrap(() => _dio.put<T>(path, data: data));
 
+  // Task 3.14 — first caller is PUT/DELETE .../devices/push-token
+  // (notification_contract.md): registering/forgetting an FCM token on
+  // login/logout. Nothing used DELETE before this (the Task 3.15 schedule
+  // screens deliberately use PUT {active:false} instead of the DELETE
+  // variant their contracts also offer, for the same soft-off effect) —
+  // added now rather than earlier because this is genuinely the first
+  // real caller.
+  Future<Response<T>> delete<T>(String path, {Map<String, dynamic>? queryParameters}) =>
+      _wrap(() => _dio.delete<T>(path, queryParameters: queryParameters));
+
   Future<Response<T>> _wrap<T>(Future<Response<T>> Function() request, {bool isRetry = false}) async {
     try {
       return await request();

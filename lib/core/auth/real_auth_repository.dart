@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../network/api_client.dart';
+import '../push/push_service.dart';
 import 'app_user.dart';
 import 'auth_repository.dart';
 import 'current_user_provider.dart';
@@ -55,6 +56,10 @@ class RealAuthRepository implements AuthRepository {
     );
     final user = AppUser.fromJson(body['user'] as Map<String, dynamic>);
     _ref.read(currentUserProvider.notifier).state = user;
+    // Task 3.14 — "call after every login" (notification_contract.md).
+    // Best-effort by design (see push_service.dart's doc comment): never
+    // allowed to fail a login over a push-registration hiccup.
+    await registerPushToken(_ref.read);
     return user;
   }
 
@@ -67,6 +72,10 @@ class RealAuthRepository implements AuthRepository {
 
   @override
   Future<void> logout() async {
+    // Task 3.14 — "call on logout" (notification_contract.md), and must
+    // happen BEFORE clearing tokens below: unregistering needs a still-
+    // valid access token to authenticate the DELETE call.
+    await unregisterPushToken(_ref.read);
     await _tokenStorage.clear();
     _ref.read(currentUserProvider.notifier).state = null;
   }

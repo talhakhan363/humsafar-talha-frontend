@@ -876,4 +876,247 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get daySunLabel => 'اتوار';
+
+  @override
+  String get goBackButtonLabel => 'واپس جائیں';
+
+  @override
+  String get alertTypePanic => 'پینک الرٹ';
+
+  @override
+  String get alertTypeMissedDose => 'دوا چھوٹ گئی';
+
+  @override
+  String get alertTypeWellnessCheck => 'ویلنیس چیک چھوٹ گیا';
+
+  @override
+  String get alertTypeGeofenceBreach => 'محفوظ علاقے سے باہر';
+
+  @override
+  String get alertTypeLowBattery => 'بیٹری کم ہے';
+
+  @override
+  String get alertTypeDeviceOffline => 'فون آف لائن ہے';
+
+  @override
+  String get alertTypeExternalContact => 'ایمرجنسی رابطہ الرٹ';
+
+  @override
+  String get alertTypeGeneric => 'الرٹ';
+
+  @override
+  String get tierLevel1PrimaryLabel => 'سطح 1 · پرائمری';
+
+  @override
+  String get tierLevel2SecondaryLabel => 'سطح 2 · سیکنڈری';
+
+  @override
+  String get tierLevel3SmsLabel => 'سطح 3 · ایس ایم ایس بھیج دیا گیا';
+
+  @override
+  String get alertsScreenTitle => 'الرٹس';
+
+  @override
+  String alertsOpenTabLabel(int count) {
+    return 'کھلے ($count)';
+  }
+
+  @override
+  String get alertsSeenTabLabel => 'دیکھے گئے';
+
+  @override
+  String get alertsEmptyOpenMessage => 'کوئی کھلا الرٹ نہیں ہے۔';
+
+  @override
+  String get alertsEmptySeenMessage => 'ابھی تک کوئی دیکھا گیا الرٹ نہیں ہے۔';
+
+  @override
+  String get iveSeenItButton => 'میں نے دیکھ لیا';
+
+  @override
+  String get seenStopsChainTitle => 'دیکھنا سلسلہ روک دیتا ہے';
+
+  @override
+  String get seenStopsChainBody =>
+      'پرائمری → سیکنڈری (5 منٹ) → ایس ایم ایس (5 منٹ)';
+
+  @override
+  String get acknowledgeFailedSnackbar =>
+      'دیکھا گیا کے طور پر نشان زد نہیں ہو سکا۔ دوبارہ کوشش کریں۔';
+
+  @override
+  String get needsAttentionHeader => 'توجہ درکار ہے';
+
+  @override
+  String get seeAllLabel => 'سب دیکھیں';
+
+  @override
+  String get panicBannerTitle => 'پینک الرٹ';
+
+  @override
+  String panicBannerBody(String name, String time) {
+    return '$name نے پینک دبایا · $time';
+  }
+
+  @override
+  String get openButtonLabel => 'کھولیں';
+
+  @override
+  String get missedDoseScreenTitle => 'چھوٹی ہوئی دوا';
+
+  @override
+  String missedDoseBannerTitle(String name, String drug) {
+    return '$name نے $drug نہیں لی';
+  }
+
+  @override
+  String get whatHappensNextHeader => 'اب آگے کیا ہوگا';
+
+  @override
+  String get missedDoseStepYouToldLabel => 'آپ کو بتا دیا گیا (پرائمری)';
+
+  @override
+  String get missedDoseStepSecondaryLabel =>
+      'نہ دیکھنے پر سیکنڈری کو بتایا جائے گا';
+
+  @override
+  String get missedDoseStepSmsLabel =>
+      'نہ دیکھنے پر ایمرجنسی رابطے کو ایس ایم ایس';
+
+  @override
+  String get giveMoreTimeButton => 'مزید وقت دیں (+30 منٹ)';
+
+  @override
+  String get tellOtherGuardiansButton => 'ابھی دوسرے گارڈینز کو بتائیں';
+
+  @override
+  String callButtonLabel(String name) {
+    return '$name کو کال کریں';
+  }
+
+  @override
+  String get tappingCountsAsSeenNote =>
+      'کوئی بھی آپشن دبانا دیکھے جانے کے طور پر شمار ہوگا۔';
+
+  @override
+  String get extendSuccessSnackbar => '30 منٹ مزید دے دیے گئے۔';
+
+  @override
+  String escalateSuccessSnackbar(int count) {
+    return '$count سیکنڈری گارڈین کو مطلع کر دیا گیا۔';
+  }
+
+  @override
+  String get escalateNoSecondarySnackbar =>
+      'ابھی کوئی سیکنڈری گارڈین الرٹس نہیں دیکھ سکتا۔';
+
+  @override
+  String get doseAlreadyResolvedMessage => 'یہ الرٹ پہلے ہی حل ہو چکا ہے۔';
+
+  @override
+  String get alreadyEscalatedMessage =>
+      'دوسرے گارڈینز کو پہلے ہی بتا دیا گیا ہے۔';
+
+  @override
+  String get callFailedSnackbar => 'کال شروع نہیں ہو سکی۔';
+
+  @override
+  String get emergencySettingsScreenTitle => 'ایمرجنسی ترتیبات';
+
+  @override
+  String get emergencySettingsButton => 'ایمرجنسی ترتیبات';
+
+  @override
+  String get remoteAlarmSectionTitle => 'ریموٹ الارم';
+
+  @override
+  String get primaryOnlyBadge => 'صرف پرائمری';
+
+  @override
+  String remoteAlarmDescription(String name) {
+    return '$name کے فون پر زور سے بجاتا ہے، خاموش موڈ میں بھی۔ انہیں قریب تلاش کرنے کے لیے استعمال کریں۔';
+  }
+
+  @override
+  String get ringAlarmButton => 'الارم بجائیں (60 سیکنڈ)';
+
+  @override
+  String get stopAlarmButton => 'الارم بند کریں';
+
+  @override
+  String get alarmAlreadyActiveMessage => 'الارم پہلے ہی بج رہا ہے۔';
+
+  @override
+  String get alarmStartFailedSnackbar =>
+      'الارم شروع نہیں ہو سکا۔ دوبارہ کوشش کریں۔';
+
+  @override
+  String get alarmStopFailedSnackbar =>
+      'الارم بند نہیں ہو سکا۔ دوبارہ کوشش کریں۔';
+
+  @override
+  String get notPrimaryGuardianNote =>
+      'صرف پرائمری گارڈین ریموٹ الارم استعمال کر سکتا ہے اور ایمرجنسی رابطہ سیٹ کر سکتا ہے۔';
+
+  @override
+  String get emergencyContactSectionTitle => 'ایمرجنسی رابطہ';
+
+  @override
+  String get emergencyContactDescription =>
+      'اگر 10 منٹ میں کوئی گارڈین الرٹ کا جواب نہیں دیتا تو ایک ایس ایم ایس بھیجا جاتا ہے۔';
+
+  @override
+  String get contactNameFieldLabel => 'نام';
+
+  @override
+  String get contactPhoneFieldLabel => 'فون';
+
+  @override
+  String get saveContactButton => 'رابطہ محفوظ کریں';
+
+  @override
+  String get contactSavedSnackbar => 'رابطہ محفوظ ہوگیا۔';
+
+  @override
+  String get contactSaveFailedSnackbar =>
+      'رابطہ محفوظ نہیں ہو سکا۔ دوبارہ کوشش کریں۔';
+
+  @override
+  String get noEmergencyContactMessage =>
+      'ابھی تک کوئی ایمرجنسی رابطہ سیٹ نہیں کیا گیا۔';
+
+  @override
+  String get removeContactButton => 'رابطہ ہٹائیں';
+
+  @override
+  String get contactRemovedSnackbar => 'رابطہ ہٹا دیا گیا۔';
+
+  @override
+  String get contactRemoveFailedSnackbar =>
+      'رابطہ نہیں ہٹایا جا سکا۔ دوبارہ کوشش کریں۔';
+
+  @override
+  String get emergencyContactDeniedNote =>
+      'آپ یہ دیکھ سکتے ہیں لیکن صرف پرائمری گارڈین اسے تبدیل کر سکتا ہے۔';
+
+  @override
+  String get alarmScreenTitle => 'الارم';
+
+  @override
+  String get alarmLookingForYouTitle => 'آپ کا گارڈین آپ کو ڈھونڈ رہا ہے';
+
+  @override
+  String alarmScreenSubtitle(String remaining) {
+    return 'آپ کے گارڈین کا الارم · $remaining باقی';
+  }
+
+  @override
+  String get stopAlarmButtonLabel => 'الارم بند کریں';
+
+  @override
+  String get stopAlarmFailedSnackbar =>
+      'الارم بند نہیں ہو سکا۔ دوبارہ کوشش کریں۔';
+
+  @override
+  String get noActiveAlarmMessage => 'ابھی کوئی الارم نہیں بج رہا۔';
 }

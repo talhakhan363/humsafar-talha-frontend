@@ -1615,6 +1615,432 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Sun'**
   String get daySunLabel;
+
+  /// No description provided for @goBackButtonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Go back'**
+  String get goBackButtonLabel;
+
+  /// No description provided for @alertTypePanic.
+  ///
+  /// In en, this message translates to:
+  /// **'Panic alert'**
+  String get alertTypePanic;
+
+  /// No description provided for @alertTypeMissedDose.
+  ///
+  /// In en, this message translates to:
+  /// **'Missed dose'**
+  String get alertTypeMissedDose;
+
+  /// No description provided for @alertTypeWellnessCheck.
+  ///
+  /// In en, this message translates to:
+  /// **'Wellness check missed'**
+  String get alertTypeWellnessCheck;
+
+  /// No description provided for @alertTypeGeofenceBreach.
+  ///
+  /// In en, this message translates to:
+  /// **'Left the safe zone'**
+  String get alertTypeGeofenceBreach;
+
+  /// No description provided for @alertTypeLowBattery.
+  ///
+  /// In en, this message translates to:
+  /// **'Low battery'**
+  String get alertTypeLowBattery;
+
+  /// No description provided for @alertTypeDeviceOffline.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone offline'**
+  String get alertTypeDeviceOffline;
+
+  /// No description provided for @alertTypeExternalContact.
+  ///
+  /// In en, this message translates to:
+  /// **'Emergency contact alert'**
+  String get alertTypeExternalContact;
+
+  /// No description provided for @alertTypeGeneric.
+  ///
+  /// In en, this message translates to:
+  /// **'Alert'**
+  String get alertTypeGeneric;
+
+  /// No description provided for @tierLevel1PrimaryLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Level 1 · Primary'**
+  String get tierLevel1PrimaryLabel;
+
+  /// No description provided for @tierLevel2SecondaryLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Level 2 · Secondary'**
+  String get tierLevel2SecondaryLabel;
+
+  /// No description provided for @tierLevel3SmsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Level 3 · SMS sent'**
+  String get tierLevel3SmsLabel;
+
+  /// No description provided for @alertsScreenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Alerts'**
+  String get alertsScreenTitle;
+
+  /// No description provided for @alertsOpenTabLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Open ({count})'**
+  String alertsOpenTabLabel(int count);
+
+  /// No description provided for @alertsSeenTabLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Seen'**
+  String get alertsSeenTabLabel;
+
+  /// No description provided for @alertsEmptyOpenMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'No open alerts.'**
+  String get alertsEmptyOpenMessage;
+
+  /// No description provided for @alertsEmptySeenMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'No seen alerts yet.'**
+  String get alertsEmptySeenMessage;
+
+  /// No description provided for @iveSeenItButton.
+  ///
+  /// In en, this message translates to:
+  /// **'I\'ve seen it'**
+  String get iveSeenItButton;
+
+  /// No description provided for @seenStopsChainTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Seen stops the chain'**
+  String get seenStopsChainTitle;
+
+  /// No description provided for @seenStopsChainBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Primary → Secondary (5 min) → SMS (5 min)'**
+  String get seenStopsChainBody;
+
+  /// No description provided for @acknowledgeFailedSnackbar.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t mark as seen. Try again.'**
+  String get acknowledgeFailedSnackbar;
+
+  /// No description provided for @needsAttentionHeader.
+  ///
+  /// In en, this message translates to:
+  /// **'Needs attention'**
+  String get needsAttentionHeader;
+
+  /// No description provided for @seeAllLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'See all'**
+  String get seeAllLabel;
+
+  /// No description provided for @panicBannerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'PANIC ALERT'**
+  String get panicBannerTitle;
+
+  /// No description provided for @panicBannerBody.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} pressed panic · {time}'**
+  String panicBannerBody(String name, String time);
+
+  /// No description provided for @openButtonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Open'**
+  String get openButtonLabel;
+
+  /// No description provided for @missedDoseScreenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Missed dose'**
+  String get missedDoseScreenTitle;
+
+  /// No description provided for @missedDoseBannerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} has not taken {drug}'**
+  String missedDoseBannerTitle(String name, String drug);
+
+  /// No description provided for @whatHappensNextHeader.
+  ///
+  /// In en, this message translates to:
+  /// **'What happens next'**
+  String get whatHappensNextHeader;
+
+  /// No description provided for @missedDoseStepYouToldLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'You are told (Primary)'**
+  String get missedDoseStepYouToldLabel;
+
+  /// No description provided for @missedDoseStepSecondaryLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Secondaries told if unseen'**
+  String get missedDoseStepSecondaryLabel;
+
+  /// No description provided for @missedDoseStepSmsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'SMS to emergency contact if unseen'**
+  String get missedDoseStepSmsLabel;
+
+  /// No description provided for @giveMoreTimeButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Give more time (+30 min)'**
+  String get giveMoreTimeButton;
+
+  /// No description provided for @tellOtherGuardiansButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Tell other Guardians now'**
+  String get tellOtherGuardiansButton;
+
+  /// No description provided for @callButtonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Call {name}'**
+  String callButtonLabel(String name);
+
+  /// No description provided for @tappingCountsAsSeenNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Tapping any option counts as seen.'**
+  String get tappingCountsAsSeenNote;
+
+  /// No description provided for @extendSuccessSnackbar.
+  ///
+  /// In en, this message translates to:
+  /// **'Given 30 more minutes.'**
+  String get extendSuccessSnackbar;
+
+  /// No description provided for @escalateSuccessSnackbar.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} Secondary Guardian(s) notified.'**
+  String escalateSuccessSnackbar(int count);
+
+  /// No description provided for @escalateNoSecondarySnackbar.
+  ///
+  /// In en, this message translates to:
+  /// **'No Secondary Guardian can see alerts yet.'**
+  String get escalateNoSecondarySnackbar;
+
+  /// No description provided for @doseAlreadyResolvedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'This alert has already been resolved.'**
+  String get doseAlreadyResolvedMessage;
+
+  /// No description provided for @alreadyEscalatedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Already told the other Guardians.'**
+  String get alreadyEscalatedMessage;
+
+  /// No description provided for @callFailedSnackbar.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t start the call.'**
+  String get callFailedSnackbar;
+
+  /// No description provided for @emergencySettingsScreenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Emergency settings'**
+  String get emergencySettingsScreenTitle;
+
+  /// No description provided for @emergencySettingsButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Emergency settings'**
+  String get emergencySettingsButton;
+
+  /// No description provided for @remoteAlarmSectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Remote alarm'**
+  String get remoteAlarmSectionTitle;
+
+  /// No description provided for @primaryOnlyBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'Primary only'**
+  String get primaryOnlyBadge;
+
+  /// No description provided for @remoteAlarmDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Rings {name}\'s phone loudly, even on silent. Use it to find them nearby.'**
+  String remoteAlarmDescription(String name);
+
+  /// No description provided for @ringAlarmButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Ring alarm (60 s)'**
+  String get ringAlarmButton;
+
+  /// No description provided for @stopAlarmButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop alarm'**
+  String get stopAlarmButton;
+
+  /// No description provided for @alarmAlreadyActiveMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Alarm is already sounding.'**
+  String get alarmAlreadyActiveMessage;
+
+  /// No description provided for @alarmStartFailedSnackbar.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t start the alarm. Try again.'**
+  String get alarmStartFailedSnackbar;
+
+  /// No description provided for @alarmStopFailedSnackbar.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t stop the alarm. Try again.'**
+  String get alarmStopFailedSnackbar;
+
+  /// No description provided for @notPrimaryGuardianNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Only the Primary Guardian can use the remote alarm and set the emergency contact.'**
+  String get notPrimaryGuardianNote;
+
+  /// No description provided for @emergencyContactSectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Emergency contact'**
+  String get emergencyContactSectionTitle;
+
+  /// No description provided for @emergencyContactDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Gets one SMS if no Guardian answers an alert in 10 minutes.'**
+  String get emergencyContactDescription;
+
+  /// No description provided for @contactNameFieldLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get contactNameFieldLabel;
+
+  /// No description provided for @contactPhoneFieldLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone'**
+  String get contactPhoneFieldLabel;
+
+  /// No description provided for @saveContactButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Save contact'**
+  String get saveContactButton;
+
+  /// No description provided for @contactSavedSnackbar.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact saved.'**
+  String get contactSavedSnackbar;
+
+  /// No description provided for @contactSaveFailedSnackbar.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t save the contact. Try again.'**
+  String get contactSaveFailedSnackbar;
+
+  /// No description provided for @noEmergencyContactMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'No emergency contact set yet.'**
+  String get noEmergencyContactMessage;
+
+  /// No description provided for @removeContactButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove contact'**
+  String get removeContactButton;
+
+  /// No description provided for @contactRemovedSnackbar.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact removed.'**
+  String get contactRemovedSnackbar;
+
+  /// No description provided for @contactRemoveFailedSnackbar.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t remove the contact. Try again.'**
+  String get contactRemoveFailedSnackbar;
+
+  /// No description provided for @emergencyContactDeniedNote.
+  ///
+  /// In en, this message translates to:
+  /// **'You can view this but only the Primary Guardian can change it.'**
+  String get emergencyContactDeniedNote;
+
+  /// No description provided for @alarmScreenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Alarm'**
+  String get alarmScreenTitle;
+
+  /// No description provided for @alarmLookingForYouTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Guardian is looking for you'**
+  String get alarmLookingForYouTitle;
+
+  /// No description provided for @alarmScreenSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Alarm from your Guardian · {remaining} left'**
+  String alarmScreenSubtitle(String remaining);
+
+  /// No description provided for @stopAlarmButtonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop alarm'**
+  String get stopAlarmButtonLabel;
+
+  /// No description provided for @stopAlarmFailedSnackbar.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t stop the alarm. Try again.'**
+  String get stopAlarmFailedSnackbar;
+
+  /// No description provided for @noActiveAlarmMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'No alarm is sounding right now.'**
+  String get noActiveAlarmMessage;
 }
 
 class _AppLocalizationsDelegate

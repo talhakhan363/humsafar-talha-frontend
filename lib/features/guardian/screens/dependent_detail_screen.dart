@@ -20,6 +20,13 @@ import '../../../shared/widgets/language_switch_button.dart';
 /// Primary-only) because both contracts say "any Guardian can read" —
 /// a Secondary can always open these screens to see the schedule; the
 /// screens themselves gate whether that Secondary can also edit it.
+///
+/// Task 3.14 (2026-10-21): added "Emergency settings" (mockup 14), same
+/// placement reasoning as the two buttons above — `emergency_contact_
+/// contract.md`'s GET is readable by a Secondary with `emergency_alerts`,
+/// so this isn't Primary-only at the navigation level either; the
+/// Remote Alarm half of that screen (Primary-only, no exceptions, per
+/// `alarm_contract.md`) is gated inside emergency_settings_screen.dart.
 class DependentDetailScreen extends ConsumerStatefulWidget {
   const DependentDetailScreen({super.key, required this.summary});
 
@@ -143,6 +150,12 @@ class _DependentDetailScreenState extends ConsumerState<DependentDetailScreen> {
               onPressed: () => context.push('/guardian/wellness-schedule', extra: summary),
               icon: const Icon(Icons.health_and_safety_outlined),
               label: Text(l10n.wellnessScheduleButton),
+            ),
+            const SizedBox(height: 12),
+            ElevatedButton.icon(
+              onPressed: () => context.push('/guardian/emergency-settings', extra: summary),
+              icon: const Icon(Icons.emergency_outlined),
+              label: Text(l10n.emergencySettingsButton),
             ),
             const SizedBox(height: 12),
             if (summary.isPrimary) ...[

@@ -8,6 +8,11 @@
          calls for. -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <!-- Task 3.14 — Android 13+ (API 33+) requires this runtime permission
+         before any notification (local or push-driven) can be shown; below
+         33 it's a no-op permission granted automatically. Requested at
+         runtime by PushService, not assumed from the manifest alone. -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <application
         android:label="humsafar_talha_frontend"
         android:name="${applicationName}"
@@ -39,6 +44,16 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+        <!-- Task 3.14 — the channel the OS uses for a push's own `notification`
+             payload when it auto-displays one (app backgrounded/terminated).
+             Must match one of the channel ids PushService creates
+             (lib/core/push/push_service.dart) — "standard_alerts" here as the
+             safe default; a critical push still carries priority: "critical"
+             in its data, which the foreground handler reads to pick the
+             high-importance channel instead when the app IS in front. -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="standard_alerts" />
     </application>
     <!-- Required to query activities that can process text, see:
          https://developer.android.com/training/package-visibility and
@@ -49,6 +64,13 @@
         <intent>
             <action android:name="android.intent.action.PROCESS_TEXT"/>
             <data android:mimeType="text/plain"/>
+        </intent>
+        <!-- Task 3.14 — required on Android 11+ (API 30+) package-visibility
+             rules so url_launcher's canLaunchUrl/launchUrl can see the
+             device's dialer app for the "Call" buttons (mockups 08b, 24). -->
+        <intent>
+            <action android:name="android.intent.action.DIAL"/>
+            <data android:scheme="tel"/>
         </intent>
     </queries>
 </manifest>

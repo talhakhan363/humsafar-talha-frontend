@@ -7,6 +7,7 @@ import '../../core/auth/app_user.dart';
 import '../../core/auth/current_user_provider.dart';
 import '../../core/network/api_exception.dart';
 import '../../core/network/providers.dart';
+import '../../core/push/push_service.dart';
 
 /// Task 1.8 built a dummy 600ms delay then a hardcoded /role-select. Task
 /// 2.5 Step D wires this to an actual "are we already logged in" check.
@@ -21,6 +22,11 @@ import '../../core/network/providers.dart';
 /// Any failure from that call - no valid session left, refresh token also
 /// expired/invalid - means "not logged in": tokens are cleared and we go
 /// to /role-select, same as a first run, rather than retry forever.
+///
+/// Task 3.14 (2026-10-21): a restored session also (re-)registers this
+/// device's push token (`registerPushToken`, best-effort) — covers the
+/// case where the app was killed and reopened days later with a rotated
+/// FCM token that was never sent while the app wasn't running.
 class SplashScreen extends ConsumerStatefulWidget {
   const SplashScreen({super.key});
 
@@ -49,6 +55,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
       final response = await ref.read(apiClientProvider).get<Map<String, dynamic>>('/auth/me');
       final user = AppUser.fromJson(response.data!);
       ref.read(currentUserProvider.notifier).state = user;
+      await registerPushToken(ref.read);
       if (!mounted) return;
 
       if (user.isGuardian) {
