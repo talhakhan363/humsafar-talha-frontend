@@ -15,6 +15,18 @@ List<GoRoute> _routes() => [
       GoRoute(path: '/wearable/connect', builder: (_, __) => stubScreen('CONNECT_BAND_STUB')),
     ];
 
+// `find.widgetWithText(ElevatedButton/OutlinedButton, ...)` matches by
+// *exact* runtime type, but the `.icon(...)` factory constructors (used
+// for every button on this screen) return a private subclass — so
+// those finders always come back empty even though the button and its
+// label are right there. These match by `is ElevatedButton`/
+// `is OutlinedButton`, which covers the `.icon` factory too.
+Finder _elevatedButtonWithText(String text) =>
+    find.ancestor(of: find.text(text), matching: find.byWidgetPredicate((widget) => widget is ElevatedButton));
+
+Finder _outlinedButtonWithText(String text) =>
+    find.ancestor(of: find.text(text), matching: find.byWidgetPredicate((widget) => widget is OutlinedButton));
+
 void main() {
   testWidgets('TC-5.8-05: not_paired status shows the Connect Band button', (tester) async {
     final fakeClient = FakeApiClient(getHandler: (_) => {'status': 'not_paired'});
@@ -22,7 +34,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Not paired'), findsOneWidget);
-    expect(find.widgetWithText(ElevatedButton, 'Connect Band'), findsOneWidget);
+    expect(_elevatedButtonWithText('Connect Band'), findsOneWidget);
   });
 
   testWidgets('TC-5.8-06: tapping Connect Band navigates there', (tester) async {
@@ -30,7 +42,7 @@ void main() {
     await tester.pumpWidget(wrapWithRouter(fakeClient: fakeClient, initialLocation: '/my-band-under-test', routes: _routes()));
     await tester.pumpAndSettle();
 
-    await tester.tap(find.widgetWithText(ElevatedButton, 'Connect Band'));
+    await tester.tap(_elevatedButtonWithText('Connect Band'));
     await tester.pumpAndSettle();
 
     expect(find.text('CONNECT_BAND_STUB'), findsOneWidget);
@@ -73,7 +85,14 @@ void main() {
     await tester.pumpWidget(wrapWithRouter(fakeClient: fakeClient, initialLocation: '/my-band-under-test', routes: _routes()));
     await tester.pumpAndSettle();
 
-    await tester.tap(find.widgetWithText(OutlinedButton, 'Unpair'));
+    // The Unpair button sits below the status Card in this screen's
+    // plain ListView, which only builds items inside its viewport —
+    // scroll it into the tree before `find` can see it at all. (And
+    // it's an `OutlinedButton.icon`, so the finder has to match by
+    // `is OutlinedButton` — see `_outlinedButtonWithText` above.)
+    await tester.scrollUntilVisible(_outlinedButtonWithText('Unpair'), 200, scrollable: find.byType(Scrollable).first);
+    await tester.pumpAndSettle();
+    await tester.tap(_outlinedButtonWithText('Unpair'));
     await tester.pumpAndSettle();
     expect(fakeClient.deleteCalls, 0); // confirm dialog first
 
@@ -95,7 +114,15 @@ void main() {
     await tester.pumpWidget(wrapWithRouter(fakeClient: fakeClient, initialLocation: '/my-band-under-test', routes: _routes()));
     await tester.pumpAndSettle();
 
-    await tester.tap(find.widgetWithText(ElevatedButton, 'Generate Demo Data'));
+    // Same lazy-build reasoning as TC-5.8-09's Unpair scroll above
+    // (and the same `.icon`-constructor finder fix).
+    await tester.scrollUntilVisible(
+      _elevatedButtonWithText('Generate Demo Data'),
+      200,
+      scrollable: find.byType(Scrollable).first,
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(_elevatedButtonWithText('Generate Demo Data'));
     await tester.pumpAndSettle();
 
     expect(fakeClient.postCalls, 1);

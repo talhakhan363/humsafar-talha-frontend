@@ -24,6 +24,22 @@ List<GoRoute> _routes({Map<String, dynamic>? existing}) => [
       ),
     ];
 
+// Adds a `/host` route in front of the screen under test — see
+// `AutoPushHost`'s doc comment in widget_test_harness.dart for why this
+// is needed for any test that actually reaches `_save()`'s
+// `Navigator.of(context).pop(true)`.
+List<GoRoute> _hostedRoutes({Map<String, dynamic>? existing}) => [
+      GoRoute(path: '/host', builder: (_, __) => const AutoPushHost(targetPath: '/add-record-under-test')),
+      ..._routes(existing: existing),
+    ];
+
+// `find.widgetWithText(OutlinedButton, ...)` matches by *exact* runtime
+// type, but `OutlinedButton.icon(...)` (used for "Attach File") returns
+// a private subclass — so that finder always comes back empty. This
+// matches by `is OutlinedButton`, which covers the `.icon` factory too.
+Finder _outlinedButtonWithText(String text) =>
+    find.ancestor(of: find.text(text), matching: find.byWidgetPredicate((widget) => widget is OutlinedButton));
+
 void main() {
   testWidgets('TC-5.6-09: empty title blocks Save with an inline error, no POST', (tester) async {
     final fakeClient = FakeApiClient();
@@ -52,7 +68,7 @@ void main() {
 
   testWidgets('TC-5.6-11: notes alone (no file) is enough content to save', (tester) async {
     final fakeClient = FakeApiClient(postHandler: (_) => <String, dynamic>{});
-    await tester.pumpWidget(wrapWithRouter(fakeClient: fakeClient, initialLocation: '/add-record-under-test', routes: _routes()));
+    await tester.pumpWidget(wrapWithRouter(fakeClient: fakeClient, initialLocation: '/host', routes: _hostedRoutes()));
     await tester.pumpAndSettle();
 
     await tester.enterText(find.widgetWithText(TextField, 'Title'), 'Checkup notes');
@@ -78,7 +94,7 @@ void main() {
     ));
     await tester.pumpAndSettle();
 
-    await tester.tap(find.widgetWithText(OutlinedButton, 'Attach File'));
+    await tester.tap(_outlinedButtonWithText('Attach File'));
     await tester.pumpAndSettle();
 
     expect(find.text('This file is too large. The limit is 10 MB.'), findsOneWidget);
@@ -92,13 +108,13 @@ void main() {
     );
     await tester.pumpWidget(wrapWithRouter(
       fakeClient: fakeClient,
-      initialLocation: '/add-record-under-test',
-      routes: _routes(),
+      initialLocation: '/host',
+      routes: _hostedRoutes(),
       extraOverrides: [filePickerSourceProvider.overrideWithValue(fakeFilePicker)],
     ));
     await tester.pumpAndSettle();
 
-    await tester.tap(find.widgetWithText(OutlinedButton, 'Attach File'));
+    await tester.tap(_outlinedButtonWithText('Attach File'));
     await tester.pumpAndSettle();
     expect(find.text('scan.pdf'), findsOneWidget);
 
@@ -121,11 +137,11 @@ void main() {
     };
     final fakeClient = FakeApiClient(patchHandler: (_) => <String, dynamic>{});
     await tester.pumpWidget(
-      wrapWithRouter(fakeClient: fakeClient, initialLocation: '/add-record-under-test', routes: _routes(existing: existing)),
+      wrapWithRouter(fakeClient: fakeClient, initialLocation: '/host', routes: _hostedRoutes(existing: existing)),
     );
     await tester.pumpAndSettle();
 
-    expect(find.widgetWithText(OutlinedButton, 'Attach File'), findsNothing);
+    expect(_outlinedButtonWithText('Attach File'), findsNothing);
     expect(find.text("The file can't be replaced. Delete this record and add a new one instead."), findsOneWidget);
     expect(find.text('Edit Record'), findsOneWidget);
 

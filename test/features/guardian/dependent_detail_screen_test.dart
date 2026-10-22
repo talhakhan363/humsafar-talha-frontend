@@ -25,6 +25,7 @@
 // compacting judgement call as `activity_log_screen.dart`'s
 // booking-detail sheet).
 
+import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:humsafar_frontend/core/guardian/dependent_summary.dart';
@@ -136,6 +137,12 @@ void main() {
     ));
     await tester.pumpAndSettle();
 
+    // Same lazy-build/viewport reasoning as TC-6.8-17's Directory
+    // scroll below — Appointments sits past Medical Records in this
+    // screen's ~12-button ListView, outside the default test viewport.
+    await tester.scrollUntilVisible(find.text('Appointments'), 300, scrollable: find.byType(Scrollable).first);
+    await tester.pumpAndSettle();
+
     expect(find.text('Appointments'), findsOneWidget);
     await tester.tap(find.text('Appointments'));
     await tester.pumpAndSettle();
@@ -150,6 +157,10 @@ void main() {
       initialLocation: '/guardian/dependent-detail',
       routes: _routes(),
     ));
+    await tester.pumpAndSettle();
+
+    // Same scroll reasoning as TC-5.6-21's Appointments above.
+    await tester.scrollUntilVisible(find.text('Vitals'), 300, scrollable: find.byType(Scrollable).first);
     await tester.pumpAndSettle();
 
     expect(find.text('Vitals'), findsOneWidget);
@@ -168,6 +179,10 @@ void main() {
     ));
     await tester.pumpAndSettle();
 
+    // Same scroll reasoning as TC-5.6-21's Appointments above.
+    await tester.scrollUntilVisible(find.text('Wearable Band'), 300, scrollable: find.byType(Scrollable).first);
+    await tester.pumpAndSettle();
+
     expect(find.text('Wearable Band'), findsOneWidget);
     await tester.tap(find.text('Wearable Band'));
     await tester.pumpAndSettle();
@@ -182,6 +197,14 @@ void main() {
       initialLocation: '/guardian/dependent-detail',
       routes: _routes(),
     ));
+    await tester.pumpAndSettle();
+
+    // "Directory & Services" is the last of ~12 stacked buttons in this
+    // screen's plain ListView, which only builds items inside its
+    // viewport — it needs to be scrolled into the tree before `find`
+    // can see it at all (same lazy-build reasoning as
+    // `my_band_screen_test.dart`'s Unpair/Generate Demo Data scrolls).
+    await tester.scrollUntilVisible(find.text('Directory & Services'), 300, scrollable: find.byType(Scrollable).first);
     await tester.pumpAndSettle();
 
     expect(find.text('Directory & Services'), findsOneWidget);

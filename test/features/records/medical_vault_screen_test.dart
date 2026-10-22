@@ -41,7 +41,14 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Blood test'), findsOneWidget);
-    expect(find.textContaining('Lab Report'), findsOneWidget);
+    // The category filter row above the list also has a "Lab Report"
+    // chip (same `categoryLabel()` text), so an untargeted
+    // `find.textContaining('Lab Report')` matches both it and this
+    // record's own subtitle — scope to the record's ListTile.
+    expect(
+      find.descendant(of: find.widgetWithText(ListTile, 'Blood test'), matching: find.textContaining('Lab Report')),
+      findsOneWidget,
+    );
   });
 
   testWidgets('TC-5.6-02: an empty vault shows the empty-state message', (tester) async {
@@ -79,7 +86,12 @@ void main() {
       wrapWithRouter(fakeClient: fakeClient, initialLocation: '/records-under-test', routes: _routes(canManageAccess: false)),
     );
     await tester.pumpAndSettle();
-    await tester.tap(find.byType(PopupMenuButton<String>));
+    // The AppBar's language switcher is also a `PopupMenuButton<String>`
+    // (see `language_switch_button.dart`), so an untargeted
+    // `find.byType(PopupMenuButton<String>)` is ambiguous — this
+    // screen's own menu keeps the default `more_vert` icon, the
+    // language switcher uses `Icons.language`.
+    await tester.tap(find.widgetWithIcon(PopupMenuButton<String>, Icons.more_vert));
     await tester.pumpAndSettle();
 
     expect(find.text('Record access'), findsNothing);
@@ -93,7 +105,8 @@ void main() {
       wrapWithRouter(fakeClient: fakeClient, initialLocation: '/records-under-test', routes: _routes(canManageAccess: true)),
     );
     await tester.pumpAndSettle();
-    await tester.tap(find.byType(PopupMenuButton<String>));
+    // Same language-switcher-collision reasoning as TC-5.6-05 above.
+    await tester.tap(find.widgetWithIcon(PopupMenuButton<String>, Icons.more_vert));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Doctor links'));
     await tester.pumpAndSettle();

@@ -45,7 +45,12 @@ void main() {
     await tester.pumpWidget(wrapWithRouter(fakeClient: fakeClient, initialLocation: '/directory-under-test', routes: _routes()));
     await tester.pumpAndSettle();
 
-    expect(find.textContaining('Sample'), findsOneWidget);
+    // The fixture's own org name ("Sample Clinic") also contains the
+    // word "Sample", so an untargeted `find.textContaining('Sample')`
+    // matches both that title and the subtitle's "· Sample" label —
+    // assert the subtitle's exact text instead (city, no distance in
+    // this fixture, plus the sample label: "Lahore · Sample").
+    expect(find.text('Lahore · Sample'), findsOneWidget);
     expect(find.byIcon(Icons.call), findsNothing);
   });
 

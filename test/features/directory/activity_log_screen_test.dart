@@ -16,6 +16,14 @@ List<GoRoute> _routes() => [
       GoRoute(path: '/activity-log-under-test', builder: (_, __) => const ActivityLogScreen(dependentId: 'dep-1')),
     ];
 
+// `find.widgetWithText(OutlinedButton, ...)` matches by *exact* runtime
+// type, but "Call to Arrange" is built with `OutlinedButton.icon(...)`,
+// which returns a private subclass — so that finder always comes back
+// empty. This matches by `is OutlinedButton`, which covers the `.icon`
+// factory too.
+Finder _outlinedButtonWithText(String text) =>
+    find.ancestor(of: find.text(text), matching: find.byWidgetPredicate((widget) => widget is OutlinedButton));
+
 final _contactEntry = {
   'type': 'org_contact',
   'subject_name': 'City Hospital',
@@ -71,7 +79,7 @@ void main() {
     expect(find.text('Pending'), findsOneWidget);
     expect(find.widgetWithText(ElevatedButton, 'Confirm'), findsOneWidget);
     expect(find.widgetWithText(OutlinedButton, 'Cancel'), findsOneWidget);
-    expect(find.widgetWithText(OutlinedButton, 'Call to Arrange'), findsOneWidget);
+    expect(_outlinedButtonWithText('Call to Arrange'), findsOneWidget);
   });
 
   testWidgets('TC-6.8-15: Confirm posts to /confirm and closes the sheet', (tester) async {

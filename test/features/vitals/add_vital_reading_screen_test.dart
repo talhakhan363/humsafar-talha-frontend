@@ -18,6 +18,14 @@ List<GoRoute> _routes() => [
       GoRoute(path: '/add-vital-under-test', builder: (_, __) => const AddVitalReadingScreen(dependentId: 'dep-1')),
     ];
 
+// Adds a `/host` route in front of the screen under test — needed for
+// any test that reaches `_save()`'s `Navigator.of(context).pop(true)`.
+// See `AutoPushHost`'s doc comment in widget_test_harness.dart.
+List<GoRoute> _hostedRoutes() => [
+      GoRoute(path: '/host', builder: (_, __) => const AutoPushHost(targetPath: '/add-vital-under-test')),
+      ..._routes(),
+    ];
+
 void main() {
   testWidgets('TC-5.7-07: heart rate is never offered as a metric choice', (tester) async {
     final fakeClient = FakeApiClient();
@@ -42,7 +50,7 @@ void main() {
 
   testWidgets('TC-5.7-09: a valid blood pressure reading POSTs top/bottom as value/diastolic', (tester) async {
     final fakeClient = FakeApiClient(postHandler: (_) => <String, dynamic>{});
-    await tester.pumpWidget(wrapWithRouter(fakeClient: fakeClient, initialLocation: '/add-vital-under-test', routes: _routes()));
+    await tester.pumpWidget(wrapWithRouter(fakeClient: fakeClient, initialLocation: '/host', routes: _hostedRoutes()));
     await tester.pumpAndSettle();
 
     await tester.enterText(find.widgetWithText(TextField, 'Systolic'), '120');
@@ -59,7 +67,7 @@ void main() {
 
   testWidgets('TC-5.7-10: switching to blood sugar shows unit and context dropdowns, sent in the body', (tester) async {
     final fakeClient = FakeApiClient(postHandler: (_) => <String, dynamic>{});
-    await tester.pumpWidget(wrapWithRouter(fakeClient: fakeClient, initialLocation: '/add-vital-under-test', routes: _routes()));
+    await tester.pumpWidget(wrapWithRouter(fakeClient: fakeClient, initialLocation: '/host', routes: _hostedRoutes()));
     await tester.pumpAndSettle();
 
     await tester.tap(find.widgetWithText(ChoiceChip, 'Blood Sugar'));

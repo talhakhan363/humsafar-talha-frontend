@@ -15,6 +15,14 @@ List<GoRoute> _routes() => [
       GoRoute(path: '/connect-band-under-test', builder: (_, __) => const ConnectBandScreen(dependentId: 'dep-1')),
     ];
 
+// Adds a `/host` route in front of the screen under test — needed for
+// any test that reaches `_pair()`'s `Navigator.of(context).pop(true)`.
+// See `AutoPushHost`'s doc comment in widget_test_harness.dart.
+List<GoRoute> _hostedRoutes() => [
+      GoRoute(path: '/host', builder: (_, __) => const AutoPushHost(targetPath: '/connect-band-under-test')),
+      ..._routes(),
+    ];
+
 void main() {
   testWidgets('TC-5.8-01: an empty address blocks Pair, no POST', (tester) async {
     final fakeClient = FakeApiClient();
@@ -30,7 +38,7 @@ void main() {
 
   testWidgets('TC-5.8-02: a valid address POSTs ble_address and an optional name', (tester) async {
     final fakeClient = FakeApiClient(postHandler: (_) => <String, dynamic>{});
-    await tester.pumpWidget(wrapWithRouter(fakeClient: fakeClient, initialLocation: '/connect-band-under-test', routes: _routes()));
+    await tester.pumpWidget(wrapWithRouter(fakeClient: fakeClient, initialLocation: '/host', routes: _hostedRoutes()));
     await tester.pumpAndSettle();
 
     await tester.enterText(find.widgetWithText(TextField, 'Bluetooth Address'), 'C4:5B:BE:12:34:56');
@@ -45,7 +53,7 @@ void main() {
 
   testWidgets('TC-5.8-03: omitting the name field sends no name key', (tester) async {
     final fakeClient = FakeApiClient(postHandler: (_) => <String, dynamic>{});
-    await tester.pumpWidget(wrapWithRouter(fakeClient: fakeClient, initialLocation: '/connect-band-under-test', routes: _routes()));
+    await tester.pumpWidget(wrapWithRouter(fakeClient: fakeClient, initialLocation: '/host', routes: _hostedRoutes()));
     await tester.pumpAndSettle();
 
     await tester.enterText(find.widgetWithText(TextField, 'Bluetooth Address'), 'C4:5B:BE:12:34:56');

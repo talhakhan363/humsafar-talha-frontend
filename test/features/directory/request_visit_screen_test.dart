@@ -22,6 +22,14 @@ List<GoRoute> _routes() => [
       ),
     ];
 
+// `find.widgetWithText(ElevatedButton, ...)` matches by *exact* runtime
+// type, but "Call to Arrange" is built with `ElevatedButton.icon(...)`,
+// which returns a private subclass — so that finder always comes back
+// empty. This matches by `is ElevatedButton`, which covers the `.icon`
+// factory too.
+Finder _elevatedButtonWithText(String text) =>
+    find.ancestor(of: find.text(text), matching: find.byWidgetPredicate((widget) => widget is ElevatedButton));
+
 void main() {
   testWidgets('TC-6.8-08: a note over 300 characters blocks Save, no POST', (tester) async {
     final fakeClient = FakeApiClient();
@@ -50,7 +58,7 @@ void main() {
     expect(body['provider_id'], 'prov-1');
     expect(body.containsKey('preferred_at'), isFalse);
     expect(find.text('Your visit request has been saved.'), findsOneWidget);
-    expect(find.widgetWithText(ElevatedButton, 'Call to Arrange'), findsNothing); // no contact returned
+    expect(_elevatedButtonWithText('Call to Arrange'), findsNothing); // no contact returned
   });
 
   testWidgets('TC-6.8-10: when the server returns a contact, Call to Arrange appears', (tester) async {
@@ -61,7 +69,7 @@ void main() {
     await tester.tap(find.widgetWithText(ElevatedButton, 'Save Request'));
     await tester.pumpAndSettle();
 
-    expect(find.widgetWithText(ElevatedButton, 'Call to Arrange'), findsOneWidget);
+    expect(_elevatedButtonWithText('Call to Arrange'), findsOneWidget);
   });
 
   testWidgets('TC-6.8-11: TOO_MANY_OPEN_BOOKINGS on save shows the mapped message', (tester) async {

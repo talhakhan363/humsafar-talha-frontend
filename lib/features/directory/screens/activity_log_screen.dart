@@ -76,7 +76,7 @@ class _ActivityLogScreenState extends ConsumerState<ActivityLogScreen> {
     switch (type) {
       case 'org_contact':
         return l10n.activityOrgContact;
-      case 'booking_request':
+      case 'booking_requested':
         return l10n.activityBookingRequested;
       case 'booking_confirmed':
         return l10n.activityBookingConfirmed;

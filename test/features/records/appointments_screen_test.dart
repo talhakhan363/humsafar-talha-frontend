@@ -83,7 +83,15 @@ void main() {
     await tester.pumpWidget(wrapWithRouter(fakeClient: fakeClient, initialLocation: '/appointments-under-test', routes: _routes()));
     await tester.pumpAndSettle();
 
-    await tester.tap(find.byType(PopupMenuButton<String>));
+    // Every screen's AppBar also carries a language-switcher
+    // `PopupMenuButton<String>` (see `language_switch_button.dart`), so
+    // an untargeted `find.byType(PopupMenuButton<String>)` is
+    // ambiguous here — scope to the one inside this appointment's own
+    // Card/ListTile.
+    await tester.tap(find.descendant(
+      of: find.widgetWithText(Card, 'Dr. Khan'),
+      matching: find.byType(PopupMenuButton<String>),
+    ));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Cancel appointment'));
     await tester.pumpAndSettle();

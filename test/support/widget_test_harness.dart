@@ -84,3 +84,53 @@ Widget wrapWithRouter({
 /// Just a named Text widget — exists so every test spells this pattern
 /// the same way instead of writing `const Text('...')` inline everywhere.
 Widget stubScreen(String label) => Text(label);
+
+/// A route stub that pushes [targetPath] onto the stack as soon as it's
+/// mounted, so a test can reach the screen under test via `context.push`
+/// (as it's always reached in the real app) instead of making it
+/// GoRouter's sole/initial route.
+///
+/// Why this matters: several screens (`add_record_screen.dart`,
+/// `add_vital_reading_screen.dart`, `connect_band_screen.dart`, …) call
+/// `Navigator.of(context).pop(true)` on save success. That's always
+/// safe in the real app, where these screens are only ever reached via
+/// `context.push(...)` from a list screen — there's always a route
+/// underneath to land on. But if a test makes the screen under test
+/// GoRouter's *only* route (as `initialLocation` normally does), that
+/// `pop()` empties go_router's match list and trips its
+/// `'currentConfiguration.isNotEmpty'` assertion. Routing through this
+/// host first — `initialLocation: '/host'`, with `/host` and the real
+/// target both in `routes` — gives the stack a second entry so the
+/// pop behaves exactly as it does in production.
+///
+/// Usage:
+/// ```dart
+/// List<GoRoute> _hostedRoutes() => [
+///       GoRoute(path: '/host', builder: (_, __) => const AutoPushHost(targetPath: '/add-record-under-test')),
+///       ..._routes(),
+///     ];
+/// // then: initialLocation: '/host', routes: _hostedRoutes()
+/// ```
+class AutoPushHost extends StatefulWidget {
+  const AutoPushHost({super.key, required this.targetPath, this.extra, this.hostLabel = 'HOST'});
+
+  final String targetPath;
+  final Object? extra;
+  final String hostLabel;
+
+  @override
+  State<AutoPushHost> createState() => _AutoPushHostState();
+}
+
+class _AutoPushHostState extends State<AutoPushHost> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) context.push(widget.targetPath, extra: widget.extra);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) => Text(widget.hostLabel);
+}
