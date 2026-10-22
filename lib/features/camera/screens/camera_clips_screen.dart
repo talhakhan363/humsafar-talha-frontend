@@ -25,12 +25,19 @@ import '../../../shared/widgets/language_switch_button.dart';
 /// as that screen's own PDF/image viewer decision, for the same reason
 /// (not this batch's job, and the OS's own video app already does it).
 ///
-/// **Named field-name caveat:** same as `camera_screen.dart` — built
-/// from the written summary of the clips section of `camera_contract.md`
-/// (list / one / download / delete, `missed` after 3 minutes), not a
-/// fresh read of the file itself. Assumed shape per clip:
-/// `{"clip_id", "trigger": "panic"|"alarm", "status":
-/// "uploaded"|"pending"|"missed", "created_at"}`.
+/// **Field-name fix, 2026-10-22 (real bug, found and reported by Sarim
+/// against the real `camera_contract.md` on `dev`):** this screen was
+/// first built from a written contract summary, not the contract file
+/// itself. The real per-clip shape: `{"clip_id", "trigger_type":
+/// "panic"|"remote_alarm", "status": "stored"|"requested"|"missed",
+/// "captured_at", "uploaded_at"}` — not `trigger`/`"alarm"`/`"uploaded"`/
+/// `"pending"`/`created_at"` as first built. Fixed below: reads
+/// `trigger_type` (and the `remote_alarm` value, not `alarm`) and
+/// `status` with the real three values — a clip is downloadable/
+/// deletable once `stored` (was gated on `uploaded`). `captured_at`/
+/// `uploaded_at` are read by neither the old nor the new code — this
+/// screen has never shown a timestamp in its list, so that's not a new
+/// gap, just an unused field either way.
 class CameraClipsScreen extends ConsumerStatefulWidget {
   const CameraClipsScreen({super.key, required this.dependentId});
 
@@ -119,22 +126,22 @@ class _CameraClipsScreenState extends ConsumerState<CameraClipsScreen> {
     }
   }
 
-  String _triggerLabel(AppLocalizations l10n, String? trigger) {
-    switch (trigger) {
+  String _triggerLabel(AppLocalizations l10n, String? triggerType) {
+    switch (triggerType) {
       case 'panic':
         return l10n.clipTriggerPanicLabel;
-      case 'alarm':
+      case 'remote_alarm':
         return l10n.clipTriggerAlarmLabel;
       default:
-        return trigger ?? '';
+        return triggerType ?? '';
     }
   }
 
   String _statusLabel(AppLocalizations l10n, String? status) {
     switch (status) {
-      case 'uploaded':
+      case 'stored':
         return l10n.clipStatusUploaded;
-      case 'pending':
+      case 'requested':
         return l10n.clipStatusPending;
       case 'missed':
         return l10n.clipStatusMissed;
@@ -184,12 +191,12 @@ class _CameraClipsScreenState extends ConsumerState<CameraClipsScreen> {
         return Card(
           margin: const EdgeInsets.only(bottom: 8),
           child: ListTile(
-            leading: Icon(clip['trigger'] == 'panic' ? Icons.warning_amber_outlined : Icons.notifications_active_outlined),
-            title: Text(_triggerLabel(l10n, clip['trigger'] as String?)),
+            leading: Icon(clip['trigger_type'] == 'panic' ? Icons.warning_amber_outlined : Icons.notifications_active_outlined),
+            title: Text(_triggerLabel(l10n, clip['trigger_type'] as String?)),
             subtitle: Text(_statusLabel(l10n, status)),
             trailing: isBusy
                 ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2))
-                : status == 'uploaded'
+                : status == 'stored'
                     ? Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [

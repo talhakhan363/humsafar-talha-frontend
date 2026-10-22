@@ -1,7 +1,9 @@
 // Task 6.9 — TC-6.9-13..16. Saved clips list (mockup 19b): empty state,
 // a saved clip's trigger/status, download (byte-fetch + OS share sheet,
 // same pattern as medical_vault_screen.dart's export), and delete with
-// its confirm dialog.
+// its confirm dialog. Fixture updated 2026-10-22 to the real field
+// names (`trigger_type`/`stored`) per camera_clips_screen.dart's own
+// field-name fix.
 
 import 'dart:typed_data';
 
@@ -17,9 +19,10 @@ import '../../support/widget_test_harness.dart';
 
 const _clip = {
   'clip_id': 'clip-1',
-  'trigger': 'panic',
-  'status': 'uploaded',
-  'created_at': '2026-10-22T10:00:00Z',
+  'trigger_type': 'panic',
+  'status': 'stored',
+  'captured_at': '2026-10-22T10:00:00Z',
+  'uploaded_at': '2026-10-22T10:00:20Z',
 };
 
 List<GoRoute> _routes() => [

@@ -1,11 +1,12 @@
-// Task 7.3 — TC-7.3-01..09. Grounded in `analytics_contract.md`'s written
-// summary (see `AnalyticsScreen`'s own doc comment for the full assumed
-// response shape and the named field-name caveat). Unlike almost every
-// other permission-gated screen in this app, `GET /dependents/{id}/
-// analytics` doesn't throw `MODULE_ACCESS_DENIED` for a part the caller
-// lacks — the written summary says that part just comes back `null` in
-// an otherwise-200 response — so the "no permission" tests below feed a
-// `null` section through `getHandler`, not an `ApiException`.
+// Task 7.3 — TC-7.3-01..09. Grounded in `analytics_contract.md` (see
+// `AnalyticsScreen`'s own doc comment for the confirmed field-name fix
+// and its remaining named assumptions). Unlike almost every other
+// permission-gated screen in this app, `GET /dependents/{id}/analytics`
+// doesn't throw `MODULE_ACCESS_DENIED` for a part the caller lacks —
+// that part just comes back `null` in an otherwise-200 response — so the
+// "no permission" tests below feed a `null` section through `getHandler`,
+// not an `ApiException`. Fixtures updated 2026-10-22 to the real field
+// names found by Sarim against the real contract file.
 
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -21,47 +22,50 @@ const _dependentId = 'dep-42';
 Map<String, dynamic> _fullAnalyticsBody() => {
       'days': 30,
       'adherence': {
-        'rate': 0.92,
+        'rate_percent': 92,
         'taken': 46,
         'missed': 4,
         'waiting': 2,
-        'streak_days': 5,
-        'change_vs_previous_period': 0.03,
-        'per_day': [
+        'perfect_days_in_a_row': 5,
+        'change': 'up',
+        'change_points': 3,
+        'daily': [
           {'date': '2026-09-23', 'taken': 2, 'missed': 0, 'waiting': 0},
           {'date': '2026-09-24', 'taken': 1, 'missed': 1, 'waiting': 0},
         ],
-        'per_medicine': [
-          {'medicine_name': 'Metformin', 'rate': 0.95, 'taken': 19, 'missed': 1},
+        'by_medicine': [
+          {'drug_name': 'Metformin', 'rate_percent': 95, 'taken': 19, 'missed': 1},
         ],
       },
       'vitals': {
-        'metrics': {
-          'blood_pressure': {
+        'metrics': [
+          {
+            'metric_type': 'blood_pressure',
             'count': 4,
             'min': {'value': 110, 'diastolic': 70, 'unit': 'mmHg'},
             'max': {'value': 140, 'diastolic': 90, 'unit': 'mmHg'},
-            'average': {'value': 122, 'diastolic': 78, 'unit': 'mmHg'},
+            'avg': {'value': 122, 'diastolic': 78, 'unit': 'mmHg'},
             'latest': {'value': 118, 'diastolic': 76, 'unit': 'mmHg'},
             'trend': 'steady',
-            'per_day': [
+            'daily': [
               {'date': '2026-09-23', 'value': 120, 'diastolic': 80},
               {'date': '2026-09-24', 'value': 118, 'diastolic': 76},
             ],
           },
-          'heart_rate': {
+          {
+            'metric_type': 'heart_rate',
             'count': 10,
             'min': {'value': 60, 'unit': 'bpm'},
             'max': {'value': 95, 'unit': 'bpm'},
-            'average': {'value': 74, 'unit': 'bpm'},
+            'avg': {'value': 74, 'unit': 'bpm'},
             'latest': {'value': 72, 'unit': 'bpm'},
             'trend': 'rising',
-            'per_day': [
+            'daily': [
               {'date': '2026-09-23', 'value': 70},
               {'date': '2026-09-24', 'value': 74},
             ],
           },
-        },
+        ],
       },
     };
 
@@ -136,6 +140,7 @@ void main() {
     // already on-screen.
     await tester.scrollUntilVisible(find.text('Heart Rate'), 300, scrollable: find.byType(Scrollable).first);
     await tester.pumpAndSettle();
+
     await tester.tap(find.text('Heart Rate'));
     await tester.pumpAndSettle();
 
@@ -179,23 +184,22 @@ void main() {
   });
 
   testWidgets('TC-7.3-07: empty per_day arrays show the "no data yet" messages instead of a broken chart', (tester) async {
-    final fakeClient = FakeApiClient(
-        getHandler: (_) => {
-              'adherence': {
-                'rate': 0.0,
-                'taken': 0,
-                'missed': 0,
-                'waiting': 0,
-                'streak_days': 0,
-                'per_day': <Map<String, dynamic>>[],
-                'per_medicine': <Map<String, dynamic>>[],
-              },
-              'vitals': {
-                'metrics': {
-                  'blood_pressure': {'count': 0, 'per_day': <Map<String, dynamic>>[]},
-                },
-              },
-            });
+    final fakeClient = FakeApiClient(getHandler: (_) => {
+          'adherence': {
+            'rate_percent': 0,
+            'taken': 0,
+            'missed': 0,
+            'waiting': 0,
+            'perfect_days_in_a_row': 0,
+            'daily': <Map<String, dynamic>>[],
+            'by_medicine': <Map<String, dynamic>>[],
+          },
+          'vitals': {
+            'metrics': [
+              {'metric_type': 'blood_pressure', 'count': 0, 'daily': <Map<String, dynamic>>[]},
+            ],
+          },
+        });
     await tester.pumpWidget(wrapWithRouter(
       fakeClient: fakeClient,
       initialLocation: '/guardian/analytics-under-test',

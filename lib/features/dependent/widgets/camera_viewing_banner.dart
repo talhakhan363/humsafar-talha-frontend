@@ -22,16 +22,21 @@ import '../../../core/network/providers.dart';
 /// (`SizedBox.shrink()`) whenever nobody is watching, so it adds no
 /// visual weight to Home the rest of the time.
 ///
-/// **Named field-name caveat (flagged for Abdullah/Talha to confirm):**
-/// built from the written summary of `camera_contract.md` in
-/// `Humsafar_Progress_Tracker.md` ("`GET .../camera/viewing` (Dependent)
-/// shows who is watching"), not a fresh read of the contract file itself
-/// — that file lives in the backend repo, which wasn't available to
-/// build this against directly. Assumed response shape:
-/// `{"is_being_viewed": bool, "viewer_count": int?}`. If the real
-/// contract uses different field names, only `_load()` below needs to
-/// change — the widget's structure and tests don't depend on the exact
-/// names, just on what they decode to.
+/// **Field-name fix, 2026-10-22 (real bug, found and reported by Sarim
+/// against the real `camera_contract.md` on `dev`):** the first build of
+/// this widget read `is_being_viewed`/`viewer_count`, guessed from a
+/// written contract summary rather than the contract file itself — the
+/// real response is `{"being_viewed": bool, "viewers":
+/// [{"user_id", "full_name", "role", "since"}]}`. As built, this meant
+/// the banner would NEVER have appeared on a real Dependent's phone —
+/// `is_being_viewed` is always absent, so it always decoded to `false`.
+/// Confirmed Critical for 6.12 K-02. Fixed below: reads `being_viewed`
+/// directly, and the viewer count is `viewers.length` rather than a
+/// separate count field (the contract has no standalone count — the
+/// list itself is the source of truth). `full_name`/`role`/`since` per
+/// viewer are not yet surfaced in the UI (this banner only ever showed a
+/// count, never names) — a possible future enhancement, not a gap
+/// against what this banner already did before the fix.
 ///
 /// On a fetch error (offline, token expired, anything) this fails
 /// quietly and tries again on the next poll, same reasoning as
@@ -73,9 +78,10 @@ class _CameraViewingBannerState extends ConsumerState<CameraViewingBanner> {
           .read(apiClientProvider)
           .get<Map<String, dynamic>>('/dependents/${widget.dependentId}/camera/viewing');
       if (!mounted) return;
+      final viewers = response.data?['viewers'] as List<dynamic>?;
       setState(() {
-        _isBeingViewed = (response.data?['is_being_viewed'] as bool?) ?? false;
-        _viewerCount = response.data?['viewer_count'] as int?;
+        _isBeingViewed = (response.data?['being_viewed'] as bool?) ?? false;
+        _viewerCount = viewers?.length;
       });
     } on ApiException {
       // Quiet failure — see the class doc comment above.

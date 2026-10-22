@@ -15,45 +15,51 @@ const _dayOptions = [7, 30, 90];
 /// Task 7.3 — Guardian-side Analytics dashboard (mockup 16), grounded in
 /// `analytics_contract.md`. One combined call
 /// (`GET /dependents/{id}/analytics?days=`) drives both sections below —
-/// per the written contract summary, a part the caller lacks permission
-/// for comes back `null` rather than a `403`, so (unlike almost every
-/// other screen in this app) permission is handled by checking for a
-/// null section, not by catching `MODULE_ACCESS_DENIED`.
+/// a part the caller lacks permission for comes back `null` rather than
+/// a `403`, so (unlike almost every other screen in this app) permission
+/// is handled by checking for a null section, not by catching
+/// `MODULE_ACCESS_DENIED`.
 ///
-/// **Named field-name caveat (flagged for Abdullah/Talha to confirm,
-/// same standing caveat as Task 6.9's `CameraScreen`/
-/// `CameraViewingBanner`):** built from the written contract summary in
-/// `Humsafar_Progress_Tracker.md` ("adherence: rate, per-day,
-/// per-medicine, change against the previous period, streak" / "vitals:
-/// min/max/average/latest/per-day/trend"), not a fresh read of
-/// `analytics_contract.md` itself. Assumed response shape:
-/// ```
-/// {
-///   "adherence": {
-///     "rate": 0.92, "taken": 46, "missed": 4, "waiting": 2,
-///     "streak_days": 5, "change_vs_previous_period": 0.03,
-///     "per_day": [{"date": "YYYY-MM-DD", "taken": 2, "missed": 0, "waiting": 0}],
-///     "per_medicine": [{"medicine_name": "Metformin", "rate": 0.95, "taken": 19, "missed": 1}]
-///   } | null,
-///   "vitals": {
-///     "metrics": {
-///       "<metric_type>": {
-///         "count": 12,
-///         "min"/"max"/"average"/"latest": {"value": 110, "diastolic": 70, "unit": "mmHg"},
-///         "trend": "rising" | "falling" | "steady",
-///         "per_day": [{"date": "YYYY-MM-DD", "value": 120, "diastolic": 80}]
-///       }
-///     }
-///   } | null
-/// }
-/// ```
+/// **Field-name fix, 2026-10-22 (real bug, found and reported by Sarim
+/// against the real `analytics_contract.md` on `dev` — see her "FOUND,
+/// 22 Oct" note in `Humsafar_Progress_Tracker.md`):** this screen was
+/// first built from a written contract summary, not the contract file
+/// itself. Confirmed renames (adherence section): `rate`→`rate_percent`,
+/// `streak_days`→`perfect_days_in_a_row`, `per_day`→`daily`,
+/// `per_medicine`→`by_medicine`, `medicine_name`→`drug_name` (within
+/// each `by_medicine` entry), and `change_vs_previous_period` split into
+/// two separate fields, `change` and `change_points`. Confirmed
+/// structural change (vitals section): `metrics` is a **list** of
+/// `{"metric_type": ..., ...}` objects, not a map keyed by metric type;
+/// each entry's own fields include the rename `average`→`avg`.
+///
+/// **Named assumptions (not independently confirmed against the
+/// contract file — flagged for Abdullah/Talha, same spirit as the
+/// now-resolved 6.9 caveat this one replaces):**
+/// (1) a `by_medicine` entry's own rate field is assumed renamed
+/// `rate`→`rate_percent` too, for naming consistency with the top-level
+/// field of the same meaning — Sarim's note did not separately confirm
+/// this nested occurrence; (2) `change`/`change_points`: since
+/// `rate_percent`'s name implies it is already a direct percent number
+/// (not a 0-1 fraction), `change_points` is assumed likewise
+/// percent-point-scaled and ready to display (e.g. `3`, not `0.03`) —
+/// this screen uses only `change_points` for the "change vs previous"
+/// figure; `change` is read but not displayed (possibly a direction
+/// string — left unused rather than guessed); (3) the vitals section's
+/// own per-metric `per_day` is assumed renamed to `daily` too, matching
+/// the adherence-level rename of the same field name, though Sarim's
+/// note named the rename once without saying whether it covers both
+/// occurrences.
+///
 /// (the per-point `value`/`diastolic`/`unit` shape mirrors
 /// `vitals_contract.md`'s own reading object, reused here rather than
 /// invented fresh — `vitals_screen.dart`'s `_valueLine` does the same
 /// "blood_pressure needs a second number" branch this screen's
-/// `_pointValueLine` does.) If the real field names differ, only the
-/// parsing in `_load()`/`_pointValueLine` below needs adjusting — the
-/// screen's loading/empty/chart states don't depend on the exact names.
+/// `_pointValueLine` does — this part was not flagged by Sarim and is
+/// left as-is.) If any assumption above is wrong, only the parsing in
+/// `_load()`/`_buildAdherenceSection()`/`_metricByType()`/
+/// `_buildVitalsMetricDetail()` below needs adjusting — the screen's
+/// loading/empty/chart states don't depend on the exact names.
 ///
 /// **Named scope cuts:** no export/PDF download here — that is Task
 /// 7.2's `reports_contract.md` (scheduled/manual summary PDFs), which no
@@ -79,7 +85,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
   int _days = 30;
   String _selectedVitalsMetric = 'blood_pressure';
   Map<String, dynamic>? _adherence;
-  Map<String, dynamic>? _vitalsMetrics;
+  List<Map<String, dynamic>>? _vitalsMetrics;
   bool _isLoading = true;
   String? _loadError;
 
@@ -103,7 +109,8 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
       final data = response.data ?? <String, dynamic>{};
       setState(() {
         _adherence = data['adherence'] as Map<String, dynamic>?;
-        _vitalsMetrics = (data['vitals'] as Map<String, dynamic>?)?['metrics'] as Map<String, dynamic>?;
+        final metricsList = (data['vitals'] as Map<String, dynamic>?)?['metrics'] as List<dynamic>?;
+        _vitalsMetrics = metricsList?.cast<Map<String, dynamic>>();
       });
     } on ApiException catch (e) {
       if (!mounted) return;
@@ -179,14 +186,14 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
         child: Padding(padding: const EdgeInsets.all(16), child: Text(l10n.adherenceAccessDeniedMessage)),
       );
     }
-    final rate = (adherence['rate'] as num?)?.toDouble();
+    final ratePercent = (adherence['rate_percent'] as num?)?.toDouble();
     final taken = adherence['taken'] as int? ?? 0;
     final missed = adherence['missed'] as int? ?? 0;
     final waiting = adherence['waiting'] as int? ?? 0;
-    final streakDays = adherence['streak_days'] as int? ?? 0;
-    final change = (adherence['change_vs_previous_period'] as num?)?.toDouble();
-    final perDay = (adherence['per_day'] as List<dynamic>? ?? []).cast<Map<String, dynamic>>();
-    final perMedicine = (adherence['per_medicine'] as List<dynamic>? ?? []).cast<Map<String, dynamic>>();
+    final streakDays = adherence['perfect_days_in_a_row'] as int? ?? 0;
+    final changePoints = (adherence['change_points'] as num?)?.toDouble();
+    final perDay = (adherence['daily'] as List<dynamic>? ?? []).cast<Map<String, dynamic>>();
+    final perMedicine = (adherence['by_medicine'] as List<dynamic>? ?? []).cast<Map<String, dynamic>>();
 
     return Card(
       child: Padding(
@@ -200,7 +207,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
               spacing: 16,
               runSpacing: 4,
               children: [
-                if (rate != null) Text('${l10n.adherenceRateLabel}: ${_formatPercent(rate)}'),
+                if (ratePercent != null) Text('${l10n.adherenceRateLabel}: ${_formatPercentValue(ratePercent)}'),
                 Text('${l10n.adherenceTakenLabel}: $taken'),
                 Text('${l10n.adherenceMissedLabel}: $missed'),
                 Text('${l10n.adherenceWaitingLabel}: $waiting'),
@@ -213,14 +220,14 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
               SizedBox(height: 140, child: _buildAdherenceChart(perDay)),
             const SizedBox(height: 8),
             Text(l10n.adherenceStreakLabel(streakDays)),
-            if (change != null) ...[
+            if (changePoints != null) ...[
               const SizedBox(height: 4),
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(change >= 0 ? Icons.arrow_upward : Icons.arrow_downward, size: 16),
+                  Icon(changePoints >= 0 ? Icons.arrow_upward : Icons.arrow_downward, size: 16),
                   const SizedBox(width: 4),
-                  Text('${l10n.adherenceChangeVsPreviousLabel}: ${_formatPercent(change.abs())}'),
+                  Text('${l10n.adherenceChangeVsPreviousLabel}: ${_formatPercentValue(changePoints.abs())}'),
                 ],
               ),
             ],
@@ -229,11 +236,13 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
               Text(l10n.adherencePerMedicineHeader, style: Theme.of(context).textTheme.titleSmall),
               const SizedBox(height: 4),
               ...perMedicine.map((medicine) {
-                final name = medicine['medicine_name'] as String? ?? '';
-                final medicineRate = (medicine['rate'] as num?)?.toDouble();
+                final name = medicine['drug_name'] as String? ?? '';
+                // Assumed renamed the same way as the top-level field —
+                // see the class doc comment's named-assumption note.
+                final medicineRate = (medicine['rate_percent'] as num?)?.toDouble();
                 return Padding(
                   padding: const EdgeInsets.symmetric(vertical: 2),
-                  child: Text(medicineRate == null ? name : '$name · ${_formatPercent(medicineRate)}'),
+                  child: Text(medicineRate == null ? name : '$name · ${_formatPercentValue(medicineRate)}'),
                 );
               }),
             ],
@@ -273,7 +282,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
       );
     }
     final selected = _selectedVitalsMetric;
-    final data = metrics[selected] as Map<String, dynamic>?;
+    final data = _metricByType(metrics, selected);
 
     return Card(
       child: Padding(
@@ -304,14 +313,25 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
     );
   }
 
+  /// `metrics` is now a list (see the class doc comment's field-name
+  /// fix) — find the one entry whose `metric_type` matches, if any.
+  Map<String, dynamic>? _metricByType(List<Map<String, dynamic>> metrics, String metricType) {
+    for (final metric in metrics) {
+      if (metric['metric_type'] == metricType) return metric;
+    }
+    return null;
+  }
+
   Widget _buildVitalsMetricDetail(AppLocalizations l10n, String metric, Map<String, dynamic> data) {
     final count = data['count'] as int? ?? 0;
     final min = data['min'] as Map<String, dynamic>?;
     final max = data['max'] as Map<String, dynamic>?;
-    final average = data['average'] as Map<String, dynamic>?;
+    final average = data['avg'] as Map<String, dynamic>?;
     final latest = data['latest'] as Map<String, dynamic>?;
     final trend = data['trend'] as String?;
-    final perDay = (data['per_day'] as List<dynamic>? ?? []).cast<Map<String, dynamic>>();
+    // Assumed renamed the same way as the adherence-level field of the
+    // same name — see the class doc comment's named-assumption note.
+    final perDay = (data['daily'] as List<dynamic>? ?? []).cast<Map<String, dynamic>>();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -379,5 +399,9 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
     }
   }
 
-  String _formatPercent(double value) => '${(value * 100).round()}%';
+  /// `rate_percent`/`change_points` are already percent-scaled per the
+  /// real contract (see the class doc comment's field-name fix) — no
+  /// `* 100` here, unlike the old pre-fix fields this replaces (which
+  /// were assumed to be 0-1 fractions, matching the old field names).
+  String _formatPercentValue(num value) => '${value.round()}%';
 }

@@ -1,8 +1,9 @@
 // Task 6.9 — TC-6.9-04..12. Guardian-side camera screen (UI-only slice:
 // exercises the real pairing/watch-session calls, but doesn't render
 // actual video — see camera_screen.dart's own doc comment for why).
-// Same named field-name caveat as that file: built from the written
-// contract summary, not a fresh read of `camera_contract.md` itself.
+// Mocks updated 2026-10-22 to the real field names (`paired` bool,
+// `viewers_now` from the plain `/camera` endpoint rather than a
+// viewer-count field on `/camera/stream`) per that file's field-name fix.
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -31,7 +32,7 @@ Finder _outlinedButtonWithText(String text) =>
 
 void main() {
   testWidgets('TC-6.9-04: not_paired shows the placeholder, no Start Watching button', (tester) async {
-    final fakeClient = FakeApiClient(getHandler: (_) => {'status': 'not_paired'});
+    final fakeClient = FakeApiClient(getHandler: (_) => {'paired': false});
     await tester.pumpWidget(wrapWithRouter(fakeClient: fakeClient, initialLocation: '/camera-under-test', routes: _routes()));
     await tester.pumpAndSettle();
 
@@ -50,8 +51,8 @@ void main() {
 
   testWidgets('TC-6.9-06: paired + Start Watching shows the watching placeholder and viewer count', (tester) async {
     final fakeClient = FakeApiClient(getHandler: (path) {
-      if (path.endsWith('/camera/stream')) return {'viewer_count': 2};
-      return {'status': 'paired'};
+      if (path.endsWith('/camera/stream')) return <String, dynamic>{};
+      return {'paired': true, 'viewers_now': 2};
     });
     await tester.pumpWidget(wrapWithRouter(fakeClient: fakeClient, initialLocation: '/camera-under-test', routes: _routes()));
     await tester.pumpAndSettle();
@@ -71,8 +72,8 @@ void main() {
 
   testWidgets('TC-6.9-07: Stop Watching DELETEs the session and returns to the start prompt', (tester) async {
     final fakeClient = FakeApiClient(getHandler: (path) {
-      if (path.endsWith('/camera/stream')) return {'viewer_count': 1};
-      return {'status': 'paired'};
+      if (path.endsWith('/camera/stream')) return <String, dynamic>{};
+      return {'paired': true, 'viewers_now': 1};
     });
     await tester.pumpWidget(wrapWithRouter(fakeClient: fakeClient, initialLocation: '/camera-under-test', routes: _routes()));
     await tester.pumpAndSettle();
@@ -90,7 +91,7 @@ void main() {
   testWidgets('TC-6.9-08: CAMERA_NOT_PAIRED on start-watching shows the mapped message', (tester) async {
     final fakeClient = FakeApiClient(getHandler: (path) {
       if (path.endsWith('/camera/stream')) throw const ApiException(code: 'CAMERA_NOT_PAIRED', message: 'raw');
-      return {'status': 'paired'};
+      return {'paired': true};
     });
     await tester.pumpWidget(wrapWithRouter(fakeClient: fakeClient, initialLocation: '/camera-under-test', routes: _routes()));
     await tester.pumpAndSettle();
@@ -104,7 +105,7 @@ void main() {
   testWidgets('TC-6.9-09: CAMERA_OFFLINE on start-watching shows the mapped message', (tester) async {
     final fakeClient = FakeApiClient(getHandler: (path) {
       if (path.endsWith('/camera/stream')) throw const ApiException(code: 'CAMERA_OFFLINE', message: 'raw');
-      return {'status': 'paired'};
+      return {'paired': true};
     });
     await tester.pumpWidget(wrapWithRouter(fakeClient: fakeClient, initialLocation: '/camera-under-test', routes: _routes()));
     await tester.pumpAndSettle();
@@ -118,7 +119,7 @@ void main() {
   testWidgets('TC-6.9-10: MODULE_ACCESS_DENIED on start-watching shows the mapped message', (tester) async {
     final fakeClient = FakeApiClient(getHandler: (path) {
       if (path.endsWith('/camera/stream')) throw const ApiException(code: 'MODULE_ACCESS_DENIED', message: 'raw');
-      return {'status': 'paired'};
+      return {'paired': true};
     });
     await tester.pumpWidget(wrapWithRouter(fakeClient: fakeClient, initialLocation: '/camera-under-test', routes: _routes()));
     await tester.pumpAndSettle();
@@ -132,7 +133,7 @@ void main() {
   testWidgets('TC-6.9-11: MAX_VIEWERS_REACHED on start-watching shows the mapped message', (tester) async {
     final fakeClient = FakeApiClient(getHandler: (path) {
       if (path.endsWith('/camera/stream')) throw const ApiException(code: 'MAX_VIEWERS_REACHED', message: 'raw');
-      return {'status': 'paired'};
+      return {'paired': true};
     });
     await tester.pumpWidget(wrapWithRouter(fakeClient: fakeClient, initialLocation: '/camera-under-test', routes: _routes()));
     await tester.pumpAndSettle();
@@ -144,7 +145,7 @@ void main() {
   });
 
   testWidgets('TC-6.9-12: the Saved Clips icon navigates to the clips screen', (tester) async {
-    final fakeClient = FakeApiClient(getHandler: (_) => {'status': 'paired'});
+    final fakeClient = FakeApiClient(getHandler: (_) => {'paired': true});
     await tester.pumpWidget(wrapWithRouter(fakeClient: fakeClient, initialLocation: '/camera-under-test', routes: _routes()));
     await tester.pumpAndSettle();
 

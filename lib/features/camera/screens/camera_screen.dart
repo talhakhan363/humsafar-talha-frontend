@@ -22,17 +22,30 @@ import '../../../shared/widgets/language_switch_button.dart';
 /// a follow-up task of its own once 6.10's hardware exists, not silently
 /// skipped — named here rather than hidden.
 ///
-/// **Named field-name caveat (flagged for Abdullah/Talha to confirm):**
-/// same caveat as `camera_viewing_banner.dart` — built from the written
-/// contract summary, not a fresh read of `camera_contract.md` itself.
-/// Assumed shapes:
-/// - `GET /dependents/{id}/camera` → `{"status": "not_paired"|"paired"}`
+/// **Field-name fix, 2026-10-22 (real bug, found and reported by Sarim
+/// against the real `camera_contract.md` on `dev`):** this screen was
+/// first built from a written contract summary, not the contract file
+/// itself. The real shapes:
+/// - `GET /dependents/{id}/camera` → `{"paired": bool, "online": bool,
+///   "viewers_now": int, "max_viewers": int}` — NOT `{"status": ...}`.
 /// - `GET /dependents/{id}/camera/stream` (start/renew a watch session)
-///   → `{"viewer_count": int?}` on success; errors mapped below.
-/// - `DELETE /dependents/{id}/camera/stream` (stop watching).
-/// If the real field names differ, only the three methods below need
-/// adjusting — the screen's states/tests don't depend on the exact
-/// names.
+///   → carries no viewer count at all; errors mapped below.
+/// - `DELETE /dependents/{id}/camera/stream` (stop watching) — unchanged.
+///
+/// Fixed below: pairing is now a bool (`_isPaired`), not a string
+/// status. Since `/camera/stream` doesn't return a viewer count, the
+/// live count shown while watching is read from `GET /dependents/{id}/
+/// camera`'s `viewers_now` instead — fetched once right after starting
+/// to watch, then refreshed alongside each 30s session renewal. This
+/// means the displayed count can lag the real one by up to the renew
+/// interval, same as the renewal itself already could; named here as a
+/// real but minor tradeoff, not silently assumed to be exact. `online`
+/// and `max_viewers` are read but not yet surfaced in the UI — this
+/// screen never showed either before the fix, so that's not a new gap.
+///
+/// If any of these shapes still don't match, only the methods below
+/// need adjusting — the screen's states/tests don't depend on the exact
+/// field names, just on what they decode to.
 class CameraScreen extends ConsumerStatefulWidget {
   const CameraScreen({super.key, required this.dependentId, required this.dependentLabel});
 
@@ -49,7 +62,7 @@ class _CameraScreenState extends ConsumerState<CameraScreen> {
 
   bool _isLoadingPairing = true;
   String? _pairingLoadError;
-  String _pairingStatus = 'not_paired';
+  bool _isPaired = false;
 
   bool _isStartingOrStopping = false;
   bool _isWatching = false;
@@ -79,7 +92,7 @@ class _CameraScreenState extends ConsumerState<CameraScreen> {
           await ref.read(apiClientProvider).get<Map<String, dynamic>>('/dependents/${widget.dependentId}/camera');
       if (!mounted) return;
       setState(() {
-        _pairingStatus = (response.data?['status'] as String?) ?? 'not_paired';
+        _isPaired = (response.data?['paired'] as bool?) ?? false;
         _isLoadingPairing = false;
       });
     } on ApiException catch (e) {
@@ -113,20 +126,31 @@ class _CameraScreenState extends ConsumerState<CameraScreen> {
       _watchError = null;
     });
     try {
-      final response = await ref
-          .read(apiClientProvider)
-          .get<Map<String, dynamic>>('/dependents/${widget.dependentId}/camera/stream');
+      await ref.read(apiClientProvider).get<Map<String, dynamic>>('/dependents/${widget.dependentId}/camera/stream');
       if (!mounted) return;
-      setState(() {
-        _isWatching = true;
-        _viewerCount = response.data?['viewer_count'] as int?;
-      });
+      setState(() => _isWatching = true);
+      await _refreshViewerCount();
       _renewTimer = Timer.periodic(_renewInterval, (_) => _renewWatching());
     } on ApiException catch (e) {
       if (!mounted) return;
       setState(() => _watchError = _messageFor(e));
     } finally {
       if (mounted) setState(() => _isStartingOrStopping = false);
+    }
+  }
+
+  /// `/camera/stream` carries no viewer count (see the class doc
+  /// comment's field-name fix) — the count shown while watching comes
+  /// from this separate, best-effort read of the pairing-status
+  /// endpoint's `viewers_now` instead.
+  Future<void> _refreshViewerCount() async {
+    try {
+      final response =
+          await ref.read(apiClientProvider).get<Map<String, dynamic>>('/dependents/${widget.dependentId}/camera');
+      if (!mounted) return;
+      setState(() => _viewerCount = response.data?['viewers_now'] as int?);
+    } on ApiException {
+      // best-effort — see doc comment above and _renewWatching below.
     }
   }
 
@@ -137,14 +161,11 @@ class _CameraScreenState extends ConsumerState<CameraScreen> {
   /// background timer silently kicking the Guardian out.
   Future<void> _renewWatching() async {
     try {
-      final response = await ref
-          .read(apiClientProvider)
-          .get<Map<String, dynamic>>('/dependents/${widget.dependentId}/camera/stream');
-      if (!mounted) return;
-      setState(() => _viewerCount = response.data?['viewer_count'] as int?);
+      await ref.read(apiClientProvider).get<Map<String, dynamic>>('/dependents/${widget.dependentId}/camera/stream');
     } on ApiException {
       // best-effort, see doc comment above
     }
+    await _refreshViewerCount();
   }
 
   Future<void> _stopWatching() async {
@@ -204,7 +225,7 @@ class _CameraScreenState extends ConsumerState<CameraScreen> {
         ),
       );
     }
-    if (_pairingStatus != 'paired') {
+    if (!_isPaired) {
       return Center(
         child: Padding(
           padding: const EdgeInsets.all(24.0),
