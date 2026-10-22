@@ -1,4 +1,28 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Task 4.7 — latent bug caught while adding this task's own
+         permissions: INTERNET was declared only in the debug/profile
+         manifests (android/app/src/debug and .../profile), which is
+         normal Flutter-template boilerplate for the tooling's own VM
+         service connection — NOT a substitute for declaring it here.
+         Every real-device run so far has used `flutter run` (debug),
+         so this app's actual networking (every `dio` call in this
+         codebase) has been working by accident of which manifest was
+         active; a release build would have had no network access at
+         all. Flagged, not silently fixed only here — see
+         test_cases/TEST_CASE_LOG.md's "Open cross-cutting items" for
+         this task. -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!-- Task 4.7 — zego_uikit_prebuilt_call's own documented Android
+         requirements (community quick-start guide, since the official
+         docs' own "Configure your project" section didn't list these
+         explicitly — see pubspec.yaml's comment on this dependency for
+         the full version-floor research). CAMERA and RECORD_AUDIO
+         below are already declared for Tasks 2.5/4.8. -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.CAMERA" />
     <!-- Task 2.7 — background location service. Foreground-only location
          (FR-C1 / the handbook both scope this to "while the app is

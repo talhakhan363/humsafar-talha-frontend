@@ -60,6 +60,19 @@
 // but TC-5.8-11 and TC-6.8-17 already use `scrollUntilVisible`, which is
 // a no-op if the target is still on-screen, so neither needed a direct
 // change.
+//
+// Extended for Task 4.7 (2026-10-22) — TC-4.7-18, the new "Call" button
+// (inserted right after Message, before Camera). One test, same
+// "one test per button" compacting as the 5.6/5.7/5.8/6.8/7.3
+// extensions above — this button isn't the privacy-sensitive one of
+// its own batch (that distinction stays with Camera). Defensively
+// added `scrollUntilVisible` to TC-6.9-17/18 (Camera's own two tests),
+// since inserting Call one slot above Camera is exactly the same
+// lazy-build/viewport risk the 2026-10-22 fix note above already
+// names — Camera was previously the second button and always safely
+// on-screen, but isn't guaranteed to stay that way now that something
+// else sits above it. `scrollUntilVisible` is a no-op if Camera is
+// still on-screen, so this costs nothing either way.
 
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -86,6 +99,7 @@ List<GoRoute> _routes() => [
       ),
       GoRoute(path: '/guardian/emergency-settings', builder: (_, __) => stubScreen('EMERGENCY_SETTINGS_STUB')),
       GoRoute(path: '/messages/chat', builder: (_, __) => stubScreen('CHAT_STUB')),
+      GoRoute(path: '/calls/outgoing', builder: (_, __) => stubScreen('OUTGOING_CALL_STUB')),
       GoRoute(path: '/guardian/camera', builder: (_, __) => stubScreen('CAMERA_STUB')),
       GoRoute(path: '/records', builder: (_, __) => stubScreen('RECORDS_STUB')),
       GoRoute(path: '/appointments', builder: (_, __) => stubScreen('APPOINTMENTS_STUB')),
@@ -169,6 +183,11 @@ void main() {
     ));
     await tester.pumpAndSettle();
 
+    // Defensive scroll — see the Task 4.7 extension note in this file's
+    // header comment. No-op if already on-screen.
+    await tester.scrollUntilVisible(find.text('Camera'), 300, scrollable: find.byType(Scrollable).first);
+    await tester.pumpAndSettle();
+
     expect(find.text('Camera'), findsOneWidget);
   });
 
@@ -181,10 +200,39 @@ void main() {
     ));
     await tester.pumpAndSettle();
 
+    // Defensive scroll — see the Task 4.7 extension note in this file's
+    // header comment. No-op if already on-screen.
+    await tester.scrollUntilVisible(find.text('Camera'), 300, scrollable: find.byType(Scrollable).first);
+    await tester.pumpAndSettle();
+
     await tester.tap(find.text('Camera'));
     await tester.pumpAndSettle();
 
     expect(find.text('CAMERA_STUB'), findsOneWidget);
+  });
+
+  testWidgets('TC-4.7-18: tapping Call + "Voice call" starts an outgoing voice call to this Dependent', (tester) async {
+    final fakeClient = FakeApiClient(getHandler: (_) => <dynamic>[]);
+    await tester.pumpWidget(wrapWithRouter(
+      fakeClient: fakeClient,
+      initialLocation: '/guardian/dependent-detail',
+      routes: _routes(),
+    ));
+    await tester.pumpAndSettle();
+
+    // Same lazy-build/viewport reasoning as this file's other scrolls.
+    await tester.scrollUntilVisible(find.text('Call'), 300, scrollable: find.byType(Scrollable).first);
+    await tester.pumpAndSettle();
+
+    expect(find.text('Call'), findsOneWidget);
+    await tester.tap(find.text('Call'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Voice call'), findsOneWidget);
+    await tester.tap(find.text('Voice call'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('OUTGOING_CALL_STUB'), findsOneWidget);
   });
 
   testWidgets('TC-5.6-20: Medical records shows and navigates to /records', (tester) async {

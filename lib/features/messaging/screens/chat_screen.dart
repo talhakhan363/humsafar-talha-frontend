@@ -5,6 +5,7 @@ import 'dart:typed_data';
 import 'package:dio/dio.dart' show ResponseType;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:humsafar_frontend/l10n/app_localizations.dart';
 
 import '../../../core/audio/audio_providers.dart';
@@ -14,6 +15,7 @@ import '../../../core/network/providers.dart';
 import '../../../core/scheduling/schedule_helpers.dart';
 import '../../../shared/widgets/accessibility_toggle_button.dart';
 import '../../../shared/widgets/language_switch_button.dart';
+import '../../calls/widgets/call_type_picker.dart';
 import '../models/chat_message.dart';
 import '../widgets/voice_recorder_sheet.dart';
 
@@ -32,8 +34,17 @@ import '../widgets/voice_recorder_sheet.dart';
 /// older, so they're appended at the end of the list (which is the
 /// visual *top*, where the "Load earlier messages" button also lives).
 ///
+/// Task 4.7 (2026-10-22): added a Guardian-only "Call" AppBar icon
+/// (mockup 17b's call bar, simplified to one icon + a Voice/Video
+/// picker rather than a dedicated bar — see `call_type_picker.dart`),
+/// opening `OutgoingCallScreen`. A Dependent never sees it — same
+/// "only a Guardian initiates" shape as the mic button above, inferred
+/// from the mockup set (17d-17f are Guardian-side, 25d is only
+/// "Incoming call") since `call_contract.md` itself hasn't been read
+/// fresh in this sandbox — flagged alongside this task's other named
+/// field-name caveats, see `outgoing_call_screen.dart`'s doc comment.
+///
 /// Named scope cuts (flagged, not silently dropped):
-/// - **No "Call" bar** (mockup 25b) — Task 4.7 hasn't shipped.
 /// - **Playing a received urgent voice message does not call
 ///   `POST /notifications/{id}/acknowledge`.** The chat message object
 ///   has no `notification_id` on it (only the *notification* carries
@@ -191,6 +202,12 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     }
   }
 
+  Future<void> _startCall() async {
+    final isVideo = await showCallTypePicker(context);
+    if (isVideo == null || !mounted) return;
+    context.push('/calls/outgoing', extra: {'calleeId': widget.peerId, 'calleeName': widget.peerName, 'isVideo': isVideo});
+  }
+
   Future<void> _openVoiceRecorder() async {
     final result = await showModalBottomSheet<ChatMessage>(
       context: context,
@@ -239,7 +256,11 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.peerName),
-        actions: const [LanguageSwitchButton(), AccessibilityToggleButton()],
+        actions: [
+          if (isGuardian) IconButton(onPressed: _startCall, icon: const Icon(Icons.call), tooltip: l10n.callButtonTooltip),
+          const LanguageSwitchButton(),
+          const AccessibilityToggleButton(),
+        ],
       ),
       body: Column(
         children: [

@@ -141,9 +141,17 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 /// above. One extra tap from the inbox to the right thread is well
 /// within NFR-07's budget.
 ///
-/// Types with no screen yet (`incoming_call`, `appointment_update`,
-/// `appointment_reminder` — Phase 4.7/5, not built) still return null:
-/// the app still opens normally, just without a deep link.
+/// Types with no screen yet (`appointment_update`, `appointment_reminder`
+/// — Phase 5, not built) still return null: the app still opens
+/// normally, just without a deep link.
+///
+/// `incoming_call` (Task 4.7) is deliberately NOT handled here even
+/// though it's now built — it needs more than a route string (a call
+/// id, caller name, and video/voice flag from the push's own `data`),
+/// which doesn't fit this function's plain `String?` signature. See
+/// [incomingCallPushData] below, which `main.dart`'s
+/// `_handleNotificationTap` checks first, before falling back to this
+/// function for every other type.
 String? routeForNotificationType(String? type) {
   switch (type) {
     case 'geofence_breach':
@@ -169,6 +177,29 @@ String? routeForNotificationType(String? type) {
     default:
       return null;
   }
+}
+
+/// Task 4.7 — parses an `incoming_call` push's `data` into what
+/// `IncomingCallScreen` needs, or `null` if this isn't that type (or is
+/// missing the one field that actually matters, `call_id`). Kept as its
+/// own small pure function for the same "unit-testable without
+/// Firebase/BuildContext" reason [routeForNotificationType] is pure.
+///
+/// **Named field-name caveat** (same as the rest of Task 4.7 — see
+/// `outgoing_call_screen.dart`'s doc comment for the full one): assumed
+/// push `data` shape `{"type": "incoming_call", "call_id": ...,
+/// "caller_name": ..., "call_type": "video"|"voice"}`. If the real
+/// `notification_contract.md`/`call_contract.md` field names differ,
+/// only this function needs adjusting.
+Map<String, dynamic>? incomingCallPushData(Map<String, dynamic> data) {
+  if (data['type'] != 'incoming_call') return null;
+  final callId = data['call_id'] as String?;
+  if (callId == null) return null;
+  return {
+    'callId': callId,
+    'callerName': data['caller_name'] as String? ?? '',
+    'isVideo': data['call_type'] == 'video',
+  };
 }
 
 final pushServiceProvider = Provider<PushService>((ref) => PushService());

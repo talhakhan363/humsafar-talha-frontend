@@ -595,5 +595,22 @@
   "vitalsTrendFalling": "گر رہا ہے",
   "vitalsTrendSteady": "مستحکم",
   "noVitalsTrendDataMessage": "اس عرصے کے لیے ابھی تک وائٹلز کا کوئی ڈیٹا نہیں ہے۔",
-  "bloodPressureChartSystolicOnlyNote": "چارٹ صرف سسٹولک (اوپر والا) نمبر دکھاتا ہے۔"
+  "bloodPressureChartSystolicOnlyNote": "چارٹ صرف سسٹولک (اوپر والا) نمبر دکھاتا ہے۔",
+  "callDependentButtonLabel": "کال",
+  "callButtonTooltip": "کال",
+  "voiceCallOption": "وائس کال",
+  "videoCallOption": "ویڈیو کال",
+  "callStartingLabel": "کال شروع ہو رہی ہے…",
+  "callRingingLabel": "کال کی جا رہی ہے…",
+  "callFailedMessage": "کال شروع نہیں ہو سکی۔ دوبارہ کوشش کریں۔",
+  "callDeclinedMessage": "کال مسترد کر دی گئی۔",
+  "callNoAnswerMessage": "کوئی جواب نہیں۔",
+  "callEndedMessage": "کال ختم ہو گئی۔",
+  "callScreenOkButton": "ٹھیک ہے",
+  "declineCallButton": "مسترد کریں",
+  "acceptCallButton": "قبول کریں",
+  "incomingVideoCallLabel": "آنے والی ویڈیو کال",
+  "incomingVoiceCallLabel": "آنے والی وائس کال",
+  "callConnectingLabel": "رابطہ ہو رہا ہے…",
+  "callAlreadyEndedMessage": "یہ کال پہلے ہی ختم ہو چکی ہے۔"
 }

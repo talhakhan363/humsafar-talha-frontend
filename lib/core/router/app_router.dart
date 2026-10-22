@@ -44,6 +44,9 @@ import '../../features/dependent/screens/share_id_screen.dart';
 import '../../features/camera/screens/camera_screen.dart';
 import '../../features/camera/screens/camera_clips_screen.dart';
 import '../../features/analytics/screens/analytics_screen.dart';
+import '../../features/calls/screens/outgoing_call_screen.dart';
+import '../../features/calls/screens/incoming_call_screen.dart';
+import '../../features/calls/screens/call_screen.dart';
 import '../guardian/dependent_summary.dart';
 
 // Task 1.8 — Navigation shell. Task 1.11 — added auth/KYC routes. Task 2.5
@@ -384,6 +387,62 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           return NoTransitionPage(
             key: state.pageKey,
             child: ChatScreen(peerId: args['peerId']!, peerName: args['peerName']!),
+          );
+        },
+      ),
+      // Task 4.7 — mockups 17d-17f (Guardian/caller side), 25d
+      // (Dependent/callee side). Three routes for the three phases: this
+      // app's own "Calling..."/"Incoming call" screens (see
+      // outgoing_call_screen.dart's doc comment for the named field-name
+      // caveat and why ZegoCloud's own Call Invitation UI isn't used),
+      // then `/calls/active` once both sides have a real join token.
+      // Role-neutral paths, like `/messages`/`/messages/chat` — either
+      // role can be the caller or the callee.
+      GoRoute(
+        path: '/calls/outgoing',
+        name: 'calls-outgoing',
+        pageBuilder: (context, state) {
+          final args = state.extra as Map<String, dynamic>;
+          return NoTransitionPage(
+            key: state.pageKey,
+            child: OutgoingCallScreen(
+              calleeId: args['calleeId'] as String,
+              calleeName: args['calleeName'] as String,
+              isVideo: args['isVideo'] as bool,
+            ),
+          );
+        },
+      ),
+      GoRoute(
+        path: '/calls/incoming',
+        name: 'calls-incoming',
+        pageBuilder: (context, state) {
+          final args = state.extra as Map<String, dynamic>;
+          return NoTransitionPage(
+            key: state.pageKey,
+            child: IncomingCallScreen(
+              callId: args['callId'] as String,
+              callerName: args['callerName'] as String,
+              isVideo: args['isVideo'] as bool,
+            ),
+          );
+        },
+      ),
+      GoRoute(
+        path: '/calls/active',
+        name: 'calls-active',
+        pageBuilder: (context, state) {
+          final args = state.extra as Map<String, dynamic>;
+          return NoTransitionPage(
+            key: state.pageKey,
+            child: CallScreen(
+              callId: args['callId'] as String,
+              appId: args['appId'] as int,
+              token: args['token'] as String,
+              userId: args['userId'] as String,
+              userName: args['userName'] as String,
+              isVideo: args['isVideo'] as bool,
+            ),
           );
         },
       ),

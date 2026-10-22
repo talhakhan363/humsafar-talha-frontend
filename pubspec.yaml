@@ -82,6 +82,13 @@ dependencies:
   # for Talha's installed 3.32.1; 11.0.3 only needs >=3.22.0 and exposes
   # the identical pickFiles API this code uses.
   file_picker: ^11.0.3
+  #
+  # Task 4.7 fix, 2026-10-22 (Talha's real `flutter pub get` run): this
+  # declared ^11.0.3 is now force-overridden down to exactly 10.3.8 — see
+  # the `dependency_overrides` block at the bottom of this file and
+  # zego_uikit_prebuilt_call's own comment below for why. Left as
+  # ^11.0.3 here (not edited down directly) so this line still documents
+  # what the app would normally want; the override is what actually wins.
 
   # Tasks 5.6/5.7 — sharing the exported records/vitals PDF and the
   # doctor-link URL through the OS share sheet, instead of building an
@@ -107,27 +114,98 @@ dependencies:
   # Talha's installed 3.32.1.
   qr_flutter: ^4.1.0
 
-  # Fix #1, 2026-10-22: the first pin here, `^1.3.0`, failed to resolve —
-  # fl_chart 1.1.1+ declares vector_math ^2.2.0, which conflicted with
-  # flutter_test's own vector_math 2.1.4 pin. Pinned to exactly 1.1.0 to
-  # dodge that.
+  # Task 7.3 — Analytics dashboard. fl_chart draws the adherence bar
+  # chart and the vitals trend line chart. Same "pure Dart, no platform
+  # channel" reasoning as qr_flutter above (its only runtime
+  # dependencies are `equatable` and `vector_math` plus the Flutter SDK
+  # itself) — safe to render directly inside `flutter_test` widget
+  # tests, unlike every native plugin elsewhere in this app.
   #
-  # Fix #2, 2026-10-22: pub get then succeeded but compiling still failed
-  # — fl_chart 1.1.0's own code calls Matrix4.translateByDouble/
-  # scaleByDouble, which don't exist until vector_math 2.2.0. fl_chart's
-  # declared ^2.1.4 constraint is simply wrong (confirmed bug: github.com/
-  # imaNNeo/fl_chart issues #1985/#1986/#2046 — same error). No fl_chart
-  # version avoids this; the fix is forcing vector_math itself to 2.2.0
-  # via dependency_overrides below.
+  # Fix #1, 2026-10-22 (Talha's real `flutter pub get` run): the first
+  # pin here, `^1.3.0`, failed to resolve — `fl_chart` 1.1.1 onward
+  # declares `vector_math: ^2.2.0`, which `flutter pub get` can't
+  # satisfy alongside `flutter_test`'s own `vector_math: 2.1.4` pin.
+  # Pinned to exactly `1.1.0` to dodge that declared-constraint clash.
+  #
+  # Fix #2, 2026-10-22 (Talha's real `flutter test` run, same day): pub
+  # get succeeded, but compiling still failed — fl_chart 1.1.0's own
+  # `custom_interactive_viewer.dart` CALLS `Matrix4.translateByDouble`/
+  # `scaleByDouble`, which don't exist until `vector_math` 2.2.0 (added
+  # in that release; see pub.dev/packages/vector_math/changelog). So
+  # fl_chart 1.1.0's declared `vector_math: ^2.1.4` constraint was
+  # simply wrong — its actual code already needs 2.2.0+, confirmed as a
+  # known fl_chart bug (github.com/imaNNeo/fl_chart issues #1985/#1986/
+  # #2046, same error, same version). No older/newer fl_chart avoids
+  # this — the fix is forcing `vector_math` itself to 2.2.0 via
+  # `dependency_overrides` below (confirmed by multiple reporters on
+  # those issues); `vector_math` 2.2.0's own changelog describes the
+  # change as additive ("new members added"), not breaking, so this
+  # shouldn't put `flutter_test` at risk. fl_chart can stay at `1.1.0`
+  # exactly — no need to also bump it now that the real constraint
+  # (vector_math) is satisfied directly.
   fl_chart: 1.1.0
+
+  # Task 4.7 — Voice/video call UI. zego_uikit_prebuilt_call is
+  # ZegoCloud's prebuilt Flutter Call UIKit — the actual video/audio
+  # widget is dropped in as-is (`call_screen.dart`); everything else
+  # (starting/accepting/declining, this app's own "Calling.../Incoming
+  # call" screens) is plain Dart against `call_contract.md`, not part of
+  # this SDK. This app's first native-SDK dependency, by far the
+  # highest-risk pin in this file so far — flagged in detail:
+  #
+  # Version floor risk (2026-10-22, could not be confirmed without a
+  # real `flutter pub get` — same category of risk that caused the real
+  # fl_chart failures above, named here up front instead of guessed
+  # silently): the package's CURRENT published version (4.24.6,
+  # 2026-10-22) declares `environment.flutter: '>=3.44.0'` — newer than
+  # Talha's installed Flutter 3.32.1, confirmed from its GitHub
+  # pubspec.yaml. Its changelog states this floor was raised specifically
+  # in 4.24.6 ("Require Dart 3.12.0, Flutter 3.44.0...") — no earlier
+  # changelog entry mentions a Flutter-version bump, and 4.16.24 notes
+  # only a "Flutter 3.29.0 Adaptation", suggesting whatever floor was set
+  # around then stayed unchanged through 4.24.5. Pinned to the last
+  # version before that bump, exactly (not `^4.24.5`, same "don't let pub
+  # resolve forward into the next breaking version" reasoning as
+  # `fl_chart: 1.1.0` above) — but this is inferred from changelog
+  # wording, not a confirmed `environment.flutter` read of 4.24.5's own
+  # pubspec.yaml (pub.dev's pages didn't expose it to this sandbox's
+  # tooling). If `flutter pub get` still fails on this line, that's the
+  # first thing to suspect — send the real error and an older/newer exact
+  # pin is a quick follow-up, same as the fl_chart round above.
+  #
+  # Also unverified: this package pulls in roughly two dozen transitive
+  # packages of its own (ZEGOCLOUD's `zego_uikit`/`zego_plugin_adapter`,
+  # plus `permission_handler` and others) — any one of them could, in
+  # principle, hit the same "declared constraint doesn't match real
+  # code" bug fl_chart's `vector_math` dependency did. Not something this
+  # sandbox (no `flutter` binary) can rule out in advance.
+  #
+  # Auth: constructed with `token:` (not `appSign:`), confirmed from the
+  # package's own published API reference — logs in with `appID` (public,
+  # fine to embed) + a per-call `token` our backend generates server-side
+  # (Task 4.4b). The ZegoCloud Server Secret never ships in this app.
+  zego_uikit_prebuilt_call: 4.24.5
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^4.0.0
 
+# Task 7.3 fix #2 (2026-10-22) — see fl_chart's comment above. Forces the
+# `vector_math` version flutter_test otherwise pins at `2.1.4` up to
+# `2.2.0`, which is what fl_chart 1.1.0's interactive-viewer code actually
+# needs to compile (a mismatch between fl_chart's declared constraint and
+# its real code — not something our own code can work around any other
+# way). Confirmed working by multiple reporters hitting this exact error
+# on fl_chart's own issue tracker.
 dependency_overrides:
   vector_math: 2.2.0
+  # Task 4.7 fix, 2026-10-22 — see zego_uikit_prebuilt_call's comment
+  # above. zego_uikit (its transitive dependency) pins file_picker to
+  # exactly 10.3.8; this app's own direct dependency wants ^11.0.3. This
+  # override forces 10.3.8 so both are satisfied by the same version,
+  # same mechanism as the vector_math line above.
+  file_picker: 10.3.8
 
 flutter:
   uses-material-design: true

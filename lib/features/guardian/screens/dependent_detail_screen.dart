@@ -8,6 +8,7 @@ import '../../../core/network/api_exception.dart';
 import '../../../core/network/providers.dart';
 import '../../../shared/widgets/accessibility_toggle_button.dart';
 import '../../../shared/widgets/language_switch_button.dart';
+import '../../calls/widgets/call_type_picker.dart';
 
 /// New screen for Task 2.5 Step E. Shows who is linked to a Dependent
 /// (GET /dependents/{id}/guardians, linkage_contract.md section 2) and the
@@ -51,6 +52,13 @@ import '../../../shared/widgets/language_switch_button.dart';
 /// combined endpoint returns `200` with a `null` section instead, so
 /// the permission gating happens inside that screen's own body, not
 /// via this button's placement.
+///
+/// Task 4.7 (2026-10-22): added "Call" right after Message — same
+/// "communication" family, skips `ChatScreen`/the inbox entirely (the
+/// peer is already known here), opens a Voice/Video picker
+/// (`call_type_picker.dart`, shared with `ChatScreen`'s own call
+/// button) then `OutgoingCallScreen`. See that screen's doc comment for
+/// the named field-name caveat on `call_contract.md`'s assumed shape.
 class DependentDetailScreen extends ConsumerStatefulWidget {
   const DependentDetailScreen({super.key, required this.summary});
 
@@ -88,6 +96,12 @@ class _DependentDetailScreenState extends ConsumerState<DependentDetailScreen> {
     } finally {
       if (mounted) setState(() => _isLoading = false);
     }
+  }
+
+  Future<void> _startCall(DependentSummary summary) async {
+    final isVideo = await showCallTypePicker(context);
+    if (isVideo == null || !mounted) return;
+    context.push('/calls/outgoing', extra: {'calleeId': summary.dependentId, 'calleeName': summary.email, 'isVideo': isVideo});
   }
 
   String _kycStatusLabel(AppLocalizations l10n, String status) {
@@ -167,6 +181,14 @@ class _DependentDetailScreenState extends ConsumerState<DependentDetailScreen> {
               onPressed: () => context.push('/messages/chat', extra: {'peerId': summary.dependentId, 'peerName': summary.email}),
               icon: const Icon(Icons.chat_bubble_outline),
               label: Text(l10n.messageButtonLabel),
+            ),
+            const SizedBox(height: 12),
+            // Task 4.7 — same "any Guardian can attempt" shape as
+            // Message above, skips ChatScreen entirely.
+            ElevatedButton.icon(
+              onPressed: () => _startCall(summary),
+              icon: const Icon(Icons.call_outlined),
+              label: Text(l10n.callDependentButtonLabel),
             ),
             const SizedBox(height: 12),
             // Task 6.9 — same shape as Live Map/Message above.

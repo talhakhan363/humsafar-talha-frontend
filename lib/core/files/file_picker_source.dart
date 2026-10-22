@@ -35,7 +35,7 @@ abstract class FilePickerSource {
 class PlatformFilePickerSource implements FilePickerSource {
   @override
   Future<PickedFileData?> pickFile({required List<String> allowedExtensions}) async {
-    final result = await FilePicker.pickFiles(
+    final result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowedExtensions: allowedExtensions,
       withData: true,

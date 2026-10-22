@@ -1,4 +1,10 @@
 // Task 4.6/4.8 — TC-4.6-07..17.
+//
+// Extended for Task 4.7 (2026-10-22) — TC-4.7-16/17, for the new
+// Guardian-only Call button in the AppBar. Added a stub route for
+// '/calls/outgoing' since that's as far as this screen's own
+// responsibility goes (see chat_screen.dart's doc comment and
+// outgoing_call_screen_test.dart for what happens past that point).
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -16,6 +22,7 @@ List<GoRoute> _routes() => [
         path: '/messages/chat',
         builder: (_, __) => const ChatScreen(peerId: 'dep-9', peerName: 'Ammi'),
       ),
+      GoRoute(path: '/calls/outgoing', builder: (_, __) => stubScreen('OUTGOING_CALL_STUB')),
     ];
 
 void main() {
@@ -364,5 +371,34 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('No messages yet. Say hello!'), findsOneWidget);
+  });
+
+  testWidgets('TC-4.7-16: a Guardian sees the Call button; tapping it + "Video call" starts an outgoing call', (tester) async {
+    final fakeClient = FakeApiClient(getHandler: (path) => path == '/messages' ? {'items': <dynamic>[], 'next_before': null} : <String, dynamic>{});
+    await tester.pumpWidget(wrapWithRouter(
+      fakeClient: fakeClient,
+      initialLocation: '/messages/chat',
+      routes: _routes(),
+      user: kTestGuardianUser,
+    ));
+    await tester.pumpAndSettle();
+
+    expect(find.byIcon(Icons.call), findsOneWidget);
+    await tester.tap(find.byIcon(Icons.call));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Video call'), findsOneWidget);
+    await tester.tap(find.text('Video call'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('OUTGOING_CALL_STUB'), findsOneWidget);
+  });
+
+  testWidgets('TC-4.7-17: a Dependent does not see the Call button', (tester) async {
+    final fakeClient = FakeApiClient(getHandler: (path) => path == '/messages' ? {'items': <dynamic>[], 'next_before': null} : <String, dynamic>{});
+    await tester.pumpWidget(wrapWithRouter(fakeClient: fakeClient, initialLocation: '/messages/chat', routes: _routes()));
+    await tester.pumpAndSettle();
+
+    expect(find.byIcon(Icons.call), findsNothing);
   });
 }

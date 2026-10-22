@@ -788,5 +788,22 @@
   "vitalsTrendFalling": "Falling",
   "vitalsTrendSteady": "Steady",
   "noVitalsTrendDataMessage": "No vitals data yet for this period.",
-  "bloodPressureChartSystolicOnlyNote": "Chart shows the systolic (top) number only."
+  "bloodPressureChartSystolicOnlyNote": "Chart shows the systolic (top) number only.",
+  "callDependentButtonLabel": "Call",
+  "callButtonTooltip": "Call",
+  "voiceCallOption": "Voice call",
+  "videoCallOption": "Video call",
+  "callStartingLabel": "Starting call…",
+  "callRingingLabel": "Calling…",
+  "callFailedMessage": "Couldn't start the call. Please try again.",
+  "callDeclinedMessage": "Call declined.",
+  "callNoAnswerMessage": "No answer.",
+  "callEndedMessage": "Call ended.",
+  "callScreenOkButton": "OK",
+  "declineCallButton": "Decline",
+  "acceptCallButton": "Accept",
+  "incomingVideoCallLabel": "Incoming video call",
+  "incomingVoiceCallLabel": "Incoming voice call",
+  "callConnectingLabel": "Connecting…",
+  "callAlreadyEndedMessage": "This call has already ended."
 }

@@ -80,10 +80,18 @@ class _HumsafarAppState extends ConsumerState<HumsafarApp> {
   }
 
   void _handleNotificationTap(RemoteMessage message) {
-    final route = routeForNotificationType(message.data['type'] as String?);
-    if (route == null) return;
     final context = rootNavigatorKey.currentContext;
     if (context == null) return;
+    // Task 4.7 — incoming_call needs more than a route string (see
+    // push_service.dart's incomingCallPushData doc comment), so it's
+    // checked first, ahead of the generic route-string mapper below.
+    final callData = incomingCallPushData(message.data);
+    if (callData != null) {
+      GoRouter.of(context).push('/calls/incoming', extra: callData);
+      return;
+    }
+    final route = routeForNotificationType(message.data['type'] as String?);
+    if (route == null) return;
     GoRouter.of(context).push(route);
   }
 
