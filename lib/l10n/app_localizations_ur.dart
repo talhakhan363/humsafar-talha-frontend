@@ -1741,4 +1741,109 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get wearableBandButton => 'پہننے والا بینڈ';
+
+  @override
+  String get shareIdScreenTitle => 'میری آئی ڈی';
+
+  @override
+  String get shareIdScreenExplanation =>
+      'یہ اپنے سرپرست کو دکھائیں، یا اسے کاپی یا شیئر کریں تاکہ وہ آپ کو لنک کر سکیں۔';
+
+  @override
+  String get copyIdButtonLabel => 'آئی ڈی کاپی کریں';
+
+  @override
+  String get idCopiedConfirmation => 'آئی ڈی کاپی ہو گئی';
+
+  @override
+  String get shareIdButtonLabel => 'شیئر کریں';
+
+  @override
+  String get shareIdShareIntro => 'یہ میری ہمسفر آئی ڈی ہے:';
+
+  @override
+  String get viewShareMyIdButton => 'میری آئی ڈی دیکھیں اور شیئر کریں';
+
+  @override
+  String get myIdMenuLabel => 'میری آئی ڈی';
+
+  @override
+  String get cameraButtonLabel => 'کیمرہ';
+
+  @override
+  String get cameraScreenTitle => 'کیمرہ';
+
+  @override
+  String get cameraNotPairedMessage =>
+      'اس ڈیپنڈنٹ کے لیے ابھی تک کوئی کیمرہ جوڑا نہیں گیا۔';
+
+  @override
+  String get cameraOfflineError =>
+      'کیمرہ جڑا ہوا ہے لیکن ابھی قابلِ رسائی نہیں ہے۔';
+
+  @override
+  String get moduleAccessDeniedCameraError =>
+      'آپ کو یہ کیمرہ دیکھنے کی اجازت نہیں ہے۔';
+
+  @override
+  String get cameraMaxViewersError =>
+      'بہت سے سرپرست پہلے ہی دیکھ رہے ہیں۔ تھوڑی دیر بعد دوبارہ کوشش کریں۔';
+
+  @override
+  String get startWatchingButtonLabel => 'دیکھنا شروع کریں';
+
+  @override
+  String get stopWatchingButtonLabel => 'دیکھنا بند کریں';
+
+  @override
+  String get cameraWatchingPlaceholderMessage =>
+      'لائیو ویڈیو ابھی تک فعال نہیں ہے - یہ اسکرین صرف دیکھنے کا سیشن ٹریک کرتی ہے؛ تصویر بعد میں شامل ہوگی۔';
+
+  @override
+  String cameraViewerCountLabel(int count) {
+    return '$count لوگ ابھی دیکھ رہے ہیں';
+  }
+
+  @override
+  String get savedClipsButtonLabel => 'محفوظ شدہ کلپس';
+
+  @override
+  String get cameraClipsScreenTitle => 'محفوظ شدہ کلپس';
+
+  @override
+  String get noSavedClipsMessage => 'ابھی تک کوئی کلپ محفوظ نہیں ہے۔';
+
+  @override
+  String get clipTriggerPanicLabel => 'پینک موڈ';
+
+  @override
+  String get clipTriggerAlarmLabel => 'ریموٹ الارم';
+
+  @override
+  String get clipStatusUploaded => 'محفوظ ہو گیا';
+
+  @override
+  String get clipStatusPending => 'ریکارڈ ہو رہا ہے...';
+
+  @override
+  String get clipStatusMissed => 'مِس ہو گیا';
+
+  @override
+  String get downloadClipButtonLabel => 'ڈاؤن لوڈ کریں';
+
+  @override
+  String get deleteClipButtonLabel => 'حذف کریں';
+
+  @override
+  String get deleteClipConfirmTitle => 'یہ کلپ حذف کریں؟';
+
+  @override
+  String get deleteClipConfirmBody => 'یہ محفوظ شدہ کلپ ہٹا دیا جائے گا۔';
+
+  @override
+  String get clipDeletedConfirmation => 'کلپ حذف ہو گئی';
+
+  @override
+  String get cameraBeingViewedBanner =>
+      'ایک سرپرست ابھی آپ کا کیمرہ دیکھ رہا ہے';
 }

@@ -214,11 +214,15 @@ class _DependentKycScreenState extends ConsumerState<DependentKycScreen> {
           ),
           const SizedBox(height: 16),
           Text(l10n.shareIdWithGuardianLabel, textAlign: TextAlign.center),
-          const SizedBox(height: 8),
-          SelectableText(
-            dependentId ?? '',
-            textAlign: TextAlign.center,
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+          const SizedBox(height: 16),
+          // Screen 05 fix: was plain SelectableText here (hard for an
+          // elderly Dependent to copy, per Sarim's design-check note on
+          // this task) — now opens the dedicated Share-My-ID screen
+          // (QR code, Copy ID, Share), matching Sarim's mockup 05.
+          ElevatedButton.icon(
+            onPressed: dependentId == null ? null : () => context.push('/dependent/share-id', extra: dependentId),
+            icon: const Icon(Icons.qr_code),
+            label: Text(l10n.viewShareMyIdButton),
           ),
         ],
       );

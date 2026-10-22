@@ -1726,4 +1726,109 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get wearableBandButton => 'Wearable Band';
+
+  @override
+  String get shareIdScreenTitle => 'My ID';
+
+  @override
+  String get shareIdScreenExplanation =>
+      'Show this to your Guardian, or copy or share it so they can link you.';
+
+  @override
+  String get copyIdButtonLabel => 'Copy ID';
+
+  @override
+  String get idCopiedConfirmation => 'ID copied';
+
+  @override
+  String get shareIdButtonLabel => 'Share';
+
+  @override
+  String get shareIdShareIntro => 'Here is my Humsafar ID:';
+
+  @override
+  String get viewShareMyIdButton => 'View & Share My ID';
+
+  @override
+  String get myIdMenuLabel => 'My ID';
+
+  @override
+  String get cameraButtonLabel => 'Camera';
+
+  @override
+  String get cameraScreenTitle => 'Camera';
+
+  @override
+  String get cameraNotPairedMessage =>
+      'No camera has been paired for this Dependent yet.';
+
+  @override
+  String get cameraOfflineError =>
+      'The camera is paired but isn\'t reachable right now.';
+
+  @override
+  String get moduleAccessDeniedCameraError =>
+      'You don\'t have permission to view this camera.';
+
+  @override
+  String get cameraMaxViewersError =>
+      'Too many Guardians are already watching. Try again shortly.';
+
+  @override
+  String get startWatchingButtonLabel => 'Start Watching';
+
+  @override
+  String get stopWatchingButtonLabel => 'Stop Watching';
+
+  @override
+  String get cameraWatchingPlaceholderMessage =>
+      'Live video isn\'t wired up yet - this screen tracks the watch session; the picture itself is a later step.';
+
+  @override
+  String cameraViewerCountLabel(int count) {
+    return '$count watching now';
+  }
+
+  @override
+  String get savedClipsButtonLabel => 'Saved Clips';
+
+  @override
+  String get cameraClipsScreenTitle => 'Saved Clips';
+
+  @override
+  String get noSavedClipsMessage => 'No saved clips yet.';
+
+  @override
+  String get clipTriggerPanicLabel => 'Panic Mode';
+
+  @override
+  String get clipTriggerAlarmLabel => 'Remote Alarm';
+
+  @override
+  String get clipStatusUploaded => 'Saved';
+
+  @override
+  String get clipStatusPending => 'Recording...';
+
+  @override
+  String get clipStatusMissed => 'Missed';
+
+  @override
+  String get downloadClipButtonLabel => 'Download';
+
+  @override
+  String get deleteClipButtonLabel => 'Delete';
+
+  @override
+  String get deleteClipConfirmTitle => 'Delete this clip?';
+
+  @override
+  String get deleteClipConfirmBody => 'This saved clip will be removed.';
+
+  @override
+  String get clipDeletedConfirmation => 'Clip deleted';
+
+  @override
+  String get cameraBeingViewedBanner =>
+      'A Guardian is watching your camera right now';
 }

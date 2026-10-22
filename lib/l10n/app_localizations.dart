@@ -3211,6 +3211,198 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Wearable Band'**
   String get wearableBandButton;
+
+  /// No description provided for @shareIdScreenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'My ID'**
+  String get shareIdScreenTitle;
+
+  /// No description provided for @shareIdScreenExplanation.
+  ///
+  /// In en, this message translates to:
+  /// **'Show this to your Guardian, or copy or share it so they can link you.'**
+  String get shareIdScreenExplanation;
+
+  /// No description provided for @copyIdButtonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy ID'**
+  String get copyIdButtonLabel;
+
+  /// No description provided for @idCopiedConfirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'ID copied'**
+  String get idCopiedConfirmation;
+
+  /// No description provided for @shareIdButtonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Share'**
+  String get shareIdButtonLabel;
+
+  /// No description provided for @shareIdShareIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'Here is my Humsafar ID:'**
+  String get shareIdShareIntro;
+
+  /// No description provided for @viewShareMyIdButton.
+  ///
+  /// In en, this message translates to:
+  /// **'View & Share My ID'**
+  String get viewShareMyIdButton;
+
+  /// No description provided for @myIdMenuLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'My ID'**
+  String get myIdMenuLabel;
+
+  /// No description provided for @cameraButtonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera'**
+  String get cameraButtonLabel;
+
+  /// No description provided for @cameraScreenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera'**
+  String get cameraScreenTitle;
+
+  /// No description provided for @cameraNotPairedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'No camera has been paired for this Dependent yet.'**
+  String get cameraNotPairedMessage;
+
+  /// No description provided for @cameraOfflineError.
+  ///
+  /// In en, this message translates to:
+  /// **'The camera is paired but isn\'t reachable right now.'**
+  String get cameraOfflineError;
+
+  /// No description provided for @moduleAccessDeniedCameraError.
+  ///
+  /// In en, this message translates to:
+  /// **'You don\'t have permission to view this camera.'**
+  String get moduleAccessDeniedCameraError;
+
+  /// No description provided for @cameraMaxViewersError.
+  ///
+  /// In en, this message translates to:
+  /// **'Too many Guardians are already watching. Try again shortly.'**
+  String get cameraMaxViewersError;
+
+  /// No description provided for @startWatchingButtonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Start Watching'**
+  String get startWatchingButtonLabel;
+
+  /// No description provided for @stopWatchingButtonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop Watching'**
+  String get stopWatchingButtonLabel;
+
+  /// No description provided for @cameraWatchingPlaceholderMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Live video isn\'t wired up yet - this screen tracks the watch session; the picture itself is a later step.'**
+  String get cameraWatchingPlaceholderMessage;
+
+  /// No description provided for @cameraViewerCountLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} watching now'**
+  String cameraViewerCountLabel(int count);
+
+  /// No description provided for @savedClipsButtonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved Clips'**
+  String get savedClipsButtonLabel;
+
+  /// No description provided for @cameraClipsScreenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved Clips'**
+  String get cameraClipsScreenTitle;
+
+  /// No description provided for @noSavedClipsMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'No saved clips yet.'**
+  String get noSavedClipsMessage;
+
+  /// No description provided for @clipTriggerPanicLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Panic Mode'**
+  String get clipTriggerPanicLabel;
+
+  /// No description provided for @clipTriggerAlarmLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Remote Alarm'**
+  String get clipTriggerAlarmLabel;
+
+  /// No description provided for @clipStatusUploaded.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved'**
+  String get clipStatusUploaded;
+
+  /// No description provided for @clipStatusPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Recording...'**
+  String get clipStatusPending;
+
+  /// No description provided for @clipStatusMissed.
+  ///
+  /// In en, this message translates to:
+  /// **'Missed'**
+  String get clipStatusMissed;
+
+  /// No description provided for @downloadClipButtonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Download'**
+  String get downloadClipButtonLabel;
+
+  /// No description provided for @deleteClipButtonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get deleteClipButtonLabel;
+
+  /// No description provided for @deleteClipConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this clip?'**
+  String get deleteClipConfirmTitle;
+
+  /// No description provided for @deleteClipConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'This saved clip will be removed.'**
+  String get deleteClipConfirmBody;
+
+  /// No description provided for @clipDeletedConfirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Clip deleted'**
+  String get clipDeletedConfirmation;
+
+  /// No description provided for @cameraBeingViewedBanner.
+  ///
+  /// In en, this message translates to:
+  /// **'A Guardian is watching your camera right now'**
+  String get cameraBeingViewedBanner;
 }
 
 class _AppLocalizationsDelegate

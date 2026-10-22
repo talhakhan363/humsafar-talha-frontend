@@ -518,5 +518,46 @@
   "vitalsHistoryHeader": "ماضی کی ریڈنگز",
   "vitalsLimitMessage": "آپ وائٹلز ریڈنگز کی حد تک پہنچ گئے ہیں۔",
   "vitalsScreenTitle": "وائٹلز",
-  "wearableBandButton": "پہننے والا بینڈ"
+  "wearableBandButton": "پہننے والا بینڈ",
+
+  "shareIdScreenTitle": "میری آئی ڈی",
+  "shareIdScreenExplanation": "یہ اپنے سرپرست کو دکھائیں، یا اسے کاپی یا شیئر کریں تاکہ وہ آپ کو لنک کر سکیں۔",
+  "copyIdButtonLabel": "آئی ڈی کاپی کریں",
+  "idCopiedConfirmation": "آئی ڈی کاپی ہو گئی",
+  "shareIdButtonLabel": "شیئر کریں",
+  "shareIdShareIntro": "یہ میری ہمسفر آئی ڈی ہے:",
+  "viewShareMyIdButton": "میری آئی ڈی دیکھیں اور شیئر کریں",
+  "myIdMenuLabel": "میری آئی ڈی",
+
+  "cameraButtonLabel": "کیمرہ",
+  "cameraScreenTitle": "کیمرہ",
+  "cameraNotPairedMessage": "اس ڈیپنڈنٹ کے لیے ابھی تک کوئی کیمرہ جوڑا نہیں گیا۔",
+  "cameraOfflineError": "کیمرہ جڑا ہوا ہے لیکن ابھی قابلِ رسائی نہیں ہے۔",
+  "moduleAccessDeniedCameraError": "آپ کو یہ کیمرہ دیکھنے کی اجازت نہیں ہے۔",
+  "cameraMaxViewersError": "بہت سے سرپرست پہلے ہی دیکھ رہے ہیں۔ تھوڑی دیر بعد دوبارہ کوشش کریں۔",
+  "startWatchingButtonLabel": "دیکھنا شروع کریں",
+  "stopWatchingButtonLabel": "دیکھنا بند کریں",
+  "cameraWatchingPlaceholderMessage": "لائیو ویڈیو ابھی تک فعال نہیں ہے - یہ اسکرین صرف دیکھنے کا سیشن ٹریک کرتی ہے؛ تصویر بعد میں شامل ہوگی۔",
+  "cameraViewerCountLabel": "{count} لوگ ابھی دیکھ رہے ہیں",
+  "@cameraViewerCountLabel": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "savedClipsButtonLabel": "محفوظ شدہ کلپس",
+  "cameraClipsScreenTitle": "محفوظ شدہ کلپس",
+  "noSavedClipsMessage": "ابھی تک کوئی کلپ محفوظ نہیں ہے۔",
+  "clipTriggerPanicLabel": "پینک موڈ",
+  "clipTriggerAlarmLabel": "ریموٹ الارم",
+  "clipStatusUploaded": "محفوظ ہو گیا",
+  "clipStatusPending": "ریکارڈ ہو رہا ہے...",
+  "clipStatusMissed": "مِس ہو گیا",
+  "downloadClipButtonLabel": "ڈاؤن لوڈ کریں",
+  "deleteClipButtonLabel": "حذف کریں",
+  "deleteClipConfirmTitle": "یہ کلپ حذف کریں؟",
+  "deleteClipConfirmBody": "یہ محفوظ شدہ کلپ ہٹا دیا جائے گا۔",
+  "clipDeletedConfirmation": "کلپ حذف ہو گئی",
+  "cameraBeingViewedBanner": "ایک سرپرست ابھی آپ کا کیمرہ دیکھ رہا ہے"
 }

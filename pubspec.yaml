@@ -95,6 +95,18 @@ dependencies:
   # not because the newer API was required).
   share_plus: ^12.0.1
 
+  # Screen 05 "Share my ID" fix + Task 6.9 — qr_flutter renders the QR
+  # code on the Share-My-ID screen (an elderly Dependent showing their ID
+  # to a Guardian in person is faster than reading digits aloud). Pure-
+  # Dart rendering (no platform channel), so it's also usable directly in
+  # widget tests, unlike every native plugin above. Pinned to 4.1.0 (its
+  # latest release) rather than left unbounded — same version-floor
+  # discipline as file_picker/share_plus/record/audioplayers above, even
+  # though this package's own floor is low enough (pre-null-safety 3.x
+  # exists for very old Flutter only) that 4.1.0 works fine against
+  # Talha's installed 3.32.1.
+  qr_flutter: ^4.1.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

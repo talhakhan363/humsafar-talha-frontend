@@ -36,6 +36,13 @@ import '../../../shared/widgets/language_switch_button.dart';
 /// Goes straight to `ChatScreen` with this Dependent as the peer,
 /// skipping the Messages inbox entirely — the peer is already known
 /// here, so there's nothing the inbox would add.
+///
+/// Task 6.9 (2026-10-22): added "Camera" — same "any Guardian can
+/// attempt, the screen itself maps `MODULE_ACCESS_DENIED`" shape as
+/// Live Map/Message above (`camera_contract.md`: Primary always,
+/// Secondary needs `camera_viewing`). UI-only slice: `CameraScreen`
+/// exercises the real pairing/watch-session calls but doesn't render
+/// actual video yet — see that screen's own doc comment for why.
 class DependentDetailScreen extends ConsumerStatefulWidget {
   const DependentDetailScreen({super.key, required this.summary});
 
@@ -152,6 +159,13 @@ class _DependentDetailScreenState extends ConsumerState<DependentDetailScreen> {
               onPressed: () => context.push('/messages/chat', extra: {'peerId': summary.dependentId, 'peerName': summary.email}),
               icon: const Icon(Icons.chat_bubble_outline),
               label: Text(l10n.messageButtonLabel),
+            ),
+            const SizedBox(height: 12),
+            // Task 6.9 — same shape as Live Map/Message above.
+            ElevatedButton.icon(
+              onPressed: () => context.push('/guardian/camera', extra: summary),
+              icon: const Icon(Icons.videocam_outlined),
+              label: Text(l10n.cameraButtonLabel),
             ),
             const SizedBox(height: 12),
             // Task 3.15 — same "any Guardian can read, permission only

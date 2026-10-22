@@ -24,6 +24,31 @@
 // to keep this already-large batch's test count proportional (same
 // compacting judgement call as `activity_log_screen.dart`'s
 // booking-detail sheet).
+//
+// Extended for Task 6.9 (2026-10-22) — TC-6.9-17..18, the new "Camera"
+// button (one test for "shows", one for "navigates" — this button
+// breaks the "one test per button" compacting above since it's the
+// privacy-sensitive one of this batch, worth the extra test). Its ids
+// sit in the Task 6.9 range (not a seventh/eighth button tacked onto
+// the 5.6/5.7/5.8/6.8 range above) since `camera_screen_test.dart`'s
+// own numbering starts at TC-6.9-04 after `camera_viewing_banner_test.
+// dart` takes TC-6.9-01..03, and `camera_clips_screen_test.dart` runs
+// through TC-6.9-16 — 17..18 are simply the next free numbers in that
+// same task's range.
+//
+// Fix, 2026-10-22 (post-delivery, Talha's real `flutter test` run):
+// inserting the new Camera button between Message and Medication
+// schedule pushed every button from Medication schedule onward down
+// one slot in this screen's lazy-building `ListView` — which flipped
+// TC-5.6-20's "Medical Records" from inside the default test viewport
+// to just outside it (`Found 0 widgets with text "Medical Records"`).
+// Same lazy-build/viewport gotcha this file's own standing convention
+// already names (see TC-6.8-17's comment below) — added
+// `scrollUntilVisible` to TC-5.6-20 and, defensively, to TC-3.14-38/39
+// (Emergency settings, now one slot closer to that same boundary)
+// since `scrollUntilVisible` is a no-op when the target is already
+// built, so this costs nothing if that one turns out to still be safely
+// on-screen.
 
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -50,6 +75,7 @@ List<GoRoute> _routes() => [
       ),
       GoRoute(path: '/guardian/emergency-settings', builder: (_, __) => stubScreen('EMERGENCY_SETTINGS_STUB')),
       GoRoute(path: '/messages/chat', builder: (_, __) => stubScreen('CHAT_STUB')),
+      GoRoute(path: '/guardian/camera', builder: (_, __) => stubScreen('CAMERA_STUB')),
       GoRoute(path: '/records', builder: (_, __) => stubScreen('RECORDS_STUB')),
       GoRoute(path: '/appointments', builder: (_, __) => stubScreen('APPOINTMENTS_STUB')),
       GoRoute(path: '/vitals', builder: (_, __) => stubScreen('VITALS_STUB')),
@@ -67,6 +93,11 @@ void main() {
     ));
     await tester.pumpAndSettle();
 
+    // Defensive scroll — see the Task 6.9 fix note in this file's header
+    // comment. No-op if already on-screen.
+    await tester.scrollUntilVisible(find.text('Emergency settings'), 300, scrollable: find.byType(Scrollable).first);
+    await tester.pumpAndSettle();
+
     expect(find.text('Emergency settings'), findsOneWidget);
   });
 
@@ -77,6 +108,11 @@ void main() {
       initialLocation: '/guardian/dependent-detail',
       routes: _routes(),
     ));
+    await tester.pumpAndSettle();
+
+    // Defensive scroll — see the Task 6.9 fix note in this file's header
+    // comment. No-op if already on-screen.
+    await tester.scrollUntilVisible(find.text('Emergency settings'), 300, scrollable: find.byType(Scrollable).first);
     await tester.pumpAndSettle();
 
     await tester.tap(find.text('Emergency settings'));
@@ -112,6 +148,33 @@ void main() {
     expect(find.text('CHAT_STUB'), findsOneWidget);
   });
 
+  testWidgets('TC-6.9-17: the screen shows a Camera button', (tester) async {
+    final fakeClient = FakeApiClient(getHandler: (_) => <dynamic>[]);
+    await tester.pumpWidget(wrapWithRouter(
+      fakeClient: fakeClient,
+      initialLocation: '/guardian/dependent-detail',
+      routes: _routes(),
+    ));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Camera'), findsOneWidget);
+  });
+
+  testWidgets('TC-6.9-18: tapping Camera opens the camera screen for this Dependent', (tester) async {
+    final fakeClient = FakeApiClient(getHandler: (_) => <dynamic>[]);
+    await tester.pumpWidget(wrapWithRouter(
+      fakeClient: fakeClient,
+      initialLocation: '/guardian/dependent-detail',
+      routes: _routes(),
+    ));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Camera'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('CAMERA_STUB'), findsOneWidget);
+  });
+
   testWidgets('TC-5.6-20: Medical records shows and navigates to /records', (tester) async {
     final fakeClient = FakeApiClient(getHandler: (_) => <dynamic>[]);
     await tester.pumpWidget(wrapWithRouter(
@@ -119,6 +182,12 @@ void main() {
       initialLocation: '/guardian/dependent-detail',
       routes: _routes(),
     ));
+    await tester.pumpAndSettle();
+
+    // Fix, 2026-10-22: see the Task 6.9 fix note in this file's header
+    // comment — the new Camera button pushed this button just past the
+    // default test viewport.
+    await tester.scrollUntilVisible(find.text('Medical Records'), 300, scrollable: find.byType(Scrollable).first);
     await tester.pumpAndSettle();
 
     expect(find.text('Medical Records'), findsOneWidget);

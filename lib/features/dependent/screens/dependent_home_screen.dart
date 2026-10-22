@@ -14,6 +14,7 @@ import '../../../core/network/providers.dart';
 import '../../../core/scheduling/schedule_helpers.dart';
 import '../../../shared/widgets/accessibility_toggle_button.dart';
 import '../../../shared/widgets/language_switch_button.dart';
+import '../widgets/camera_viewing_banner.dart';
 import '../widgets/location_status_banner.dart';
 import '../widgets/safety_action_buttons.dart';
 
@@ -68,6 +69,18 @@ import '../widgets/safety_action_buttons.dart';
 /// pure scheduling math, `PanicButton`/`SafetyActionButton`'s rendering,
 /// and the real Panic/Wellness/Medication/Messages screens' own test
 /// files.
+///
+/// Task 6.9 (2026-10-22): added `CameraViewingBanner` (FR-K1.3's
+/// always-visible "a Guardian is watching" notice, mockup 29) right
+/// below the location banner — both are passive status rows, so they
+/// read as one group. It's its own `ConsumerStatefulWidget` with its own
+/// test file precisely so adding it here doesn't touch this screen's
+/// existing "not automated-tested as a full screen" situation.
+///
+/// Screen 05 fix (2026-10-22): added a 5th "More" row, "My ID", opening
+/// the same `ShareIdScreen` the KYC outcome view now also opens — a
+/// Dependent may need to share their ID again later (e.g. for a second
+/// Guardian invite), not just once right after registration.
 class DependentHomeScreen extends ConsumerStatefulWidget {
   const DependentHomeScreen({super.key});
 
@@ -229,6 +242,7 @@ class _DependentHomeScreenState extends ConsumerState<DependentHomeScreen> with 
           padding: const EdgeInsets.all(16),
           children: [
             LocationStatusBanner(status: _permissionStatus, onRetry: _startLocationSharing, onOpenSettings: _openSettings),
+            if (user != null) CameraViewingBanner(dependentId: user.userId),
             const SizedBox(height: 16),
             Text(l10n.dependentHomeGreeting(user?.fullName ?? ''), style: Theme.of(context).textTheme.titleLarge),
             const SizedBox(height: 2),
@@ -314,6 +328,13 @@ class _DependentHomeScreenState extends ConsumerState<DependentHomeScreen> with 
                 title: Text(l10n.directoryButton),
                 trailing: const Icon(Icons.chevron_right),
                 onTap: () => context.push('/directory', extra: user.userId),
+              ),
+              ListTile(
+                contentPadding: EdgeInsets.zero,
+                leading: const Icon(Icons.qr_code),
+                title: Text(l10n.myIdMenuLabel),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () => context.push('/dependent/share-id', extra: user.userId),
               ),
             ],
           ],

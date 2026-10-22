@@ -40,6 +40,9 @@ import '../../features/auth/screens/login_screen.dart';
 import '../../features/auth/screens/accept_invite_screen.dart';
 import '../../features/kyc/screens/guardian_verification_screen.dart';
 import '../../features/kyc/screens/dependent_kyc_screen.dart';
+import '../../features/dependent/screens/share_id_screen.dart';
+import '../../features/camera/screens/camera_screen.dart';
+import '../../features/camera/screens/camera_clips_screen.dart';
 import '../guardian/dependent_summary.dart';
 
 // Task 1.8 — Navigation shell. Task 1.11 — added auth/KYC routes. Task 2.5
@@ -397,6 +400,37 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: '/dependent/alarm',
         name: 'dependent-alarm',
         pageBuilder: (context, state) => NoTransitionPage(key: state.pageKey, child: const AlarmScreen()),
+      ),
+      // Screen 05 fix — reachable from both the KYC outcome view
+      // (unauthenticated, `extra` is the just-registered id) and
+      // Home's "More" footer (authenticated, `extra` is the Dependent's
+      // own id). Plain `dependentId` extra, no API calls of its own —
+      // see ShareIdScreen's doc comment for why that makes both entry
+      // points safe.
+      GoRoute(
+        path: '/dependent/share-id',
+        name: 'share-id',
+        pageBuilder: (context, state) =>
+            NoTransitionPage(key: state.pageKey, child: ShareIdScreen(dependentId: state.extra as String)),
+      ),
+      // Task 6.9 — same `DependentSummary` extra as `/guardian/live-map`
+      // (both need dependentId + email for the AppBar title).
+      GoRoute(
+        path: '/guardian/camera',
+        name: 'camera',
+        pageBuilder: (context, state) {
+          final summary = state.extra as DependentSummary;
+          return NoTransitionPage(
+            key: state.pageKey,
+            child: CameraScreen(dependentId: summary.dependentId, dependentLabel: summary.email),
+          );
+        },
+      ),
+      GoRoute(
+        path: '/guardian/camera/clips',
+        name: 'camera-clips',
+        pageBuilder: (context, state) =>
+            NoTransitionPage(key: state.pageKey, child: CameraClipsScreen(dependentId: state.extra as String)),
       ),
     ],
   );

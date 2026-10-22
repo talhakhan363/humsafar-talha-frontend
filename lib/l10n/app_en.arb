@@ -711,5 +711,46 @@
   "vitalsHistoryHeader": "History",
   "vitalsLimitMessage": "You've reached the limit of vitals readings.",
   "vitalsScreenTitle": "Vitals",
-  "wearableBandButton": "Wearable Band"
+  "wearableBandButton": "Wearable Band",
+
+  "shareIdScreenTitle": "My ID",
+  "shareIdScreenExplanation": "Show this to your Guardian, or copy or share it so they can link you.",
+  "copyIdButtonLabel": "Copy ID",
+  "idCopiedConfirmation": "ID copied",
+  "shareIdButtonLabel": "Share",
+  "shareIdShareIntro": "Here is my Humsafar ID:",
+  "viewShareMyIdButton": "View & Share My ID",
+  "myIdMenuLabel": "My ID",
+
+  "cameraButtonLabel": "Camera",
+  "cameraScreenTitle": "Camera",
+  "cameraNotPairedMessage": "No camera has been paired for this Dependent yet.",
+  "cameraOfflineError": "The camera is paired but isn't reachable right now.",
+  "moduleAccessDeniedCameraError": "You don't have permission to view this camera.",
+  "cameraMaxViewersError": "Too many Guardians are already watching. Try again shortly.",
+  "startWatchingButtonLabel": "Start Watching",
+  "stopWatchingButtonLabel": "Stop Watching",
+  "cameraWatchingPlaceholderMessage": "Live video isn't wired up yet - this screen tracks the watch session; the picture itself is a later step.",
+  "cameraViewerCountLabel": "{count} watching now",
+  "@cameraViewerCountLabel": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "savedClipsButtonLabel": "Saved Clips",
+  "cameraClipsScreenTitle": "Saved Clips",
+  "noSavedClipsMessage": "No saved clips yet.",
+  "clipTriggerPanicLabel": "Panic Mode",
+  "clipTriggerAlarmLabel": "Remote Alarm",
+  "clipStatusUploaded": "Saved",
+  "clipStatusPending": "Recording...",
+  "clipStatusMissed": "Missed",
+  "downloadClipButtonLabel": "Download",
+  "deleteClipButtonLabel": "Delete",
+  "deleteClipConfirmTitle": "Delete this clip?",
+  "deleteClipConfirmBody": "This saved clip will be removed.",
+  "clipDeletedConfirmation": "Clip deleted",
+  "cameraBeingViewedBanner": "A Guardian is watching your camera right now"
 }
