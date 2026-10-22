@@ -51,6 +51,12 @@
 // editing a medical record or an appointment are the first real PATCH
 // callers (`ApiClient.patch`, added the same day). Purely additive, same
 // shape as the `put`/`delete` extensions above it.
+//
+// Extended for Task 7.3 (2026-10-22): added `lastGetQueryParameters` —
+// `AnalyticsScreen` is the first screen under test whose GET behavior a
+// test needs to distinguish by query parameter (`?days=`), not just by
+// path; `getHandler` itself still only receives the path, same as
+// before. Purely additive, same shape as every extension above it.
 
 import 'package:dio/dio.dart';
 import 'package:humsafar_frontend/core/network/api_client.dart';
@@ -136,6 +142,10 @@ class FakeApiClient extends ApiClient {
   /// The path of the most recent GET, or null if GET hasn't been called yet.
   String? lastGetPath;
 
+  /// The `queryParameters` of the most recent GET, or null if GET hasn't
+  /// been called yet (or was called with none).
+  Map<String, dynamic>? lastGetQueryParameters;
+
   /// The path of the most recent POST, or null if POST hasn't been called yet.
   String? lastPostPath;
 
@@ -172,6 +182,7 @@ class FakeApiClient extends ApiClient {
   Future<Response<T>> get<T>(String path, {Map<String, dynamic>? queryParameters, ResponseType? responseType}) async {
     getCalls++;
     lastGetPath = path;
+    lastGetQueryParameters = queryParameters;
     if (getError != null) throw getError!;
     final dynamic body = getHandler?.call(path) ?? <String, dynamic>{};
     return Response<T>(requestOptions: RequestOptions(path: path), data: body as T, statusCode: 200);

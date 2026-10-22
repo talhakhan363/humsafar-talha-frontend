@@ -43,6 +43,14 @@ import '../../../shared/widgets/language_switch_button.dart';
 /// Secondary needs `camera_viewing`). UI-only slice: `CameraScreen`
 /// exercises the real pairing/watch-session calls but doesn't render
 /// actual video yet — see that screen's own doc comment for why.
+///
+/// Task 7.3 (2026-10-22): added "Analytics" — placed right after
+/// Vitals since it's the same "health data" family, before Wearable
+/// Band. Unlike every button above, `AnalyticsScreen` doesn't map a
+/// `MODULE_ACCESS_DENIED` exception itself — `analytics_contract.md`'s
+/// combined endpoint returns `200` with a `null` section instead, so
+/// the permission gating happens inside that screen's own body, not
+/// via this button's placement.
 class DependentDetailScreen extends ConsumerStatefulWidget {
   const DependentDetailScreen({super.key, required this.summary});
 
@@ -211,6 +219,13 @@ class _DependentDetailScreenState extends ConsumerState<DependentDetailScreen> {
               onPressed: () => context.push('/vitals', extra: summary.dependentId),
               icon: const Icon(Icons.monitor_heart_outlined),
               label: Text(l10n.vitalsButton),
+            ),
+            const SizedBox(height: 12),
+            // Task 7.3 — same shape as Live Map/Message/Camera above.
+            ElevatedButton.icon(
+              onPressed: () => context.push('/guardian/analytics', extra: summary),
+              icon: const Icon(Icons.insights_outlined),
+              label: Text(l10n.analyticsButtonLabel),
             ),
             const SizedBox(height: 12),
             ElevatedButton.icon(

@@ -49,6 +49,17 @@
 // since `scrollUntilVisible` is a no-op when the target is already
 // built, so this costs nothing if that one turns out to still be safely
 // on-screen.
+//
+// Extended for Task 7.3 (2026-10-22) — TC-7.3-10, the new "Analytics"
+// button (inserted right after Vitals, before Wearable Band) — one
+// test, same "one test per button" compacting as the 5.6/5.7/5.8/6.8
+// extension above (not the two-test treatment Camera got, since
+// Analytics isn't the one privacy-sensitive button of its batch). Same
+// lazy-build/viewport gotcha as the fix note above applies again —
+// every button from Wearable Band onward just shifted one more slot —
+// but TC-5.8-11 and TC-6.8-17 already use `scrollUntilVisible`, which is
+// a no-op if the target is still on-screen, so neither needed a direct
+// change.
 
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -79,6 +90,7 @@ List<GoRoute> _routes() => [
       GoRoute(path: '/records', builder: (_, __) => stubScreen('RECORDS_STUB')),
       GoRoute(path: '/appointments', builder: (_, __) => stubScreen('APPOINTMENTS_STUB')),
       GoRoute(path: '/vitals', builder: (_, __) => stubScreen('VITALS_STUB')),
+      GoRoute(path: '/guardian/analytics', builder: (_, __) => stubScreen('ANALYTICS_STUB')),
       GoRoute(path: '/wearable', builder: (_, __) => stubScreen('WEARABLE_STUB')),
       GoRoute(path: '/directory', builder: (_, __) => stubScreen('DIRECTORY_STUB')),
     ];
@@ -257,6 +269,26 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('WEARABLE_STUB'), findsOneWidget);
+  });
+
+  testWidgets('TC-7.3-10: Analytics shows and navigates to /guardian/analytics', (tester) async {
+    final fakeClient = FakeApiClient(getHandler: (_) => <dynamic>[]);
+    await tester.pumpWidget(wrapWithRouter(
+      fakeClient: fakeClient,
+      initialLocation: '/guardian/dependent-detail',
+      routes: _routes(),
+    ));
+    await tester.pumpAndSettle();
+
+    // Same scroll reasoning as TC-5.6-21's Appointments above.
+    await tester.scrollUntilVisible(find.text('Analytics'), 300, scrollable: find.byType(Scrollable).first);
+    await tester.pumpAndSettle();
+
+    expect(find.text('Analytics'), findsOneWidget);
+    await tester.tap(find.text('Analytics'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('ANALYTICS_STUB'), findsOneWidget);
   });
 
   testWidgets('TC-6.8-17: Directory & Services shows and navigates to /directory', (tester) async {

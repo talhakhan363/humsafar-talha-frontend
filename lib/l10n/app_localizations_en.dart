@@ -1831,4 +1831,94 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get cameraBeingViewedBanner =>
       'A Guardian is watching your camera right now';
+
+  @override
+  String get analyticsButtonLabel => 'Analytics';
+
+  @override
+  String get analyticsScreenTitle => 'Analytics';
+
+  @override
+  String get analyticsDays7Label => '7 days';
+
+  @override
+  String get analyticsDays30Label => '30 days';
+
+  @override
+  String get analyticsDays90Label => '90 days';
+
+  @override
+  String get adherenceSectionHeader => 'Medication adherence';
+
+  @override
+  String get adherenceRateLabel => 'Adherence rate';
+
+  @override
+  String get adherenceTakenLabel => 'Taken';
+
+  @override
+  String get adherenceMissedLabel => 'Missed';
+
+  @override
+  String get adherenceWaitingLabel => 'Waiting';
+
+  @override
+  String adherenceStreakLabel(int days) {
+    return 'Streak: $days days';
+  }
+
+  @override
+  String get adherenceChangeVsPreviousLabel => 'Change vs previous period';
+
+  @override
+  String get adherencePerMedicineHeader => 'By medicine';
+
+  @override
+  String get adherenceAccessDeniedMessage =>
+      'You don\'t have permission to view medication adherence for this Dependent.';
+
+  @override
+  String get noAdherenceDataMessage =>
+      'No medication data yet for this period.';
+
+  @override
+  String get vitalsSectionHeader => 'Vitals trends';
+
+  @override
+  String get vitalsAccessDeniedMessage =>
+      'You don\'t have permission to view vitals trends for this Dependent.';
+
+  @override
+  String get vitalsMetricCountLabel => 'Readings';
+
+  @override
+  String get vitalsMinLabel => 'Min';
+
+  @override
+  String get vitalsMaxLabel => 'Max';
+
+  @override
+  String get vitalsAverageLabel => 'Average';
+
+  @override
+  String get vitalsLatestLabel => 'Latest';
+
+  @override
+  String get vitalsTrendLabel => 'Trend';
+
+  @override
+  String get vitalsTrendRising => 'Rising';
+
+  @override
+  String get vitalsTrendFalling => 'Falling';
+
+  @override
+  String get vitalsTrendSteady => 'Steady';
+
+  @override
+  String get noVitalsTrendDataMessage => 'No vitals data yet for this period.';
+
+  @override
+  String get bloodPressureChartSystolicOnlyNote =>
+      'Chart shows the systolic (top) number only.';
 }

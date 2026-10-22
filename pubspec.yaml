@@ -107,10 +107,27 @@ dependencies:
   # Talha's installed 3.32.1.
   qr_flutter: ^4.1.0
 
+  # Fix #1, 2026-10-22: the first pin here, `^1.3.0`, failed to resolve —
+  # fl_chart 1.1.1+ declares vector_math ^2.2.0, which conflicted with
+  # flutter_test's own vector_math 2.1.4 pin. Pinned to exactly 1.1.0 to
+  # dodge that.
+  #
+  # Fix #2, 2026-10-22: pub get then succeeded but compiling still failed
+  # — fl_chart 1.1.0's own code calls Matrix4.translateByDouble/
+  # scaleByDouble, which don't exist until vector_math 2.2.0. fl_chart's
+  # declared ^2.1.4 constraint is simply wrong (confirmed bug: github.com/
+  # imaNNeo/fl_chart issues #1985/#1986/#2046 — same error). No fl_chart
+  # version avoids this; the fix is forcing vector_math itself to 2.2.0
+  # via dependency_overrides below.
+  fl_chart: 1.1.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^4.0.0
+
+dependency_overrides:
+  vector_math: 2.2.0
 
 flutter:
   uses-material-design: true

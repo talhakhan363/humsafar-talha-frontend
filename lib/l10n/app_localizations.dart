@@ -3403,6 +3403,174 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'A Guardian is watching your camera right now'**
   String get cameraBeingViewedBanner;
+
+  /// No description provided for @analyticsButtonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Analytics'**
+  String get analyticsButtonLabel;
+
+  /// No description provided for @analyticsScreenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Analytics'**
+  String get analyticsScreenTitle;
+
+  /// No description provided for @analyticsDays7Label.
+  ///
+  /// In en, this message translates to:
+  /// **'7 days'**
+  String get analyticsDays7Label;
+
+  /// No description provided for @analyticsDays30Label.
+  ///
+  /// In en, this message translates to:
+  /// **'30 days'**
+  String get analyticsDays30Label;
+
+  /// No description provided for @analyticsDays90Label.
+  ///
+  /// In en, this message translates to:
+  /// **'90 days'**
+  String get analyticsDays90Label;
+
+  /// No description provided for @adherenceSectionHeader.
+  ///
+  /// In en, this message translates to:
+  /// **'Medication adherence'**
+  String get adherenceSectionHeader;
+
+  /// No description provided for @adherenceRateLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Adherence rate'**
+  String get adherenceRateLabel;
+
+  /// No description provided for @adherenceTakenLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Taken'**
+  String get adherenceTakenLabel;
+
+  /// No description provided for @adherenceMissedLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Missed'**
+  String get adherenceMissedLabel;
+
+  /// No description provided for @adherenceWaitingLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting'**
+  String get adherenceWaitingLabel;
+
+  /// No description provided for @adherenceStreakLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Streak: {days} days'**
+  String adherenceStreakLabel(int days);
+
+  /// No description provided for @adherenceChangeVsPreviousLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Change vs previous period'**
+  String get adherenceChangeVsPreviousLabel;
+
+  /// No description provided for @adherencePerMedicineHeader.
+  ///
+  /// In en, this message translates to:
+  /// **'By medicine'**
+  String get adherencePerMedicineHeader;
+
+  /// No description provided for @adherenceAccessDeniedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'You don\'t have permission to view medication adherence for this Dependent.'**
+  String get adherenceAccessDeniedMessage;
+
+  /// No description provided for @noAdherenceDataMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'No medication data yet for this period.'**
+  String get noAdherenceDataMessage;
+
+  /// No description provided for @vitalsSectionHeader.
+  ///
+  /// In en, this message translates to:
+  /// **'Vitals trends'**
+  String get vitalsSectionHeader;
+
+  /// No description provided for @vitalsAccessDeniedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'You don\'t have permission to view vitals trends for this Dependent.'**
+  String get vitalsAccessDeniedMessage;
+
+  /// No description provided for @vitalsMetricCountLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Readings'**
+  String get vitalsMetricCountLabel;
+
+  /// No description provided for @vitalsMinLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Min'**
+  String get vitalsMinLabel;
+
+  /// No description provided for @vitalsMaxLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Max'**
+  String get vitalsMaxLabel;
+
+  /// No description provided for @vitalsAverageLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Average'**
+  String get vitalsAverageLabel;
+
+  /// No description provided for @vitalsLatestLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Latest'**
+  String get vitalsLatestLabel;
+
+  /// No description provided for @vitalsTrendLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Trend'**
+  String get vitalsTrendLabel;
+
+  /// No description provided for @vitalsTrendRising.
+  ///
+  /// In en, this message translates to:
+  /// **'Rising'**
+  String get vitalsTrendRising;
+
+  /// No description provided for @vitalsTrendFalling.
+  ///
+  /// In en, this message translates to:
+  /// **'Falling'**
+  String get vitalsTrendFalling;
+
+  /// No description provided for @vitalsTrendSteady.
+  ///
+  /// In en, this message translates to:
+  /// **'Steady'**
+  String get vitalsTrendSteady;
+
+  /// No description provided for @noVitalsTrendDataMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'No vitals data yet for this period.'**
+  String get noVitalsTrendDataMessage;
+
+  /// No description provided for @bloodPressureChartSystolicOnlyNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Chart shows the systolic (top) number only.'**
+  String get bloodPressureChartSystolicOnlyNote;
 }
 
 class _AppLocalizationsDelegate

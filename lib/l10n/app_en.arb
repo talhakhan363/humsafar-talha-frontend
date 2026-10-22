@@ -752,5 +752,41 @@
   "deleteClipConfirmTitle": "Delete this clip?",
   "deleteClipConfirmBody": "This saved clip will be removed.",
   "clipDeletedConfirmation": "Clip deleted",
-  "cameraBeingViewedBanner": "A Guardian is watching your camera right now"
+  "cameraBeingViewedBanner": "A Guardian is watching your camera right now",
+
+  "analyticsButtonLabel": "Analytics",
+  "analyticsScreenTitle": "Analytics",
+  "analyticsDays7Label": "7 days",
+  "analyticsDays30Label": "30 days",
+  "analyticsDays90Label": "90 days",
+  "adherenceSectionHeader": "Medication adherence",
+  "adherenceRateLabel": "Adherence rate",
+  "adherenceTakenLabel": "Taken",
+  "adherenceMissedLabel": "Missed",
+  "adherenceWaitingLabel": "Waiting",
+  "adherenceStreakLabel": "Streak: {days} days",
+  "@adherenceStreakLabel": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "adherenceChangeVsPreviousLabel": "Change vs previous period",
+  "adherencePerMedicineHeader": "By medicine",
+  "adherenceAccessDeniedMessage": "You don't have permission to view medication adherence for this Dependent.",
+  "noAdherenceDataMessage": "No medication data yet for this period.",
+  "vitalsSectionHeader": "Vitals trends",
+  "vitalsAccessDeniedMessage": "You don't have permission to view vitals trends for this Dependent.",
+  "vitalsMetricCountLabel": "Readings",
+  "vitalsMinLabel": "Min",
+  "vitalsMaxLabel": "Max",
+  "vitalsAverageLabel": "Average",
+  "vitalsLatestLabel": "Latest",
+  "vitalsTrendLabel": "Trend",
+  "vitalsTrendRising": "Rising",
+  "vitalsTrendFalling": "Falling",
+  "vitalsTrendSteady": "Steady",
+  "noVitalsTrendDataMessage": "No vitals data yet for this period.",
+  "bloodPressureChartSystolicOnlyNote": "Chart shows the systolic (top) number only."
 }

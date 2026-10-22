@@ -559,5 +559,41 @@
   "deleteClipConfirmTitle": "یہ کلپ حذف کریں؟",
   "deleteClipConfirmBody": "یہ محفوظ شدہ کلپ ہٹا دیا جائے گا۔",
   "clipDeletedConfirmation": "کلپ حذف ہو گئی",
-  "cameraBeingViewedBanner": "ایک سرپرست ابھی آپ کا کیمرہ دیکھ رہا ہے"
+  "cameraBeingViewedBanner": "ایک سرپرست ابھی آپ کا کیمرہ دیکھ رہا ہے",
+
+  "analyticsButtonLabel": "تحلیل",
+  "analyticsScreenTitle": "تحلیل",
+  "analyticsDays7Label": "7 دن",
+  "analyticsDays30Label": "30 دن",
+  "analyticsDays90Label": "90 دن",
+  "adherenceSectionHeader": "دوا کی پابندی",
+  "adherenceRateLabel": "پابندی کی شرح",
+  "adherenceTakenLabel": "لی گئی",
+  "adherenceMissedLabel": "مِس ہوئی",
+  "adherenceWaitingLabel": "باقی",
+  "adherenceStreakLabel": "تسلسل: {days} دن",
+  "@adherenceStreakLabel": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "adherenceChangeVsPreviousLabel": "پچھلے عرصے کے مقابلے میں تبدیلی",
+  "adherencePerMedicineHeader": "دوا کے لحاظ سے",
+  "adherenceAccessDeniedMessage": "آپ کو اس ڈیپنڈنٹ کی دوا کی پابندی دیکھنے کی اجازت نہیں ہے۔",
+  "noAdherenceDataMessage": "اس عرصے کے لیے ابھی تک دوا کا کوئی ڈیٹا نہیں ہے۔",
+  "vitalsSectionHeader": "وائٹلز کا رجحان",
+  "vitalsAccessDeniedMessage": "آپ کو اس ڈیپنڈنٹ کے وائٹلز کا رجحان دیکھنے کی اجازت نہیں ہے۔",
+  "vitalsMetricCountLabel": "ریڈنگز",
+  "vitalsMinLabel": "کم ترین",
+  "vitalsMaxLabel": "زیادہ ترین",
+  "vitalsAverageLabel": "اوسط",
+  "vitalsLatestLabel": "تازہ ترین",
+  "vitalsTrendLabel": "رجحان",
+  "vitalsTrendRising": "بڑھ رہا ہے",
+  "vitalsTrendFalling": "گر رہا ہے",
+  "vitalsTrendSteady": "مستحکم",
+  "noVitalsTrendDataMessage": "اس عرصے کے لیے ابھی تک وائٹلز کا کوئی ڈیٹا نہیں ہے۔",
+  "bloodPressureChartSystolicOnlyNote": "چارٹ صرف سسٹولک (اوپر والا) نمبر دکھاتا ہے۔"
 }

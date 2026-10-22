@@ -1846,4 +1846,96 @@ class AppLocalizationsUr extends AppLocalizations {
   @override
   String get cameraBeingViewedBanner =>
       'ایک سرپرست ابھی آپ کا کیمرہ دیکھ رہا ہے';
+
+  @override
+  String get analyticsButtonLabel => 'تحلیل';
+
+  @override
+  String get analyticsScreenTitle => 'تحلیل';
+
+  @override
+  String get analyticsDays7Label => '7 دن';
+
+  @override
+  String get analyticsDays30Label => '30 دن';
+
+  @override
+  String get analyticsDays90Label => '90 دن';
+
+  @override
+  String get adherenceSectionHeader => 'دوا کی پابندی';
+
+  @override
+  String get adherenceRateLabel => 'پابندی کی شرح';
+
+  @override
+  String get adherenceTakenLabel => 'لی گئی';
+
+  @override
+  String get adherenceMissedLabel => 'مِس ہوئی';
+
+  @override
+  String get adherenceWaitingLabel => 'باقی';
+
+  @override
+  String adherenceStreakLabel(int days) {
+    return 'تسلسل: $days دن';
+  }
+
+  @override
+  String get adherenceChangeVsPreviousLabel =>
+      'پچھلے عرصے کے مقابلے میں تبدیلی';
+
+  @override
+  String get adherencePerMedicineHeader => 'دوا کے لحاظ سے';
+
+  @override
+  String get adherenceAccessDeniedMessage =>
+      'آپ کو اس ڈیپنڈنٹ کی دوا کی پابندی دیکھنے کی اجازت نہیں ہے۔';
+
+  @override
+  String get noAdherenceDataMessage =>
+      'اس عرصے کے لیے ابھی تک دوا کا کوئی ڈیٹا نہیں ہے۔';
+
+  @override
+  String get vitalsSectionHeader => 'وائٹلز کا رجحان';
+
+  @override
+  String get vitalsAccessDeniedMessage =>
+      'آپ کو اس ڈیپنڈنٹ کے وائٹلز کا رجحان دیکھنے کی اجازت نہیں ہے۔';
+
+  @override
+  String get vitalsMetricCountLabel => 'ریڈنگز';
+
+  @override
+  String get vitalsMinLabel => 'کم ترین';
+
+  @override
+  String get vitalsMaxLabel => 'زیادہ ترین';
+
+  @override
+  String get vitalsAverageLabel => 'اوسط';
+
+  @override
+  String get vitalsLatestLabel => 'تازہ ترین';
+
+  @override
+  String get vitalsTrendLabel => 'رجحان';
+
+  @override
+  String get vitalsTrendRising => 'بڑھ رہا ہے';
+
+  @override
+  String get vitalsTrendFalling => 'گر رہا ہے';
+
+  @override
+  String get vitalsTrendSteady => 'مستحکم';
+
+  @override
+  String get noVitalsTrendDataMessage =>
+      'اس عرصے کے لیے ابھی تک وائٹلز کا کوئی ڈیٹا نہیں ہے۔';
+
+  @override
+  String get bloodPressureChartSystolicOnlyNote =>
+      'چارٹ صرف سسٹولک (اوپر والا) نمبر دکھاتا ہے۔';
 }

@@ -43,6 +43,7 @@ import '../../features/kyc/screens/dependent_kyc_screen.dart';
 import '../../features/dependent/screens/share_id_screen.dart';
 import '../../features/camera/screens/camera_screen.dart';
 import '../../features/camera/screens/camera_clips_screen.dart';
+import '../../features/analytics/screens/analytics_screen.dart';
 import '../guardian/dependent_summary.dart';
 
 // Task 1.8 — Navigation shell. Task 1.11 — added auth/KYC routes. Task 2.5
@@ -245,6 +246,19 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           key: state.pageKey,
           child: EmergencySettingsScreen(summary: state.extra as DependentSummary),
         ),
+      ),
+      // Task 7.3 — same `DependentSummary` extra as `/guardian/live-map`
+      // (both need dependentId + email for the AppBar title).
+      GoRoute(
+        path: '/guardian/analytics',
+        name: 'analytics',
+        pageBuilder: (context, state) {
+          final summary = state.extra as DependentSummary;
+          return NoTransitionPage(
+            key: state.pageKey,
+            child: AnalyticsScreen(dependentId: summary.dependentId, dependentLabel: summary.email),
+          );
+        },
       ),
       // Tasks 5.6/5.7/5.8/6.8 (2026-10-22): records/appointments/vitals/
       // wearable/directory routes are role-neutral (no `/guardian/` or
