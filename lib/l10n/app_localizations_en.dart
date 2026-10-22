@@ -1921,4 +1921,55 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get bloodPressureChartSystolicOnlyNote =>
       'Chart shows the systolic (top) number only.';
+
+  @override
+  String get callDependentButtonLabel => 'Call';
+
+  @override
+  String get callButtonTooltip => 'Call';
+
+  @override
+  String get voiceCallOption => 'Voice call';
+
+  @override
+  String get videoCallOption => 'Video call';
+
+  @override
+  String get callStartingLabel => 'Starting call…';
+
+  @override
+  String get callRingingLabel => 'Calling…';
+
+  @override
+  String get callFailedMessage => 'Couldn\'t start the call. Please try again.';
+
+  @override
+  String get callDeclinedMessage => 'Call declined.';
+
+  @override
+  String get callNoAnswerMessage => 'No answer.';
+
+  @override
+  String get callEndedMessage => 'Call ended.';
+
+  @override
+  String get callScreenOkButton => 'OK';
+
+  @override
+  String get declineCallButton => 'Decline';
+
+  @override
+  String get acceptCallButton => 'Accept';
+
+  @override
+  String get incomingVideoCallLabel => 'Incoming video call';
+
+  @override
+  String get incomingVoiceCallLabel => 'Incoming voice call';
+
+  @override
+  String get callConnectingLabel => 'Connecting…';
+
+  @override
+  String get callAlreadyEndedMessage => 'This call has already ended.';
 }

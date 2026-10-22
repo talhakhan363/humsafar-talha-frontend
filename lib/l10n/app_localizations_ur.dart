@@ -1938,4 +1938,55 @@ class AppLocalizationsUr extends AppLocalizations {
   @override
   String get bloodPressureChartSystolicOnlyNote =>
       'چارٹ صرف سسٹولک (اوپر والا) نمبر دکھاتا ہے۔';
+
+  @override
+  String get callDependentButtonLabel => 'کال';
+
+  @override
+  String get callButtonTooltip => 'کال';
+
+  @override
+  String get voiceCallOption => 'وائس کال';
+
+  @override
+  String get videoCallOption => 'ویڈیو کال';
+
+  @override
+  String get callStartingLabel => 'کال شروع ہو رہی ہے…';
+
+  @override
+  String get callRingingLabel => 'کال کی جا رہی ہے…';
+
+  @override
+  String get callFailedMessage => 'کال شروع نہیں ہو سکی۔ دوبارہ کوشش کریں۔';
+
+  @override
+  String get callDeclinedMessage => 'کال مسترد کر دی گئی۔';
+
+  @override
+  String get callNoAnswerMessage => 'کوئی جواب نہیں۔';
+
+  @override
+  String get callEndedMessage => 'کال ختم ہو گئی۔';
+
+  @override
+  String get callScreenOkButton => 'ٹھیک ہے';
+
+  @override
+  String get declineCallButton => 'مسترد کریں';
+
+  @override
+  String get acceptCallButton => 'قبول کریں';
+
+  @override
+  String get incomingVideoCallLabel => 'آنے والی ویڈیو کال';
+
+  @override
+  String get incomingVoiceCallLabel => 'آنے والی وائس کال';
+
+  @override
+  String get callConnectingLabel => 'رابطہ ہو رہا ہے…';
+
+  @override
+  String get callAlreadyEndedMessage => 'یہ کال پہلے ہی ختم ہو چکی ہے۔';
 }

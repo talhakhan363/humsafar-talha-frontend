@@ -3571,6 +3571,108 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Chart shows the systolic (top) number only.'**
   String get bloodPressureChartSystolicOnlyNote;
+
+  /// No description provided for @callDependentButtonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Call'**
+  String get callDependentButtonLabel;
+
+  /// No description provided for @callButtonTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Call'**
+  String get callButtonTooltip;
+
+  /// No description provided for @voiceCallOption.
+  ///
+  /// In en, this message translates to:
+  /// **'Voice call'**
+  String get voiceCallOption;
+
+  /// No description provided for @videoCallOption.
+  ///
+  /// In en, this message translates to:
+  /// **'Video call'**
+  String get videoCallOption;
+
+  /// No description provided for @callStartingLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Starting call…'**
+  String get callStartingLabel;
+
+  /// No description provided for @callRingingLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Calling…'**
+  String get callRingingLabel;
+
+  /// No description provided for @callFailedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t start the call. Please try again.'**
+  String get callFailedMessage;
+
+  /// No description provided for @callDeclinedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Call declined.'**
+  String get callDeclinedMessage;
+
+  /// No description provided for @callNoAnswerMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'No answer.'**
+  String get callNoAnswerMessage;
+
+  /// No description provided for @callEndedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Call ended.'**
+  String get callEndedMessage;
+
+  /// No description provided for @callScreenOkButton.
+  ///
+  /// In en, this message translates to:
+  /// **'OK'**
+  String get callScreenOkButton;
+
+  /// No description provided for @declineCallButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Decline'**
+  String get declineCallButton;
+
+  /// No description provided for @acceptCallButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Accept'**
+  String get acceptCallButton;
+
+  /// No description provided for @incomingVideoCallLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Incoming video call'**
+  String get incomingVideoCallLabel;
+
+  /// No description provided for @incomingVoiceCallLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Incoming voice call'**
+  String get incomingVoiceCallLabel;
+
+  /// No description provided for @callConnectingLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Connecting…'**
+  String get callConnectingLabel;
+
+  /// No description provided for @callAlreadyEndedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'This call has already ended.'**
+  String get callAlreadyEndedMessage;
 }
 
 class _AppLocalizationsDelegate
