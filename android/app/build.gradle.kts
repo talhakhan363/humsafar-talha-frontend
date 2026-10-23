@@ -31,7 +31,11 @@ android {
         applicationId = "com.example.humsafar_talha_frontend"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
-        minSdk = 23
+        // 2026-10-22 — bumped from 23: the audio_session plugin (pulled in
+        // by just_audio for voice-message playback, Task 4.8) requires
+        // minSdk 24 and failed the manifest merge at 23. 24 = Android 7.0
+        // (2016); negligible real-device impact.
+        minSdk = 24
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName

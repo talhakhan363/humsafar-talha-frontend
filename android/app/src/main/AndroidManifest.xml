@@ -46,7 +46,15 @@
     <application
         android:label="humsafar_talha_frontend"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/ic_launcher"
+        android:usesCleartextTraffic="true">
+        <!-- 2026-10-22 — allows plain http:// Dio calls (the emulator default
+             10.0.2.2:8000 and real-device testing against a teammate's LAN IP
+             like Abdullah's backend at 192.168.1.37:8000). Android blocks
+             cleartext traffic by default from API 28+, which this app's
+             targetSdk exceeds; every real call in this codebase is http, not
+             https, so without this flag a real-device run would be silently
+             blocked by the OS, not by anything wrong in the app itself. -->
         <activity
             android:name=".MainActivity"
             android:exported="true"
