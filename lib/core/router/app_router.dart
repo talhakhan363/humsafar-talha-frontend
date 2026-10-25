@@ -437,6 +437,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             key: state.pageKey,
             child: CallScreen(
               callId: args['callId'] as String,
+              roomId: args['roomId'] as String,
               appId: args['appId'] as int,
               token: args['token'] as String,
               userId: args['userId'] as String,
