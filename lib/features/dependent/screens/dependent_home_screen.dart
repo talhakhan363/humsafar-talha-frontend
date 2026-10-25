@@ -12,6 +12,7 @@ import '../../../core/location/location_polling_service.dart';
 import '../../../core/network/api_exception.dart';
 import '../../../core/network/providers.dart';
 import '../../../core/scheduling/schedule_helpers.dart';
+import '../../../core/theme/humsafar_colors.dart';
 import '../../../shared/widgets/accessibility_toggle_button.dart';
 import '../../../shared/widgets/language_switch_button.dart';
 import '../widgets/camera_viewing_banner.dart';
@@ -248,7 +249,7 @@ class _DependentHomeScreenState extends ConsumerState<DependentHomeScreen> with 
             const SizedBox(height: 2),
             Text(
               '${weekdayName(now, languageCode)} · ${formatClockTime(now)}',
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.grey.shade600),
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: HumsafarColors.muted),
             ),
             const SizedBox(height: 20),
             PanicButton(
@@ -288,7 +289,10 @@ class _DependentHomeScreenState extends ConsumerState<DependentHomeScreen> with 
             ),
             if (_scheduleLoadError != null) ...[
               const SizedBox(height: 12),
-              Text(_scheduleLoadError!, style: TextStyle(color: Colors.red.shade700)),
+              // Fixed 2026-10-25 — Design Handoff v1.0 fix #5: this was red,
+              // but red is reserved for Panic/critical alerts only (section
+              // 2.5). A load error here is a warning, not a Panic.
+              Text(_scheduleLoadError!, style: const TextStyle(color: HumsafarColors.warning)),
             ],
             const SizedBox(height: 24),
             // Tasks 5.6/5.7/5.8/6.8 (2026-10-22): the first four real
