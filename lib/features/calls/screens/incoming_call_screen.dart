@@ -66,9 +66,11 @@ class _IncomingCallScreenState extends ConsumerState<IncomingCallScreen> {
     setState(() => _state = _IncomingCallState.accepting);
     try {
       final response = await ref.read(apiClientProvider).post<Map<String, dynamic>>('/calls/${widget.callId}/accept');
-      final zego = response.data?['zego'] as Map<String, dynamic>?;
+      // Fixed 2026-10-24: the real backend sends this under `join`, not
+      // `zego` — see call_screen.dart's class doc comment.
+      final join = response.data?['join'] as Map<String, dynamic>?;
       if (!mounted) return;
-      if (zego == null) {
+      if (join == null) {
         setState(() => _state = _IncomingCallState.error);
         return;
       }
@@ -77,10 +79,12 @@ class _IncomingCallScreenState extends ConsumerState<IncomingCallScreen> {
         '/calls/active',
         extra: {
           'callId': widget.callId,
-          'appId': zego['app_id'] as int,
-          'token': zego['token'] as String,
+          'roomId': join['room_id'] as String,
+          // app_id arrives as a string, not an int — must be parsed.
+          'appId': int.parse(join['app_id'] as String),
+          'token': join['token'] as String,
           'isVideo': widget.isVideo,
-          'userId': me?.userId ?? '',
+          'userId': join['user_id'] as String,
           'userName': me?.fullName ?? '',
         },
       );
