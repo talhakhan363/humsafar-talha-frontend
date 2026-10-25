@@ -294,7 +294,7 @@ class _PanicScreenState extends ConsumerState<PanicScreen> {
           // on the hold-to-trigger button (_buildHoldView, untouched by
           // this fix). A checkmark reads as reassurance, so it's styled
           // with the success token rather than danger.
-          Icon(Icons.check_circle, color: HumsafarColors.success, size: 96),
+          const Icon(Icons.check_circle, color: HumsafarColors.success, size: 96),
           const SizedBox(height: 16),
           Text(
             l10n.panicHelpIsComingTitle,
