@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/theme/humsafar_colors.dart';
+
 /// Task 3.10 — the big, high-contrast-aware action buttons on the
 /// Dependent home screen (mockup screen 20). Public (not private to the
 /// screen file) so they're independently widget-testable — see
@@ -29,17 +31,24 @@ class PanicButton extends StatelessWidget {
     final baseTitleSize = textTheme.titleLarge?.fontSize ?? 22;
     final labelStyle = (textTheme.titleLarge ?? const TextStyle(fontWeight: FontWeight.w700))
         .copyWith(fontSize: baseTitleSize * 1.4, color: Colors.white);
-    final subtitleStyle = (textTheme.bodyLarge ?? const TextStyle(fontSize: 16)).copyWith(color: Colors.white70);
+    // Fixed 2026-10-25 — Design Handoff v1.0 fix #3: white70-on-red.shade700
+    // was only 3.12:1, below the 4.5:1 AA minimum on this safety-critical
+    // screen. Plain white on the handoff's danger token is 5.30:1.
+    final subtitleStyle = (textTheme.bodyLarge ?? const TextStyle(fontSize: 16)).copyWith(color: Colors.white);
 
     return Material(
-      color: Colors.red.shade700,
+      // Fix #2 (section 3): was Colors.red.shade700 — now the handoff's
+      // danger token, reserved for Panic/critical alerts only.
+      color: HumsafarColors.danger,
       borderRadius: BorderRadius.circular(16),
       child: InkWell(
         borderRadius: BorderRadius.circular(16),
         onTap: onTap,
         child: Container(
           width: double.infinity,
-          constraints: const BoxConstraints(minHeight: 160),
+          // Fixed 2026-10-25 — Design Handoff v1.0 fix #4: mockup 20 has
+          // this button 200px tall, not 160.
+          constraints: const BoxConstraints(minHeight: 200),
           padding: const EdgeInsets.all(20),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -69,9 +78,11 @@ class SafetyActionButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    // Fix #2 (section 3): was Colors.teal.shade800 / Colors.grey.shade700 /
+    // Colors.teal — now the handoff's primaryDark/muted/primary tokens.
     final labelStyle =
-        (textTheme.titleLarge ?? const TextStyle(fontSize: 22, fontWeight: FontWeight.w700)).copyWith(color: Colors.teal.shade800);
-    final subtitleStyle = (textTheme.bodyMedium ?? const TextStyle(fontSize: 14)).copyWith(color: Colors.grey.shade700);
+        (textTheme.titleLarge ?? const TextStyle(fontSize: 22, fontWeight: FontWeight.w700)).copyWith(color: HumsafarColors.primaryDark);
+    final subtitleStyle = (textTheme.bodyMedium ?? const TextStyle(fontSize: 14)).copyWith(color: HumsafarColors.muted);
 
     return Material(
       color: Colors.transparent,
@@ -83,7 +94,7 @@ class SafetyActionButton extends StatelessWidget {
           constraints: const BoxConstraints(minHeight: 110),
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            border: Border.all(color: Colors.teal, width: 2),
+            border: Border.all(color: HumsafarColors.primary, width: 2),
             borderRadius: BorderRadius.circular(16),
           ),
           child: Column(
