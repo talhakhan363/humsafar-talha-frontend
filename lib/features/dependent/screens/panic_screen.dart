@@ -9,6 +9,7 @@ import '../../../core/auth/current_user_provider.dart';
 import '../../../core/network/api_exception.dart';
 import '../../../core/network/providers.dart';
 import '../../../core/scheduling/schedule_helpers.dart';
+import '../../../core/theme/humsafar_colors.dart';
 import '../../../shared/widgets/accessibility_toggle_button.dart';
 import '../../../shared/widgets/language_switch_button.dart';
 import '../widgets/panic_hold_button.dart';
@@ -286,11 +287,18 @@ class _PanicScreenState extends ConsumerState<PanicScreen> {
       padding: const EdgeInsets.all(24),
       child: Column(
         children: [
-          Icon(Icons.check_circle, color: Colors.red.shade700, size: 96),
+          // Fixed 2026-10-25 — Design Handoff v1.0 fix #6: this whole view
+          // used to lean on red (icon, title, escalation note), but by the
+          // time a Dependent sees "help is coming" the Panic has already
+          // been sent — mockup 21b uses calm colours here, keeping red only
+          // on the hold-to-trigger button (_buildHoldView, untouched by
+          // this fix). A checkmark reads as reassurance, so it's styled
+          // with the success token rather than danger.
+          Icon(Icons.check_circle, color: HumsafarColors.success, size: 96),
           const SizedBox(height: 16),
           Text(
             l10n.panicHelpIsComingTitle,
-            style: textTheme.headlineSmall?.copyWith(color: Colors.red.shade700, fontWeight: FontWeight.bold),
+            style: textTheme.headlineSmall?.copyWith(color: HumsafarColors.success, fontWeight: FontWeight.bold),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 8),
@@ -298,7 +306,7 @@ class _PanicScreenState extends ConsumerState<PanicScreen> {
           if (triggeredAt != null)
             Text(
               l10n.panicTriggeredAtMessage(formatClockTime(triggeredAt)),
-              style: textTheme.bodyMedium?.copyWith(color: Colors.grey.shade600),
+              style: textTheme.bodyMedium?.copyWith(color: HumsafarColors.muted),
               textAlign: TextAlign.center,
             ),
           const SizedBox(height: 16),
@@ -311,16 +319,19 @@ class _PanicScreenState extends ConsumerState<PanicScreen> {
           ),
           if (tier == 'external_contact') ...[
             const SizedBox(height: 8),
+            // Still amber, not red — this view stays calm throughout per
+            // fix #6; an escalation note here is a status update, not a
+            // new Panic trigger.
             Text(
               l10n.panicEscalatedMessage,
-              style: textTheme.bodyLarge?.copyWith(color: Colors.red.shade700, fontWeight: FontWeight.w600),
+              style: textTheme.bodyLarge?.copyWith(color: HumsafarColors.warning, fontWeight: FontWeight.w600),
               textAlign: TextAlign.center,
             ),
           ],
           const SizedBox(height: 16),
           Text(
             l10n.panicAutoEscalateNote,
-            style: textTheme.bodySmall?.copyWith(color: Colors.grey.shade600),
+            style: textTheme.bodySmall?.copyWith(color: HumsafarColors.muted),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 32),
