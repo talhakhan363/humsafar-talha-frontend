@@ -29,31 +29,32 @@ import '../../../core/auth/current_user_provider.dart';
 /// declines, or the call is auto-marked missed by the backend's own
 /// 30s timeout job.
 ///
-/// **Named field-name caveat:** `call_contract.md` itself hasn't been
-/// read fresh in this sandbox — it lives in the backend repo, not
-/// available here. Built from the Progress Tracker's written summary
-/// for Task 4.4 ("start / ring / accept / decline / end, 30s missed
-/// timeout, one open call per person, mock join token, history,
-/// background job") — same contract-grounding convention, and the same
-/// caveat, as Tasks 6.9/7.3. Assumed shapes:
+/// **Fixed 2026-10-24 — real `call_contract.md` field names, confirmed
+/// independently by both Abdullah and Sarim (reading straight from
+/// `docs/api/call_contract.md`/`backend/app/schemas/call.py` on `dev`),
+/// replacing this screen's earlier guessed/summarized shape:**
 /// - `POST /calls` body `{"receiver_id": ..., "type": "video"|"voice"}`
-///   → `{"call_id": ..., "status": "ringing", ...}`.
+///   → `{"call_id": ..., "status": "ringing", ...}` — unchanged, this
+///   part was already correct.
 /// - `GET /calls/{id}` → `{"call_id": ..., "status": "ringing"|
-///   "accepted"|"declined"|"missed"|"ended", "zego": {"app_id": <int>,
-///   "token": <string>} | null}` — `zego` is assumed present once
-///   `status` is `"accepted"`, carrying everything `CallScreen` needs to
-///   join. The ZegoCloud App ID and the per-call token both come from
-///   the backend (which already has to generate the real token per Task
-///   4.4b, `CALL_PROVIDER=zego`) — this Flutter app never embeds the
-///   ZegoCloud App ID or Server Secret itself, only what the backend
-///   hands back per call.
-/// - The call's own `call_id` is reused as ZegoCloud's `callID` (the
-///   room/channel identifier) rather than inventing a separate field.
+///   "accepted"|"declined"|"missed"|"ended"|"cancelled", "join": {
+///   "provider", "app_id", "room_id", "user_id", "token", "expires_at"
+///   } | null}`. The real key is **`join`, not `zego`**.
+/// - `join['app_id']` is a **string**, not an int — must go through
+///   `int.parse(...)` before reaching `CallScreen`'s `appID`, or it
+///   throws.
+/// - The ZegoCloud room/channel id and the joining user id are
+///   `join['room_id']`/`join['user_id']` — **not** this app's own
+///   `call_id`/current-user id. The token is signed for those exact
+///   values; joining with this app's own ids instead gets refused by
+///   ZegoCloud the moment a real (non-mock) token is used. See
+///   `call_screen.dart`'s class doc comment for how `callId` (this
+///   app's own id, for `POST /calls/{id}/end`) and the new `roomId`
+///   (ZegoCloud's id, for the actual join) are now kept separate.
 ///
-/// If the real contract differs, only this screen's polling logic and
-/// `IncomingCallScreen`/`CallScreen`'s matching assumptions need
-/// adjusting — flagged for Abdullah/Talha to confirm against the real
-/// `call_contract.md`.
+/// Everything else in this screen (the `/calls` POST, the 2s poll, the
+/// `ringing`/`declined`/`missed`/`ended` status names) was already
+/// correct and needed no change.
 class OutgoingCallScreen extends ConsumerStatefulWidget {
   const OutgoingCallScreen({super.key, required this.calleeId, required this.calleeName, required this.isVideo});
 
@@ -117,12 +118,12 @@ class _OutgoingCallScreenState extends ConsumerState<OutgoingCallScreen> {
       switch (status) {
         case 'accepted':
           _pollTimer?.cancel();
-          final zego = response.data?['zego'] as Map<String, dynamic>?;
-          if (zego == null) {
+          final join = response.data?['join'] as Map<String, dynamic>?;
+          if (join == null) {
             setState(() => _state = _OutgoingCallState.failed);
             return;
           }
-          _goToCallScreen(callId, zego);
+          _goToCallScreen(callId, join);
         case 'declined':
           _pollTimer?.cancel();
           setState(() => _state = _OutgoingCallState.declined);
@@ -142,16 +143,18 @@ class _OutgoingCallScreenState extends ConsumerState<OutgoingCallScreen> {
     }
   }
 
-  void _goToCallScreen(String callId, Map<String, dynamic> zego) {
+  void _goToCallScreen(String callId, Map<String, dynamic> join) {
     final me = ref.read(currentUserProvider);
     context.pushReplacement(
       '/calls/active',
       extra: {
         'callId': callId,
-        'appId': zego['app_id'] as int,
-        'token': zego['token'] as String,
+        'roomId': join['room_id'] as String,
+        // app_id arrives as a string, not an int — must be parsed.
+        'appId': int.parse(join['app_id'] as String),
+        'token': join['token'] as String,
         'isVideo': widget.isVideo,
-        'userId': me?.userId ?? '',
+        'userId': join['user_id'] as String,
         'userName': me?.fullName ?? '',
       },
     );
