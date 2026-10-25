@@ -37,7 +37,7 @@ void main() {
       getHandler: (_) => {
         'call_id': 'call-1',
         'status': 'accepted',
-        'zego': {'app_id': 123456789, 'token': 'tok-abc'},
+        'join': {'provider': 'zego', 'app_id': '123456789', 'room_id': 'room-1', 'user_id': 'user-1', 'token': 'tok-abc'},
       },
     );
     await tester.pumpWidget(wrapWithRouter(fakeClient: fakeClient, initialLocation: '/calls/outgoing-under-test', routes: _routes()));
