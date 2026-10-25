@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'accessibility_mode.dart';
+import 'humsafar_colors.dart';
 
 /// Task 1.9 — the two ThemeData sets the app switches between.
 ///
@@ -20,9 +21,42 @@ class AppTheme {
     }
   }
 
+  /// Fixed 2026-10-25 — Design Handoff v1.0 fix #1 (section 3): this used
+  /// to generate its whole palette from one green seed colour
+  /// (`0xFF2E7D32`), which is why the app still looked green everywhere
+  /// instead of Sarim's teal brand. Now built from [HumsafarColors]
+  /// instead, with `fromSeed`'s override parameters pinning the roles the
+  /// handoff actually specifies (primary/secondary/surface/error/outline)
+  /// rather than letting Material 3 derive them from a seed guess. This is
+  /// the foundational piece of the handoff's 8-item fix list — the other 7
+  /// (37 raw-Colors.* screens, Panic button sizing/contrast, the location
+  /// banner, Inter font, etc.) are a separate follow-up pass.
   static final ThemeData _standard = ThemeData(
     useMaterial3: true,
-    colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF2E7D32)),
+    colorScheme: ColorScheme.fromSeed(
+      seedColor: HumsafarColors.primary,
+      primary: HumsafarColors.primary,
+      onPrimary: Colors.white,
+      primaryContainer: HumsafarColors.primaryTint,
+      onPrimaryContainer: HumsafarColors.primaryDark,
+      secondary: HumsafarColors.primaryDark,
+      onSecondary: Colors.white,
+      secondaryContainer: HumsafarColors.primarySoft,
+      onSecondaryContainer: HumsafarColors.primaryDark,
+      surface: HumsafarColors.surface,
+      onSurface: HumsafarColors.text,
+      error: HumsafarColors.danger,
+      onError: Colors.white,
+      errorContainer: HumsafarColors.dangerTint,
+      onErrorContainer: HumsafarColors.danger,
+      outline: HumsafarColors.border,
+    ),
+    scaffoldBackgroundColor: HumsafarColors.background,
+    appBarTheme: const AppBarTheme(
+      backgroundColor: HumsafarColors.surface,
+      foregroundColor: HumsafarColors.text,
+      elevation: 0,
+    ),
     textTheme: _baseTextTheme,
   );
 
