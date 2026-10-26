@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:humsafar_frontend/l10n/app_localizations.dart';
 
+import '../../core/theme/humsafar_colors.dart';
+
 /// Task 3.14 — small, pure (no network, no BuildContext-dependent state)
 /// helpers for turning one `GET /notifications` item (notification_contract.md)
 /// into display strings/colors. Shared between GuardianHomeScreen's "Needs
@@ -42,21 +44,26 @@ String alertTypeLabel(AppLocalizations l10n, String type) {
 ({IconData icon, Color color}) alertVisualsFor(String type) {
   switch (type) {
     case 'panic':
-      return (icon: Icons.warning_rounded, color: Colors.red.shade700);
+      // Fix #2 (Design Handoff v1.0, section 3): tokenized, kept red on
+      // purpose — this is literally the Panic alert type, matching the
+      // handoff's "red for Panic and critical alerts" rule. Every other
+      // type below moved to the warning token (amber), per this
+      // function's own doc comment on mockup 08's convention.
+      return (icon: Icons.warning_rounded, color: HumsafarColors.danger);
     case 'missed_dose':
-      return (icon: Icons.medication_outlined, color: Colors.orange.shade800);
+      return (icon: Icons.medication_outlined, color: HumsafarColors.warning);
     case 'wellness_check':
-      return (icon: Icons.favorite_border, color: Colors.orange.shade800);
+      return (icon: Icons.favorite_border, color: HumsafarColors.warning);
     case 'geofence_breach':
-      return (icon: Icons.location_off_outlined, color: Colors.orange.shade800);
+      return (icon: Icons.location_off_outlined, color: HumsafarColors.warning);
     case 'low_battery':
-      return (icon: Icons.battery_alert_outlined, color: Colors.orange.shade800);
+      return (icon: Icons.battery_alert_outlined, color: HumsafarColors.warning);
     case 'device_offline':
-      return (icon: Icons.phonelink_erase_outlined, color: Colors.orange.shade800);
+      return (icon: Icons.phonelink_erase_outlined, color: HumsafarColors.warning);
     case 'external_contact':
-      return (icon: Icons.sms_outlined, color: Colors.orange.shade800);
+      return (icon: Icons.sms_outlined, color: HumsafarColors.warning);
     default:
-      return (icon: Icons.notifications_outlined, color: Colors.grey.shade700);
+      return (icon: Icons.notifications_outlined, color: HumsafarColors.muted);
   }
 }
 
