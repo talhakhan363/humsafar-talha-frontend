@@ -7,6 +7,7 @@ import 'package:humsafar_frontend/l10n/app_localizations.dart';
 
 import '../../../core/network/api_exception.dart';
 import '../../../core/network/providers.dart';
+import '../../../core/theme/humsafar_colors.dart';
 import '../../../shared/widgets/accessibility_toggle_button.dart';
 import '../../../shared/widgets/language_switch_button.dart';
 import 'vitals_screen.dart' show metricLabel;
@@ -151,7 +152,7 @@ class _AddVitalReadingScreenState extends ConsumerState<AddVitalReadingScreen> {
           TextField(controller: _noteController, decoration: InputDecoration(labelText: l10n.vitalNoteFieldLabel)),
           if (_error != null) ...[
             const SizedBox(height: 12),
-            Text(_error!, style: TextStyle(color: Colors.red.shade700)),
+            Text(_error!, style: const TextStyle(color: HumsafarColors.warning)),
           ],
           const SizedBox(height: 24),
           ElevatedButton(
