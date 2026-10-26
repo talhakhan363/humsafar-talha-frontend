@@ -258,7 +258,7 @@ class _PanicScreenState extends ConsumerState<PanicScreen> {
             const SizedBox(height: 4),
             Text(
               l10n.panicHoldStopsAccidentNote,
-              style: textTheme.bodyMedium?.copyWith(color: Colors.grey.shade600),
+              style: textTheme.bodyMedium?.copyWith(color: HumsafarColors.muted),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 24),
