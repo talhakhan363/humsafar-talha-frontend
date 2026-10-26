@@ -5,6 +5,7 @@ import 'package:humsafar_frontend/l10n/app_localizations.dart';
 
 import '../../../core/network/api_exception.dart';
 import '../../../core/network/providers.dart';
+import '../../../core/theme/humsafar_colors.dart';
 import '../../../shared/widgets/accessibility_toggle_button.dart';
 import '../../../shared/widgets/language_switch_button.dart';
 import '../models/conversation_summary.dart';
@@ -140,11 +141,11 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 if (roleLabel != null)
-                  Text(roleLabel, style: TextStyle(fontSize: 12, color: Colors.grey.shade600)),
+                  Text(roleLabel, style: const TextStyle(fontSize: 12, color: HumsafarColors.muted)),
                 Row(
                   children: [
                     if (c.lastMessageIsVoice) ...[
-                      const Icon(Icons.mic, size: 16, color: Colors.amber),
+                      const Icon(Icons.mic, size: 16, color: HumsafarColors.warning),
                       const SizedBox(width: 4),
                     ],
                     Expanded(
@@ -164,7 +165,7 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
             trailing: c.unreadCount > 0
                 ? CircleAvatar(
                     radius: 12,
-                    backgroundColor: Colors.red.shade700,
+                    backgroundColor: HumsafarColors.danger,
                     child: Text('${c.unreadCount}', style: const TextStyle(color: Colors.white, fontSize: 12)),
                   )
                 : const Icon(Icons.chevron_right),
