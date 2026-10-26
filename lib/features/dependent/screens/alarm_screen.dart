@@ -9,6 +9,7 @@ import '../../../core/auth/current_user_provider.dart';
 import '../../../core/network/api_exception.dart';
 import '../../../core/network/providers.dart';
 import '../../../core/scheduling/schedule_helpers.dart';
+import '../../../core/theme/humsafar_colors.dart';
 import '../../../shared/widgets/accessibility_toggle_button.dart';
 import '../../../shared/widgets/language_switch_button.dart';
 
@@ -122,7 +123,7 @@ class _AlarmScreenState extends ConsumerState<AlarmScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final backgroundColor = Colors.teal.shade800;
+    const backgroundColor = HumsafarColors.primaryDark;
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: AppBar(
@@ -193,7 +194,7 @@ class _AlarmScreenState extends ConsumerState<AlarmScreen> {
                     width: 120,
                     height: 120,
                     decoration: const BoxDecoration(shape: BoxShape.circle, color: Colors.white),
-                    child: Icon(Icons.notifications, size: 56, color: Colors.teal.shade800),
+                    child: const Icon(Icons.notifications, size: 56, color: HumsafarColors.primaryDark),
                   ),
                 ),
               ),
@@ -215,7 +216,7 @@ class _AlarmScreenState extends ConsumerState<AlarmScreen> {
             width: double.infinity,
             child: ElevatedButton(
               onPressed: _isStopping ? null : _stopAlarm,
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.white, foregroundColor: Colors.teal.shade800),
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.white, foregroundColor: HumsafarColors.primaryDark),
               child: Text(l10n.stopAlarmButtonLabel),
             ),
           ),
