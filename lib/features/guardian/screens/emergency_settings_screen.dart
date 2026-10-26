@@ -5,6 +5,7 @@ import 'package:humsafar_frontend/l10n/app_localizations.dart';
 import '../../../core/guardian/dependent_summary.dart';
 import '../../../core/network/api_exception.dart';
 import '../../../core/network/providers.dart';
+import '../../../core/theme/humsafar_colors.dart';
 import '../../../shared/widgets/accessibility_toggle_button.dart';
 import '../../../shared/widgets/language_switch_button.dart';
 
@@ -204,11 +205,15 @@ class _EmergencySettingsScreenState extends ConsumerState<EmergencySettingsScree
                 if (isPrimary)
                   ElevatedButton(
                     onPressed: _isAlarmActing ? null : _toggleAlarm,
-                    style: _alarmActive ? ElevatedButton.styleFrom(backgroundColor: Colors.red.shade700) : null,
+                    // Still red on purpose while active — this mirrors a
+                    // live remote alarm actually ringing on the
+                    // Dependent's phone, a critical state, not a plain
+                    // error (fix #2, Design Handoff v1.0 section 3).
+                    style: _alarmActive ? ElevatedButton.styleFrom(backgroundColor: HumsafarColors.danger) : null,
                     child: Text(_alarmActive ? l10n.stopAlarmButton : l10n.ringAlarmButton),
                   )
                 else
-                  Text(l10n.notPrimaryGuardianNote, style: TextStyle(color: Colors.grey.shade700)),
+                  Text(l10n.notPrimaryGuardianNote, style: const TextStyle(color: HumsafarColors.muted)),
               ],
             ),
           ),
@@ -216,10 +221,10 @@ class _EmergencySettingsScreenState extends ConsumerState<EmergencySettingsScree
         const SizedBox(height: 16),
         Text(l10n.emergencyContactSectionTitle, style: Theme.of(context).textTheme.titleMedium),
         const SizedBox(height: 4),
-        Text(l10n.emergencyContactDescription, style: TextStyle(color: Colors.grey.shade700)),
+        Text(l10n.emergencyContactDescription, style: const TextStyle(color: HumsafarColors.muted)),
         const SizedBox(height: 12),
         if (_contactDenied)
-          Text(l10n.emergencyContactDeniedNote, style: TextStyle(color: Colors.grey.shade700))
+          Text(l10n.emergencyContactDeniedNote, style: const TextStyle(color: HumsafarColors.muted))
         else if (_contactLoadError != null) ...[
           Text(_contactLoadError!, textAlign: TextAlign.center),
           const SizedBox(height: 8),
