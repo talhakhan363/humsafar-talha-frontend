@@ -18,6 +18,18 @@ dependencies:
   flutter_riverpod: ^2.5.1
   go_router: ^14.2.0
 
+  # Design Handoff v1.0 fix #8 (section 2.3): Latin text uses Inter; Urdu
+  # falls back to Noto Nastaliq Urdu (Inter has no Urdu letters). Both come
+  # from google_fonts at runtime rather than bundling .ttf files — the
+  # handoff explicitly allows either approach ("add it with google_fonts or
+  # bundle the .ttf files"), and google_fonts also hosts Noto Nastaliq Urdu,
+  # so one package covers both without adding font assets to this file.
+  # Version pin unverified against a real `flutter pub get` on Talha's
+  # installed Flutter 3.32.1 — same named risk as fl_chart/
+  # zego_uikit_prebuilt_call above; if this specific line fails to
+  # resolve, send the real error and an adjusted pin is a quick follow-up.
+  google_fonts: ^6.2.1
+
   cupertino_icons: ^1.0.6
   dio: ^5.11.0
   flutter_secure_storage: ^10.3.1
