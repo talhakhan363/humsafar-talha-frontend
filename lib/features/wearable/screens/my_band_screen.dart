@@ -5,6 +5,7 @@ import 'package:humsafar_frontend/l10n/app_localizations.dart';
 
 import '../../../core/network/api_exception.dart';
 import '../../../core/network/providers.dart';
+import '../../../core/theme/humsafar_colors.dart';
 import '../../../shared/widgets/accessibility_toggle_button.dart';
 import '../../../shared/widgets/language_switch_button.dart';
 
@@ -158,7 +159,7 @@ class _MyBandScreenState extends ConsumerState<MyBandScreen> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(Icons.watch_outlined, size: 48, color: Colors.grey),
+              const Icon(Icons.watch_outlined, size: 48, color: HumsafarColors.muted),
               const SizedBox(height: 12),
               Text(l10n.bandStatusNotPaired, textAlign: TextAlign.center),
               const SizedBox(height: 16),
@@ -178,12 +179,12 @@ class _MyBandScreenState extends ConsumerState<MyBandScreen> {
       children: [
         if (status == 'no_data')
           Card(
-            color: Colors.amber.shade50,
+            color: HumsafarColors.warningTint,
             child: Padding(
               padding: const EdgeInsets.all(12),
               child: Row(
                 children: [
-                  Icon(Icons.warning_amber_outlined, color: Colors.amber.shade800),
+                  const Icon(Icons.warning_amber_outlined, color: HumsafarColors.warning),
                   const SizedBox(width: 8),
                   Expanded(child: Text(l10n.bandNoDataBanner)),
                 ],
