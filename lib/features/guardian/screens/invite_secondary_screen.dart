@@ -5,6 +5,7 @@ import 'package:humsafar_frontend/l10n/app_localizations.dart';
 
 import '../../../core/network/api_exception.dart';
 import '../../../core/network/providers.dart';
+import '../../../core/theme/humsafar_colors.dart';
 import '../../../shared/widgets/accessibility_toggle_button.dart';
 import '../../../shared/widgets/language_switch_button.dart';
 
@@ -127,7 +128,7 @@ class _InviteSecondaryScreenState extends ConsumerState<InviteSecondaryScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        const Icon(Icons.check_circle, size: 48, color: Colors.green),
+        const Icon(Icons.check_circle, size: 48, color: HumsafarColors.success),
         const SizedBox(height: 16),
         Text(l10n.inviteCreatedMessage(days), textAlign: TextAlign.center),
         const SizedBox(height: 12),
