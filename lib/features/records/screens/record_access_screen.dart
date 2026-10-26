@@ -4,6 +4,7 @@ import 'package:humsafar_frontend/l10n/app_localizations.dart';
 
 import '../../../core/network/api_exception.dart';
 import '../../../core/network/providers.dart';
+import '../../../core/theme/humsafar_colors.dart';
 import '../../../shared/widgets/accessibility_toggle_button.dart';
 import '../../../shared/widgets/language_switch_button.dart';
 import 'medical_vault_screen.dart' show categoryLabel;
@@ -127,7 +128,7 @@ class _RecordAccessScreenState extends ConsumerState<RecordAccessScreen> {
                 if (!granted)
                   Padding(
                     padding: const EdgeInsets.only(top: 4),
-                    child: Text(l10n.healthRecordsNotGrantedNote, style: TextStyle(color: Colors.grey.shade600)),
+                    child: Text(l10n.healthRecordsNotGrantedNote, style: const TextStyle(color: HumsafarColors.muted)),
                   ),
                 const SizedBox(height: 8),
                 ..._categories.map((category) {
