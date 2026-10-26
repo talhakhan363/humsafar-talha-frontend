@@ -7,6 +7,7 @@ import 'package:humsafar_frontend/l10n/app_localizations.dart';
 
 import '../../../core/network/api_exception.dart';
 import '../../../core/network/providers.dart';
+import '../../../core/theme/humsafar_colors.dart';
 import '../../../shared/widgets/accessibility_toggle_button.dart';
 import '../../../shared/widgets/language_switch_button.dart';
 
@@ -232,7 +233,7 @@ class _CameraScreenState extends ConsumerState<CameraScreen> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(Icons.videocam_off_outlined, size: 48, color: Colors.grey.shade600),
+              const Icon(Icons.videocam_off_outlined, size: 48, color: HumsafarColors.muted),
               const SizedBox(height: 12),
               Text(l10n.cameraNotPairedMessage, textAlign: TextAlign.center),
             ],
@@ -246,9 +247,9 @@ class _CameraScreenState extends ConsumerState<CameraScreen> {
         if (_watchError != null)
           Container(
             width: double.infinity,
-            color: Colors.amber.shade100,
+            color: HumsafarColors.warningTint,
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-            child: Text(_watchError!, style: TextStyle(color: Colors.amber.shade900)),
+            child: Text(_watchError!, style: const TextStyle(color: HumsafarColors.warning)),
           ),
         Expanded(child: _isWatching ? _buildWatching(l10n) : _buildStartPrompt(l10n)),
       ],
