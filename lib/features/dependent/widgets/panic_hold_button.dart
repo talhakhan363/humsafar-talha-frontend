@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/theme/humsafar_colors.dart';
+
 /// Task 3.11 — the press-and-hold confirm button on the Panic screen
 /// (mockup screen 21: "Need help? / Press and hold the button for 2
 /// seconds"). Extracted as its own widget so the hold-to-confirm timing
@@ -96,8 +98,13 @@ class _PanicHoldButtonState extends State<PanicHoldButton> with SingleTickerProv
               child: CircularProgressIndicator(
                 value: _controller.value,
                 strokeWidth: 8,
-                backgroundColor: Colors.red.shade100,
-                valueColor: AlwaysStoppedAnimation<Color>(Colors.red.shade700),
+                // Fix #2 (Design Handoff v1.0, section 3): tokenized, but
+                // deliberately still red — fix #6's note is explicit that
+                // red stays on THIS hold-to-trigger button; only the
+                // post-trigger "help is coming" view (panic_screen.dart)
+                // moved off red.
+                backgroundColor: HumsafarColors.dangerTint,
+                valueColor: const AlwaysStoppedAnimation<Color>(HumsafarColors.danger),
               ),
             ),
             Container(
@@ -106,7 +113,7 @@ class _PanicHoldButtonState extends State<PanicHoldButton> with SingleTickerProv
               alignment: Alignment.center,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: widget.enabled ? Colors.red.shade700 : Colors.red.shade200,
+                color: widget.enabled ? HumsafarColors.danger : HumsafarColors.danger.withValues(alpha: 0.4),
               ),
               child: Padding(
                 padding: const EdgeInsets.all(16),
