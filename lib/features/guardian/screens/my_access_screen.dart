@@ -4,6 +4,7 @@ import 'package:humsafar_frontend/l10n/app_localizations.dart';
 
 import '../../../core/network/api_exception.dart';
 import '../../../core/network/providers.dart';
+import '../../../core/theme/humsafar_colors.dart';
 import '../../../shared/widgets/accessibility_toggle_button.dart';
 import '../../../shared/widgets/language_switch_button.dart';
 
@@ -136,7 +137,7 @@ class _MyAccessScreenState extends ConsumerState<MyAccessScreen> {
         ...modules.entries.map(
           (entry) => ListTile(
             leading: Icon(entry.value ? Icons.check_circle : Icons.cancel,
-                color: entry.value ? Colors.green : Colors.red),
+                color: entry.value ? HumsafarColors.success : HumsafarColors.danger),
             title: Text(_moduleLabel(l10n, entry.key)),
           ),
         ),
