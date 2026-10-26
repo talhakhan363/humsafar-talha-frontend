@@ -6,6 +6,7 @@ import 'package:humsafar_frontend/l10n/app_localizations.dart';
 
 import '../../../core/network/api_exception.dart';
 import '../../../core/network/providers.dart';
+import '../../../core/theme/humsafar_colors.dart';
 
 /// Task 6.9's privacy-critical half (FR-K1.3): "the on-screen viewing
 /// indicator is not optional polish — it must actually appear whenever a
@@ -95,18 +96,18 @@ class _CameraViewingBannerState extends ConsumerState<CameraViewingBanner> {
     final l10n = AppLocalizations.of(context)!;
     return Container(
       width: double.infinity,
-      color: Colors.teal.withValues(alpha: 0.1),
+      color: HumsafarColors.primaryTint,
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Row(
         children: [
-          const Icon(Icons.visibility, color: Colors.teal, size: 18),
+          const Icon(Icons.visibility, color: HumsafarColors.primary, size: 18),
           const SizedBox(width: 8),
           Expanded(
             child: Text(
               _viewerCount != null && _viewerCount! > 1
                   ? '${l10n.cameraBeingViewedBanner} (${l10n.cameraViewerCountLabel(_viewerCount!)})'
                   : l10n.cameraBeingViewedBanner,
-              style: const TextStyle(color: Colors.teal, fontWeight: FontWeight.bold),
+              style: const TextStyle(color: HumsafarColors.primary, fontWeight: FontWeight.bold),
             ),
           ),
         ],
