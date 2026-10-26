@@ -6,6 +6,7 @@ import 'package:humsafar_frontend/l10n/app_localizations.dart';
 import '../../../core/network/api_exception.dart';
 import '../../../core/network/providers.dart';
 import '../../../core/auth/current_user_provider.dart';
+import '../../../core/theme/humsafar_colors.dart';
 
 /// Task 4.7 — mockup 25d "Incoming call" (Dependent side). Reached from
 /// a tap on the critical `incoming_call` push (see `main.dart`'s
@@ -139,14 +140,14 @@ class _IncomingCallScreenState extends ConsumerState<IncomingCallScreen> {
                               onPressed: _decline,
                               icon: const Icon(Icons.call_end, color: Colors.white),
                               iconSize: 56,
-                              style: IconButton.styleFrom(backgroundColor: Colors.red, shape: const CircleBorder()),
+                              style: IconButton.styleFrom(backgroundColor: HumsafarColors.danger, shape: const CircleBorder()),
                               tooltip: l10n.declineCallButton,
                             ),
                             IconButton(
                               onPressed: _accept,
                               icon: const Icon(Icons.call, color: Colors.white),
                               iconSize: 56,
-                              style: IconButton.styleFrom(backgroundColor: Colors.green, shape: const CircleBorder()),
+                              style: IconButton.styleFrom(backgroundColor: HumsafarColors.success, shape: const CircleBorder()),
                               tooltip: l10n.acceptCallButton,
                             ),
                           ],
