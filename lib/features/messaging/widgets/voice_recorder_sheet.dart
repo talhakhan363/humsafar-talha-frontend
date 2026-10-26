@@ -12,6 +12,7 @@ import '../../../core/audio/audio_recorder_source.dart';
 import '../../../core/network/api_exception.dart';
 import '../../../core/network/providers.dart';
 import '../../../core/scheduling/schedule_helpers.dart';
+import '../../../core/theme/humsafar_colors.dart';
 import '../models/chat_message.dart';
 
 const _maxRecordingSeconds = 120;
@@ -187,15 +188,15 @@ class _VoiceRecorderSheetState extends ConsumerState<VoiceRecorderSheet> {
             Text(
               l10n.urgentVoiceWarningMessage(widget.peerName),
               textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.amber.shade900),
+              style: const TextStyle(color: HumsafarColors.warning),
             ),
             const SizedBox(height: 20),
             if (_errorMessage != null) ...[
-              Text(_errorMessage!, style: TextStyle(color: Colors.red.shade700), textAlign: TextAlign.center),
+              Text(_errorMessage!, style: const TextStyle(color: HumsafarColors.warning), textAlign: TextAlign.center),
               const SizedBox(height: 12),
             ],
             if (_hitMaxLength && _phase != _RecorderPhase.recording) ...[
-              Text(l10n.maxLengthReachedMessage, style: TextStyle(color: Colors.orange.shade800), textAlign: TextAlign.center),
+              Text(l10n.maxLengthReachedMessage, style: const TextStyle(color: HumsafarColors.warning), textAlign: TextAlign.center),
               const SizedBox(height: 12),
             ],
             ..._buildPhaseControls(l10n),
@@ -209,7 +210,7 @@ class _VoiceRecorderSheetState extends ConsumerState<VoiceRecorderSheet> {
     switch (_phase) {
       case _RecorderPhase.idle:
         return [
-          const Icon(Icons.mic_none, size: 48, color: Colors.teal),
+          const Icon(Icons.mic_none, size: 48, color: HumsafarColors.primary),
           const SizedBox(height: 12),
           ElevatedButton.icon(
             onPressed: _startRecording,
@@ -219,7 +220,7 @@ class _VoiceRecorderSheetState extends ConsumerState<VoiceRecorderSheet> {
         ];
       case _RecorderPhase.recording:
         return [
-          const Icon(Icons.fiber_manual_record, color: Colors.red, size: 32),
+          const Icon(Icons.fiber_manual_record, color: HumsafarColors.danger, size: 32),
           const SizedBox(height: 8),
           Text(l10n.recordingInProgressLabel(formatCountdown(Duration(seconds: _elapsedSeconds))), textAlign: TextAlign.center),
           const SizedBox(height: 16),
