@@ -6,6 +6,7 @@ import 'package:humsafar_frontend/l10n/app_localizations.dart';
 import '../../../core/formatting/format_helpers.dart';
 import '../../../core/network/api_exception.dart';
 import '../../../core/network/providers.dart';
+import '../../../core/theme/humsafar_colors.dart';
 import '../../../shared/widgets/accessibility_toggle_button.dart';
 import '../../../shared/widgets/export_scope_sheet.dart';
 import '../../../shared/widgets/language_switch_button.dart';
@@ -196,7 +197,7 @@ class _VitalsScreenState extends ConsumerState<VitalsScreen> {
                       const SizedBox(height: 4),
                       Text(_valueLine(reading), style: Theme.of(context).textTheme.titleMedium),
                       if (metric == 'heart_rate')
-                        Text(l10n.fromBandNote, style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.grey.shade600)),
+                        Text(l10n.fromBandNote, style: Theme.of(context).textTheme.bodySmall?.copyWith(color: HumsafarColors.muted)),
                     ],
                   ),
                 ),
