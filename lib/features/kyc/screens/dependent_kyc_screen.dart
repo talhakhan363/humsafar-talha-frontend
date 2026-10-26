@@ -10,6 +10,7 @@ import 'package:image_picker/image_picker.dart';
 import '../../../core/auth/pending_dependent_registration_provider.dart';
 import '../../../core/network/api_exception.dart';
 import '../../../core/network/providers.dart';
+import '../../../core/theme/humsafar_colors.dart';
 import '../../../shared/widgets/accessibility_toggle_button.dart';
 import '../../../shared/widgets/language_switch_button.dart';
 
@@ -232,7 +233,7 @@ class _DependentKycScreenState extends ConsumerState<DependentKycScreen> {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const Icon(Icons.check_circle, size: 48, color: Colors.green),
+          const Icon(Icons.check_circle, size: 48, color: HumsafarColors.success),
           const SizedBox(height: 16),
           Text(outcome.message ?? l10n.kycVerifiedActiveDefaultMessage, textAlign: TextAlign.center),
           const SizedBox(height: 16),
@@ -250,7 +251,11 @@ class _DependentKycScreenState extends ConsumerState<DependentKycScreen> {
         Icon(
           outcome.status == 'pending' ? Icons.hourglass_top : Icons.error_outline,
           size: 48,
-          color: outcome.status == 'failed' ? Colors.red : null,
+          // Fix #2 (Design Handoff v1.0, section 3): this is Dependent-
+          // facing (self-registration KYC), so a failed-verification
+          // outcome follows the handoff's "errors on Dependent screens
+          // are amber/grey, never red" rule rather than staying red.
+          color: outcome.status == 'failed' ? HumsafarColors.warning : null,
         ),
         const SizedBox(height: 16),
         Text(
