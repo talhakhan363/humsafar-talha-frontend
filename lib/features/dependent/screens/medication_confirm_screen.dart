@@ -9,6 +9,7 @@ import '../../../core/auth/current_user_provider.dart';
 import '../../../core/network/api_exception.dart';
 import '../../../core/network/providers.dart';
 import '../../../core/scheduling/schedule_helpers.dart';
+import '../../../core/theme/humsafar_colors.dart';
 import '../../../shared/widgets/accessibility_toggle_button.dart';
 import '../../../shared/widgets/language_switch_button.dart';
 
@@ -248,7 +249,7 @@ class _MedicationConfirmScreenState extends ConsumerState<MedicationConfirmScree
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.medication, size: 56, color: Colors.teal.shade700),
+            const Icon(Icons.medication, size: 56, color: HumsafarColors.primaryDark),
             const SizedBox(height: 16),
             Text(l10n.medicineTimePromptTitle, style: Theme.of(context).textTheme.headlineSmall, textAlign: TextAlign.center),
             const SizedBox(height: 8),
@@ -277,14 +278,14 @@ class _MedicationConfirmScreenState extends ConsumerState<MedicationConfirmScree
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.check_circle_outline, size: 56, color: Colors.teal.shade700),
+            const Icon(Icons.check_circle_outline, size: 56, color: HumsafarColors.primaryDark),
             const SizedBox(height: 16),
             Text(l10n.medicineConfirmTitle, style: Theme.of(context).textTheme.headlineSmall, textAlign: TextAlign.center),
             const SizedBox(height: 8),
             Text(l10n.medicineConfirmMessage(drug, dosage), textAlign: TextAlign.center),
             const SizedBox(height: 12),
             if (expired)
-              Text(l10n.medicineConfirmExpiredMessage, style: TextStyle(color: Colors.amber.shade900), textAlign: TextAlign.center)
+              Text(l10n.medicineConfirmExpiredMessage, style: const TextStyle(color: HumsafarColors.warning), textAlign: TextAlign.center)
             else
               Chip(label: Text(l10n.medicineConfirmExpiresNote(formatCountdown(remaining)))),
             const SizedBox(height: 24),
@@ -308,7 +309,7 @@ class _MedicationConfirmScreenState extends ConsumerState<MedicationConfirmScree
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.check_circle, size: 64, color: Colors.green.shade700),
+            const Icon(Icons.check_circle, size: 64, color: HumsafarColors.success),
             const SizedBox(height: 16),
             Text(l10n.medicineTakenTitle, style: Theme.of(context).textTheme.headlineSmall, textAlign: TextAlign.center),
             const SizedBox(height: 8),
