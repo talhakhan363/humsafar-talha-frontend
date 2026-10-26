@@ -10,6 +10,7 @@ import '../../../core/files/file_picker_source.dart';
 import '../../../core/formatting/format_helpers.dart';
 import '../../../core/network/api_exception.dart';
 import '../../../core/network/providers.dart';
+import '../../../core/theme/humsafar_colors.dart';
 import '../../../shared/widgets/accessibility_toggle_button.dart';
 import '../../../shared/widgets/language_switch_button.dart';
 import 'medical_vault_screen.dart' show categoryLabel;
@@ -223,7 +224,7 @@ class _AddRecordScreenState extends ConsumerState<AddRecordScreen> {
             ),
           if (_error != null) ...[
             const SizedBox(height: 12),
-            Text(_error!, style: TextStyle(color: Colors.red.shade700)),
+            Text(_error!, style: const TextStyle(color: HumsafarColors.warning)),
           ],
           const SizedBox(height: 24),
           ElevatedButton(
