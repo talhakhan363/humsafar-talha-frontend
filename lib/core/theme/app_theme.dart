@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'accessibility_mode.dart';
 import 'humsafar_colors.dart';
@@ -12,10 +13,16 @@ import 'humsafar_colors.dart';
 class AppTheme {
   AppTheme._();
 
-  static ThemeData themeFor(AccessibilityMode mode) {
+  /// [languageCode] only ever changes the STANDARD theme's font (fix #8,
+  /// below) — the high-contrast theme intentionally keeps its existing
+  /// font per the handoff section 2.3's "keep Talha's existing ... theme"
+  /// note. Callers: see main.dart's doc comment on why one call site must
+  /// pass a FIXED language code regardless of the real chosen one, and
+  /// only the other is allowed to vary per rebuild.
+  static ThemeData themeFor(AccessibilityMode mode, String languageCode) {
     switch (mode) {
       case AccessibilityMode.standard:
-        return _standard;
+        return _standardFor(languageCode);
       case AccessibilityMode.highContrast:
         return _highContrast;
     }
@@ -27,38 +34,51 @@ class AppTheme {
   /// instead of Sarim's teal brand. Now built from [HumsafarColors]
   /// instead, with `fromSeed`'s override parameters pinning the roles the
   /// handoff actually specifies (primary/secondary/surface/error/outline)
-  /// rather than letting Material 3 derive them from a seed guess. This is
-  /// the foundational piece of the handoff's 8-item fix list — the other 7
-  /// (37 raw-Colors.* screens, Panic button sizing/contrast, the location
-  /// banner, Inter font, etc.) are a separate follow-up pass.
-  static final ThemeData _standard = ThemeData(
-    useMaterial3: true,
-    colorScheme: ColorScheme.fromSeed(
-      seedColor: HumsafarColors.primary,
-      primary: HumsafarColors.primary,
-      onPrimary: Colors.white,
-      primaryContainer: HumsafarColors.primaryTint,
-      onPrimaryContainer: HumsafarColors.primaryDark,
-      secondary: HumsafarColors.primaryDark,
-      onSecondary: Colors.white,
-      secondaryContainer: HumsafarColors.primarySoft,
-      onSecondaryContainer: HumsafarColors.primaryDark,
-      surface: HumsafarColors.surface,
-      onSurface: HumsafarColors.text,
-      error: HumsafarColors.danger,
-      onError: Colors.white,
-      errorContainer: HumsafarColors.dangerTint,
-      onErrorContainer: HumsafarColors.danger,
-      outline: HumsafarColors.border,
-    ),
-    scaffoldBackgroundColor: HumsafarColors.background,
-    appBarTheme: const AppBarTheme(
-      backgroundColor: HumsafarColors.surface,
-      foregroundColor: HumsafarColors.text,
-      elevation: 0,
-    ),
-    textTheme: _baseTextTheme,
-  );
+  /// rather than letting Material 3 derive them from a seed guess.
+  ///
+  /// Also fix #8 (section 2.3): Latin text uses Inter; Urdu falls back to
+  /// Noto Nastaliq Urdu, since Inter has no Urdu letters and Android would
+  /// otherwise silently substitute its own system font. Both come from
+  /// google_fonts (see pubspec.yaml's comment on that dependency) keyed on
+  /// [languageCode] — this is why [_standard] became a method instead of
+  /// the single cached `static final` field it used to be; GoogleFonts'
+  /// lookup is cheap (no network call itself — the actual glyph data is
+  /// fetched/cached lazily by the rendering pipeline the first time it's
+  /// actually drawn), so recomputing this on each relevant rebuild is not
+  /// a real cost.
+  static ThemeData _standardFor(String languageCode) {
+    final fontTextTheme = languageCode == 'ur'
+        ? GoogleFonts.getTextTheme('Noto Nastaliq Urdu', _baseTextTheme)
+        : GoogleFonts.getTextTheme('Inter', _baseTextTheme);
+    return ThemeData(
+      useMaterial3: true,
+      colorScheme: ColorScheme.fromSeed(
+        seedColor: HumsafarColors.primary,
+        primary: HumsafarColors.primary,
+        onPrimary: Colors.white,
+        primaryContainer: HumsafarColors.primaryTint,
+        onPrimaryContainer: HumsafarColors.primaryDark,
+        secondary: HumsafarColors.primaryDark,
+        onSecondary: Colors.white,
+        secondaryContainer: HumsafarColors.primarySoft,
+        onSecondaryContainer: HumsafarColors.primaryDark,
+        surface: HumsafarColors.surface,
+        onSurface: HumsafarColors.text,
+        error: HumsafarColors.danger,
+        onError: Colors.white,
+        errorContainer: HumsafarColors.dangerTint,
+        onErrorContainer: HumsafarColors.danger,
+        outline: HumsafarColors.border,
+      ),
+      scaffoldBackgroundColor: HumsafarColors.background,
+      appBarTheme: const AppBarTheme(
+        backgroundColor: HumsafarColors.surface,
+        foregroundColor: HumsafarColors.text,
+        elevation: 0,
+      ),
+      textTheme: fontTextTheme,
+    );
+  }
 
   // FR-P2: large-text + high-contrast mode.
   // - Text sizes scaled up ~25% over the standard theme.
