@@ -5,6 +5,7 @@ import 'package:humsafar_frontend/l10n/app_localizations.dart';
 
 import '../../../core/network/api_exception.dart';
 import '../../../core/network/providers.dart';
+import '../../../core/theme/humsafar_colors.dart';
 import '../../../shared/widgets/accessibility_toggle_button.dart';
 import '../../../shared/widgets/language_switch_button.dart';
 import '../../vitals/screens/vitals_screen.dart' show metricLabel;
@@ -254,7 +255,9 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
 
   Widget _buildAdherenceChart(List<Map<String, dynamic>> perDay) {
     final primary = Theme.of(context).colorScheme.primary;
-    final missedColor = Colors.grey.shade400;
+    // Fix #2 (Design Handoff v1.0, section 3): raw Colors.grey.shade400
+    // replaced with the border token — a light neutral grey, same role.
+    const missedColor = HumsafarColors.border;
     return BarChart(
       BarChartData(
         titlesData: const FlTitlesData(show: false),
