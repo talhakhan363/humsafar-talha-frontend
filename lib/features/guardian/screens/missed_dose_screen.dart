@@ -5,6 +5,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/network/api_exception.dart';
 import '../../../core/network/providers.dart';
+import '../../../core/theme/humsafar_colors.dart';
 import '../../../shared/widgets/accessibility_toggle_button.dart';
 import '../../../shared/widgets/language_switch_button.dart';
 
@@ -236,11 +237,11 @@ class _MissedDoseScreenState extends ConsumerState<MissedDoseScreen> {
       children: [
         Container(
           padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(color: Colors.amber.shade50, borderRadius: BorderRadius.circular(8)),
+          decoration: BoxDecoration(color: HumsafarColors.warningTint, borderRadius: BorderRadius.circular(8)),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Icon(Icons.info_outline, color: Colors.orange.shade800),
+              const Icon(Icons.info_outline, color: HumsafarColors.warning),
               const SizedBox(width: 8),
               Expanded(
                 child: Column(
@@ -298,7 +299,7 @@ class _MissedDoseScreenState extends ConsumerState<MissedDoseScreen> {
         Center(
           child: Text(
             l10n.tappingCountsAsSeenNote,
-            style: TextStyle(color: Colors.grey.shade600, fontSize: 12),
+            style: const TextStyle(color: HumsafarColors.muted, fontSize: 12),
             textAlign: TextAlign.center,
           ),
         ),
@@ -322,7 +323,7 @@ class _StepRow extends StatelessWidget {
           Icon(
             done ? Icons.check_circle : Icons.circle_outlined,
             size: 18,
-            color: done ? Colors.teal : Colors.grey,
+            color: done ? HumsafarColors.success : HumsafarColors.muted,
           ),
           const SizedBox(width: 8),
           Expanded(child: Text(label)),
