@@ -7,6 +7,7 @@ import '../../../core/guardian/dependent_summary.dart';
 import '../../../core/network/api_exception.dart';
 import '../../../core/network/providers.dart';
 import '../../../core/scheduling/schedule_helpers.dart';
+import '../../../core/theme/humsafar_colors.dart';
 import '../../../shared/widgets/accessibility_toggle_button.dart';
 import '../../../shared/widgets/language_switch_button.dart';
 import '../notification_display.dart';
@@ -168,7 +169,7 @@ class _GuardianHomeScreenState extends ConsumerState<GuardianHomeScreen> {
                   child: Container(
                     padding: const EdgeInsets.all(2),
                     constraints: const BoxConstraints(minWidth: 16, minHeight: 16),
-                    decoration: const BoxDecoration(color: Colors.red, shape: BoxShape.circle),
+                    decoration: const BoxDecoration(color: HumsafarColors.danger, shape: BoxShape.circle),
                     child: Text(
                       '$_unreadMessages',
                       textAlign: TextAlign.center,
@@ -305,7 +306,11 @@ class _PanicBanner extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     final sentAt = DateTime.tryParse(notification['sent_at'] as String? ?? '');
     return Container(
-      decoration: BoxDecoration(color: Colors.red.shade700, borderRadius: BorderRadius.circular(8)),
+      // Fix #2 (Design Handoff v1.0, section 3): tokenized, kept red on
+      // purpose — this banner only ever renders for an active Panic
+      // event (see PanicBanner's own doc comment / call sites), so it
+      // falls squarely under "red for Panic and critical alerts".
+      decoration: BoxDecoration(color: HumsafarColors.danger, borderRadius: BorderRadius.circular(8)),
       padding: const EdgeInsets.all(16),
       child: Row(
         children: [
@@ -328,7 +333,7 @@ class _PanicBanner extends StatelessWidget {
           ),
           ElevatedButton(
             onPressed: () => context.push('/guardian/alerts'),
-            style: ElevatedButton.styleFrom(backgroundColor: Colors.white, foregroundColor: Colors.red.shade700),
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.white, foregroundColor: HumsafarColors.danger),
             child: Text(l10n.openButtonLabel),
           ),
         ],
