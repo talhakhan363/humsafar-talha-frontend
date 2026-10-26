@@ -122,7 +122,15 @@ class _HumsafarAppState extends ConsumerState<HumsafarApp> {
       // and since AppTheme's fields are `static final`, it's even the same
       // identical instance every rebuild) — so it never actually
       // interpolates and the assertion never runs.
-      theme: AppTheme.themeFor(AccessibilityMode.standard),
+      // Fix #8 (2026-10-25): languageCode is hardcoded 'en' here on
+      // purpose, NOT Localizations.localeOf(context) or chosenLocale —
+      // see the comment block above. This value must stay IDENTICAL
+      // across rebuilds (same reasoning as AccessibilityMode.standard
+      // being hardcoded here already); the real, locale-aware font swap
+      // happens below in `builder`, through the plain (non-animated)
+      // Theme widget this comment block already set up for exactly this
+      // kind of safe, reactive swap.
+      theme: AppTheme.themeFor(AccessibilityMode.standard, 'en'),
       routerConfig: router,
       locale: chosenLocale,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -132,8 +140,13 @@ class _HumsafarAppState extends ConsumerState<HumsafarApp> {
       // accessibilityMode now just replaces the ThemeData outright on the
       // next frame — no lerp, no interpolation, no assertion to trip.
       builder: (context, child) {
+        // Fix #8 (2026-10-25): this is the safe spot for the font to vary
+        // by language — plain Theme, not AnimatedTheme, so switching
+        // languages just replaces the ThemeData outright on the next
+        // frame, same "no lerp, no interpolation" reasoning as the
+        // accessibility-mode swap this builder already existed for.
         return Theme(
-          data: AppTheme.themeFor(accessibilityMode),
+          data: AppTheme.themeFor(accessibilityMode, Localizations.localeOf(context).languageCode),
           child: child ?? const SizedBox.shrink(),
         );
       },
