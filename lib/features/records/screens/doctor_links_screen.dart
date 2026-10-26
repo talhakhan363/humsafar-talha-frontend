@@ -5,6 +5,7 @@ import 'package:humsafar_frontend/l10n/app_localizations.dart';
 import '../../../core/files/file_providers.dart';
 import '../../../core/network/api_exception.dart';
 import '../../../core/network/providers.dart';
+import '../../../core/theme/humsafar_colors.dart';
 import '../../../shared/widgets/accessibility_toggle_button.dart';
 import '../../../shared/widgets/language_switch_button.dart';
 import 'medical_vault_screen.dart' show categoryLabel;
@@ -136,7 +137,7 @@ class _DoctorLinksScreenState extends ConsumerState<DoctorLinksScreen> {
         return Card(
           margin: const EdgeInsets.only(bottom: 12),
           child: ListTile(
-            leading: Icon(isActive ? Icons.link : Icons.link_off, color: isActive ? Colors.teal : Colors.grey),
+            leading: Icon(isActive ? Icons.link : Icons.link_off, color: isActive ? HumsafarColors.primary : HumsafarColors.muted),
             title: Text(_statusLabel(l10n, status)),
             subtitle: Text(
               '${categories == null || categories.length == 4 ? l10n.allCategoriesLabel : categories.map((c) => categoryLabel(l10n, c)).join(', ')}'
