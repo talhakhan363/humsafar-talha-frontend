@@ -8,6 +8,7 @@ import 'package:latlong2/latlong.dart' as ll;
 
 import '../../../core/network/api_exception.dart';
 import '../../../core/network/providers.dart';
+import '../../../core/theme/humsafar_colors.dart';
 import '../../../shared/widgets/accessibility_toggle_button.dart';
 import '../../../shared/widgets/language_switch_button.dart';
 
@@ -194,8 +195,8 @@ class _LiveMapScreenState extends ConsumerState<LiveMapScreen> {
                               point: ll.LatLng(g.lat, g.lng),
                               radius: g.radiusM,
                               useRadiusInMeter: true,
-                              color: Colors.teal.withValues(alpha: 0.15),
-                              borderColor: Colors.teal,
+                              color: HumsafarColors.primaryTint,
+                              borderColor: HumsafarColors.primary,
                               borderStrokeWidth: 2,
                             ),
                           )
@@ -212,7 +213,7 @@ class _LiveMapScreenState extends ConsumerState<LiveMapScreen> {
                             // Amber for outside a safe zone (warning), never red —
                             // matches Sarim's 2.8 mockup convention: red is
                             // reserved for Panic only.
-                            color: _zoneStatus == 'outside' ? Colors.amber.shade800 : Colors.teal,
+                            color: _zoneStatus == 'outside' ? HumsafarColors.warning : HumsafarColors.primary,
                             size: 40,
                           ),
                         ),
@@ -241,18 +242,18 @@ class _LiveMapScreenState extends ConsumerState<LiveMapScreen> {
 
     return Container(
       width: double.infinity,
-      color: isWarning ? Colors.amber.shade100 : Theme.of(context).colorScheme.surfaceContainerHighest,
+      color: isWarning ? HumsafarColors.warningTint : Theme.of(context).colorScheme.surfaceContainerHighest,
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             statusText,
-            style: TextStyle(fontWeight: FontWeight.bold, color: isWarning ? Colors.amber.shade900 : null),
+            style: TextStyle(fontWeight: FontWeight.bold, color: isWarning ? HumsafarColors.warning : null),
           ),
           if (lastSeenText != null) Text(lastSeenText, style: Theme.of(context).textTheme.bodySmall),
           if (_isStale && _position != null)
-            Text(l10n.locationStaleWarning, style: TextStyle(fontSize: 12, color: Colors.amber.shade900)),
+            Text(l10n.locationStaleWarning, style: const TextStyle(fontSize: 12, color: HumsafarColors.warning)),
         ],
       ),
     );
