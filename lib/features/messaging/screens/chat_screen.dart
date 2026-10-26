@@ -13,6 +13,7 @@ import '../../../core/auth/current_user_provider.dart';
 import '../../../core/network/api_exception.dart';
 import '../../../core/network/providers.dart';
 import '../../../core/scheduling/schedule_helpers.dart';
+import '../../../core/theme/humsafar_colors.dart';
 import '../../../shared/widgets/accessibility_toggle_button.dart';
 import '../../../shared/widgets/language_switch_button.dart';
 import '../../calls/widgets/call_type_picker.dart';
@@ -345,7 +346,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
               constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.75),
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: message.isVoice ? Colors.amber.shade100 : (isMe ? Colors.teal.shade100 : Colors.grey.shade200),
+                color: message.isVoice ? HumsafarColors.warningTint : (isMe ? HumsafarColors.primarySoft : HumsafarColors.tabTrack),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: message.isVoice ? _buildVoiceBubbleContent(l10n, message) : Text(message.body ?? ''),
@@ -354,7 +355,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
           if (showReadCaption)
             Padding(
               padding: const EdgeInsets.only(top: 2),
-              child: Text(l10n.readLabel, style: TextStyle(fontSize: 11, color: Colors.grey.shade600)),
+              child: Text(l10n.readLabel, style: const TextStyle(fontSize: 11, color: HumsafarColors.muted)),
             ),
         ],
       ),
@@ -374,7 +375,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
               )
             : IconButton(
                 onPressed: () => _toggleVoicePlayback(message),
-                icon: Icon(isPlaying ? Icons.pause_circle : Icons.play_circle, color: Colors.amber.shade900),
+                icon: Icon(isPlaying ? Icons.pause_circle : Icons.play_circle, color: HumsafarColors.warning),
               ),
         const SizedBox(width: 4),
         Text(l10n.urgentVoiceMessageLabel),
@@ -397,19 +398,19 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
             child: Container(
               constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.75),
               padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(color: Colors.teal.shade50, borderRadius: BorderRadius.circular(12)),
+              decoration: BoxDecoration(color: HumsafarColors.primaryTint, borderRadius: BorderRadius.circular(12)),
               child: Text(draft.body),
             ),
           ),
           Padding(
             padding: const EdgeInsets.only(top: 2),
             child: draft.status == _DraftStatus.sending
-                ? Text(l10n.sendingLabel, style: TextStyle(fontSize: 11, color: Colors.grey.shade600))
+                ? Text(l10n.sendingLabel, style: const TextStyle(fontSize: 11, color: HumsafarColors.muted))
                 : GestureDetector(
                     onTap: () => _attemptSend(draft.clientId, draft.body),
                     child: Text(
                       l10n.notSentTapToRetryLabel,
-                      style: TextStyle(fontSize: 11, color: Colors.red.shade700, decoration: TextDecoration.underline),
+                      style: const TextStyle(fontSize: 11, color: HumsafarColors.warning, decoration: TextDecoration.underline),
                     ),
                   ),
           ),
