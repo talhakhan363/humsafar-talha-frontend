@@ -6,6 +6,7 @@ import '../../../core/guardian/dependent_summary.dart';
 import '../../../core/network/api_exception.dart';
 import '../../../core/network/providers.dart';
 import '../../../core/scheduling/schedule_helpers.dart';
+import '../../../core/theme/humsafar_colors.dart';
 import '../../../shared/widgets/accessibility_toggle_button.dart';
 import '../../../shared/widgets/language_switch_button.dart';
 
@@ -206,7 +207,7 @@ class _WellnessScheduleScreenState extends ConsumerState<WellnessScheduleScreen>
         if (!_canManage)
           Padding(
             padding: const EdgeInsets.only(bottom: 12),
-            child: Text(l10n.wellnessManagementDeniedNote, style: TextStyle(color: Colors.grey.shade700)),
+            child: Text(l10n.wellnessManagementDeniedNote, style: const TextStyle(color: HumsafarColors.muted)),
           ),
         if (_schedules.isEmpty) ...[
           Padding(
