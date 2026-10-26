@@ -5,6 +5,7 @@ import 'package:humsafar_frontend/l10n/app_localizations.dart';
 import '../../../core/formatting/format_helpers.dart';
 import '../../../core/network/api_exception.dart';
 import '../../../core/network/providers.dart';
+import '../../../core/theme/humsafar_colors.dart';
 import '../../../shared/widgets/accessibility_toggle_button.dart';
 import '../../../shared/widgets/language_switch_button.dart';
 
@@ -365,7 +366,7 @@ class _AppointmentFormState extends State<_AppointmentForm> {
           TextField(controller: _notesController, decoration: InputDecoration(labelText: l10n.appointmentNotesFieldLabel)),
           if (_error != null) ...[
             const SizedBox(height: 8),
-            Text(_error!, style: TextStyle(color: Colors.red.shade700)),
+            Text(_error!, style: const TextStyle(color: HumsafarColors.warning)),
           ],
           const SizedBox(height: 16),
           Row(
