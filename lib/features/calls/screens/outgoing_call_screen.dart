@@ -8,6 +8,7 @@ import 'package:humsafar_frontend/l10n/app_localizations.dart';
 import '../../../core/network/api_exception.dart';
 import '../../../core/network/providers.dart';
 import '../../../core/auth/current_user_provider.dart';
+import '../../../core/theme/humsafar_colors.dart';
 
 /// Task 4.7 — mockup 17e "Calling...". Shown to the caller immediately
 /// after they tap Call, while the callee's device is ringing. This is
@@ -201,7 +202,7 @@ class _OutgoingCallScreenState extends ConsumerState<OutgoingCallScreen> {
                     onPressed: _cancelCall,
                     icon: const Icon(Icons.call_end, color: Colors.white),
                     iconSize: 56,
-                    style: IconButton.styleFrom(backgroundColor: Colors.red, shape: const CircleBorder()),
+                    style: IconButton.styleFrom(backgroundColor: HumsafarColors.danger, shape: const CircleBorder()),
                   )
                 else
                   ElevatedButton(
