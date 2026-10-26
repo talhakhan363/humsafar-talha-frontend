@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:humsafar_frontend/l10n/app_localizations.dart';
 
 import '../../../core/location/device_location_source.dart';
+import '../../../core/theme/humsafar_colors.dart';
 
 /// Small status row shown on the Dependent home screen for Task 2.7.
 /// Deliberately a pure presentational widget — it takes the
@@ -38,15 +39,18 @@ class LocationStatusBanner extends StatelessWidget {
 
     switch (status!) {
       case LocationPermissionStatus.granted:
+        // Fixed 2026-10-25 — Design Handoff v1.0 fix #7: Colors.teal on
+        // white was 3.67:1, below the 4.5:1 AA minimum (Sarim's NFR-08
+        // check). The primary token gives 5.36:1.
         return Container(
           width: double.infinity,
-          color: Colors.teal.withValues(alpha: 0.1),
+          color: HumsafarColors.primaryTint,
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           child: Row(
             children: [
-              const Icon(Icons.location_on, color: Colors.teal, size: 18),
+              const Icon(Icons.location_on, color: HumsafarColors.primary, size: 18),
               const SizedBox(width: 8),
-              Text(l10n.locationSharingActiveLabel, style: const TextStyle(color: Colors.teal)),
+              Text(l10n.locationSharingActiveLabel, style: const TextStyle(color: HumsafarColors.primary)),
             ],
           ),
         );
@@ -80,14 +84,16 @@ class LocationStatusBanner extends StatelessWidget {
     required String buttonLabel,
     required VoidCallback onPressed,
   }) {
+    // Fix #2 (section 3): was Colors.amber.shade100 / Colors.amber.shade900
+    // — now the handoff's warning tokens, same semantic meaning.
     return Container(
       width: double.infinity,
-      color: Colors.amber.shade100,
+      color: HumsafarColors.warningTint,
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(message, style: TextStyle(color: Colors.amber.shade900)),
+          Text(message, style: const TextStyle(color: HumsafarColors.warning)),
           const SizedBox(height: 6),
           TextButton(onPressed: onPressed, child: Text(buttonLabel)),
         ],
