@@ -6,6 +6,7 @@ import 'package:humsafar_frontend/l10n/app_localizations.dart';
 import '../../../core/network/api_exception.dart';
 import '../../../core/network/providers.dart';
 import '../../../core/scheduling/schedule_helpers.dart';
+import '../../../core/theme/humsafar_colors.dart';
 import '../../../shared/widgets/accessibility_toggle_button.dart';
 import '../../../shared/widgets/language_switch_button.dart';
 import '../notification_display.dart';
@@ -186,7 +187,7 @@ class _AlertsScreenState extends ConsumerState<AlertsScreen> {
                     if (_showOpenTab && _open.isNotEmpty) ...[
                       const SizedBox(height: 4),
                       Card(
-                        color: Colors.teal.shade50,
+                        color: HumsafarColors.primaryTint,
                         child: Padding(
                           padding: const EdgeInsets.all(12),
                           child: Row(
@@ -266,7 +267,7 @@ class _AlertCard extends StatelessWidget {
             const SizedBox(height: 4),
             Text(
               sentAt == null ? (notification['body'] as String? ?? '') : formatClockTime(sentAt.toLocal()),
-              style: TextStyle(color: Colors.grey.shade700),
+              style: const TextStyle(color: HumsafarColors.muted),
             ),
             if (tierBadge != null) ...[
               const SizedBox(height: 8),
