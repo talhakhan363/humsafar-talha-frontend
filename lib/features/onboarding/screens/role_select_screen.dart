@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:humsafar_frontend/l10n/app_localizations.dart';
 
+import '../../../core/theme/humsafar_colors.dart';
 import '../../../providers/app_mode_provider.dart';
 import '../../../shared/widgets/language_switch_button.dart';
 
@@ -33,7 +34,7 @@ class RoleSelectScreen extends ConsumerWidget {
               child: Text(
                 l10n.devRoleSwitcherBody,
                 textAlign: TextAlign.center,
-                style: const TextStyle(color: Colors.grey),
+                style: const TextStyle(color: HumsafarColors.muted),
               ),
             ),
             const SizedBox(height: 24),
