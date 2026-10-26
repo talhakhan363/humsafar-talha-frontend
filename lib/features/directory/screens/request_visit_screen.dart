@@ -8,6 +8,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../core/formatting/format_helpers.dart';
 import '../../../core/network/api_exception.dart';
 import '../../../core/network/providers.dart';
+import '../../../core/theme/humsafar_colors.dart';
 import '../../../shared/widgets/accessibility_toggle_button.dart';
 import '../../../shared/widgets/language_switch_button.dart';
 
@@ -144,7 +145,7 @@ class _RequestVisitScreenState extends ConsumerState<RequestVisitScreen> {
         ),
         if (_error != null) ...[
           const SizedBox(height: 12),
-          Text(_error!, style: TextStyle(color: Colors.red.shade700)),
+          Text(_error!, style: const TextStyle(color: HumsafarColors.warning)),
         ],
         const SizedBox(height: 24),
         ElevatedButton(
@@ -165,7 +166,7 @@ class _RequestVisitScreenState extends ConsumerState<RequestVisitScreen> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(Icons.check_circle_outline, size: 48, color: Colors.teal),
+            const Icon(Icons.check_circle_outline, size: 48, color: HumsafarColors.success),
             const SizedBox(height: 12),
             Text(l10n.visitRequestSavedMessage, textAlign: TextAlign.center),
             if (contact != null) ...[
