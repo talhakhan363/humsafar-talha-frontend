@@ -6,6 +6,7 @@ import '../../../core/guardian/dependent_summary.dart';
 import '../../../core/network/api_exception.dart';
 import '../../../core/network/providers.dart';
 import '../../../core/scheduling/schedule_helpers.dart';
+import '../../../core/theme/humsafar_colors.dart';
 import '../../../shared/widgets/accessibility_toggle_button.dart';
 import '../../../shared/widgets/language_switch_button.dart';
 
@@ -180,7 +181,7 @@ class _MedicationScheduleScreenState extends ConsumerState<MedicationScheduleScr
         if (!_canManage)
           Padding(
             padding: const EdgeInsets.only(bottom: 12),
-            child: Text(l10n.medicationManagementDeniedNote, style: TextStyle(color: Colors.grey.shade700)),
+            child: Text(l10n.medicationManagementDeniedNote, style: const TextStyle(color: HumsafarColors.muted)),
           ),
         if (_schedules.isEmpty)
           Padding(
@@ -374,7 +375,7 @@ class _MedicationScheduleFormState extends State<_MedicationScheduleForm> {
           ],
           if (_error != null) ...[
             const SizedBox(height: 8),
-            Text(_error!, style: TextStyle(color: Colors.red.shade700)),
+            Text(_error!, style: const TextStyle(color: HumsafarColors.warning)),
           ],
           const SizedBox(height: 16),
           Row(
