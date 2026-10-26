@@ -9,6 +9,7 @@ import '../../../core/auth/current_user_provider.dart';
 import '../../../core/network/api_exception.dart';
 import '../../../core/network/providers.dart';
 import '../../../core/scheduling/schedule_helpers.dart';
+import '../../../core/theme/humsafar_colors.dart';
 import '../../../shared/widgets/accessibility_toggle_button.dart';
 import '../../../shared/widgets/language_switch_button.dart';
 
@@ -205,7 +206,7 @@ class _WellnessCheckScreenState extends ConsumerState<WellnessCheckScreen> {
             const SizedBox(height: 8),
             Text(
               l10n.wellnessCheckTimeUpNote,
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.grey.shade700),
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(color: HumsafarColors.muted),
               textAlign: TextAlign.center,
             ),
           ],
@@ -228,7 +229,7 @@ class _WellnessCheckScreenState extends ConsumerState<WellnessCheckScreen> {
               child: ElevatedButton(
                 onPressed: _phase == _Phase.responding ? null : _respond,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.teal.shade700,
+                  backgroundColor: HumsafarColors.primary,
                   foregroundColor: Colors.white,
                   minimumSize: const Size.fromHeight(80),
                 ),
@@ -250,25 +251,32 @@ class _WellnessCheckScreenState extends ConsumerState<WellnessCheckScreen> {
             child: OutlinedButton(
               onPressed: _openPanic,
               style: OutlinedButton.styleFrom(
-                foregroundColor: Colors.red.shade700,
-                side: BorderSide(color: Colors.red.shade700, width: 2),
+                // Fix #2 (Design Handoff v1.0, section 3): tokenized, kept
+                // red on purpose — per Sarim's 3.9 design note, this
+                // button always opens the Panic screen directly, so it
+                // falls under the handoff's "red for Panic" rule rather
+                // than the "errors/warnings on Dependent screens are
+                // never red" one (this isn't an error, it's a Panic entry
+                // point).
+                foregroundColor: HumsafarColors.danger,
+                side: const BorderSide(color: HumsafarColors.danger, width: 2),
                 minimumSize: const Size.fromHeight(80),
               ),
               child: Text(
                 l10n.iNeedHelpButton,
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(color: Colors.red.shade700),
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(color: HumsafarColors.danger),
               ),
             ),
           ),
           const SizedBox(height: 8),
           Text(
             l10n.iNeedHelpOpensPanicNote,
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.grey.shade600),
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(color: HumsafarColors.muted),
             textAlign: TextAlign.center,
           ),
           Text(
             l10n.noAnswerGuardianToldNote,
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.grey.shade600),
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(color: HumsafarColors.muted),
             textAlign: TextAlign.center,
           ),
         ],
