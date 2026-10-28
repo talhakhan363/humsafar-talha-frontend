@@ -254,7 +254,14 @@ class _DependentHomeScreenState extends ConsumerState<DependentHomeScreen> with 
       body: RefreshIndicator(
         onRefresh: _refreshAll,
         child: ListView(
-          padding: const EdgeInsets.all(16),
+          // Bug fix (2026-10-28, found live tonight): plain EdgeInsets.all(16)
+          // left the last "More" row (now Logout) sitting right behind a
+          // 3-button-nav phone's on-screen system bar - still tappable, but
+          // visually covered. Padding the bottom by the real system inset
+          // (MediaQuery's viewPadding, same signal SafeArea itself reads)
+          // keeps the last row clear on every nav style - gesture nav has
+          // viewPadding.bottom near 0, so this is a no-op there.
+          padding: EdgeInsets.fromLTRB(16, 16, 16, 16 + MediaQuery.of(context).viewPadding.bottom),
           children: [
             LocationStatusBanner(status: _permissionStatus, onRetry: _startLocationSharing, onOpenSettings: _openSettings),
             if (user != null) CameraViewingBanner(dependentId: user.userId),
