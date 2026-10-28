@@ -50,6 +50,14 @@ class _DependentKycScreenState extends ConsumerState<DependentKycScreen> {
   bool _isSubmitting = false;
   _KycOutcome? _outcome;
 
+  // Bug fix (2026-10-27, found live during ICP-1 step 8): the Share-My-ID
+  // button below needs the dependent's own id, but _submit() clears the
+  // WHOLE pendingDependentRegistrationProvider (id included) the moment
+  // verification succeeds - it was only ever meant to drop the password.
+  // That left the button permanently disabled right after a real PASS.
+  // Saving the id here, before that provider gets cleared, is the fix.
+  String? _verifiedDependentId;
+
   @override
   void dispose() {
     _cnicController.dispose();
@@ -107,8 +115,11 @@ class _DependentKycScreenState extends ConsumerState<DependentKycScreen> {
       setState(() => _outcome = _KycOutcome(status: status, nextStep: nextStep, message: message));
 
       // Once genuinely verified, the password has done its job - drop it
-      // rather than hold it in memory any longer than needed.
+      // rather than hold it in memory any longer than needed. Keep the id
+      // around locally first (see _verifiedDependentId's doc comment) -
+      // _buildOutcome's Share-My-ID button still needs it after this.
       if (status == 'verified') {
+        _verifiedDependentId = pending.dependentId;
         ref.read(pendingDependentRegistrationProvider.notifier).state = null;
       }
     } on ApiException catch (e) {
@@ -201,7 +212,7 @@ class _DependentKycScreenState extends ConsumerState<DependentKycScreen> {
   }
 
   Widget _buildOutcome(AppLocalizations l10n, _KycOutcome outcome) {
-    final dependentId = ref.read(pendingDependentRegistrationProvider)?.dependentId;
+    final dependentId = _verifiedDependentId;
 
     if (outcome.status == 'verified' && outcome.nextStep == 'link_primary_guardian') {
       return Column(
