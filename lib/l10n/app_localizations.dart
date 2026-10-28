@@ -3260,6 +3260,12 @@ abstract class AppLocalizations {
   /// **'My ID'**
   String get myIdMenuLabel;
 
+  /// No description provided for @logoutButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Logout'**
+  String get logoutButton;
+
   /// No description provided for @cameraButtonLabel.
   ///
   /// In en, this message translates to:

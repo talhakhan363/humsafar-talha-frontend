@@ -1768,6 +1768,9 @@ class AppLocalizationsUr extends AppLocalizations {
   String get myIdMenuLabel => 'میری آئی ڈی';
 
   @override
+  String get logoutButton => 'لاگ آؤٹ';
+
+  @override
   String get cameraButtonLabel => 'کیمرہ';
 
   @override

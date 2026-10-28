@@ -1753,6 +1753,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get myIdMenuLabel => 'My ID';
 
   @override
+  String get logoutButton => 'Logout';
+
+  @override
   String get cameraButtonLabel => 'Camera';
 
   @override
