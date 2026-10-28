@@ -138,6 +138,17 @@ class _GuardianHomeScreenState extends ConsumerState<GuardianHomeScreen> {
     if (linked == true) _loadDependents();
   }
 
+  // Bug fix (2026-10-28, found live during ICP-1 step 23 - see
+  // dependent_home_screen.dart's matching doc comment for the full
+  // story): no screen in the app had a real logout button, even though
+  // AuthRepository.logout() was already fully built and correct. Wired
+  // up here as an AppBar icon next to the existing dev-only swap_horiz
+  // button, since this screen has no "More" list to put it in instead.
+  Future<void> _logout() async {
+    await ref.read(authRepositoryProvider).logout();
+    if (mounted) context.go('/login');
+  }
+
   String? _emailFor(String? dependentId) {
     if (dependentId == null) return null;
     final match = (_dependents ?? []).where((d) => d.dependentId == dependentId);
@@ -183,6 +194,11 @@ class _GuardianHomeScreenState extends ConsumerState<GuardianHomeScreen> {
             icon: const Icon(Icons.swap_horiz),
             tooltip: l10n.switchModeTooltip,
             onPressed: () => context.go('/role-select'),
+          ),
+          IconButton(
+            icon: const Icon(Icons.logout),
+            tooltip: l10n.logoutButton,
+            onPressed: _logout,
           ),
         ],
       ),
