@@ -4,7 +4,7 @@
   "@appTitle": {
     "description": "App name shown on the splash screen and window title."
   },
-  "guardianAppTitle": "Guardian App",
+  "guardianAppTitle": "Home",
   "dependentAppTitle": "Dependent App",
   "devRoleSwitcherTitle": "Humsafar — Dev Role Switcher",
   "devRoleSwitcherBody": "Temporary screen — will be replaced by real login (Task 1.11 / 2.5).",
