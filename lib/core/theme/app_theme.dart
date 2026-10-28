@@ -13,18 +13,24 @@ import 'humsafar_colors.dart';
 class AppTheme {
   AppTheme._();
 
-  /// [languageCode] only ever changes the STANDARD theme's font (fix #8,
-  /// below) — the high-contrast theme intentionally keeps its existing
-  /// font per the handoff section 2.3's "keep Talha's existing ... theme"
-  /// note. Callers: see main.dart's doc comment on why one call site must
-  /// pass a FIXED language code regardless of the real chosen one, and
-  /// only the other is allowed to vary per rebuild.
+  /// [languageCode] changes both themes' font (fix #8 below covers the
+  /// standard theme; high-contrast was fixed 2026-10-27 — Sarim's ICP-1
+  /// step 22 finding: it was skipping the Urdu font entirely and silently
+  /// falling back to the phone's own Naskh font instead of Noto Nastaliq
+  /// Urdu, because `_highContrast` never applied a GoogleFonts text theme
+  /// at all. The "keep Talha's existing theme" handoff note this used to
+  /// cite was about the fixed black/white/amber COLOR scheme below, not
+  /// an instruction to skip the Urdu font swap too). Callers: see
+  /// main.dart's doc comment on why one call site must pass a FIXED
+  /// language code regardless of the real chosen one, and only the other
+  /// is allowed to vary per rebuild — that reasoning is about
+  /// AccessibilityMode.standard specifically, so it's unaffected by this.
   static ThemeData themeFor(AccessibilityMode mode, String languageCode) {
     switch (mode) {
       case AccessibilityMode.standard:
         return _standardFor(languageCode);
       case AccessibilityMode.highContrast:
-        return _highContrast;
+        return _highContrast(languageCode);
     }
   }
 
@@ -85,45 +91,56 @@ class AppTheme {
   // - Colors pinned to a fixed black/white/amber palette instead of a
   //   generated Material 3 seed scheme, so contrast ratios stay predictable
   //   and don't drift if the seed color ever changes later (NFR-08).
-  static final ThemeData _highContrast = ThemeData(
-    useMaterial3: true,
-    brightness: Brightness.light,
-    colorScheme: const ColorScheme.highContrastLight(
-      primary: Colors.black,
-      onPrimary: Colors.white,
-      secondary: Color(0xFFB45309), // amber-800: dark enough for 4.5:1 on white
-      onSecondary: Colors.white,
-      surface: Colors.white,
-      onSurface: Colors.black,
-      error: Color(0xFFB00020),
-      onError: Colors.white,
-    ),
-    scaffoldBackgroundColor: Colors.white,
-    textTheme: _scaledTextTheme(_baseTextTheme, 1.25),
-    appBarTheme: const AppBarTheme(
-      backgroundColor: Colors.black,
-      foregroundColor: Colors.white,
-    ),
-    elevatedButtonTheme: ElevatedButtonThemeData(
-      style: ElevatedButton.styleFrom(
-        minimumSize: const Size(64, 56), // bigger tap targets alongside bigger text
-        // Bug fix (2026-08-12): deliberately NOT setting a raw `textStyle:`
-        // here anymore. Every ElevatedButton internally re-wraps itself in
-        // its own AnimatedTheme (Flutter's ButtonStyleButton, not ours),
-        // which lerps the FULL ambient ThemeData on every accessibility
-        // toggle — including this field. A bare `const TextStyle(...)`
-        // defaults to `inherit: true` and never passes through
-        // ThemeData's own textTheme-merge pipeline, so it stayed inherit
-        // TRUE while everything else (bodyLarge, titleLarge, and the
-        // button's own default label style in the standard theme) gets
-        // forced to inherit FALSE by that pipeline. That mismatch is what
-        // "Failed to interpolate TextStyles with different inherit
-        // values" was actually pointing at. Fixed below by driving the
-        // bold weight through textTheme.labelLarge instead, so it goes
-        // through the same safe merge as every other role.
+  //
+  // Fixed 2026-10-27 (Sarim's ICP-1 step 22 finding): became a method
+  // taking [languageCode], same reasoning as [_standardFor] — this was a
+  // `static final` field, built once with [_baseTextTheme] directly, so
+  // it could never pick up the Urdu GoogleFonts theme and silently fell
+  // back to the phone's own Naskh font instead of Noto Nastaliq Urdu.
+  static ThemeData _highContrast(String languageCode) {
+    final fontTextTheme = languageCode == 'ur'
+        ? GoogleFonts.getTextTheme('Noto Nastaliq Urdu', _baseTextTheme)
+        : GoogleFonts.getTextTheme('Inter', _baseTextTheme);
+    return ThemeData(
+      useMaterial3: true,
+      brightness: Brightness.light,
+      colorScheme: const ColorScheme.highContrastLight(
+        primary: Colors.black,
+        onPrimary: Colors.white,
+        secondary: Color(0xFFB45309), // amber-800: dark enough for 4.5:1 on white
+        onSecondary: Colors.white,
+        surface: Colors.white,
+        onSurface: Colors.black,
+        error: Color(0xFFB00020),
+        onError: Colors.white,
       ),
-    ),
-  );
+      scaffoldBackgroundColor: Colors.white,
+      textTheme: _scaledTextTheme(fontTextTheme, 1.25),
+      appBarTheme: const AppBarTheme(
+        backgroundColor: Colors.black,
+        foregroundColor: Colors.white,
+      ),
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ElevatedButton.styleFrom(
+          minimumSize: const Size(64, 56), // bigger tap targets alongside bigger text
+          // Bug fix (2026-08-12): deliberately NOT setting a raw `textStyle:`
+          // here anymore. Every ElevatedButton internally re-wraps itself in
+          // its own AnimatedTheme (Flutter's ButtonStyleButton, not ours),
+          // which lerps the FULL ambient ThemeData on every accessibility
+          // toggle — including this field. A bare `const TextStyle(...)`
+          // defaults to `inherit: true` and never passes through
+          // ThemeData's own textTheme-merge pipeline, so it stayed inherit
+          // TRUE while everything else (bodyLarge, titleLarge, and the
+          // button's own default label style in the standard theme) gets
+          // forced to inherit FALSE by that pipeline. That mismatch is what
+          // "Failed to interpolate TextStyles with different inherit
+          // values" was actually pointing at. Fixed below by driving the
+          // bold weight through textTheme.labelLarge instead, so it goes
+          // through the same safe merge as every other role.
+        ),
+      ),
+    );
+  }
 
   static const TextTheme _baseTextTheme = TextTheme(
     bodyLarge: TextStyle(fontSize: 16),
