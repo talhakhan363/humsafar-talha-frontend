@@ -11,6 +11,8 @@ import '../../../core/location/device_location_source.dart';
 import '../../../core/location/location_polling_service.dart';
 import '../../../core/network/api_exception.dart';
 import '../../../core/network/providers.dart';
+// providers.dart (above) also carries authRepositoryProvider, used by
+// _logout below.
 import '../../../core/scheduling/schedule_helpers.dart';
 import '../../../core/theme/humsafar_colors.dart';
 import '../../../shared/widgets/accessibility_toggle_button.dart';
@@ -140,6 +142,18 @@ class _DependentHomeScreenState extends ConsumerState<DependentHomeScreen> with 
     } else {
       unawaited(Geolocator.openAppSettings());
     }
+  }
+
+  // Bug fix (2026-10-28, found live during ICP-1 step 23): there was no
+  // way to actually log out anywhere in the app - the swap_horiz icon
+  // above only goes to the dev-only /role-select screen, which doesn't
+  // clear the session. AuthRepository.logout() was already fully built
+  // and correct (clears tokens, unregisters push, clears
+  // currentUserProvider); it just had no button calling it. Wired up
+  // here via the "More" list, same pattern as My ID/Vitals/etc. above.
+  Future<void> _logout() async {
+    await ref.read(authRepositoryProvider).logout();
+    if (mounted) context.go('/login');
   }
 
   Future<void> _loadUpcoming() async {
@@ -339,6 +353,13 @@ class _DependentHomeScreenState extends ConsumerState<DependentHomeScreen> with 
                 title: Text(l10n.myIdMenuLabel),
                 trailing: const Icon(Icons.chevron_right),
                 onTap: () => context.push('/dependent/share-id', extra: user.userId),
+              ),
+              ListTile(
+                contentPadding: EdgeInsets.zero,
+                leading: const Icon(Icons.logout),
+                title: Text(l10n.logoutButton),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: _logout,
               ),
             ],
           ],
