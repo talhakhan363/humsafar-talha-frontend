@@ -161,7 +161,20 @@ class AppTheme {
       // same safe path as bodyLarge/titleLarge above — so its `inherit`
       // flag stays consistent with the standard theme's fallback instead
       // of clashing with it.
-      labelLarge: const TextStyle(fontWeight: FontWeight.w700),
+      //
+      // Bug fix (2026-10-28, Sarim's ICP-1 retest on debug-apk-1.7): this
+      // used to be a bare `const TextStyle(fontWeight: FontWeight.w700)`,
+      // which has no fontFamily and so REPLACED `base.labelLarge` (the
+      // Nastaliq/Inter GoogleFonts style from fix above) instead of
+      // building on it. Every button, FAB and TextButton uses labelLarge,
+      // so every Urdu button label silently fell back to the phone's own
+      // Naskh font in high-contrast mode, while normal body/title text
+      // (bodyLarge/titleLarge above) correctly stayed Nastaliq — exactly
+      // what Sarim found on screenshots of the Dependent home buttons.
+      // Fixed by building on `base.labelLarge` via `copyWith` instead of
+      // replacing it outright, so the font family survives and only the
+      // weight changes — same pattern already used for bodyLarge/titleLarge.
+      labelLarge: base.labelLarge?.copyWith(fontWeight: FontWeight.w700),
     );
   }
 }
