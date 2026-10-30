@@ -295,8 +295,18 @@ class _WellnessScheduleFormState extends State<_WellnessScheduleForm> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final timeStr = '${_time.hour.toString().padLeft(2, '0')}:${_time.minute.toString().padLeft(2, '0')}';
+    // Bug fix (2026-10-30, final nav-bar-overlap sweep incl. pop-ups/
+    // sheets): this only padded for the keyboard (viewInsets.bottom) and
+    // never for the phone's own virtual nav bar (viewPadding.bottom) -
+    // with the keyboard closed this sheet's bottom content sat right
+    // against, or behind, the 3-button nav bar.
     return Padding(
-      padding: EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 16 + MediaQuery.of(context).viewInsets.bottom),
+      padding: EdgeInsets.only(
+        left: 16,
+        right: 16,
+        top: 16,
+        bottom: 16 + MediaQuery.of(context).viewInsets.bottom + MediaQuery.of(context).viewPadding.bottom,
+      ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
