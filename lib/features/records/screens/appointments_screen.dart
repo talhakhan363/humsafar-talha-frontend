@@ -329,7 +329,13 @@ class _AppointmentFormState extends State<_AppointmentForm> {
     final scheduledAt = DateTime(_date.year, _date.month, _date.day, _time.hour, _time.minute);
     Navigator.of(context).pop({
       'provider_name': _providerController.text.trim(),
-      'scheduled_at': scheduledAt.toIso8601String(),
+      // Bug fix (2026-10-30, pre-empting Sarim's 5.10 run): same issue as
+      // request_visit_screen.dart's G-02 - scheduledAt is a LOCAL
+      // DateTime; .toIso8601String() on it has no 'Z'/offset at all, so
+      // the backend has no way to know which time zone the picked
+      // date/time is in. .toUtc() first makes the zone explicit and
+      // sends the correct UTC instant for what was actually picked.
+      'scheduled_at': scheduledAt.toUtc().toIso8601String(),
       'notes': _notesController.text.trim(),
     });
   }
@@ -338,8 +344,18 @@ class _AppointmentFormState extends State<_AppointmentForm> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final languageCode = Localizations.localeOf(context).languageCode;
+    // Bug fix (2026-10-30, final nav-bar-overlap sweep incl. pop-ups/
+    // sheets): this only padded for the keyboard (viewInsets.bottom) and
+    // never for the phone's own virtual nav bar (viewPadding.bottom) -
+    // with the keyboard closed this sheet's bottom content sat right
+    // against, or behind, the 3-button nav bar.
     return Padding(
-      padding: EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 16 + MediaQuery.of(context).viewInsets.bottom),
+      padding: EdgeInsets.only(
+        left: 16,
+        right: 16,
+        top: 16,
+        bottom: 16 + MediaQuery.of(context).viewInsets.bottom + MediaQuery.of(context).viewPadding.bottom,
+      ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,

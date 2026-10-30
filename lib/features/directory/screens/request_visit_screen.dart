@@ -1,9 +1,8 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:humsafar_frontend/l10n/app_localizations.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../../core/formatting/format_helpers.dart';
 import '../../../core/network/api_exception.dart';
@@ -33,7 +32,10 @@ class _RequestVisitScreenState extends ConsumerState<RequestVisitScreen> {
   bool _isSaving = false;
   String? _error;
   Map<String, dynamic>? _created;
-  final String _clientId = '${DateTime.now().microsecondsSinceEpoch}-${Random().nextInt(1 << 32)}';
+  // Bug fix (2026-10-30, Sarim's G-01): this was a hand-rolled
+  // timestamp+random string, not a real UUID, so the backend's safe-retry
+  // check 422'd every visit request.
+  final String _clientId = const Uuid().v4();
 
   @override
   void dispose() {
@@ -70,7 +72,18 @@ class _RequestVisitScreenState extends ConsumerState<RequestVisitScreen> {
             '/dependents/${widget.dependentId}/bookings',
             data: {
               'provider_id': widget.provider['provider_id'],
-              if (_preferredAt != null) 'preferred_at': _preferredAt!.toIso8601String(),
+              // Bug fix (2026-10-30, Sarim's G-02): `_preferredAt` is a
+              // LOCAL DateTime (built from showDatePicker/showTimePicker,
+              // no `.toUtc()` applied). Calling `.toIso8601String()`
+              // directly on a local DateTime produces a string with no
+              // 'Z'/offset at all — e.g. "2026-11-05T14:30:00.000" for
+              // 2:30 PM Pakistan time — so the backend has no way to
+              // know which time zone that wall-clock time is in.
+              // `.toUtc()` first both makes the zone explicit (adds the
+              // trailing 'Z') and sends the correct UTC instant for what
+              // the Guardian actually picked, instead of the ambiguous
+              // raw local clock value.
+              if (_preferredAt != null) 'preferred_at': _preferredAt!.toUtc().toIso8601String(),
               if (note.isNotEmpty) 'note': note,
               'client_id': _clientId,
             },
