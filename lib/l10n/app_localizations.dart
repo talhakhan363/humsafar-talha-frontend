@@ -107,7 +107,7 @@ abstract class AppLocalizations {
   /// No description provided for @guardianAppTitle.
   ///
   /// In en, this message translates to:
-  /// **'Guardian App'**
+  /// **'Home'**
   String get guardianAppTitle;
 
   /// No description provided for @dependentAppTitle.
@@ -203,7 +203,7 @@ abstract class AppLocalizations {
   /// No description provided for @dependentKycTitle.
   ///
   /// In en, this message translates to:
-  /// **'Dependent Verification (KYC)'**
+  /// **'Dependent Verification'**
   String get dependentKycTitle;
 
   /// No description provided for @fullNameLabel.

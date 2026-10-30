@@ -12,7 +12,7 @@ class AppLocalizationsUr extends AppLocalizations {
   String get appTitle => 'ہمسفر';
 
   @override
-  String get guardianAppTitle => 'گارڈین ایپ';
+  String get guardianAppTitle => 'ہوم';
 
   @override
   String get dependentAppTitle => 'ڈیپینڈنٹ ایپ';
@@ -63,7 +63,7 @@ class AppLocalizationsUr extends AppLocalizations {
   String get guardianVerificationTitle => 'گارڈین کی تصدیق';
 
   @override
-  String get dependentKycTitle => 'ڈیپینڈنٹ کی تصدیق (KYC)';
+  String get dependentKycTitle => 'ڈیپینڈنٹ کی تصدیق';
 
   @override
   String get fullNameLabel => 'پورا نام';

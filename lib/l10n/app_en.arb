@@ -20,7 +20,7 @@
   "registerScreenTitle": "Create Account",
   "loginScreenTitle": "Login",
   "guardianVerificationTitle": "Guardian Verification",
-  "dependentKycTitle": "Dependent Verification (KYC)",
+  "dependentKycTitle": "Dependent Verification",
   "fullNameLabel": "Full Name",
   "emailLabel": "Email",
   "phoneLabel": "Phone Number",

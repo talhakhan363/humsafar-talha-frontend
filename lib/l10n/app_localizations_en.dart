@@ -12,7 +12,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get appTitle => 'Humsafar';
 
   @override
-  String get guardianAppTitle => 'Guardian App';
+  String get guardianAppTitle => 'Home';
 
   @override
   String get dependentAppTitle => 'Dependent App';
@@ -64,7 +64,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get guardianVerificationTitle => 'Guardian Verification';
 
   @override
-  String get dependentKycTitle => 'Dependent Verification (KYC)';
+  String get dependentKycTitle => 'Dependent Verification';
 
   @override
   String get fullNameLabel => 'Full Name';
