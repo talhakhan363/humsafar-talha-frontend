@@ -121,6 +121,9 @@ class _DependentKycScreenState extends ConsumerState<DependentKycScreen> {
       if (status == 'verified') {
         _verifiedDependentId = pending.dependentId;
         ref.read(pendingDependentRegistrationProvider.notifier).state = null;
+        // Bug fix (2026-10-30): also clear the persisted copy — see
+        // pending_dependent_registration_provider.dart's doc comment.
+        await ref.read(pendingDependentRegistrationStorageProvider).clear();
       }
     } on ApiException catch (e) {
       if (!mounted) return;

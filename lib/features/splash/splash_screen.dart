@@ -5,6 +5,7 @@ import 'package:humsafar_frontend/l10n/app_localizations.dart';
 
 import '../../core/auth/app_user.dart';
 import '../../core/auth/current_user_provider.dart';
+import '../../core/auth/pending_dependent_registration_provider.dart';
 import '../../core/network/api_exception.dart';
 import '../../core/network/providers.dart';
 import '../../core/push/push_service.dart';
@@ -46,7 +47,19 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
     final refreshToken = await tokenStorage.readRefreshToken();
 
     if (refreshToken == null) {
+      // Bug fix (2026-10-30): resume path for an interrupted Dependent
+      // KYC — see pending_dependent_registration_provider.dart's doc
+      // comment. A Dependent never gets tokens until kyc-verify succeeds,
+      // so this is exactly the branch where an unfinished KYC
+      // registration would otherwise strand someone at /role-select with
+      // no way back in.
+      final pending = await ref.read(pendingDependentRegistrationStorageProvider).read();
       if (!mounted) return;
+      if (pending != null) {
+        ref.read(pendingDependentRegistrationProvider.notifier).state = pending;
+        context.go('/kyc/dependent');
+        return;
+      }
       context.go('/role-select');
       return;
     }

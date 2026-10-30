@@ -95,10 +95,16 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
         if (!mounted) return;
         context.go('/kyc/guardian');
       } else {
-        ref.read(pendingDependentRegistrationProvider.notifier).state = PendingDependentRegistration(
+        final pending = PendingDependentRegistration(
           dependentId: user.userId,
           password: _passwordController.text,
         );
+        ref.read(pendingDependentRegistrationProvider.notifier).state = pending;
+        // Bug fix (2026-10-30): also persist, so an interrupted KYC can
+        // resume on the next app launch — see
+        // pending_dependent_registration_provider.dart's doc comment.
+        await ref.read(pendingDependentRegistrationStorageProvider).save(pending);
+        if (!mounted) return;
         context.go('/kyc/dependent');
       }
     } on ApiException catch (e) {
@@ -133,10 +139,32 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
     }
   }
 
+  // Bug fix (2026-10-30, user-reported): same back-button fix as
+  // login_screen.dart — see that screen's doc comment for the full
+  // explanation.
+  void _onBack(BuildContext context) {
+    if (context.canPop()) {
+      context.pop();
+    } else {
+      context.go('/role-select');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) return;
+        _onBack(context);
+      },
+      child: _buildScaffold(context, l10n),
+    );
+  }
+
+  Widget _buildScaffold(BuildContext context, AppLocalizations l10n) {
     return Scaffold(
       appBar: AppBar(
         title: Text(l10n.registerScreenTitle),
@@ -232,7 +260,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
               ),
               const SizedBox(height: 12),
               TextButton(
-                onPressed: _isSubmitting ? null : () => context.go('/login'),
+                onPressed: _isSubmitting ? null : () => context.push('/login'),
                 child: Text(l10n.alreadyHaveAccountPrompt),
               ),
             ],
