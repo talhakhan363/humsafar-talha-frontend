@@ -416,6 +416,24 @@ abstract class AppLocalizations {
   /// **'Save'**
   String get saveButtonLabel;
 
+  /// No description provided for @exitAppConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Exit the app?'**
+  String get exitAppConfirmTitle;
+
+  /// No description provided for @exitAppConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to exit Humsafar?'**
+  String get exitAppConfirmBody;
+
+  /// No description provided for @exitAppButtonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Exit'**
+  String get exitAppButtonLabel;
+
   /// No description provided for @yesLabel.
   ///
   /// In en, this message translates to:

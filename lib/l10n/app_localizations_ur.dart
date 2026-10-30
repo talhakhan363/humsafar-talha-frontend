@@ -178,6 +178,15 @@ class AppLocalizationsUr extends AppLocalizations {
   String get saveButtonLabel => 'محفوظ کریں';
 
   @override
+  String get exitAppConfirmTitle => 'ایپ بند کریں؟';
+
+  @override
+  String get exitAppConfirmBody => 'کیا آپ واقعی ہمسفر ایپ بند کرنا چاہتے ہیں؟';
+
+  @override
+  String get exitAppButtonLabel => 'بند کریں';
+
+  @override
   String get yesLabel => 'جی ہاں';
 
   @override

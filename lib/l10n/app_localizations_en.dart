@@ -175,6 +175,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get saveButtonLabel => 'Save';
 
   @override
+  String get exitAppConfirmTitle => 'Exit the app?';
+
+  @override
+  String get exitAppConfirmBody => 'Are you sure you want to exit Humsafar?';
+
+  @override
+  String get exitAppButtonLabel => 'Exit';
+
+  @override
   String get yesLabel => 'Yes';
 
   @override

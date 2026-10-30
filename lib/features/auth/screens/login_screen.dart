@@ -79,48 +79,71 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     }
   }
 
+  // Bug fix (2026-10-30, user-reported): back from this screen used to
+  // exit the app directly instead of returning to the dev role switcher.
+  // Reached via a push (role_select_screen.dart's "Preview" link),
+  // `context.pop()` already does the right thing on its own — this only
+  // kicks in on the other path here, straight after logout
+  // (`context.go('/login')`), which resets the whole stack and leaves
+  // nothing to pop back to.
+  void _onBack(BuildContext context) {
+    if (context.canPop()) {
+      context.pop();
+    } else {
+      context.go('/role-select');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(l10n.loginScreenTitle),
-        actions: const [LanguageSwitchButton(), AccessibilityToggleButton()],
-      ),
-      // Bug fix (2026-10-30): bottom-nav-bar overlap, see vitals_screen.dart.
-      body: SingleChildScrollView(
-        padding: EdgeInsets.fromLTRB(24, 24, 24, 24 + MediaQuery.of(context).viewPadding.bottom),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              TextFormField(
-                controller: _emailController,
-                keyboardType: TextInputType.emailAddress,
-                decoration: InputDecoration(labelText: l10n.emailLabel),
-                validator: (value) => (value == null || value.trim().isEmpty) ? l10n.fieldRequiredError : null,
-              ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: _passwordController,
-                obscureText: true,
-                decoration: InputDecoration(labelText: l10n.passwordLabel),
-                validator: (value) => (value == null || value.isEmpty) ? l10n.fieldRequiredError : null,
-              ),
-              const SizedBox(height: 24),
-              ElevatedButton(
-                onPressed: _isSubmitting ? null : _submit,
-                child:
-                    _isSubmitting ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2)) : Text(l10n.loginButton),
-              ),
-              const SizedBox(height: 12),
-              TextButton(
-                onPressed: _isSubmitting ? null : () => context.go('/register'),
-                child: Text(l10n.dontHaveAccountPrompt),
-              ),
-            ],
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) return;
+        _onBack(context);
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(l10n.loginScreenTitle),
+          actions: const [LanguageSwitchButton(), AccessibilityToggleButton()],
+        ),
+        // Bug fix (2026-10-30): bottom-nav-bar overlap, see vitals_screen.dart.
+        body: SingleChildScrollView(
+          padding: EdgeInsets.fromLTRB(24, 24, 24, 24 + MediaQuery.of(context).viewPadding.bottom),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                TextFormField(
+                  controller: _emailController,
+                  keyboardType: TextInputType.emailAddress,
+                  decoration: InputDecoration(labelText: l10n.emailLabel),
+                  validator: (value) => (value == null || value.trim().isEmpty) ? l10n.fieldRequiredError : null,
+                ),
+                const SizedBox(height: 16),
+                TextFormField(
+                  controller: _passwordController,
+                  obscureText: true,
+                  decoration: InputDecoration(labelText: l10n.passwordLabel),
+                  validator: (value) => (value == null || value.isEmpty) ? l10n.fieldRequiredError : null,
+                ),
+                const SizedBox(height: 24),
+                ElevatedButton(
+                  onPressed: _isSubmitting ? null : _submit,
+                  child: _isSubmitting
+                      ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2))
+                      : Text(l10n.loginButton),
+                ),
+                const SizedBox(height: 12),
+                TextButton(
+                  onPressed: _isSubmitting ? null : () => context.push('/register'),
+                  child: Text(l10n.dontHaveAccountPrompt),
+                ),
+              ],
+            ),
           ),
         ),
       ),
