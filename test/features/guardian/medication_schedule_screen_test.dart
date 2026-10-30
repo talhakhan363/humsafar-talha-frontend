@@ -286,7 +286,15 @@ void main() {
 
     expect(fakeClient.postCalls, 1);
     expect(fakeClient.lastPostPath, '/dependents/dep-1/medications');
-    expect(fakeClient.lastPostData, {'drug_name': 'Aspirin', 'dosage': '100mg', 'time': '08:00', 'frequency': 'daily'});
+    // Bug fix (2026-10-30, Sarim's N-01): this test was asserting the
+    // OLD, broken POST body shape as correct — 'time': a bare string,
+    // which is what made every real add-medicine attempt 422 against
+    // the actual backend. Updated to the fixed shape
+    // (medication_schedule_screen.dart's `_openForm`): POST wraps the
+    // single time picked in this form into 'times': [...], matching the
+    // create-takes-a-list / update-takes-one-value split this contract
+    // family already uses for wellness schedules.
+    expect(fakeClient.lastPostData, {'drug_name': 'Aspirin', 'dosage': '100mg', 'frequency': 'daily', 'times': ['08:00']});
     expect(find.text('Saved.'), findsOneWidget);
     expect(fakeClient.getCalls, 2); // _load() ran again after the save
 

@@ -126,7 +126,22 @@ class _MedicationScheduleScreenState extends ConsumerState<MedicationScheduleScr
     final l10n = AppLocalizations.of(context)!;
     try {
       if (existing == null) {
-        await ref.read(apiClientProvider).post('/dependents/${widget.summary.dependentId}/medications', data: result);
+        // Bug fix (2026-10-30, Sarim's N-01): was posting `result` as-is
+        // ('time': a bare string) — POST /dependents/{id}/medications
+        // needs 'times' as a list, which is why every add-medicine
+        // attempt 422'd. This form still only has one time-of-day
+        // picker (no UI for multiple doses a day), so this wraps that
+        // single time in a one-element list rather than adding
+        // multi-time support, which would be a bigger, un-asked-for
+        // change. PUT below is deliberately left on singular 'time' —
+        // same create-takes-a-list / update-takes-one-value split this
+        // same contract family already uses in
+        // wellness_schedule_screen.dart's `_openForm`, which was never
+        // reported broken, so there's no reason to change it too.
+        final createData = {...result, 'times': [result['time']]}..remove('time');
+        await ref
+            .read(apiClientProvider)
+            .post('/dependents/${widget.summary.dependentId}/medications', data: createData);
       } else {
         await ref.read(apiClientProvider).put(
               '/dependents/${widget.summary.dependentId}/medications/${existing['schedule_id']}',
@@ -201,7 +216,7 @@ class _MedicationScheduleScreenState extends ConsumerState<MedicationScheduleScr
               child: ListTile(
                 onTap: _canManage ? () => _openForm(existing: schedule) : null,
                 title: Text('${schedule['drug_name']} · ${schedule['dosage']}'),
-                subtitle: Text('${formatHHMM(schedule['time'] as String)} · $frequencyLabel'),
+                subtitle: Text('${formatHHMM(_scheduleTimeHHMM(schedule) ?? '00:00')} · $frequencyLabel'),
                 trailing: Switch(
                   value: schedule['active'] as bool? ?? true,
                   onChanged: !_canManage || _pendingToggle.contains(scheduleId)
@@ -222,6 +237,23 @@ class _MedicationScheduleScreenState extends ConsumerState<MedicationScheduleScr
 /// wellness_schedule_screen.dart's analogous day display if it ever
 /// needs one (it currently doesn't — wellness checks have no `days`
 /// field in the contract, only medication schedules do).
+/// Bug fix (2026-10-30, Sarim's N-01): reads a schedule's time whether
+/// the backend returns the old singular `time` or the `times` list the
+/// contract actually documents for this resource — see `_save()` below
+/// for the matching write-side fix (`times: [timeStr]` instead of
+/// `time: timeStr`, which is what made `POST /medications` 422 for every
+/// Guardian trying to add a medicine). Defensive on purpose: this repo
+/// has no local copy of `medication_contract.md` to confirm whether a
+/// GET response was ever changed to match, so this reads either shape
+/// instead of assuming one.
+String? _scheduleTimeHHMM(Map<String, dynamic> schedule) {
+  final time = schedule['time'] as String?;
+  if (time != null) return time;
+  final times = (schedule['times'] as List<dynamic>?)?.cast<String>();
+  if (times != null && times.isNotEmpty) return times.first;
+  return null;
+}
+
 String weekdayShortLabel(AppLocalizations l10n, String day) {
   switch (day) {
     case 'mon':
@@ -267,7 +299,7 @@ class _MedicationScheduleFormState extends State<_MedicationScheduleForm> {
     _drugController = TextEditingController(text: existing?['drug_name'] as String? ?? '');
     _dosageController = TextEditingController(text: existing?['dosage'] as String? ?? '');
     if (existing != null) {
-      final timeStr = existing['time'] as String?;
+      final timeStr = _scheduleTimeHHMM(existing);
       final parts = timeStr?.split(':');
       if (parts != null && parts.length == 2) {
         final h = int.tryParse(parts[0]);
@@ -302,6 +334,14 @@ class _MedicationScheduleFormState extends State<_MedicationScheduleForm> {
       return;
     }
     final timeStr = '${_time.hour.toString().padLeft(2, '0')}:${_time.minute.toString().padLeft(2, '0')}';
+    // Kept as a plain singular 'time' here — _openForm (the caller) is
+    // the one that reshapes this into 'times': [timeStr] for a create
+    // and leaves it as 'time' for an update, matching the POST-takes-a-
+    // list / PUT-takes-one-value split this same contract family already
+    // uses in wellness_schedule_screen.dart's `_openForm`. See that
+    // split's doc comment there, and this screen's own `_openForm` below,
+    // for why a single shared shape here would be wrong for one of the
+    // two calls.
     Navigator.of(context).pop({
       'drug_name': _drugController.text.trim(),
       'dosage': _dosageController.text.trim(),
@@ -315,8 +355,18 @@ class _MedicationScheduleFormState extends State<_MedicationScheduleForm> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final timeStr = '${_time.hour.toString().padLeft(2, '0')}:${_time.minute.toString().padLeft(2, '0')}';
+    // Bug fix (2026-10-30, final nav-bar-overlap sweep incl. pop-ups/
+    // sheets): this only padded for the keyboard (viewInsets.bottom) and
+    // never for the phone's own virtual nav bar (viewPadding.bottom) -
+    // with the keyboard closed this sheet's bottom content sat right
+    // against, or behind, the 3-button nav bar.
     return Padding(
-      padding: EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 16 + MediaQuery.of(context).viewInsets.bottom),
+      padding: EdgeInsets.only(
+        left: 16,
+        right: 16,
+        top: 16,
+        bottom: 16 + MediaQuery.of(context).viewInsets.bottom + MediaQuery.of(context).viewPadding.bottom,
+      ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
