@@ -263,11 +263,19 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
           const AccessibilityToggleButton(),
         ],
       ),
-      body: Column(
-        children: [
-          Expanded(child: _buildMessageList(l10n)),
-          _buildComposer(l10n, isGuardian),
-        ],
+      // Bug fix (2026-10-30): bottom-nav-bar overlap, see vitals_screen.dart.
+      // The composer (send button, text field) sits right against the
+      // bottom edge, exactly the kind of control that was getting
+      // covered by the 3-button nav bar.
+      body: SafeArea(
+        bottom: true,
+        top: false,
+        child: Column(
+          children: [
+            Expanded(child: _buildMessageList(l10n)),
+            _buildComposer(l10n, isGuardian),
+          ],
+        ),
       ),
     );
   }

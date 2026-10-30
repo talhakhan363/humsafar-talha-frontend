@@ -175,9 +175,14 @@ class _EmergencySettingsScreenState extends ConsumerState<EmergencySettingsScree
         title: Text(l10n.emergencySettingsScreenTitle),
         actions: const [LanguageSwitchButton(), AccessibilityToggleButton()],
       ),
-      body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : RefreshIndicator(onRefresh: _load, child: _buildBody(l10n)),
+      // Bug fix (2026-10-30): bottom-nav-bar overlap, see vitals_screen.dart.
+      body: SafeArea(
+        bottom: true,
+        top: false,
+        child: _isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : RefreshIndicator(onRefresh: _load, child: _buildBody(l10n)),
+      ),
     );
   }
 

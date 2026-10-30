@@ -121,7 +121,11 @@ class _AlertsScreenState extends ConsumerState<AlertsScreen> {
         title: Text(l10n.alertsScreenTitle),
         actions: const [LanguageSwitchButton(), AccessibilityToggleButton()],
       ),
-      body: RefreshIndicator(onRefresh: _load, child: _buildBody(l10n)),
+      // Bug fix (2026-10-30, the finding that triggered this app-wide
+      // sweep — user reported the "Seen stops the chain" note cut off
+      // at the bottom of this exact screen): bottom-nav-bar overlap,
+      // see vitals_screen.dart.
+      body: SafeArea(bottom: true, top: false, child: RefreshIndicator(onRefresh: _load, child: _buildBody(l10n))),
     );
   }
 

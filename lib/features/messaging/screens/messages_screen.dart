@@ -94,7 +94,8 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
         title: Text(l10n.messagesScreenTitle),
         actions: const [LanguageSwitchButton(), AccessibilityToggleButton()],
       ),
-      body: RefreshIndicator(onRefresh: _load, child: _buildBody(l10n)),
+      // Bug fix (2026-10-30): bottom-nav-bar overlap, see vitals_screen.dart.
+      body: SafeArea(bottom: true, top: false, child: RefreshIndicator(onRefresh: _load, child: _buildBody(l10n))),
     );
   }
 

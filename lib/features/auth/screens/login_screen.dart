@@ -88,8 +88,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         title: Text(l10n.loginScreenTitle),
         actions: const [LanguageSwitchButton(), AccessibilityToggleButton()],
       ),
+      // Bug fix (2026-10-30): bottom-nav-bar overlap, see vitals_screen.dart.
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(24.0),
+        padding: EdgeInsets.fromLTRB(24, 24, 24, 24 + MediaQuery.of(context).viewPadding.bottom),
         child: Form(
           key: _formKey,
           child: Column(

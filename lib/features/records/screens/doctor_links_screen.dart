@@ -103,7 +103,8 @@ class _DoctorLinksScreenState extends ConsumerState<DoctorLinksScreen> {
         actions: const [LanguageSwitchButton(), AccessibilityToggleButton()],
       ),
       floatingActionButton: FloatingActionButton(onPressed: _createLink, child: const Icon(Icons.add_link)),
-      body: RefreshIndicator(onRefresh: _load, child: _buildBody(l10n)),
+      // Bug fix (2026-10-30): bottom-nav-bar overlap, see vitals_screen.dart.
+      body: SafeArea(bottom: true, top: false, child: RefreshIndicator(onRefresh: _load, child: _buildBody(l10n))),
     );
   }
 

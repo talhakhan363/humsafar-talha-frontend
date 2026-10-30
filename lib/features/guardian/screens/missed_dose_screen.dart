@@ -198,7 +198,8 @@ class _MissedDoseScreenState extends ConsumerState<MissedDoseScreen> {
         title: Text(l10n.missedDoseScreenTitle),
         actions: const [LanguageSwitchButton(), AccessibilityToggleButton()],
       ),
-      body: _buildBody(l10n),
+      // Bug fix (2026-10-30): bottom-nav-bar overlap, see vitals_screen.dart.
+      body: SafeArea(bottom: true, top: false, child: _buildBody(l10n)),
     );
   }
 

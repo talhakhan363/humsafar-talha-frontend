@@ -133,8 +133,9 @@ class _AddVitalReadingScreenState extends ConsumerState<AddVitalReadingScreen> {
         title: Text(l10n.addVitalReadingTitle),
         actions: const [LanguageSwitchButton(), AccessibilityToggleButton()],
       ),
+      // Bug fix (2026-10-30): bottom-nav-bar overlap, see vitals_screen.dart.
       body: ListView(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.fromLTRB(16, 16, 16, 16 + MediaQuery.of(context).viewPadding.bottom),
         children: [
           Wrap(
             spacing: 8,

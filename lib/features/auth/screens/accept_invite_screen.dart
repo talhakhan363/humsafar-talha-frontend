@@ -82,8 +82,9 @@ class _AcceptInviteScreenState extends ConsumerState<AcceptInviteScreen> {
         title: Text(l10n.acceptAnInviteTitle),
         actions: const [LanguageSwitchButton(), AccessibilityToggleButton()],
       ),
+      // Bug fix (2026-10-30): bottom-nav-bar overlap, see vitals_screen.dart.
       body: Padding(
-        padding: const EdgeInsets.all(24.0),
+        padding: EdgeInsets.fromLTRB(24, 24, 24, 24 + MediaQuery.of(context).viewPadding.bottom),
         child: Form(
           key: _formKey,
           child: Column(

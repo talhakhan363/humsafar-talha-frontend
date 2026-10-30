@@ -155,7 +155,12 @@ class _VitalsScreenState extends ConsumerState<VitalsScreen> {
         ],
       ),
       floatingActionButton: FloatingActionButton(onPressed: _openAdd, child: const Icon(Icons.add)),
-      body: RefreshIndicator(onRefresh: _load, child: _buildBody(l10n)),
+      // Bug fix (2026-10-30, found live by the user): bottom content was
+      // getting hidden behind the phone's 3-button nav bar on scroll, same
+      // root cause as dependent_home_screen.dart's earlier fix — body
+      // wasn't safe-area-aware at the bottom. SafeArea(top: false) avoids
+      // double-padding the top (the AppBar already handles that).
+      body: SafeArea(bottom: true, top: false, child: RefreshIndicator(onRefresh: _load, child: _buildBody(l10n))),
     );
   }
 

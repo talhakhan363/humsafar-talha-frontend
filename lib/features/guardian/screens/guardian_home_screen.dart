@@ -202,7 +202,8 @@ class _GuardianHomeScreenState extends ConsumerState<GuardianHomeScreen> {
           ),
         ],
       ),
-      body: RefreshIndicator(onRefresh: _refreshAll, child: _buildBody()),
+      // Bug fix (2026-10-30): bottom-nav-bar overlap, see vitals_screen.dart.
+      body: SafeArea(bottom: true, top: false, child: RefreshIndicator(onRefresh: _refreshAll, child: _buildBody())),
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         crossAxisAlignment: CrossAxisAlignment.end,

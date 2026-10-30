@@ -88,8 +88,9 @@ class _ConnectBandScreenState extends ConsumerState<ConnectBandScreen> {
         title: Text(l10n.connectBandScreenTitle),
         actions: const [LanguageSwitchButton(), AccessibilityToggleButton()],
       ),
+      // Bug fix (2026-10-30): bottom-nav-bar overlap, see vitals_screen.dart.
       body: ListView(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.fromLTRB(16, 16, 16, 16 + MediaQuery.of(context).viewPadding.bottom),
         children: [
           Text(l10n.connectBandInstructions),
           const SizedBox(height: 16),

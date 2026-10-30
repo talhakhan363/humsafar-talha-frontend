@@ -86,8 +86,9 @@ class _InviteSecondaryScreenState extends ConsumerState<InviteSecondaryScreen> {
         title: Text(l10n.inviteASecondaryButton),
         actions: const [LanguageSwitchButton(), AccessibilityToggleButton()],
       ),
+      // Bug fix (2026-10-30): bottom-nav-bar overlap, see vitals_screen.dart.
       body: Padding(
-        padding: const EdgeInsets.all(24.0),
+        padding: EdgeInsets.fromLTRB(24, 24, 24, 24 + MediaQuery.of(context).viewPadding.bottom),
         child: _inviteToken == null ? _buildForm(l10n) : _buildResult(l10n),
       ),
     );

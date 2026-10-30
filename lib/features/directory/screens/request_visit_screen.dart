@@ -113,7 +113,12 @@ class _RequestVisitScreenState extends ConsumerState<RequestVisitScreen> {
         title: Text(l10n.requestVisitScreenTitle),
         actions: const [LanguageSwitchButton(), AccessibilityToggleButton()],
       ),
-      body: _created != null ? _buildSuccess(l10n) : _buildForm(l10n, languageCode),
+      // Bug fix (2026-10-30): bottom-nav-bar overlap, see vitals_screen.dart.
+      body: SafeArea(
+        bottom: true,
+        top: false,
+        child: _created != null ? _buildSuccess(l10n) : _buildForm(l10n, languageCode),
+      ),
     );
   }
 

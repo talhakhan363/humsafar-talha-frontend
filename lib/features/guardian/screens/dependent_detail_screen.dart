@@ -129,8 +129,9 @@ class _DependentDetailScreenState extends ConsumerState<DependentDetailScreen> {
       ),
       body: RefreshIndicator(
         onRefresh: _loadGuardians,
+        // Bug fix (2026-10-30): bottom-nav-bar overlap, see vitals_screen.dart.
         child: ListView(
-          padding: const EdgeInsets.all(16),
+          padding: EdgeInsets.fromLTRB(16, 16, 16, 16 + MediaQuery.of(context).viewPadding.bottom),
           children: [
             Card(
               child: Padding(

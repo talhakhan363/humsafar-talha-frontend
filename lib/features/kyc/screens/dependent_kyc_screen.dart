@@ -155,9 +155,15 @@ class _DependentKycScreenState extends ConsumerState<DependentKycScreen> {
         title: Text(l10n.dependentKycTitle),
         actions: const [LanguageSwitchButton(), AccessibilityToggleButton()],
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(24.0),
-        child: _outcome == null ? _buildForm(l10n) : _buildOutcome(l10n, _outcome!),
+      // Bug fix (2026-10-30, flagged directly by the user on this screen):
+      // bottom-nav-bar overlap, see vitals_screen.dart.
+      body: SafeArea(
+        bottom: true,
+        top: false,
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(24.0),
+          child: _outcome == null ? _buildForm(l10n) : _buildOutcome(l10n, _outcome!),
+        ),
       ),
     );
   }

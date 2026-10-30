@@ -152,7 +152,8 @@ class _LiveMapScreenState extends ConsumerState<LiveMapScreen> {
           IconButton(icon: const Icon(Icons.refresh), tooltip: l10n.retryButton, onPressed: _loadLocation),
         ],
       ),
-      body: _buildBody(l10n),
+      // Bug fix (2026-10-30): bottom-nav-bar overlap, see vitals_screen.dart.
+      body: SafeArea(bottom: true, top: false, child: _buildBody(l10n)),
     );
   }
 

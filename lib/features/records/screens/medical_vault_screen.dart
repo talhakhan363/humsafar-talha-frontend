@@ -259,7 +259,8 @@ class _MedicalVaultScreenState extends ConsumerState<MedicalVaultScreen> {
               ),
             ),
           ),
-          Expanded(child: RefreshIndicator(onRefresh: _load, child: _buildBody(l10n))),
+          // Bug fix (2026-10-30): bottom-nav-bar overlap, see vitals_screen.dart.
+          Expanded(child: SafeArea(bottom: true, top: false, child: RefreshIndicator(onRefresh: _load, child: _buildBody(l10n)))),
         ],
       ),
     );
