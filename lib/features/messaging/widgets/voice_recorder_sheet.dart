@@ -1,11 +1,11 @@
 import 'dart:async';
-import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:dio/dio.dart' show FormData, MultipartFile;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:humsafar_frontend/l10n/app_localizations.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../../core/audio/audio_providers.dart';
 import '../../../core/audio/audio_recorder_source.dart';
@@ -51,7 +51,10 @@ class _VoiceRecorderSheetState extends ConsumerState<VoiceRecorderSheet> {
   Uint8List? _recordedBytes;
   bool _isPlayingPreview = false;
   String? _errorMessage;
-  final String _clientId = '${DateTime.now().microsecondsSinceEpoch}-${Random().nextInt(1 << 32)}';
+  // Bug fix (2026-10-30, Sarim's G-01): this was a hand-rolled
+  // timestamp+random string, not a real UUID, so the backend's safe-retry
+  // check 422'd every voice message.
+  final String _clientId = const Uuid().v4();
 
   // Cached at the point recording starts, not re-read in dispose(): current
   // flutter_riverpod throws "Cannot use ref after the widget was disposed"

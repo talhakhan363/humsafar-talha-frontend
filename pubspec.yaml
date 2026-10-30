@@ -35,6 +35,14 @@ dependencies:
   flutter_secure_storage: ^10.3.1
   image_picker: ^1.1.2
 
+  # Bug fix (2026-10-30, Sarim's G-01, QA 6.12): the hand-rolled
+  # `'${DateTime.now().microsecondsSinceEpoch}-${Random().nextInt(1 << 32)}'`
+  # client_id used in 5 places (chat text/voice messages, records,
+  # vitals, visit requests) is not a UUID, so the backend's safe-retry
+  # check 422s every one of those requests. Real UUIDs via this package
+  # instead - see each call site's own comment.
+  uuid: ^4.5.1
+
   # Task 2.6 — Live Map. flutter_map (OpenStreetMap tiles) instead of
   # google_maps_flutter: no Google Cloud project, no billing-enabled API
   # key, no account setup at all. Does everything 2.6 needs (a marker +
