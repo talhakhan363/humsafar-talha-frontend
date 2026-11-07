@@ -17,6 +17,36 @@ import '../../core/theme/humsafar_colors.dart';
 /// receives the Dependent-facing or Phase-4/5 types (`medication_due`,
 /// `message`, `incoming_call`, ...), so a fallback is enough, not a gap.
 
+/// Title for a notification card (F-10 fix, QA ICP-3 Results v1.1): every
+/// `external_contact` notice used to show the same generic
+/// [alertTypeLabel] ("Emergency contact alert") no matter the outcome —
+/// the server's own `title` and `data.result` were both ignored, so a
+/// Guardian could not tell whether the SMS went out, failed, or there
+/// was no contact to send it to at all (Run 1 of ICP-3: "no SMS went out
+/// and Ali could not tell"). `external_contact`'s `data.result`
+/// (`sent` / `no_contact` / `failed`, per
+/// notification_contract.md/emergency_contact_contract.md) now picks
+/// one of three specific, already-localized titles instead of the raw
+/// server text — matching how every other notification type here is
+/// already localized from its own fields rather than by displaying the
+/// server's English `title` string directly. Every other type falls
+/// through to [alertTypeLabel] unchanged.
+String notificationTitle(AppLocalizations l10n, Map<String, dynamic> notification) {
+  final type = notification['type'] as String? ?? '';
+  if (type == 'external_contact') {
+    final result = (notification['data'] as Map<String, dynamic>?)?['result'] as String?;
+    switch (result) {
+      case 'sent':
+        return l10n.externalContactSentTitle;
+      case 'no_contact':
+        return l10n.externalContactNoContactTitle;
+      case 'failed':
+        return l10n.externalContactFailedTitle;
+    }
+  }
+  return alertTypeLabel(l10n, type);
+}
+
 /// Localized label for a notification's `type`.
 String alertTypeLabel(AppLocalizations l10n, String type) {
   switch (type) {

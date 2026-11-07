@@ -132,6 +132,23 @@ String formatHHMM(String time) {
   return formatClockTime(DateTime(2000, 1, 1, hour, minute));
 }
 
+/// Bug fix (F-11, QA ICP-3 Results v1.1): the Alerts list used to show
+/// only [formatClockTime] for every row, so an alert from yesterday (or
+/// last week) looked exactly like one from a minute ago — nothing told
+/// the two apart. Adds a numeric day/month prefix (no locale month-name
+/// dependency, same reasoning as [weekdayName] avoiding `intl`) whenever
+/// [time] isn't the same local day as [now]; today's alerts are
+/// unchanged.
+String formatAlertTimestamp(DateTime time, DateTime now) {
+  final local = time.toLocal();
+  final clock = formatClockTime(local);
+  final isToday = local.year == now.year && local.month == now.month && local.day == now.day;
+  if (isToday) return clock;
+  final day = local.day.toString().padLeft(2, '0');
+  final month = local.month.toString().padLeft(2, '0');
+  return '$day/$month, $clock';
+}
+
 /// Task 3.15 — the seven day abbreviations `medication_contract.md`'s
 /// `days` field uses, in week order. Exported so the Guardian-side
 /// medication schedule form can build its day-picker from one place

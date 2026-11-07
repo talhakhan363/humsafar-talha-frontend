@@ -25,10 +25,17 @@ import '../notification_display.dart';
 /// are just a client-side filter on that one field — simpler than two
 /// separate requests, and there's no server-side "acknowledged=true"
 /// filter to ask for anyway (only `unacknowledged=true` exists, as the
-/// convenience the home-screen badge count uses). Standard (all-clear)
-/// notifications are not shown here at all: they're not something a
-/// Guardian needs to act on, and mockup 08 only ever shows actionable
-/// critical rows.
+/// convenience the home-screen badge count uses).
+///
+/// Bug fix (F-12, QA ICP-3 Results v1.1, steps 5 & 7): standard
+/// (all-clear / informational) notifications used to not be fetched at
+/// all, anywhere in the app — a Guardian had no way to see
+/// "Emergency contact messaged" or "Panic alert closed" even though the
+/// server saved them. A third "Notices" tab now does a second
+/// `GET /notifications?priority=standard` call and lists them
+/// read-only (no "I've seen it" button — nothing here needs
+/// acknowledgment; that is still Open/Seen's job for critical alerts
+/// only, unchanged above).
 ///
 /// Tapping "I've seen it" on a `missed_dose` row opens the Missed dose
 /// screen (mockup 08b) with everything that screen needs taken straight
@@ -46,10 +53,13 @@ class AlertsScreen extends ConsumerStatefulWidget {
   ConsumerState<AlertsScreen> createState() => _AlertsScreenState();
 }
 
+enum _AlertsTab { open, seen, notices }
+
 class _AlertsScreenState extends ConsumerState<AlertsScreen> {
   List<Map<String, dynamic>> _open = [];
   List<Map<String, dynamic>> _seen = [];
-  bool _showOpenTab = true;
+  List<Map<String, dynamic>> _notices = [];
+  _AlertsTab _tab = _AlertsTab.open;
   bool _isLoading = true;
   String? _loadError;
   final Set<String> _pendingAck = {};
@@ -66,15 +76,21 @@ class _AlertsScreenState extends ConsumerState<AlertsScreen> {
       _loadError = null;
     });
     try {
-      final response = await ref.read(apiClientProvider).get<Map<String, dynamic>>(
-            '/notifications',
-            queryParameters: {'priority': 'critical'},
-          );
+      final apiClient = ref.read(apiClientProvider);
+      // Bug fix (F-12): two calls, one per priority — the contract has
+      // no "both" query, and standard notices need none of the
+      // Open/Seen acknowledgment bookkeeping the critical ones do.
+      final criticalResponse =
+          await apiClient.get<Map<String, dynamic>>('/notifications', queryParameters: {'priority': 'critical'});
+      final standardResponse =
+          await apiClient.get<Map<String, dynamic>>('/notifications', queryParameters: {'priority': 'standard'});
       if (!mounted) return;
-      final items = (response.data?['items'] as List<dynamic>? ?? []).cast<Map<String, dynamic>>();
+      final items = (criticalResponse.data?['items'] as List<dynamic>? ?? []).cast<Map<String, dynamic>>();
+      final notices = (standardResponse.data?['items'] as List<dynamic>? ?? []).cast<Map<String, dynamic>>();
       setState(() {
         _open = items.where((n) => n['is_acknowledged'] != true).toList();
         _seen = items.where((n) => n['is_acknowledged'] == true).toList();
+        _notices = notices;
       });
     } on ApiException catch (e) {
       if (!mounted) return;
@@ -146,49 +162,57 @@ class _AlertsScreenState extends ConsumerState<AlertsScreen> {
         ),
       );
     }
-    final rows = _showOpenTab ? _open : _seen;
+    final rows = switch (_tab) {
+      _AlertsTab.open => _open,
+      _AlertsTab.seen => _seen,
+      _AlertsTab.notices => _notices,
+    };
+    final emptyMessage = switch (_tab) {
+      _AlertsTab.open => l10n.alertsEmptyOpenMessage,
+      _AlertsTab.seen => l10n.alertsEmptySeenMessage,
+      _AlertsTab.notices => l10n.alertsEmptyNoticesMessage,
+    };
     return Column(
       children: [
         Padding(
           padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
-          child: Row(
+          child: Wrap(
+            spacing: 8,
+            runSpacing: 8,
             children: [
-              Expanded(
-                child: ChoiceChip(
-                  label: Text(l10n.alertsOpenTabLabel(_open.length)),
-                  selected: _showOpenTab,
-                  onSelected: (_) => setState(() => _showOpenTab = true),
-                ),
+              ChoiceChip(
+                label: Text(l10n.alertsOpenTabLabel(_open.length)),
+                selected: _tab == _AlertsTab.open,
+                onSelected: (_) => setState(() => _tab = _AlertsTab.open),
               ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: ChoiceChip(
-                  label: Text(l10n.alertsSeenTabLabel),
-                  selected: !_showOpenTab,
-                  onSelected: (_) => setState(() => _showOpenTab = false),
-                ),
+              ChoiceChip(
+                label: Text(l10n.alertsSeenTabLabel),
+                selected: _tab == _AlertsTab.seen,
+                onSelected: (_) => setState(() => _tab = _AlertsTab.seen),
+              ),
+              // (F-12 fix) third tab: standard notices, see the class
+              // doc comment.
+              ChoiceChip(
+                label: Text(l10n.alertsNoticesTabLabel(_notices.length)),
+                selected: _tab == _AlertsTab.notices,
+                onSelected: (_) => setState(() => _tab = _AlertsTab.notices),
               ),
             ],
           ),
         ),
         Expanded(
           child: rows.isEmpty
-              ? Center(
-                  child: Text(
-                    _showOpenTab ? l10n.alertsEmptyOpenMessage : l10n.alertsEmptySeenMessage,
-                    textAlign: TextAlign.center,
-                  ),
-                )
+              ? Center(child: Text(emptyMessage, textAlign: TextAlign.center))
               : ListView(
                   padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
                   children: [
                     ...rows.map((n) => _AlertCard(
                           notification: n,
-                          showAckButton: _showOpenTab,
+                          showAckButton: _tab == _AlertsTab.open,
                           isPending: _pendingAck.contains(n['notification_id']),
                           onAcknowledge: () => _acknowledge(n),
                         )),
-                    if (_showOpenTab && _open.isNotEmpty) ...[
+                    if (_tab == _AlertsTab.open && _open.isNotEmpty) ...[
                       const SizedBox(height: 4),
                       Card(
                         color: HumsafarColors.primaryTint,
@@ -262,7 +286,9 @@ class _AlertCard extends StatelessWidget {
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
-                    alertTypeLabel(l10n, type),
+                    // Bug fix (F-10): was alertTypeLabel(l10n, type),
+                    // see notification_display.dart's doc comment.
+                    notificationTitle(l10n, notification),
                     style: TextStyle(fontWeight: FontWeight.bold, color: visuals.color),
                   ),
                 ),
@@ -270,7 +296,10 @@ class _AlertCard extends StatelessWidget {
             ),
             const SizedBox(height: 4),
             Text(
-              sentAt == null ? (notification['body'] as String? ?? '') : formatClockTime(sentAt.toLocal()),
+              // Bug fix (F-11): was formatClockTime(sentAt.toLocal()),
+              // which had no date — see schedule_helpers.dart's
+              // formatAlertTimestamp doc comment.
+              sentAt == null ? (notification['body'] as String? ?? '') : formatAlertTimestamp(sentAt, DateTime.now()),
               style: const TextStyle(color: HumsafarColors.muted),
             ),
             if (tierBadge != null) ...[
