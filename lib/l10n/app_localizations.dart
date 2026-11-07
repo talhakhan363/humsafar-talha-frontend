@@ -596,6 +596,30 @@ abstract class AppLocalizations {
   /// **'Verification failed - please try again.'**
   String get kycFailedDefaultMessage;
 
+  /// No description provided for @cancelRegistrationButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel registration'**
+  String get cancelRegistrationButton;
+
+  /// No description provided for @abandonKycConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel this registration?'**
+  String get abandonKycConfirmTitle;
+
+  /// No description provided for @abandonKycConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'ll need to register again from the start. Nothing has been saved to an account yet.'**
+  String get abandonKycConfirmBody;
+
+  /// No description provided for @abandonKycButtonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel registration'**
+  String get abandonKycButtonLabel;
+
   /// No description provided for @inviteCodeOptionalLabel.
   ///
   /// In en, this message translates to:
@@ -1676,6 +1700,24 @@ abstract class AppLocalizations {
   /// **'Emergency contact alert'**
   String get alertTypeExternalContact;
 
+  /// No description provided for @externalContactSentTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Emergency contact messaged'**
+  String get externalContactSentTitle;
+
+  /// No description provided for @externalContactNoContactTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No emergency contact set'**
+  String get externalContactNoContactTitle;
+
+  /// No description provided for @externalContactFailedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Emergency contact could not be reached'**
+  String get externalContactFailedTitle;
+
   /// No description provided for @alertTypeGeneric.
   ///
   /// In en, this message translates to:
@@ -1718,6 +1760,12 @@ abstract class AppLocalizations {
   /// **'Seen'**
   String get alertsSeenTabLabel;
 
+  /// No description provided for @alertsNoticesTabLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Notices ({count})'**
+  String alertsNoticesTabLabel(int count);
+
   /// No description provided for @alertsEmptyOpenMessage.
   ///
   /// In en, this message translates to:
@@ -1729,6 +1777,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No seen alerts yet.'**
   String get alertsEmptySeenMessage;
+
+  /// No description provided for @alertsEmptyNoticesMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'No notices yet.'**
+  String get alertsEmptyNoticesMessage;
 
   /// No description provided for @iveSeenItButton.
   ///
@@ -1849,6 +1903,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Given 30 more minutes.'**
   String get extendSuccessSnackbar;
+
+  /// No description provided for @extendSuccessWithDeadlineSnackbar.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} has until {time}.'**
+  String extendSuccessWithDeadlineSnackbar(String name, String time);
 
   /// No description provided for @escalateSuccessSnackbar.
   ///
@@ -2282,6 +2342,12 @@ abstract class AppLocalizations {
   /// **'Called organization'**
   String get activityOrgContact;
 
+  /// No description provided for @addedByLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Added by {name}'**
+  String addedByLabel(String name);
+
   /// No description provided for @addAppointmentTitle.
   ///
   /// In en, this message translates to:
@@ -2383,6 +2449,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Attach File'**
   String get attachFileButtonLabel;
+
+  /// No description provided for @takePhotoButtonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Take Photo'**
+  String get takePhotoButtonLabel;
 
   /// No description provided for @bandAddressFieldLabel.
   ///
@@ -2587,6 +2659,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Delete this record?'**
   String get deleteRecordConfirmTitle;
+
+  /// No description provided for @deleteMedicationScheduleConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this medicine?'**
+  String get deleteMedicationScheduleConfirmTitle;
+
+  /// No description provided for @deleteMedicationScheduleConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'{drugName} will be permanently removed, not just switched off.'**
+  String deleteMedicationScheduleConfirmBody(String drugName);
+
+  /// No description provided for @medicationScheduleDeletedSnackbar.
+  ///
+  /// In en, this message translates to:
+  /// **'Medicine deleted.'**
+  String get medicationScheduleDeletedSnackbar;
+
+  /// No description provided for @medicationScheduleDeleteFailedSnackbar.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t delete the medicine. Try again.'**
+  String get medicationScheduleDeleteFailedSnackbar;
 
   /// No description provided for @demoDataDisabledMessage.
   ///
