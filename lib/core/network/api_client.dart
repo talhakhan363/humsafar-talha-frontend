@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 
 import 'api_config.dart';
@@ -84,8 +86,36 @@ class ApiClient {
       final data = e.response?.data;
       // Real envelope is { "error": { "code", "message", "details" } } —
       // not the fields at the top level. This was the bug: unwrap it here.
-      final envelope = data is Map<String, dynamic> ? data['error'] : null;
-      final code = envelope is Map<String, dynamic> ? envelope['code'] as String? : null;
+      //
+      // Bug fix (P-03 investigation, QA 5.10 Results v1.0, R-08/R-09):
+      // every byte download in this app (records/vitals PDF export,
+      // GET .../records/{id}/file, the voice-message audio endpoint)
+      // calls `get` with `responseType: ResponseType.bytes`. Dio's byte
+      // transformer applies to an ERROR response too, not just a
+      // successful one — so when the server actually answers with its
+      // normal JSON error envelope, it arrives here as raw `List<int>`,
+      // not a `Map`, and used to fall straight past the unwrap below
+      // into the generic "Network error" fallback. That is exactly the
+      // "Preparing..., then an error" symptom with no real cause shown.
+      // Decoding bytes as UTF-8 JSON first (when they parse as the
+      // envelope shape) lets whatever is actually wrong with
+      // GET .../records/export surface its real code/message instead
+      // of this blanket fallback — which is what actually answers this
+      // finding's open question ("confirm with the exact error") rather
+      // than guessing at a fix for a cause that was never visible.
+      Map<String, dynamic>? envelope;
+      if (data is Map<String, dynamic>) {
+        envelope = data['error'] as Map<String, dynamic>?;
+      } else if (data is List<int>) {
+        try {
+          final decoded = jsonDecode(utf8.decode(data));
+          if (decoded is Map<String, dynamic>) envelope = decoded['error'] as Map<String, dynamic>?;
+        } catch (_) {
+          // Not JSON text (a genuine binary body, or a truncated one) —
+          // falls through to the generic message below, unchanged.
+        }
+      }
+      final code = envelope?['code'] as String?;
 
       if (code == 'TOKEN_EXPIRED' && !isRetry) {
         if (await _tryRefresh()) {
@@ -93,7 +123,7 @@ class ApiClient {
         }
       }
 
-      if (envelope is Map<String, dynamic>) {
+      if (envelope != null) {
         throw ApiException.fromJson(envelope, statusCode: e.response?.statusCode);
       }
       throw ApiException.unexpected(e.message ?? 'Network error', statusCode: e.response?.statusCode);

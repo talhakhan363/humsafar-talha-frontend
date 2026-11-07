@@ -2,6 +2,7 @@ import 'package:dio/dio.dart' show FormData, MultipartFile;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:humsafar_frontend/l10n/app_localizations.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../core/files/file_providers.dart';
@@ -49,6 +50,10 @@ class _AddRecordScreenState extends ConsumerState<AddRecordScreen> {
   // timestamp+random string, not a real UUID, so the backend's safe-retry
   // check 422'd every new record.
   final String _clientId = const Uuid().v4();
+  // (P-06 fix) same plugin dependent_kyc_screen.dart already uses for
+  // liveness capture — no new, unvetted plugin needed.
+  final _imagePicker = ImagePicker();
+  bool _isCapturingPhoto = false;
 
   bool get _isEdit => widget.existing != null;
 
@@ -92,6 +97,34 @@ class _AddRecordScreenState extends ConsumerState<AddRecordScreen> {
       _pickedFile = picked;
       _error = null;
     });
+  }
+
+  // Bug fix (P-06, QA 5.10 Results v1.0, R-02): "gallery or files" was
+  // the only way in — no camera option, even though the main use case
+  // (per the finding) is a Dependent photographing a prescription on
+  // the spot, not picking an existing photo. `image_picker`'s camera
+  // source hands back the same bytes shape `_pickFile` already uses,
+  // so this reuses `_pickedFile`/`FormData` unchanged below; only the
+  // source of the bytes differs.
+  Future<void> _takePhoto() async {
+    final l10n = AppLocalizations.of(context)!;
+    setState(() => _isCapturingPhoto = true);
+    try {
+      final photo = await _imagePicker.pickImage(source: ImageSource.camera, maxWidth: 2000, imageQuality: 85);
+      if (photo == null) return; // cancelled
+      final bytes = await photo.readAsBytes();
+      if (!mounted) return;
+      if (bytes.length > _kMaxFileBytes) {
+        setState(() => _error = l10n.fileTooLargeMessage);
+        return;
+      }
+      setState(() {
+        _pickedFile = PickedFileData(bytes: bytes, fileName: 'record_photo_${_clientId.substring(0, 8)}.jpg', sizeBytes: bytes.length);
+        _error = null;
+      });
+    } finally {
+      if (mounted) setState(() => _isCapturingPhoto = false);
+    }
   }
 
   Future<void> _save() async {
@@ -210,11 +243,31 @@ class _AddRecordScreenState extends ConsumerState<AddRecordScreen> {
           ),
           if (!_isEdit) ...[
             const SizedBox(height: 16),
-            OutlinedButton.icon(
-              onPressed: _pickFile,
-              icon: const Icon(Icons.attach_file),
-              label: Text(_pickedFile == null ? l10n.attachFileButtonLabel : _pickedFile!.fileName),
+            Row(
+              children: [
+                Expanded(
+                  child: OutlinedButton.icon(
+                    onPressed: _pickFile,
+                    icon: const Icon(Icons.attach_file),
+                    label: Text(l10n.attachFileButtonLabel),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                // (P-06 fix) see _takePhoto's doc comment.
+                Expanded(
+                  child: OutlinedButton.icon(
+                    onPressed: _isCapturingPhoto ? null : _takePhoto,
+                    icon: const Icon(Icons.camera_alt),
+                    label: Text(l10n.takePhotoButtonLabel),
+                  ),
+                ),
+              ],
             ),
+            if (_pickedFile != null)
+              Padding(
+                padding: const EdgeInsets.only(top: 8),
+                child: Text(_pickedFile!.fileName, style: Theme.of(context).textTheme.bodyMedium),
+              ),
             if (_pickedFile != null)
               Padding(
                 padding: const EdgeInsets.only(top: 4),

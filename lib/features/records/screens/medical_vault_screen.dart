@@ -315,9 +315,15 @@ class _MedicalVaultScreenState extends ConsumerState<MedicalVaultScreen> {
             child: ListTile(
               leading: Icon(hasFile ? Icons.insert_drive_file_outlined : Icons.sticky_note_2_outlined),
               title: Text(record['title'] as String? ?? ''),
+              // Bug fix (P-05, QA 5.10 Results v1.0, R-01): the server
+              // already sends `uploaded_by_name` on every record — this
+              // just never read it, so the list had no way to tell who
+              // added something (relevant once more than one Guardian
+              // can add records for the same Dependent).
               subtitle: Text(
                 '${categoryLabel(l10n, record['category'] as String? ?? '')}'
-                '${recordDate == null ? '' : ' · ${formatDateDisplay(recordDate, languageCode)}'}',
+                '${recordDate == null ? '' : ' · ${formatDateDisplay(recordDate, languageCode)}'}'
+                '${record['uploaded_by_name'] == null ? '' : ' · ${l10n.addedByLabel(record['uploaded_by_name'] as String)}'}',
               ),
               trailing: Row(
                 mainAxisSize: MainAxisSize.min,

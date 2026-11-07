@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:humsafar_frontend/l10n/app_localizations.dart';
 
 import '../../../core/files/file_providers.dart';
+import '../../../core/network/api_config.dart';
 import '../../../core/network/api_exception.dart';
 import '../../../core/network/providers.dart';
 import '../../../core/theme/humsafar_colors.dart';
@@ -70,7 +71,16 @@ class _DoctorLinksScreenState extends ConsumerState<DoctorLinksScreen> {
           .read(apiClientProvider)
           .post<Map<String, dynamic>>('/dependents/${widget.dependentId}/records/share', data: options);
       if (!mounted) return;
-      final url = response.data?['url'] as String? ?? '';
+      // Bug fix (P-01, QA 5.10 Results v1.0, R-11): the server returns a
+      // root-relative path ("/shared/records/<token>"), not a full URL.
+      // records_contract.md: "the app must add the server address in
+      // front if url starts with /" — without this, a doctor who taps
+      // the shared link gets a bare path with no host, which opens as a
+      // search query instead of the record. Only prefix when the server
+      // actually sent a relative path; a future absolute URL from the
+      // server is left untouched.
+      final rawUrl = response.data?['url'] as String? ?? '';
+      final url = rawUrl.startsWith('/') ? '$apiBaseUrl$rawUrl' : rawUrl;
       await ref.read(shareSourceProvider).shareText('${l10n.doctorLinkShareIntro}\n$url');
       _load();
     } on ApiException catch (e) {

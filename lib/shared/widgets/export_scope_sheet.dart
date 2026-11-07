@@ -54,7 +54,16 @@ Future<void> showExportScopeSheet({
     await ref.read(shareSourceProvider).shareBytes(bytes: bytes, fileName: '$fileNamePrefix$scopeSuffix.pdf');
   } on ApiException catch (e) {
     messenger.hideCurrentSnackBar();
-    messenger.showSnackBar(SnackBar(content: Text(e.code == 'MODULE_ACCESS_DENIED' ? l10n.healthRecordsAccessDeniedMessage : l10n.exportFailedMessage)));
+    // Bug fix (P-03 investigation, QA 5.10 R-08/R-09): this used to
+    // show the same generic exportFailedMessage no matter what the
+    // server actually said — now that api_client.dart's `_wrap` can
+    // decode a bytes-request's error envelope at all (see its doc
+    // comment), showing e.message here is what actually lets whoever
+    // retests this see the real cause instead of nothing.
+    final shown = e.code == 'MODULE_ACCESS_DENIED'
+        ? l10n.healthRecordsAccessDeniedMessage
+        : (e.message.isEmpty ? l10n.exportFailedMessage : e.message);
+    messenger.showSnackBar(SnackBar(content: Text(shown)));
   }
 }
 
