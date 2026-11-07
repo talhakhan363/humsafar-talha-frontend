@@ -34,6 +34,14 @@ dependencies:
   dio: ^5.11.0
   flutter_secure_storage: ^10.3.1
   image_picker: ^1.1.2
+  # Bug fix (N-02, QA 3.16 Accessibility Results v1.0): only a transitive
+  # dependency before (pulled in by another plugin) — importing it
+  # directly worked anyway, but naming it explicitly here is the honest
+  # version: AccessibilityModeNotifier now genuinely depends on it to
+  # persist the large-text/high-contrast toggle across app restarts,
+  # not shared_preferences for credential-like data (that stays on
+  # flutter_secure_storage, see pending_dependent_registration_provider.dart).
+  shared_preferences: ^2.5.3
 
   # Bug fix (2026-10-30, Sarim's G-01, QA 6.12): the hand-rolled
   # `'${DateTime.now().microsecondsSinceEpoch}-${Random().nextInt(1 << 32)}'`
@@ -211,6 +219,23 @@ dev_dependencies:
     sdk: flutter
   flutter_lints: ^4.0.0
 
+  # Bug fix (F-08, QA ICP-1 Results, Low): still shipping the default
+  # Flutter mascot icon instead of the real Humsafar icon. The design
+  # assets were ready in the shared/integration repo under
+  # assets/brand/app-icon/ (PR #83) but had never been pulled into this
+  # branch — copied in alongside this change, see the `flutter:assets`-
+  # adjacent `flutter_launcher_icons:` config below for how they're used.
+  # Dev-only tool (generates PNGs into android/ and ios/ at config time,
+  # nothing it provides is imported by app code), so it can't affect the
+  # runtime dependency graph the way a real plugin would. Checked its
+  # published pubspec.yaml directly (pub.dev's own page omits the
+  # `environment:` block): `sdk: ">=3.0.0 <4.0.0"`, comfortably inside
+  # this project's own `>=3.3.0 <4.0.0` floor — no fl_chart/zego-style
+  # resolver clash expected here. Pinned to its current latest (0.14.4,
+  # stable for ~17 months per pub.dev) rather than left unbounded, same
+  # discipline as every other pin in this file.
+  flutter_launcher_icons: ^0.14.4
+
 # Task 7.3 fix #2 (2026-10-22) — see fl_chart's comment above. Forces the
 # `vector_math` version flutter_test otherwise pins at `2.1.4` up to
 # `2.2.0`, which is what fl_chart 1.1.0's interactive-viewer code actually
@@ -226,6 +251,38 @@ dependency_overrides:
   # override forces 10.3.8 so both are satisfied by the same version,
   # same mechanism as the vector_math line above.
   file_picker: 10.3.8
+
+# Bug fix (F-08, QA ICP-1 Results, Low) — see the flutter_launcher_icons
+# dev_dependency comment above. `image_path` feeds the plain/legacy icon
+# (API <26); the `adaptive_icon_*` pair feeds the Android 8+ adaptive
+# icon using the same two-layer split the design assets already ship as
+# (background + foreground PNGs), so the icon still masks correctly into
+# round/squircle/etc. launcher shapes instead of being naively cropped.
+# `min_sdk_android: 21` matches this app's real Android floor (not
+# flutter_launcher_icons' own default of 21, stated explicitly so a
+# future AGP/minSdk bump doesn't silently drift the two apart) — confirm
+# against android/app/build.gradle's minSdkVersion if that ever changes.
+#
+# Fix, 2026-11-07 (Talha's real `dart run flutter_launcher_icons` run):
+# `ios: true` crashed with PathNotFoundException on
+# ios/Runner/Assets.xcassets/... — this repo has no ios/ directory at
+# all (confirmed: `flutter create` here was Android-only, there's no
+# ios/, macos/, linux/ or windows/ folder either), and this app has never
+# targeted iOS anywhere in its scope (every QA report, every test
+# account, every device in this project is Android-only). `ios: false`
+# so the tool only touches the platform that actually exists. Android
+# generation itself already ran clean before the iOS crash — confirmed
+# fresh mipmap-*/drawable-* files under android/app/src/main/res/,
+# written the same run — so F-08 was already done; this is just
+# preventing the next run from throwing on a platform this app doesn't
+# have.
+flutter_launcher_icons:
+  android: true
+  ios: false
+  image_path: "assets/brand/app-icon/Humsafar_AppIcon_v1.0_full_1024.png"
+  min_sdk_android: 21
+  adaptive_icon_background: "assets/brand/app-icon/Humsafar_AppIcon_v1.0_background_1024.png"
+  adaptive_icon_foreground: "assets/brand/app-icon/Humsafar_AppIcon_v1.0_foreground_1024.png"
 
 flutter:
   uses-material-design: true
