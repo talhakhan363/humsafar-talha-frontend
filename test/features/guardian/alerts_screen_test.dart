@@ -50,6 +50,24 @@ const _seenItem = {
   'is_acknowledged': true,
 };
 
+// Bug fix (N-07, QA 3.16 Accessibility Results v1.0, F-02): `_load()` now
+// also calls `GET /guardians/me/dependents` (linkage_contract.md) to show
+// which Dependent each alert belongs to. Same fixture shape as
+// missed_dose_screen_test.dart / guardian_home_screen_test.dart's
+// `_dependentsList`/`_oneDependent` — every `getHandler` below now
+// branches on `path` so this new List-typed call doesn't get the
+// notifications Map instead (that cast would throw).
+const _dependentsList = [
+  {
+    'dependent_id': 'dep-9',
+    'email': 'ammi@example.com',
+    'phone': '03001234567',
+    'my_role': 'primary',
+    'kyc_status': 'verified',
+    'account_active': true,
+  },
+];
+
 List<GoRoute> _routes() => [
       GoRoute(path: '/guardian/alerts', builder: (_, __) => const AlertsScreen()),
       GoRoute(
@@ -61,10 +79,13 @@ List<GoRoute> _routes() => [
 void main() {
   testWidgets('TC-3.14-04: Open tab shows unacknowledged items with the count in the tab label', (tester) async {
     final fakeClient = FakeApiClient(
-      getHandler: (_) => {
-        'items': [_panicItem, _missedDoseItem, _seenItem],
-        'unacknowledged_critical': 2,
-        'next_before': null,
+      getHandler: (path) {
+        if (path == '/guardians/me/dependents') return _dependentsList;
+        return {
+          'items': [_panicItem, _missedDoseItem, _seenItem],
+          'unacknowledged_critical': 2,
+          'next_before': null,
+        };
       },
     );
     await tester.pumpWidget(wrapWithRouter(fakeClient: fakeClient, initialLocation: '/guardian/alerts', routes: _routes()));
@@ -78,9 +99,12 @@ void main() {
 
   testWidgets('TC-3.14-05: tier badge shows "Level 2 · Secondary" for data.tier secondary', (tester) async {
     final fakeClient = FakeApiClient(
-      getHandler: (_) => {
-        'items': [_missedDoseItem],
-        'unacknowledged_critical': 1,
+      getHandler: (path) {
+        if (path == '/guardians/me/dependents') return _dependentsList;
+        return {
+          'items': [_missedDoseItem],
+          'unacknowledged_critical': 1,
+        };
       },
     );
     await tester.pumpWidget(wrapWithRouter(fakeClient: fakeClient, initialLocation: '/guardian/alerts', routes: _routes()));
@@ -90,7 +114,9 @@ void main() {
   });
 
   testWidgets('TC-3.14-06: Seen tab shows acknowledged items only, Open tab empty state', (tester) async {
-    final fakeClient = FakeApiClient(getHandler: (_) => {'items': [_seenItem]});
+    final fakeClient = FakeApiClient(
+      getHandler: (path) => path == '/guardians/me/dependents' ? _dependentsList : {'items': [_seenItem]},
+    );
     await tester.pumpWidget(wrapWithRouter(fakeClient: fakeClient, initialLocation: '/guardian/alerts', routes: _routes()));
     await tester.pumpAndSettle();
 
@@ -102,7 +128,7 @@ void main() {
 
   testWidgets('TC-3.14-07: "I\'ve seen it" on a missed_dose row acknowledges and opens Missed dose', (tester) async {
     final fakeClient = FakeApiClient(
-      getHandler: (_) => {'items': [_missedDoseItem]},
+      getHandler: (path) => path == '/guardians/me/dependents' ? _dependentsList : {'items': [_missedDoseItem]},
       postHandler: (_) => {'notification_id': 'n-dose', 'is_acknowledged': true},
     );
     await tester.pumpWidget(wrapWithRouter(fakeClient: fakeClient, initialLocation: '/guardian/alerts', routes: _routes()));
@@ -118,7 +144,7 @@ void main() {
 
   testWidgets('TC-3.14-08: "I\'ve seen it" on a panic row acknowledges but does not navigate', (tester) async {
     final fakeClient = FakeApiClient(
-      getHandler: (_) => {'items': [_panicItem]},
+      getHandler: (path) => path == '/guardians/me/dependents' ? _dependentsList : {'items': [_panicItem]},
       postHandler: (_) => {'is_acknowledged': true},
     );
     await tester.pumpWidget(wrapWithRouter(fakeClient: fakeClient, initialLocation: '/guardian/alerts', routes: _routes()));
@@ -133,7 +159,7 @@ void main() {
 
   testWidgets('TC-3.14-09: a failed acknowledge shows a snackbar and leaves the item on Open', (tester) async {
     final fakeClient = FakeApiClient(
-      getHandler: (_) => {'items': [_panicItem]},
+      getHandler: (path) => path == '/guardians/me/dependents' ? _dependentsList : {'items': [_panicItem]},
       postError: const ApiException(code: 'unexpected_error', message: 'Network error'),
     );
     await tester.pumpWidget(wrapWithRouter(fakeClient: fakeClient, initialLocation: '/guardian/alerts', routes: _routes()));
@@ -149,7 +175,8 @@ void main() {
   testWidgets('TC-3.14-10: a load failure shows Retry, which reloads successfully', (tester) async {
     var shouldFail = true;
     final fakeClient = FakeApiClient(
-      getHandler: (_) {
+      getHandler: (path) {
+        if (path == '/guardians/me/dependents') return _dependentsList;
         if (shouldFail) {
           shouldFail = false;
           throw const ApiException(code: 'unexpected_error', message: "Couldn't load alerts.");
