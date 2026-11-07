@@ -329,12 +329,21 @@ class _PanicScreenState extends ConsumerState<PanicScreen> {
               textAlign: TextAlign.center,
             ),
           ],
-          const SizedBox(height: 16),
-          Text(
-            l10n.panicAutoEscalateNote,
-            style: textTheme.bodySmall?.copyWith(color: HumsafarColors.muted),
-            textAlign: TextAlign.center,
-          ),
+          // Bug fix (F-18, QA ICP-3 Results v1.1, step 4): this kept
+          // showing "If nobody answers within 5 minutes, your emergency
+          // contact is reached" even after a Guardian had already
+          // acknowledged — a stale warning about something that either
+          // already happened (tier == external_contact) or can no
+          // longer happen (someone did answer). Only relevant while
+          // genuinely still waiting on the primary 5-minute window.
+          if (acknowledgedAt == null && tier != 'external_contact') ...[
+            const SizedBox(height: 16),
+            Text(
+              l10n.panicAutoEscalateNote,
+              style: textTheme.bodySmall?.copyWith(color: HumsafarColors.muted),
+              textAlign: TextAlign.center,
+            ),
+          ],
           const SizedBox(height: 32),
           SizedBox(
             width: double.infinity,

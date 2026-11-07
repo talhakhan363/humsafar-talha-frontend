@@ -5,6 +5,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/network/api_exception.dart';
 import '../../../core/network/providers.dart';
+import '../../../core/scheduling/schedule_helpers.dart';
 import '../../../core/theme/humsafar_colors.dart';
 import '../../../shared/widgets/accessibility_toggle_button.dart';
 import '../../../shared/widgets/language_switch_button.dart';
@@ -133,12 +134,25 @@ class _MissedDoseScreenState extends ConsumerState<MissedDoseScreen> {
     final l10n = AppLocalizations.of(context)!;
     setState(() => _isActing = true);
     try {
-      await ref
+      final response = await ref
           .read(apiClientProvider)
-          .post('/dependents/${widget.dependentId}/medication-doses/${widget.confirmationId}/extend');
+          .post<Map<String, dynamic>>('/dependents/${widget.dependentId}/medication-doses/${widget.confirmationId}/extend');
       await _acknowledgeAlert();
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.extendSuccessSnackbar)));
+      // Bug fix (F-17, QA ICP-3 Results v1.1, step 10): this always
+      // showed the same fixed "Given 30 more minutes" text — not
+      // wrong today (this screen only ever sends the extend contract's
+      // default), but the fix note's own suggestion ("show 'Ammi has
+      // until HH:MM'") is both more useful and correct even if a future
+      // change ever sends a non-default `minutes`. medication_contract.md:
+      // POST .../extend returns the dose, same shape as the list, whose
+      // `window_ends_at` is exactly the new deadline.
+      final newDeadline = DateTime.tryParse(response.data?['window_ends_at'] as String? ?? '');
+      final message = newDeadline == null
+          ? l10n.extendSuccessSnackbar
+          : l10n.extendSuccessWithDeadlineSnackbar(
+              _dependentLabel ?? widget.dependentId, formatClockTime(newDeadline.toLocal()));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
       _load();
     } on ApiException catch (e) {
       if (!mounted) return;

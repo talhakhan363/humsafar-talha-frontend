@@ -52,6 +52,7 @@ class _MedicationScheduleScreenState extends ConsumerState<MedicationScheduleScr
   bool _isLoading = true;
   String? _loadError;
   final Set<String> _pendingToggle = {};
+  final Set<String> _pendingDelete = {};
 
   @override
   void initState() {
@@ -114,6 +115,47 @@ class _MedicationScheduleScreenState extends ConsumerState<MedicationScheduleScr
     final l10n = AppLocalizations.of(context)!;
     if (e.code == 'MODULE_ACCESS_DENIED') return l10n.medicationManagementDeniedNote;
     return e.message;
+  }
+
+  // Bug fix (N-15, QA Retest debug-apk-1.8 v1.0): a medicine could only
+  // be switched off (the Active switch above), never actually removed —
+  // the class doc comment's own note that DELETE "has the exact same
+  // effect as PUT {active: false}" is true for what the *Dependent's
+  // schedule* does, but Sarim's finding is about the list never
+  // shrinking: a Guardian who added a medicine by mistake, or whose
+  // Dependent stopped taking it for good, had no way to get it off this
+  // screen at all. The backend DELETE (204) already exists; this just
+  // gives it a button, with a confirm dialog since it is irreversible
+  // (unlike the switch).
+  Future<void> _delete(Map<String, dynamic> schedule) async {
+    final l10n = AppLocalizations.of(context)!;
+    final scheduleId = schedule['schedule_id'] as String;
+    final shouldDelete = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: Text(l10n.deleteMedicationScheduleConfirmTitle),
+        content: Text(l10n.deleteMedicationScheduleConfirmBody(schedule['drug_name'] as String? ?? '')),
+        actions: [
+          TextButton(onPressed: () => Navigator.of(dialogContext).pop(false), child: Text(l10n.cancelButton)),
+          TextButton(onPressed: () => Navigator.of(dialogContext).pop(true), child: Text(l10n.deleteButtonLabel)),
+        ],
+      ),
+    );
+    if (shouldDelete != true || !mounted) return;
+    setState(() => _pendingDelete.add(scheduleId));
+    try {
+      await ref.read(apiClientProvider).delete('/dependents/${widget.summary.dependentId}/medications/$scheduleId');
+      if (!mounted) return;
+      setState(() => _schedules.removeWhere((s) => s['schedule_id'] == scheduleId));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.medicationScheduleDeletedSnackbar)));
+    } on ApiException catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(e.code == 'MODULE_ACCESS_DENIED' ? _messageFor(e) : l10n.medicationScheduleDeleteFailedSnackbar),
+      ));
+    } finally {
+      if (mounted) setState(() => _pendingDelete.remove(scheduleId));
+    }
   }
 
   Future<void> _openForm({Map<String, dynamic>? existing}) async {
@@ -217,11 +259,29 @@ class _MedicationScheduleScreenState extends ConsumerState<MedicationScheduleScr
                 onTap: _canManage ? () => _openForm(existing: schedule) : null,
                 title: Text('${schedule['drug_name']} · ${schedule['dosage']}'),
                 subtitle: Text('${formatHHMM(_scheduleTimeHHMM(schedule) ?? '00:00')} · $frequencyLabel'),
-                trailing: Switch(
-                  value: schedule['active'] as bool? ?? true,
-                  onChanged: !_canManage || _pendingToggle.contains(scheduleId)
-                      ? null
-                      : (value) => _toggleActive(schedule, value),
+                // (N-15 fix) delete alongside the existing on/off switch —
+                // see _delete's doc comment.
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Switch(
+                      value: schedule['active'] as bool? ?? true,
+                      onChanged: !_canManage || _pendingToggle.contains(scheduleId)
+                          ? null
+                          : (value) => _toggleActive(schedule, value),
+                    ),
+                    if (_canManage)
+                      _pendingDelete.contains(scheduleId)
+                          ? const Padding(
+                              padding: EdgeInsets.all(8),
+                              child: SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2)),
+                            )
+                          : IconButton(
+                              icon: const Icon(Icons.delete_outline, color: HumsafarColors.muted),
+                              tooltip: l10n.deleteButtonLabel,
+                              onPressed: () => _delete(schedule),
+                            ),
+                  ],
                 ),
               ),
             );

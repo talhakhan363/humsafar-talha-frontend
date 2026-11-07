@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:humsafar_frontend/l10n/app_localizations.dart';
@@ -155,11 +156,42 @@ class _GuardianHomeScreenState extends ConsumerState<GuardianHomeScreen> {
     return match.isEmpty ? null : match.first.email;
   }
 
+  // Bug fix (F-19, QA Retest debug-apk-1.8 v1.0, check 1.8-b): the
+  // 1.8 note said back always ends on the role-select screen with
+  // "Exit the app?" (role_select_screen.dart) — that held for the
+  // preview/dev screens only. Signed in, a back swipe on this (the
+  // real Home once logged in) closed the app at once, no question
+  // asked. Same confirm-dialog pattern as role_select_screen.dart's
+  // own _confirmExit, reused here rather than invented fresh.
+  Future<void> _confirmExit(BuildContext context) async {
+    final l10n = AppLocalizations.of(context)!;
+    final shouldExit = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: Text(l10n.exitAppConfirmTitle),
+        content: Text(l10n.exitAppConfirmBody),
+        actions: [
+          TextButton(onPressed: () => Navigator.of(dialogContext).pop(false), child: Text(l10n.cancelButton)),
+          TextButton(onPressed: () => Navigator.of(dialogContext).pop(true), child: Text(l10n.exitAppButtonLabel)),
+        ],
+      ),
+    );
+    if (shouldExit == true) {
+      SystemNavigator.pop();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    return Scaffold(
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) return;
+        _confirmExit(context);
+      },
+      child: Scaffold(
       appBar: AppBar(
         title: Text(l10n.guardianAppTitle),
         actions: [
@@ -222,6 +254,7 @@ class _GuardianHomeScreenState extends ConsumerState<GuardianHomeScreen> {
             label: Text(l10n.linkADependentLabel),
           ),
         ],
+      ),
       ),
     );
   }
@@ -375,7 +408,9 @@ class _AlertPreviewRow extends StatelessWidget {
       margin: const EdgeInsets.only(top: 8),
       child: ListTile(
         leading: Icon(visuals.icon, color: visuals.color),
-        title: Text(alertTypeLabel(l10n, type)),
+        // Bug fix (F-10): was alertTypeLabel(l10n, type), see
+        // notification_display.dart's doc comment.
+        title: Text(notificationTitle(l10n, notification)),
         subtitle: tierBadge == null ? null : Text(tierBadge),
         trailing: const Icon(Icons.chevron_right),
         onTap: () => context.push('/guardian/alerts'),
