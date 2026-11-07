@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:humsafar_frontend/l10n/app_localizations.dart';
@@ -43,6 +45,15 @@ class _EmergencySettingsScreenState extends ConsumerState<EmergencySettingsScree
   bool _isLoading = true;
   bool _alarmActive = false;
   bool _isAlarmActing = false;
+  // Bug fix (F-15, QA ICP-3 Results v1.1, step 11): after the alarm's
+  // own duration_s/expires_at passes, the server auto-expires it, but
+  // this screen never re-checked — "Stop alarm" stayed on screen and
+  // tapping it got a 409 NO_ACTIVE_ALARM the UI just showed as a plain
+  // "Couldn't stop" failure, leaving the button dead until the screen
+  // was closed and reopened. Fix: re-sync with the server at
+  // expires_at, and treat NO_ACTIVE_ALARM on stop as "already stopped"
+  // rather than an error (see _scheduleAutoRefresh / _toggleAlarm).
+  Timer? _autoRefreshTimer;
 
   Map<String, dynamic>? _contact; // null once loaded + no contact set
   bool _contactDenied = false;
@@ -60,9 +71,24 @@ class _EmergencySettingsScreenState extends ConsumerState<EmergencySettingsScree
 
   @override
   void dispose() {
+    _autoRefreshTimer?.cancel();
     _nameController.dispose();
     _phoneController.dispose();
     super.dispose();
+  }
+
+  /// (F-15 fix) Re-check with the server right after the alarm's own
+  /// `expires_at` so a stale "Stop alarm" button never outlives the
+  /// real alarm. A little slack (1 s) covers clock skew between this
+  /// phone and the server.
+  void _scheduleAutoRefresh(String? expiresAtIso) {
+    _autoRefreshTimer?.cancel();
+    final expiresAt = expiresAtIso == null ? null : DateTime.tryParse(expiresAtIso);
+    if (expiresAt == null) return;
+    final remaining = expiresAt.difference(DateTime.now()) + const Duration(seconds: 1);
+    _autoRefreshTimer = Timer(remaining.isNegative ? Duration.zero : remaining, () {
+      if (mounted) _load();
+    });
   }
 
   Future<void> _load() async {
@@ -72,7 +98,15 @@ class _EmergencySettingsScreenState extends ConsumerState<EmergencySettingsScree
     if (widget.summary.isPrimary) {
       try {
         final response = await apiClient.get<Map<String, dynamic>>('/dependents/${widget.summary.dependentId}/alarm');
-        if (mounted) setState(() => _alarmActive = response.data?['active'] as bool? ?? false);
+        if (!mounted) return;
+        final isActive = response.data?['active'] as bool? ?? false;
+        final alarm = response.data?['alarm'] as Map<String, dynamic>?;
+        setState(() => _alarmActive = isActive);
+        if (isActive) {
+          _scheduleAutoRefresh(alarm?['expires_at'] as String?);
+        } else {
+          _autoRefreshTimer?.cancel();
+        }
       } on ApiException {
         // non-fatal — the Ring/Stop button just won't reflect live state
       }
@@ -108,17 +142,33 @@ class _EmergencySettingsScreenState extends ConsumerState<EmergencySettingsScree
       final apiClient = ref.read(apiClientProvider);
       if (_alarmActive) {
         await apiClient.post('/dependents/${widget.summary.dependentId}/alarm/stop');
+        _autoRefreshTimer?.cancel();
       } else {
         final response =
             await apiClient.post<Map<String, dynamic>>('/dependents/${widget.summary.dependentId}/alarm');
         if (response.data?['already_active'] == true && mounted) {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.alarmAlreadyActiveMessage)));
         }
+        // (F-15 fix) schedule the re-check for whenever this alarm
+        // (new or already-active) actually expires, instead of just
+        // flipping a local bool that never gets re-verified.
+        _scheduleAutoRefresh(response.data?['expires_at'] as String?);
       }
       if (!mounted) return;
       setState(() => _alarmActive = !_alarmActive);
-    } on ApiException catch (_) {
+    } on ApiException catch (e) {
       if (!mounted) return;
+      // Bug fix (F-15): the alarm already auto-expired server-side
+      // (409 NO_ACTIVE_ALARM) between this screen showing "Stop alarm"
+      // and the tap landing — that is not a failure, it is the normal
+      // end of the alarm the auto-refresh above should usually have
+      // already caught. Reflect reality instead of showing an error on
+      // a button that was, correctly, trying to stop a finished alarm.
+      if (_alarmActive && e.code == 'NO_ACTIVE_ALARM') {
+        _autoRefreshTimer?.cancel();
+        setState(() => _alarmActive = false);
+        return;
+      }
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(_alarmActive ? l10n.alarmStopFailedSnackbar : l10n.alarmStartFailedSnackbar),
       ));
@@ -214,7 +264,18 @@ class _EmergencySettingsScreenState extends ConsumerState<EmergencySettingsScree
                     // live remote alarm actually ringing on the
                     // Dependent's phone, a critical state, not a plain
                     // error (fix #2, Design Handoff v1.0 section 3).
-                    style: _alarmActive ? ElevatedButton.styleFrom(backgroundColor: HumsafarColors.danger) : null,
+                    // Bug fix (F-14): ElevatedButton's default
+                    // foreground on an overridden backgroundColor was
+                    // the theme's dark-red text colour, not a
+                    // button-default white — label landed dark red on
+                    // red, well under 4.5:1. HumsafarColors.surface is
+                    // pure white, >7:1 on HumsafarColors.danger.
+                    style: _alarmActive
+                        ? ElevatedButton.styleFrom(
+                            backgroundColor: HumsafarColors.danger,
+                            foregroundColor: HumsafarColors.surface,
+                          )
+                        : null,
                     child: Text(_alarmActive ? l10n.stopAlarmButton : l10n.ringAlarmButton),
                   )
                 else

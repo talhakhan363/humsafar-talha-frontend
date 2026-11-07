@@ -232,3 +232,12 @@ flutter:
   # Task 1.10 — tells the Flutter tool to generate AppLocalizations from
   # lib/l10n/*.arb (config in l10n.yaml) every time `flutter pub get` runs.
   generate: true
+
+  # Bug fix (F-13, QA ICP-3 Results v1.1, step 11): alarm_screen.dart's
+  # own looping alarm tone (see that file's doc comment) — this app's
+  # first bundled audio asset. A short synthesized two-tone beep
+  # (generated, not recorded — a placeholder for whatever real alarm
+  # sound the team picks), not music or a voice recording, so it's free
+  # of any licensing question.
+  assets:
+    - assets/sounds/alarm.wav

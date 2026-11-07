@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -21,8 +22,8 @@ import '../../../shared/widgets/language_switch_button.dart';
 /// the Dependent acting for themself — `dependentId` is just
 /// `currentUserProvider`'s own id.
 ///
-/// Two named scope cuts from the mockup, both flagged rather than
-/// silently skipped:
+/// One named scope cut from the mockup, flagged rather than silently
+/// skipped:
 /// 1. **No "Call Ali" button.** The mockup's Call button would need the
 ///    triggering Guardian's phone number, and nothing Task 3.14 reads
 ///    (alarm_contract.md's `data`/response only carries `triggered_by`,
@@ -31,14 +32,29 @@ import '../../../shared/widgets/language_switch_button.dart';
 ///    side screen's own endpoint, not confirmed callable by a Dependent
 ///    here. Adding that lookup is backend-adjacent follow-up work, not
 ///    this screen's job.
-/// 2. **No native silent-mode bypass / looping ringtone.** "Rings loudly,
-///    even on silent" (the mockup's own subtitle) is a platform-level
-///    audio override outside what `flutter_local_notifications`'s normal
-///    notification sound does. `PushService`'s `critical_alerts` Android
-///    channel (max importance, `playSound: true`) already gives this push
-///    real sound/heads-up behavior on arrival; this screen's job is the
-///    full-screen visual + Stop action once the person has opened it, not
-///    a custom audio engine.
+///
+/// **Bug fix (F-13, QA ICP-3 Results v1.1, step 11):** this used to rely
+/// entirely on `PushService`'s notification sound for "rings loudly,
+/// even on silent" — a plain notification-channel sound plays on the
+/// phone's **ringtone/notification** stream, which the Android ringer
+/// silent/vibrate toggle *does* mute (that's the whole point of silent
+/// mode); it is not the same thing as Do Not Disturb. The **alarm**
+/// stream is the one stream Android's own ringer-silent toggle does not
+/// touch (why a phone's alarm clock still rings on silent) — this
+/// screen now loops [_alarmSound] on that stream itself via
+/// `audioplayers`' `AudioContextAndroid(usageType: alarm)`, for as long
+/// as the alarm is genuinely active, stopping on a successful Stop, on
+/// auto-expiry (`_load`'s own `!active` branch), or on dispose. No new
+/// plugin: `audioplayers` is already a dependency (Task 4.8, voice
+/// messages). `assets/sounds/alarm.wav` is a short synthesized
+/// placeholder tone bundled for this fix, not the final sound design.
+///
+/// **Unverified against a real build** — this sandbox has no Flutter
+/// SDK to run `flutter analyze`/`flutter pub get` against, same
+/// disclosed risk as several native-plugin pins in pubspec.yaml. Worth
+/// a real-device smoke test before relying on it, and this can only be
+/// end-to-end verified once F-16 (real push) ships — right now nothing
+/// makes `remote_alarm` actually reach this screen on Ammi's phone.
 class AlarmScreen extends ConsumerStatefulWidget {
   const AlarmScreen({super.key});
 
@@ -54,6 +70,9 @@ class _AlarmScreenState extends ConsumerState<AlarmScreen> {
   Timer? _tickTimer;
   bool _isStopping = false;
   String? _loadError;
+  // (F-13 fix) see the class doc comment.
+  final AudioPlayer _alarmSound = AudioPlayer();
+  bool _isSoundPlaying = false;
 
   String get _dependentId => ref.read(currentUserProvider)!.userId;
 
@@ -66,7 +85,52 @@ class _AlarmScreenState extends ConsumerState<AlarmScreen> {
   @override
   void dispose() {
     _tickTimer?.cancel();
+    _stopAlarmSound();
+    _alarmSound.dispose();
     super.dispose();
+  }
+
+  /// (F-13 fix) Routes playback through Android's alarm stream, which
+  /// the ringer silent/vibrate toggle does not mute — see the class doc
+  /// comment for why that is the one stream that actually matters here.
+  Future<void> _startAlarmSound() async {
+    if (_isSoundPlaying) return;
+    _isSoundPlaying = true;
+    try {
+      // Bug fix (2026-11-07): `audioplayers` 6.6.0's AudioContext
+      // constructor isn't const (flutter analyze: "The constructor
+      // being called isn't a const constructor" at this line) —
+      // dropping `const` on the outer call is the fix, no behavior
+      // change. AudioContextAndroid's own constructor IS const, so it
+      // keeps its `const` (analyze's prefer_const_constructors info).
+      await _alarmSound.setAudioContext(AudioContext(
+        android: const AudioContextAndroid(
+          isSpeakerphoneOn: true,
+          stayAwake: true,
+          contentType: AndroidContentType.sonification,
+          usageType: AndroidUsageType.alarm,
+          audioFocus: AndroidAudioFocus.gain,
+        ),
+      ));
+      await _alarmSound.setReleaseMode(ReleaseMode.loop);
+      await _alarmSound.play(AssetSource('sounds/alarm.wav'));
+    } catch (_) {
+      // Never let a platform audio failure take down the alarm screen
+      // itself — the visual countdown + Stop button (and whatever the
+      // OS's own notification sound did on arrival) still work even if
+      // this extra loop can't start on a given device.
+      _isSoundPlaying = false;
+    }
+  }
+
+  Future<void> _stopAlarmSound() async {
+    if (!_isSoundPlaying) return;
+    _isSoundPlaying = false;
+    try {
+      await _alarmSound.stop();
+    } catch (_) {
+      // best-effort, see _startAlarmSound
+    }
   }
 
   Future<void> _load() async {
@@ -87,10 +151,19 @@ class _AlarmScreenState extends ConsumerState<AlarmScreen> {
         _now = DateTime.now();
       });
       if (active) {
+        unawaited(_startAlarmSound());
         _tickTimer = Timer.periodic(const Duration(seconds: 1), (_) {
           if (!mounted) return;
           setState(() => _now = DateTime.now());
+          // (F-13 fix) catches auto-expiry even if nobody taps Stop —
+          // the countdown reaching zero means the server's own
+          // expires_at has passed, so the loop should not outlive it.
+          if (_expiresAt != null && !_expiresAt!.isAfter(_now)) {
+            unawaited(_stopAlarmSound());
+          }
         });
+      } else {
+        unawaited(_stopAlarmSound());
       }
     } on ApiException catch (e) {
       if (!mounted) return;
@@ -106,6 +179,17 @@ class _AlarmScreenState extends ConsumerState<AlarmScreen> {
     try {
       await ref.read(apiClientProvider).post('/dependents/$_dependentId/alarm/stop');
       _tickTimer?.cancel();
+      // Bug fix (2026-11-07, TC-3.14-29): this was `await`ed, so leaving
+      // the screen waited on the platform audio call to finish first —
+      // in the widget-test environment (no real audio platform channel)
+      // that await never resolved, so `context.go('/dependent')` below
+      // never ran and the test's navigation check failed. Same fix as
+      // `_load()`'s own alarm-sound calls just below: fire-and-forget,
+      // consistent with "a platform audio failure never blocks this
+      // screen" in the class doc comment — stopping the sound should
+      // never be allowed to hold up leaving the screen, on a real
+      // device or in a test.
+      unawaited(_stopAlarmSound());
       if (!mounted) return;
       if (context.canPop()) {
         context.pop();
