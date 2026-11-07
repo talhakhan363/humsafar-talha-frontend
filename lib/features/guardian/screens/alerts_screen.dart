@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:humsafar_frontend/l10n/app_localizations.dart';
 
+import '../../../core/guardian/dependent_summary.dart';
 import '../../../core/network/api_exception.dart';
 import '../../../core/network/providers.dart';
 import '../../../core/scheduling/schedule_helpers.dart';
@@ -63,6 +64,8 @@ class _AlertsScreenState extends ConsumerState<AlertsScreen> {
   bool _isLoading = true;
   String? _loadError;
   final Set<String> _pendingAck = {};
+  // (N-07 fix) see _load's doc comment below.
+  Map<String, String> _dependentEmailById = {};
 
   @override
   void initState() {
@@ -84,6 +87,17 @@ class _AlertsScreenState extends ConsumerState<AlertsScreen> {
           await apiClient.get<Map<String, dynamic>>('/notifications', queryParameters: {'priority': 'critical'});
       final standardResponse =
           await apiClient.get<Map<String, dynamic>>('/notifications', queryParameters: {'priority': 'standard'});
+      // Bug fix (N-07, QA 3.16 Accessibility Results v1.0, F-02): a
+      // Guardian with more than one linked Dependent had no way to tell
+      // whose alert was whose — `notification_contract.md`'s response
+      // carries `dependent_id`, not a name. There's no structured name
+      // field yet anywhere in the API (same root cause as ICP-1 F-04,
+      // per the Progress Tracker), so per the finding's own fix note,
+      // this shows the email — the one thing `GET /guardians/me/dependents`
+      // (linkage_contract.md) actually has — until F-04 adds a real name.
+      final dependentsResponse = await apiClient.get<List<dynamic>>('/guardians/me/dependents');
+      final dependents =
+          (dependentsResponse.data ?? []).map((e) => DependentSummary.fromJson(e as Map<String, dynamic>)).toList();
       if (!mounted) return;
       final items = (criticalResponse.data?['items'] as List<dynamic>? ?? []).cast<Map<String, dynamic>>();
       final notices = (standardResponse.data?['items'] as List<dynamic>? ?? []).cast<Map<String, dynamic>>();
@@ -91,6 +105,7 @@ class _AlertsScreenState extends ConsumerState<AlertsScreen> {
         _open = items.where((n) => n['is_acknowledged'] != true).toList();
         _seen = items.where((n) => n['is_acknowledged'] == true).toList();
         _notices = notices;
+        _dependentEmailById = {for (final d in dependents) d.dependentId: d.email};
       });
     } on ApiException catch (e) {
       if (!mounted) return;
@@ -208,6 +223,7 @@ class _AlertsScreenState extends ConsumerState<AlertsScreen> {
                   children: [
                     ...rows.map((n) => _AlertCard(
                           notification: n,
+                          dependentEmail: _dependentEmailById[n['dependent_id']],
                           showAckButton: _tab == _AlertsTab.open,
                           isPending: _pendingAck.contains(n['notification_id']),
                           onAcknowledge: () => _acknowledge(n),
@@ -248,12 +264,16 @@ class _AlertsScreenState extends ConsumerState<AlertsScreen> {
 class _AlertCard extends StatelessWidget {
   const _AlertCard({
     required this.notification,
+    required this.dependentEmail,
     required this.showAckButton,
     required this.isPending,
     required this.onAcknowledge,
   });
 
   final Map<String, dynamic> notification;
+  // (N-07 fix) null when this Guardian only has one linked Dependent, or
+  // the lookup didn't resolve — nothing new to disambiguate in that case.
+  final String? dependentEmail;
   final bool showAckButton;
   final bool isPending;
   final VoidCallback onAcknowledge;
@@ -294,6 +314,11 @@ class _AlertCard extends StatelessWidget {
                 ),
               ],
             ),
+            if (dependentEmail != null) ...[
+              const SizedBox(height: 2),
+              // (N-07 fix) see _load's doc comment.
+              Text(dependentEmail!, style: Theme.of(context).textTheme.bodySmall?.copyWith(color: HumsafarColors.muted)),
+            ],
             const SizedBox(height: 4),
             Text(
               // Bug fix (F-11): was formatClockTime(sentAt.toLocal()),
