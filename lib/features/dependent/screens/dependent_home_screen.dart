@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
@@ -100,6 +101,8 @@ class _DependentHomeScreenState extends ConsumerState<DependentHomeScreen> with 
   ({Map<String, dynamic> item, DateTime at})? _nextMedication;
   ({Map<String, dynamic> item, DateTime at})? _nextWellnessCheck;
   Map<String, dynamic>? _duePendingDose;
+  // (N-10 fix) see _loadUpcoming's doc comment below.
+  bool _hasDuePendingWellnessCheck = false;
   int _unreadMessages = 0;
 
   @override
@@ -156,6 +159,32 @@ class _DependentHomeScreenState extends ConsumerState<DependentHomeScreen> with 
     if (mounted) context.go('/login');
   }
 
+  // Bug fix (F-19, QA Retest debug-apk-1.8 v1.0, check 1.8-b): the
+  // finding's own fix note says "wrap the signed-in Home screens" —
+  // plural. guardian_home_screen.dart got this confirm-exit dialog
+  // first (QA only tested the Guardian account); this screen is the
+  // other signed-in Home a back swipe could silently close the app
+  // from, so the same fix applies here. Same pattern as
+  // guardian_home_screen.dart's own `_confirmExit`, reused rather than
+  // invented fresh.
+  Future<void> _confirmExit(BuildContext context) async {
+    final l10n = AppLocalizations.of(context)!;
+    final shouldExit = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: Text(l10n.exitAppConfirmTitle),
+        content: Text(l10n.exitAppConfirmBody),
+        actions: [
+          TextButton(onPressed: () => Navigator.of(dialogContext).pop(false), child: Text(l10n.cancelButton)),
+          TextButton(onPressed: () => Navigator.of(dialogContext).pop(true), child: Text(l10n.exitAppButtonLabel)),
+        ],
+      ),
+    );
+    if (shouldExit == true) {
+      SystemNavigator.pop();
+    }
+  }
+
   Future<void> _loadUpcoming() async {
     final user = ref.read(currentUserProvider);
     if (user == null) return;
@@ -172,6 +201,20 @@ class _DependentHomeScreenState extends ConsumerState<DependentHomeScreen> with 
         '/dependents/${user.userId}/medication-doses',
         queryParameters: {'status': 'pending'},
       );
+      // Bug fix (N-10, QA 3.16 Accessibility Results v1.0, A-03): "Next
+      // check" was computed purely from the schedule's own `time` via
+      // `earliestUpcoming`, which (by design — see
+      // schedule_helpers.dart's `nextOccurrenceForTime`, `isAfter(now)`
+      // only) always rolls forward to a FUTURE occurrence and can never
+      // say "due now". A check that's actually due right now already has
+      // its own pending response row — same endpoint
+      // wellness_check_screen.dart already self-resolves from — so Home
+      // checks that too, same pattern `_duePendingDose` above already
+      // uses for medicine.
+      final duePendingWellnessResponse = await apiClient.get<Map<String, dynamic>>(
+        '/dependents/${user.userId}/wellness-check-responses',
+        queryParameters: {'status': 'pending'},
+      );
 
       final medItems = (medsResponse.data?['items'] as List<dynamic>? ?? [])
           .cast<Map<String, dynamic>>()
@@ -183,6 +226,7 @@ class _DependentHomeScreenState extends ConsumerState<DependentHomeScreen> with 
           .toList();
       final dueDoses = (dueDosesResponse.data?['items'] as List<dynamic>? ?? []).cast<Map<String, dynamic>>()
         ..sort((a, b) => (a['scheduled_for'] as String).compareTo(b['scheduled_for'] as String));
+      final duePendingWellnessChecks = (duePendingWellnessResponse.data?['items'] as List<dynamic>? ?? []);
 
       final nextMed = earliestUpcoming<Map<String, dynamic>>(
         items: medItems,
@@ -201,6 +245,7 @@ class _DependentHomeScreenState extends ConsumerState<DependentHomeScreen> with 
         _nextMedication = nextMed;
         _nextWellnessCheck = nextWellness;
         _duePendingDose = dueDoses.isEmpty ? null : dueDoses.first;
+        _hasDuePendingWellnessCheck = duePendingWellnessChecks.isNotEmpty;
         _isLoadingSchedules = false;
       });
     } on ApiException catch (e) {
@@ -238,7 +283,27 @@ class _DependentHomeScreenState extends ConsumerState<DependentHomeScreen> with 
     final now = DateTime.now();
     final doseDue = _duePendingDose;
 
-    return Scaffold(
+    // Bug fix (N-05, QA 3.16 Accessibility Results v1.0, B-05): at the
+    // phone's own maximum font-size setting STACKED on top of this app's
+    // own large-text/high-contrast mode, PANIC/"I am OK"/"My medicine"
+    // grew tall enough that PANIC was only partly visible without
+    // scrolling — on what's meant to be the most reachable screen in the
+    // app. Clamping the OS-level scaler here (not removing it — large
+    // text still gets meaningfully bigger, just not unbounded on top of
+    // the app's own 1.25x) keeps this one screen usable at any phone
+    // setting; nothing else in the app needed this, so it's scoped here
+    // rather than globally in main.dart.
+    final clampedScaler = MediaQuery.textScalerOf(context).clamp(maxScaleFactor: 1.3);
+
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) return;
+        _confirmExit(context);
+      },
+      child: MediaQuery(
+      data: MediaQuery.of(context).copyWith(textScaler: clampedScaler),
+      child: Scaffold(
       appBar: AppBar(
         title: Text(l10n.dependentHomeTitle),
         actions: [
@@ -280,19 +345,28 @@ class _DependentHomeScreenState extends ConsumerState<DependentHomeScreen> with 
             ),
             const SizedBox(height: 16),
             SafetyActionButton(
-              onTap: () => context.push('/dependent/wellness-check'),
+              // Bug fix (N-10, second half): re-load on return so a just-
+              // answered check's "due now" doesn't keep showing stale.
+              onTap: () => context.push('/dependent/wellness-check').then((_) => _loadUpcoming()),
               label: l10n.iAmOkButtonLabel,
               subtitle: _isLoadingSchedules
                   ? ''
-                  : (_nextWellnessCheck != null
-                      ? l10n.nextWellnessCheckMessage(formatClockTime(_nextWellnessCheck!.at))
-                      : l10n.noWellnessCheckScheduledMessage),
+                  // (N-10 fix) see _loadUpcoming's doc comment — a
+                  // pending response takes priority over the
+                  // schedule-computed future time, which by design can
+                  // never itself say "due now".
+                  : (_hasDuePendingWellnessCheck
+                      ? l10n.wellnessCheckDueNowLabel
+                      : (_nextWellnessCheck != null
+                          ? l10n.nextWellnessCheckMessage(formatClockTime(_nextWellnessCheck!.at))
+                          : l10n.noWellnessCheckScheduledMessage)),
             ),
             const SizedBox(height: 16),
             SafetyActionButton(
-              onTap: () => doseDue != null
-                  ? context.push('/dependent/medication', extra: true)
-                  : context.push('/dependent/medication'),
+              onTap: () => (doseDue != null
+                      ? context.push('/dependent/medication', extra: true)
+                      : context.push('/dependent/medication'))
+                  .then((_) => _loadUpcoming()),
               label: doseDue != null ? l10n.medicineStep1OfTwoLabel : l10n.myMedicineButtonLabel,
               subtitle: doseDue != null
                   ? ''
@@ -371,6 +445,8 @@ class _DependentHomeScreenState extends ConsumerState<DependentHomeScreen> with 
             ],
           ],
         ),
+      ),
+      ),
       ),
     );
   }
