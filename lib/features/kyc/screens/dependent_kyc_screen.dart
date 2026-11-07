@@ -66,6 +66,37 @@ class _DependentKycScreenState extends ConsumerState<DependentKycScreen> {
 
   bool get _canSubmit => _livenessPhotoBytes != null;
 
+  // Bug fix (F-20, QA 5.10 Results v1.0): an interrupted Dependent
+  // sign-up always reopens here (splash_screen.dart's resume check,
+  // via context.go which clears the route stack — so there's no
+  // Back), and this screen had no Cancel/Logout either. The only way
+  // off used to be Android's "Clear app data", which a real Dependent
+  // would never know to do. Clearing the pending registration here
+  // (both the in-memory provider and its secure-storage copy — see
+  // pending_dependent_registration_provider.dart's doc comment) is
+  // exactly what makes splash's resume check stop firing, so /role-
+  // select is a real way out, not a dead end that snaps back here on
+  // the next cold start.
+  Future<void> _confirmAbandonRegistration() async {
+    final l10n = AppLocalizations.of(context)!;
+    final shouldAbandon = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: Text(l10n.abandonKycConfirmTitle),
+        content: Text(l10n.abandonKycConfirmBody),
+        actions: [
+          TextButton(onPressed: () => Navigator.of(dialogContext).pop(false), child: Text(l10n.cancelButton)),
+          TextButton(onPressed: () => Navigator.of(dialogContext).pop(true), child: Text(l10n.abandonKycButtonLabel)),
+        ],
+      ),
+    );
+    if (shouldAbandon != true || !mounted) return;
+    ref.read(pendingDependentRegistrationProvider.notifier).state = null;
+    await ref.read(pendingDependentRegistrationStorageProvider).clear();
+    if (!mounted) return;
+    context.go('/role-select');
+  }
+
   Future<void> _captureLiveness() async {
     setState(() => _isCapturing = true);
     try {
@@ -156,6 +187,15 @@ class _DependentKycScreenState extends ConsumerState<DependentKycScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(l10n.dependentKycTitle),
+        // (F-20 fix) hidden only once verification is actually done —
+        // see _confirmAbandonRegistration's doc comment above.
+        leading: _outcome?.status == 'verified'
+            ? null
+            : IconButton(
+                icon: const Icon(Icons.close),
+                tooltip: l10n.cancelRegistrationButton,
+                onPressed: _confirmAbandonRegistration,
+              ),
         actions: const [LanguageSwitchButton(), AccessibilityToggleButton()],
       ),
       // Bug fix (2026-10-30, flagged directly by the user on this screen):
