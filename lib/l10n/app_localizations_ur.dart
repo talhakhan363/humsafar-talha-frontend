@@ -284,6 +284,19 @@ class AppLocalizationsUr extends AppLocalizations {
       'تصدیق ناکام ہوگئی - براہ کرم دوبارہ کوشش کریں۔';
 
   @override
+  String get cancelRegistrationButton => 'رجسٹریشن منسوخ کریں';
+
+  @override
+  String get abandonKycConfirmTitle => 'یہ رجسٹریشن منسوخ کریں؟';
+
+  @override
+  String get abandonKycConfirmBody =>
+      'آپ کو دوبارہ شروع سے رجسٹر کرنا ہوگا۔ ابھی تک کسی اکاؤنٹ میں کچھ محفوظ نہیں ہوا۔';
+
+  @override
+  String get abandonKycButtonLabel => 'رجسٹریشن منسوخ کریں';
+
+  @override
   String get inviteCodeOptionalLabel => 'دعوتی کوڈ (اختیاری)';
 
   @override
@@ -907,6 +920,17 @@ class AppLocalizationsUr extends AppLocalizations {
   String get alertTypeExternalContact => 'ایمرجنسی رابطہ الرٹ';
 
   @override
+  String get externalContactSentTitle => 'ایمرجنسی رابطے کو پیغام بھیج دیا گیا';
+
+  @override
+  String get externalContactNoContactTitle =>
+      'کوئی ایمرجنسی رابطہ محفوظ نہیں ہے';
+
+  @override
+  String get externalContactFailedTitle =>
+      'ایمرجنسی رابطے تک نہیں پہنچا جا سکا';
+
+  @override
   String get alertTypeGeneric => 'الرٹ';
 
   @override
@@ -930,10 +954,18 @@ class AppLocalizationsUr extends AppLocalizations {
   String get alertsSeenTabLabel => 'دیکھے گئے';
 
   @override
+  String alertsNoticesTabLabel(int count) {
+    return 'اطلاعات ($count)';
+  }
+
+  @override
   String get alertsEmptyOpenMessage => 'کوئی کھلا الرٹ نہیں ہے۔';
 
   @override
   String get alertsEmptySeenMessage => 'ابھی تک کوئی دیکھا گیا الرٹ نہیں ہے۔';
+
+  @override
+  String get alertsEmptyNoticesMessage => 'ابھی تک کوئی اطلاع نہیں ہے۔';
 
   @override
   String get iveSeenItButton => 'میں نے دیکھ لیا';
@@ -1005,6 +1037,11 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get extendSuccessSnackbar => '30 منٹ مزید دے دیے گئے۔';
+
+  @override
+  String extendSuccessWithDeadlineSnackbar(String name, String time) {
+    return '$name کے پاس $time تک وقت ہے۔';
+  }
 
   @override
   String escalateSuccessSnackbar(int count) {
@@ -1251,6 +1288,11 @@ class AppLocalizationsUr extends AppLocalizations {
   String get activityOrgContact => 'ادارے کو کال کی';
 
   @override
+  String addedByLabel(String name) {
+    return '$name نے شامل کیا';
+  }
+
+  @override
   String get addAppointmentTitle => 'اپائنٹمنٹ شامل کریں';
 
   @override
@@ -1304,6 +1346,9 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get attachFileButtonLabel => 'فائل منسلک کریں';
+
+  @override
+  String get takePhotoButtonLabel => 'تصویر لیں';
 
   @override
   String get bandAddressFieldLabel => 'بلوٹوتھ ایڈریس';
@@ -1413,6 +1458,21 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get deleteRecordConfirmTitle => 'کیا یہ ریکارڈ حذف کر دیں؟';
+
+  @override
+  String get deleteMedicationScheduleConfirmTitle => 'کیا یہ دوا حذف کر دیں؟';
+
+  @override
+  String deleteMedicationScheduleConfirmBody(String drugName) {
+    return '$drugName مستقل طور پر حذف ہو جائے گی، صرف بند نہیں ہوگی۔';
+  }
+
+  @override
+  String get medicationScheduleDeletedSnackbar => 'دوا حذف کر دی گئی۔';
+
+  @override
+  String get medicationScheduleDeleteFailedSnackbar =>
+      'دوا حذف نہیں ہو سکی۔ دوبارہ کوشش کریں۔';
 
   @override
   String get demoDataDisabledMessage =>

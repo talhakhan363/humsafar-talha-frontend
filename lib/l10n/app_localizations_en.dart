@@ -277,6 +277,19 @@ class AppLocalizationsEn extends AppLocalizations {
       'Verification failed - please try again.';
 
   @override
+  String get cancelRegistrationButton => 'Cancel registration';
+
+  @override
+  String get abandonKycConfirmTitle => 'Cancel this registration?';
+
+  @override
+  String get abandonKycConfirmBody =>
+      'You\'ll need to register again from the start. Nothing has been saved to an account yet.';
+
+  @override
+  String get abandonKycButtonLabel => 'Cancel registration';
+
+  @override
   String get inviteCodeOptionalLabel => 'Invite code (optional)';
 
   @override
@@ -894,6 +907,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get alertTypeExternalContact => 'Emergency contact alert';
 
   @override
+  String get externalContactSentTitle => 'Emergency contact messaged';
+
+  @override
+  String get externalContactNoContactTitle => 'No emergency contact set';
+
+  @override
+  String get externalContactFailedTitle =>
+      'Emergency contact could not be reached';
+
+  @override
   String get alertTypeGeneric => 'Alert';
 
   @override
@@ -917,10 +940,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get alertsSeenTabLabel => 'Seen';
 
   @override
+  String alertsNoticesTabLabel(int count) {
+    return 'Notices ($count)';
+  }
+
+  @override
   String get alertsEmptyOpenMessage => 'No open alerts.';
 
   @override
   String get alertsEmptySeenMessage => 'No seen alerts yet.';
+
+  @override
+  String get alertsEmptyNoticesMessage => 'No notices yet.';
 
   @override
   String get iveSeenItButton => 'I\'ve seen it';
@@ -987,6 +1018,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get extendSuccessSnackbar => 'Given 30 more minutes.';
+
+  @override
+  String extendSuccessWithDeadlineSnackbar(String name, String time) {
+    return '$name has until $time.';
+  }
 
   @override
   String escalateSuccessSnackbar(int count) {
@@ -1229,6 +1265,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get activityOrgContact => 'Called organization';
 
   @override
+  String addedByLabel(String name) {
+    return 'Added by $name';
+  }
+
+  @override
   String get addAppointmentTitle => 'Add Appointment';
 
   @override
@@ -1282,6 +1323,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get attachFileButtonLabel => 'Attach File';
+
+  @override
+  String get takePhotoButtonLabel => 'Take Photo';
 
   @override
   String get bandAddressFieldLabel => 'Bluetooth Address';
@@ -1392,6 +1436,21 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get deleteRecordConfirmTitle => 'Delete this record?';
+
+  @override
+  String get deleteMedicationScheduleConfirmTitle => 'Delete this medicine?';
+
+  @override
+  String deleteMedicationScheduleConfirmBody(String drugName) {
+    return '$drugName will be permanently removed, not just switched off.';
+  }
+
+  @override
+  String get medicationScheduleDeletedSnackbar => 'Medicine deleted.';
+
+  @override
+  String get medicationScheduleDeleteFailedSnackbar =>
+      'Couldn\'t delete the medicine. Try again.';
 
   @override
   String get demoDataDisabledMessage =>

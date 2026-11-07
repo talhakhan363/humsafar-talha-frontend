@@ -86,6 +86,10 @@
   "kycVerifiedActiveDefaultMessage": "You're verified and active.",
   "kycPendingDefaultMessage": "Still pending - please submit again.",
   "kycFailedDefaultMessage": "Verification failed - please try again.",
+  "cancelRegistrationButton": "Cancel registration",
+  "abandonKycConfirmTitle": "Cancel this registration?",
+  "abandonKycConfirmBody": "You'll need to register again from the start. Nothing has been saved to an account yet.",
+  "abandonKycButtonLabel": "Cancel registration",
   "inviteCodeOptionalLabel": "Invite code (optional)",
   "inviteCodeHelperText": "Only if a Primary Guardian invited you as a Secondary Guardian.",
   "roleLockedToGuardianNote": "Role locked to Guardian while an invite code is entered.",
@@ -373,6 +377,9 @@
   "alertTypeLowBattery": "Low battery",
   "alertTypeDeviceOffline": "Phone offline",
   "alertTypeExternalContact": "Emergency contact alert",
+  "externalContactSentTitle": "Emergency contact messaged",
+  "externalContactNoContactTitle": "No emergency contact set",
+  "externalContactFailedTitle": "Emergency contact could not be reached",
   "alertTypeGeneric": "Alert",
   "tierLevel1PrimaryLabel": "Level 1 · Primary",
   "tierLevel2SecondaryLabel": "Level 2 · Secondary",
@@ -387,8 +394,17 @@
     }
   },
   "alertsSeenTabLabel": "Seen",
+  "alertsNoticesTabLabel": "Notices ({count})",
+  "@alertsNoticesTabLabel": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "alertsEmptyOpenMessage": "No open alerts.",
   "alertsEmptySeenMessage": "No seen alerts yet.",
+  "alertsEmptyNoticesMessage": "No notices yet.",
   "iveSeenItButton": "I've seen it",
   "seenStopsChainTitle": "Seen stops the chain",
   "seenStopsChainBody": "Primary → Secondary (5 min) → SMS (5 min)",
@@ -436,6 +452,17 @@
   },
   "tappingCountsAsSeenNote": "Tapping any option counts as seen.",
   "extendSuccessSnackbar": "Given 30 more minutes.",
+  "extendSuccessWithDeadlineSnackbar": "{name} has until {time}.",
+  "@extendSuccessWithDeadlineSnackbar": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
   "escalateSuccessSnackbar": "{count} Secondary Guardian(s) notified.",
   "@escalateSuccessSnackbar": {
     "placeholders": {
@@ -550,6 +577,14 @@
   "activityLogMenuItem": "Activity log",
   "activityLogScreenTitle": "Activity Log",
   "activityOrgContact": "Called organization",
+  "addedByLabel": "Added by {name}",
+  "@addedByLabel": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "addAppointmentTitle": "Add Appointment",
   "addRecordTitle": "Add Record",
   "addVitalReadingTitle": "Add Reading",
@@ -567,6 +602,7 @@
   "appointmentsUpcomingTabLabel": "Upcoming",
   "askForPriceLabel": "Ask for price",
   "attachFileButtonLabel": "Attach File",
+  "takePhotoButtonLabel": "Take Photo",
   "bandAddressFieldLabel": "Bluetooth Address",
   "bandAlreadyPairedMessage": "This Dependent already has a band paired.",
   "bandNameFieldLabel": "Band Name (optional)",
@@ -601,6 +637,17 @@
   "deleteButtonLabel": "Delete",
   "deleteRecordConfirmBody": "This record will be permanently removed.",
   "deleteRecordConfirmTitle": "Delete this record?",
+  "deleteMedicationScheduleConfirmTitle": "Delete this medicine?",
+  "deleteMedicationScheduleConfirmBody": "{drugName} will be permanently removed, not just switched off.",
+  "@deleteMedicationScheduleConfirmBody": {
+    "placeholders": {
+      "drugName": {
+        "type": "String"
+      }
+    }
+  },
+  "medicationScheduleDeletedSnackbar": "Medicine deleted.",
+  "medicationScheduleDeleteFailedSnackbar": "Couldn't delete the medicine. Try again.",
   "demoDataDisabledMessage": "Demo data isn't available for this band.",
   "diastolicFieldLabel": "Diastolic",
   "directoryButton": "Directory & Services",
