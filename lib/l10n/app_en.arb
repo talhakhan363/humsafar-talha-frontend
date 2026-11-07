@@ -206,6 +206,7 @@
     }
   },
   "noWellnessCheckScheduledMessage": "No wellness check scheduled",
+  "wellnessCheckDueNowLabel": "Check due now — tap to answer",
   "nextMedicationMessage": "Next: {drug} at {time}",
   "@nextMedicationMessage": {
     "placeholders": {
@@ -223,12 +224,14 @@
   "panicHoldInstructions": "Press and hold the button for 2 seconds",
   "panicHoldButtonLabel": "HOLD",
   "panicHoldButtonSubtitle": "to send help",
+  "panicHoldButtonSemanticsLabel": "Press and hold for 2 seconds to send help to your Guardians",
   "panicSendingLabel": "Sending alert...",
   "panicAllGuardiansToldNote": "All your Guardians will be told at once.",
   "panicHoldStopsAccidentNote": "Holding stops accidental alerts.",
   "panicHelpIsComingTitle": "Help is coming",
-  "panicToldCountMessage": "We told {count} Guardian(s)",
+  "panicToldCountMessage": "{count, plural, one{We told {count} Guardian} other{We told {count} Guardians}}",
   "@panicToldCountMessage": {
+    "description": "Bug fix (N-14, QA 3.16 Accessibility Results v1.0, D-04): was the literal placeholder text 'Guardian(s)' for every count. ICU plural form here for forward-compat with a real flutter gen-l10n run — app_localizations_en.dart's hand-written override (this project has no gen-l10n tool available) is the one actually read at runtime right now.",
     "placeholders": {
       "count": {
         "type": "int"
@@ -570,6 +573,8 @@
   "micPermissionDeniedMessage": "Microphone permission is needed to record a voice message.",
   "voiceSendFailedGenericMessage": "Couldn't send the voice message. Try again.",
   "audioDownloadFailedMessage": "Couldn't load the voice message. Try again.",
+  "playVoiceMessageTooltip": "Play voice message",
+  "pauseVoiceMessageTooltip": "Pause voice message",
   "activityBookingCancelled": "Booking cancelled",
   "activityBookingCompleted": "Booking completed",
   "activityBookingConfirmed": "Booking confirmed",
@@ -577,6 +582,8 @@
   "activityLogMenuItem": "Activity log",
   "activityLogScreenTitle": "Activity Log",
   "activityOrgContact": "Called organization",
+  "activityFilterCallsLabel": "Calls",
+  "activityFilterRequestsLabel": "Requests",
   "addedByLabel": "Added by {name}",
   "@addedByLabel": {
     "placeholders": {
@@ -635,6 +642,7 @@
   "dateFieldLabel": "Date",
   "deleteAppointmentConfirmTitle": "Delete this appointment?",
   "deleteButtonLabel": "Delete",
+  "editButtonLabel": "Edit",
   "deleteRecordConfirmBody": "This record will be permanently removed.",
   "deleteRecordConfirmTitle": "Delete this record?",
   "deleteMedicationScheduleConfirmTitle": "Delete this medicine?",
@@ -652,6 +660,7 @@
   "diastolicFieldLabel": "Diastolic",
   "directoryButton": "Directory & Services",
   "directoryOrganizationsTabLabel": "Organizations",
+  "emergencyNumbersSectionHeader": "Emergency numbers",
   "directoryProvidersTabLabel": "Home Care",
   "directoryScreenTitle": "Directory",
   "doctorLinkShareIntro": "Here is a secure link to view the medical records:",
@@ -856,5 +865,6 @@
   "incomingVideoCallLabel": "Incoming video call",
   "incomingVoiceCallLabel": "Incoming voice call",
   "callConnectingLabel": "Connecting…",
-  "callAlreadyEndedMessage": "This call has already ended."
+  "callAlreadyEndedMessage": "This call has already ended.",
+  "cancelCallTooltip": "Cancel call"
 }

@@ -24,8 +24,19 @@ class ActivityLogScreen extends ConsumerStatefulWidget {
   ConsumerState<ActivityLogScreen> createState() => _ActivityLogScreenState();
 }
 
+// Bug fix (G-04, QA 6.12 Directory Results v1.0, D-16): screen 18d has
+// Calls/Requests filter chips over the timeline; this app had no way to
+// narrow it down at all. Filtered client-side against the one already-
+// loaded `_entries` list — `booking_contract.md`'s `GET .../activity` does
+// take a `type` query param, but only a single exact type, not an
+// "any booking_* step" group, so re-querying per chip would need four
+// separate calls merged back together for no benefit over filtering the
+// list already in memory.
+enum _ActivityFilter { all, calls, requests }
+
 class _ActivityLogScreenState extends ConsumerState<ActivityLogScreen> {
   List<Map<String, dynamic>> _entries = [];
+  _ActivityFilter _filter = _ActivityFilter.all;
   bool _isLoading = true;
   String? _loadError;
 
@@ -89,6 +100,17 @@ class _ActivityLogScreenState extends ConsumerState<ActivityLogScreen> {
     }
   }
 
+  List<Map<String, dynamic>> get _filteredEntries {
+    switch (_filter) {
+      case _ActivityFilter.calls:
+        return _entries.where((e) => e['type'] == 'org_contact').toList();
+      case _ActivityFilter.requests:
+        return _entries.where((e) => (e['type'] as String? ?? '').startsWith('booking_')).toList();
+      case _ActivityFilter.all:
+        return _entries;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -97,8 +119,32 @@ class _ActivityLogScreenState extends ConsumerState<ActivityLogScreen> {
         title: Text(l10n.activityLogScreenTitle),
         actions: const [LanguageSwitchButton(), AccessibilityToggleButton()],
       ),
-      // Bug fix (2026-10-30): bottom-nav-bar overlap, see vitals_screen.dart.
-      body: SafeArea(bottom: true, top: false, child: RefreshIndicator(onRefresh: _load, child: _buildBody(l10n))),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: [
+                  _buildFilterChip(l10n, _ActivityFilter.all, l10n.recordCategoryAll),
+                  _buildFilterChip(l10n, _ActivityFilter.calls, l10n.activityFilterCallsLabel),
+                  _buildFilterChip(l10n, _ActivityFilter.requests, l10n.activityFilterRequestsLabel),
+                ],
+              ),
+            ),
+          ),
+          // Bug fix (2026-10-30): bottom-nav-bar overlap, see vitals_screen.dart.
+          Expanded(child: SafeArea(bottom: true, top: false, child: RefreshIndicator(onRefresh: _load, child: _buildBody(l10n)))),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildFilterChip(AppLocalizations l10n, _ActivityFilter filter, String label) {
+    return Padding(
+      padding: const EdgeInsets.only(right: 8, bottom: 8),
+      child: ChoiceChip(label: Text(label), selected: _filter == filter, onSelected: (_) => setState(() => _filter = filter)),
     );
   }
 
@@ -119,10 +165,11 @@ class _ActivityLogScreenState extends ConsumerState<ActivityLogScreen> {
         ),
       );
     }
-    if (_entries.isEmpty) return Center(child: Text(l10n.noActivityMessage, textAlign: TextAlign.center));
+    final filtered = _filteredEntries;
+    if (filtered.isEmpty) return Center(child: Text(l10n.noActivityMessage, textAlign: TextAlign.center));
     return ListView(
       padding: const EdgeInsets.all(16),
-      children: _entries.map((entry) {
+      children: filtered.map((entry) {
         final type = entry['type'] as String? ?? '';
         final isBooking = type.startsWith('booking_');
         final initiatedBy = entry['initiated_by'] as Map<String, dynamic>?;

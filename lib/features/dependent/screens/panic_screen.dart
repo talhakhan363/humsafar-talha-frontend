@@ -247,6 +247,7 @@ class _PanicScreenState extends ConsumerState<PanicScreen> {
             PanicHoldButton(
               label: l10n.panicHoldButtonLabel,
               subtitle: l10n.panicHoldButtonSubtitle,
+              semanticsLabel: l10n.panicHoldButtonSemanticsLabel,
               enabled: _phase == _Phase.idle,
               onHoldComplete: _triggerPanic,
             ),

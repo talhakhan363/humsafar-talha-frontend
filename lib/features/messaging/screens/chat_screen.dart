@@ -385,9 +385,13 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                 padding: EdgeInsets.all(8),
                 child: SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2)),
               )
+            // Bug fix (N-08, QA 3.16 Accessibility Results v1.0, C-02): no
+            // tooltip, and the icon alone doesn't say what state tapping
+            // it leads to for TalkBack — both states get their own label.
             : IconButton(
                 onPressed: () => _toggleVoicePlayback(message),
                 icon: Icon(isPlaying ? Icons.pause_circle : Icons.play_circle, color: HumsafarColors.warning),
+                tooltip: isPlaying ? l10n.pauseVoiceMessageTooltip : l10n.playVoiceMessageTooltip,
               ),
         const SizedBox(width: 4),
         Text(l10n.urgentVoiceMessageLabel),

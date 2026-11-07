@@ -54,7 +54,7 @@ class AppTheme {
   /// a real cost.
   static ThemeData _standardFor(String languageCode) {
     final fontTextTheme = languageCode == 'ur'
-        ? GoogleFonts.getTextTheme('Noto Nastaliq Urdu', _baseTextTheme)
+        ? _withUrduLineHeight(GoogleFonts.getTextTheme('Noto Nastaliq Urdu', _baseTextTheme))
         : GoogleFonts.getTextTheme('Inter', _baseTextTheme);
     return ThemeData(
       useMaterial3: true,
@@ -99,7 +99,7 @@ class AppTheme {
   // back to the phone's own Naskh font instead of Noto Nastaliq Urdu.
   static ThemeData _highContrast(String languageCode) {
     final fontTextTheme = languageCode == 'ur'
-        ? GoogleFonts.getTextTheme('Noto Nastaliq Urdu', _baseTextTheme)
+        ? _withUrduLineHeight(GoogleFonts.getTextTheme('Noto Nastaliq Urdu', _baseTextTheme))
         : GoogleFonts.getTextTheme('Inter', _baseTextTheme);
     return ThemeData(
       useMaterial3: true,
@@ -151,9 +151,28 @@ class AppTheme {
   static TextTheme _scaledTextTheme(TextTheme base, double factor) {
     TextStyle? scale(TextStyle? style) => style?.copyWith(fontSize: (style.fontSize ?? 14) * factor);
     return base.copyWith(
+      // Bug fix (N-09, QA 3.16 Accessibility Results v1.0, B-01): this
+      // used to only scale bodyLarge/bodyMedium/titleLarge/labelLarge —
+      // any text using a different TextTheme role (titleMedium, bodySmall,
+      // ...) silently stayed standard-size in high-contrast mode. That's
+      // exactly "3 small lines do not grow": panic_screen.dart's "All
+      // your Guardians will be told at once" (titleMedium) and its
+      // "If nobody answers..." note (bodySmall) are two of them. Scaling
+      // every role now, not just the four this one screen happened to
+      // use — the bug was in this theme, not in those widgets, which
+      // already correctly read from Theme.of(context).textTheme.
+      displayLarge: scale(base.displayLarge),
+      displayMedium: scale(base.displayMedium),
+      displaySmall: scale(base.displaySmall),
+      headlineLarge: scale(base.headlineLarge),
+      headlineMedium: scale(base.headlineMedium),
+      headlineSmall: scale(base.headlineSmall),
+      titleLarge: scale(base.titleLarge),
+      titleMedium: scale(base.titleMedium),
+      titleSmall: scale(base.titleSmall),
       bodyLarge: scale(base.bodyLarge),
       bodyMedium: scale(base.bodyMedium),
-      titleLarge: scale(base.titleLarge),
+      bodySmall: scale(base.bodySmall),
       // Bold button/label text in high-contrast mode. This role feeds
       // ElevatedButton's default label style (Material 3 uses labelLarge
       // for button text) and, unlike the old elevatedButtonTheme.textStyle
@@ -174,7 +193,37 @@ class AppTheme {
       // Fixed by building on `base.labelLarge` via `copyWith` instead of
       // replacing it outright, so the font family survives and only the
       // weight changes — same pattern already used for bodyLarge/titleLarge.
-      labelLarge: base.labelLarge?.copyWith(fontWeight: FontWeight.w700),
+      // (N-09 fix, same reasoning as above) now also scaled, not just bold.
+      labelLarge: base.labelLarge?.copyWith(fontWeight: FontWeight.w700, fontSize: (base.labelLarge?.fontSize ?? 14) * factor),
+      labelMedium: scale(base.labelMedium),
+      labelSmall: scale(base.labelSmall),
+    );
+  }
+
+  /// Bug fix (N-12, QA 3.16 Accessibility Results v1.0, D-03): Nastaliq's
+  /// diagonal baseline needs noticeably more line height than Latin
+  /// script, or adjacent lines' loops/descenders touch — seen in the HOLD
+  /// button and the wellness helper lines, but it's a font-metrics issue,
+  /// not something specific to those two screens, so it's fixed once here
+  /// for every Urdu text role rather than chased per-widget.
+  static TextTheme _withUrduLineHeight(TextTheme theme) {
+    TextStyle? bump(TextStyle? style) => style?.copyWith(height: 1.6);
+    return theme.copyWith(
+      displayLarge: bump(theme.displayLarge),
+      displayMedium: bump(theme.displayMedium),
+      displaySmall: bump(theme.displaySmall),
+      headlineLarge: bump(theme.headlineLarge),
+      headlineMedium: bump(theme.headlineMedium),
+      headlineSmall: bump(theme.headlineSmall),
+      titleLarge: bump(theme.titleLarge),
+      titleMedium: bump(theme.titleMedium),
+      titleSmall: bump(theme.titleSmall),
+      bodyLarge: bump(theme.bodyLarge),
+      bodyMedium: bump(theme.bodyMedium),
+      bodySmall: bump(theme.bodySmall),
+      labelLarge: bump(theme.labelLarge),
+      labelMedium: bump(theme.labelMedium),
+      labelSmall: bump(theme.labelSmall),
     );
   }
 }

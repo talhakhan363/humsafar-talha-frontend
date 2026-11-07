@@ -95,7 +95,16 @@ class LocationStatusBanner extends StatelessWidget {
         children: [
           Text(message, style: const TextStyle(color: HumsafarColors.warning)),
           const SizedBox(height: 6),
-          TextButton(onPressed: onPressed, child: Text(buttonLabel)),
+          // Bug fix (N-11, QA 3.16 Accessibility Results v1.0, C-01):
+          // this measured ≈24dp tall — half the 48dp minimum every other
+          // tappable target on these screens meets. TextButton's own
+          // default padding is tight; pinning a minimumSize is the
+          // standard Material fix.
+          TextButton(
+            onPressed: onPressed,
+            style: TextButton.styleFrom(minimumSize: const Size(64, 48)),
+            child: Text(buttonLabel),
+          ),
         ],
       ),
     );

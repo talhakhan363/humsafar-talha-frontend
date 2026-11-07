@@ -600,6 +600,10 @@ class AppLocalizationsUr extends AppLocalizations {
   String get noWellnessCheckScheduledMessage => 'کوئی ویلنیس چیک شیڈول نہیں ہے';
 
   @override
+  String get wellnessCheckDueNowLabel =>
+      'چیک اب واجب ہے — جواب دینے کے لیے دبائیں';
+
+  @override
   String nextMedicationMessage(String drug, String time) {
     return 'اگلی خوراک: $drug, $time پر';
   }
@@ -617,10 +621,14 @@ class AppLocalizationsUr extends AppLocalizations {
   String get panicHoldInstructions => 'بٹن کو 2 سیکنڈ تک دبائے رکھیں';
 
   @override
-  String get panicHoldButtonLabel => 'دبائیں';
+  String get panicHoldButtonLabel => 'دبائے رکھیں';
 
   @override
   String get panicHoldButtonSubtitle => 'مدد بھیجنے کے لیے';
+
+  @override
+  String get panicHoldButtonSemanticsLabel =>
+      'اپنے گارڈینز کو مدد بھیجنے کے لیے 2 سیکنڈ تک دبائے رکھیں';
 
   @override
   String get panicSendingLabel => 'الرٹ بھیجا جا رہا ہے...';
@@ -1267,6 +1275,12 @@ class AppLocalizationsUr extends AppLocalizations {
       'صوتی پیغام لوڈ نہیں ہو سکا۔ دوبارہ کوشش کریں۔';
 
   @override
+  String get playVoiceMessageTooltip => 'صوتی پیغام چلائیں';
+
+  @override
+  String get pauseVoiceMessageTooltip => 'صوتی پیغام روکیں';
+
+  @override
   String get activityBookingCancelled => 'بکنگ منسوخ';
 
   @override
@@ -1286,6 +1300,12 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get activityOrgContact => 'ادارے کو کال کی';
+
+  @override
+  String get activityFilterCallsLabel => 'کالیں';
+
+  @override
+  String get activityFilterRequestsLabel => 'درخواستیں';
 
   @override
   String addedByLabel(String name) {
@@ -1453,6 +1473,9 @@ class AppLocalizationsUr extends AppLocalizations {
   String get deleteButtonLabel => 'حذف کریں';
 
   @override
+  String get editButtonLabel => 'ترمیم کریں';
+
+  @override
   String get deleteRecordConfirmBody =>
       'یہ ریکارڈ مستقل طور پر حذف ہو جائے گا۔';
 
@@ -1486,6 +1509,9 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get directoryOrganizationsTabLabel => 'ادارے';
+
+  @override
+  String get emergencyNumbersSectionHeader => 'ایمرجنسی نمبرز';
 
   @override
   String get directoryProvidersTabLabel => 'گھریلو نگہداشت';
@@ -2061,4 +2087,7 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get callAlreadyEndedMessage => 'یہ کال پہلے ہی ختم ہو چکی ہے۔';
+
+  @override
+  String get cancelCallTooltip => 'کال منسوخ کریں';
 }

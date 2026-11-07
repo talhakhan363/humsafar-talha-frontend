@@ -65,7 +65,9 @@ void main() {
     // "Help is coming" legitimately appears twice — the AppBar title and
     // the body heading both show it, matching the mockup's own AppBar.
     expect(find.text('Help is coming'), findsNWidgets(2));
-    expect(find.text('We told 2 Guardian(s)'), findsOneWidget);
+    // Bug fix (N-14, QA 3.16 Accessibility Results v1.0, D-04): the
+    // literal placeholder text "Guardian(s)" is gone — proper plural now.
+    expect(find.text('We told 2 Guardians'), findsOneWidget);
     expect(find.text('Waiting for a Guardian to see this'), findsOneWidget);
     expect(find.text('I am safe now'), findsOneWidget);
 
@@ -104,7 +106,8 @@ void main() {
 
     expect(fakeClient.postCalls, 1);
     expect(find.text('Help is coming'), findsNWidgets(2)); // AppBar title + body heading
-    expect(find.text('We told 3 Guardian(s)'), findsOneWidget);
+    // Bug fix (N-14, QA 3.16 Accessibility Results v1.0, D-04): see above.
+    expect(find.text('We told 3 Guardians'), findsOneWidget);
 
     await tester.pumpWidget(const SizedBox());
   });

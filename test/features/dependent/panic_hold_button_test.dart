@@ -23,6 +23,7 @@ void main() {
         body: PanicHoldButton(
           label: 'HOLD',
           subtitle: 'to send help',
+          semanticsLabel: 'Press and hold for 2 seconds to send help',
           holdDuration: const Duration(milliseconds: 100),
           onHoldComplete: () => completeCount++,
         ),
@@ -44,6 +45,7 @@ void main() {
         body: PanicHoldButton(
           label: 'HOLD',
           subtitle: 'to send help',
+          semanticsLabel: 'Press and hold for 2 seconds to send help',
           holdDuration: const Duration(milliseconds: 100),
           onHoldComplete: () => completeCount++,
         ),
@@ -65,6 +67,7 @@ void main() {
         body: PanicHoldButton(
           label: 'HOLD',
           subtitle: 'to send help',
+          semanticsLabel: 'Press and hold for 2 seconds to send help',
           holdDuration: const Duration(milliseconds: 50),
           enabled: false,
           onHoldComplete: () => completeCount++,

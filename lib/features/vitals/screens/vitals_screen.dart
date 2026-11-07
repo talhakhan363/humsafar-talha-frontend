@@ -293,7 +293,12 @@ class _VitalsScreenState extends ConsumerState<VitalsScreen> {
                 trailing: canDelete
                     ? (_pendingDelete.contains(readingId)
                         ? const SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2))
-                        : IconButton(icon: const Icon(Icons.delete_outline), onPressed: () => _delete(reading)))
+                        // Bug fix (N-08, QA 3.16 Accessibility Results v1.0, C-02): no tooltip.
+                        : IconButton(
+                            icon: const Icon(Icons.delete_outline),
+                            tooltip: l10n.deleteButtonLabel,
+                            onPressed: () => _delete(reading),
+                          ))
                     : null,
               ),
             );

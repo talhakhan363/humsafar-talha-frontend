@@ -1148,6 +1148,12 @@ abstract class AppLocalizations {
   /// **'No wellness check scheduled'**
   String get noWellnessCheckScheduledMessage;
 
+  /// No description provided for @wellnessCheckDueNowLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Check due now — tap to answer'**
+  String get wellnessCheckDueNowLabel;
+
   /// No description provided for @nextMedicationMessage.
   ///
   /// In en, this message translates to:
@@ -1190,6 +1196,12 @@ abstract class AppLocalizations {
   /// **'to send help'**
   String get panicHoldButtonSubtitle;
 
+  /// No description provided for @panicHoldButtonSemanticsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Press and hold for 2 seconds to send help to your Guardians'**
+  String get panicHoldButtonSemanticsLabel;
+
   /// No description provided for @panicSendingLabel.
   ///
   /// In en, this message translates to:
@@ -1214,10 +1226,10 @@ abstract class AppLocalizations {
   /// **'Help is coming'**
   String get panicHelpIsComingTitle;
 
-  /// No description provided for @panicToldCountMessage.
+  /// Bug fix (N-14, QA 3.16 Accessibility Results v1.0, D-04): was the literal placeholder text 'Guardian(s)' for every count. ICU plural form here for forward-compat with a real flutter gen-l10n run — app_localizations_en.dart's hand-written override (this project has no gen-l10n tool available) is the one actually read at runtime right now.
   ///
   /// In en, this message translates to:
-  /// **'We told {count} Guardian(s)'**
+  /// **'{count, plural, one{We told {count} Guardian} other{We told {count} Guardians}}'**
   String panicToldCountMessage(int count);
 
   /// No description provided for @panicTriggeredAtMessage.
@@ -2300,6 +2312,18 @@ abstract class AppLocalizations {
   /// **'Couldn\'t load the voice message. Try again.'**
   String get audioDownloadFailedMessage;
 
+  /// No description provided for @playVoiceMessageTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Play voice message'**
+  String get playVoiceMessageTooltip;
+
+  /// No description provided for @pauseVoiceMessageTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Pause voice message'**
+  String get pauseVoiceMessageTooltip;
+
   /// No description provided for @activityBookingCancelled.
   ///
   /// In en, this message translates to:
@@ -2341,6 +2365,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Called organization'**
   String get activityOrgContact;
+
+  /// No description provided for @activityFilterCallsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Calls'**
+  String get activityFilterCallsLabel;
+
+  /// No description provided for @activityFilterRequestsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Requests'**
+  String get activityFilterRequestsLabel;
 
   /// No description provided for @addedByLabel.
   ///
@@ -2648,6 +2684,12 @@ abstract class AppLocalizations {
   /// **'Delete'**
   String get deleteButtonLabel;
 
+  /// No description provided for @editButtonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get editButtonLabel;
+
   /// No description provided for @deleteRecordConfirmBody.
   ///
   /// In en, this message translates to:
@@ -2707,6 +2749,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Organizations'**
   String get directoryOrganizationsTabLabel;
+
+  /// No description provided for @emergencyNumbersSectionHeader.
+  ///
+  /// In en, this message translates to:
+  /// **'Emergency numbers'**
+  String get emergencyNumbersSectionHeader;
 
   /// No description provided for @directoryProvidersTabLabel.
   ///
@@ -3793,6 +3841,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'This call has already ended.'**
   String get callAlreadyEndedMessage;
+
+  /// No description provided for @cancelCallTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel call'**
+  String get cancelCallTooltip;
 }
 
 class _AppLocalizationsDelegate

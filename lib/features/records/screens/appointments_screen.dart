@@ -249,7 +249,15 @@ class _AppointmentsScreenState extends ConsumerState<AppointmentsScreen> {
                           PopupMenuItem(value: 'delete', child: Text(l10n.deleteButtonLabel)),
                         ],
                       )
-                    : IconButton(icon: const Icon(Icons.delete_outline), onPressed: () => _delete(appointment))),
+                    // Bug fix (N-08, QA 3.16 Accessibility Results v1.0,
+                    // C-02): a bare icon button with no tooltip and no
+                    // visible label reads to TalkBack as an unlabeled
+                    // button.
+                    : IconButton(
+                        icon: const Icon(Icons.delete_outline),
+                        tooltip: l10n.deleteButtonLabel,
+                        onPressed: () => _delete(appointment),
+                      )),
           ),
         );
       }).toList(),

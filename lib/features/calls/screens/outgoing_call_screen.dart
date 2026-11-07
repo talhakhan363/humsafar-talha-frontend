@@ -202,6 +202,8 @@ class _OutgoingCallScreenState extends ConsumerState<OutgoingCallScreen> {
                     onPressed: _cancelCall,
                     icon: const Icon(Icons.call_end, color: Colors.white),
                     iconSize: 56,
+                    // Bug fix (N-08, QA 3.16 Accessibility Results v1.0, C-02): no tooltip.
+                    tooltip: l10n.cancelCallTooltip,
                     style: IconButton.styleFrom(backgroundColor: HumsafarColors.danger, shape: const CircleBorder()),
                   )
                 else

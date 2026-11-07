@@ -217,26 +217,50 @@ class _DirectoryScreenState extends ConsumerState<DirectoryScreen> {
 
   Widget _buildOrganizations(AppLocalizations l10n) {
     if (_organizations.isEmpty) return Center(child: Text(l10n.noDirectoryResultsMessage, textAlign: TextAlign.center));
+    // Bug fix (G-03, QA 6.12 Directory Results v1.0, D-01): the national
+    // emergency numbers (Rescue 1122, Edhi 115, ...) were sorted
+    // alphabetically among ~20 demo entries instead of grouped at the
+    // top, as in mockup screen 18. `directory_contract.md` says they're
+    // the only entries with no position ("lat, lng (null for national
+    // numbers)") — that's the one field that tells them apart from a
+    // regular demo organization, so it's the grouping key, not name or
+    // `is_sample` (every national number already has `is_sample: false`,
+    // same as a hypothetical future real entry would).
+    final national = _organizations.where((org) => org['lat'] == null).toList();
+    final others = _organizations.where((org) => org['lat'] != null).toList();
     return ListView(
       padding: const EdgeInsets.all(16),
-      children: _organizations.map((org) {
-        final isSample = org['is_sample'] as bool? ?? false;
-        final distance = formatDistanceKm(org['distance_km'] as double?);
-        final phone = org['phone'] as String?;
-        return Card(
-          margin: const EdgeInsets.only(bottom: 12),
-          child: ListTile(
-            title: Text(org['name'] as String? ?? ''),
-            subtitle: Text(
-              '${org['city'] as String? ?? ''}${distance == null ? '' : ' · $distance'}'
-              '${isSample ? ' · ${l10n.sampleEntryLabel}' : ''}',
-            ),
-            trailing: phone == null || isSample
-                ? null
-                : IconButton(icon: const Icon(Icons.call), onPressed: () => _call(org)),
+      children: [
+        if (national.isNotEmpty) ...[
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: Text(l10n.emergencyNumbersSectionHeader, style: Theme.of(context).textTheme.titleMedium),
           ),
-        );
-      }).toList(),
+          ...national.map((org) => _buildOrganizationCard(l10n, org)),
+          const SizedBox(height: 12),
+        ],
+        ...others.map((org) => _buildOrganizationCard(l10n, org)),
+      ],
+    );
+  }
+
+  Widget _buildOrganizationCard(AppLocalizations l10n, Map<String, dynamic> org) {
+    final isSample = org['is_sample'] as bool? ?? false;
+    final distance = formatDistanceKm(org['distance_km'] as double?);
+    final phone = org['phone'] as String?;
+    return Card(
+      margin: const EdgeInsets.only(bottom: 12),
+      child: ListTile(
+        title: Text(org['name'] as String? ?? ''),
+        subtitle: Text(
+          '${org['city'] as String? ?? ''}${distance == null ? '' : ' · $distance'}'
+          '${isSample ? ' · ${l10n.sampleEntryLabel}' : ''}',
+        ),
+        trailing: phone == null || isSample
+            ? null
+            // Bug fix (N-08, QA 3.16 Accessibility Results v1.0, C-02): no tooltip.
+            : IconButton(icon: const Icon(Icons.call), tooltip: l10n.callButtonTooltip, onPressed: () => _call(org)),
+      ),
     );
   }
 

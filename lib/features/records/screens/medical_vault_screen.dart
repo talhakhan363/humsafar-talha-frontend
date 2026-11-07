@@ -336,12 +336,20 @@ class _MedicalVaultScreenState extends ConsumerState<MedicalVaultScreen> {
                       tooltip: l10n.downloadFileTooltip,
                       onPressed: _pendingDownload.contains(recordId) ? null : () => _downloadFile(record),
                     ),
+                  // Bug fix (N-08, QA 3.16 Accessibility Results v1.0,
+                  // C-02): these two had no tooltip, unlike the download
+                  // button right above them.
                   if (canModify) ...[
-                    IconButton(icon: const Icon(Icons.edit_outlined), onPressed: () => _openEdit(record)),
+                    IconButton(
+                      icon: const Icon(Icons.edit_outlined),
+                      tooltip: l10n.editButtonLabel,
+                      onPressed: () => _openEdit(record),
+                    ),
                     IconButton(
                       icon: _pendingDelete.contains(recordId)
                           ? const SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2))
                           : const Icon(Icons.delete_outline),
+                      tooltip: l10n.deleteButtonLabel,
                       onPressed: _pendingDelete.contains(recordId) ? null : () => _delete(record),
                     ),
                   ],

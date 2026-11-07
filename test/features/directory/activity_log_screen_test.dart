@@ -66,6 +66,31 @@ void main() {
     expect(find.byIcon(Icons.chevron_right), findsNothing);
   });
 
+  testWidgets('TC-6.8-17: the Calls/Requests filter chips narrow the timeline (G-04)', (tester) async {
+    final fakeClient = FakeApiClient(getHandler: (_) => {'items': [_contactEntry, _bookingEntry]});
+    await tester.pumpWidget(wrapWithRouter(fakeClient: fakeClient, initialLocation: '/activity-log-under-test', routes: _routes()));
+    await tester.pumpAndSettle();
+
+    // Default ("All"): both show.
+    expect(find.text('Called organization · City Hospital'), findsOneWidget);
+    expect(find.text('Visit requested · Nurse Amina'), findsOneWidget);
+
+    await tester.tap(find.widgetWithText(ChoiceChip, 'Calls'));
+    await tester.pumpAndSettle();
+    expect(find.text('Called organization · City Hospital'), findsOneWidget);
+    expect(find.text('Visit requested · Nurse Amina'), findsNothing);
+
+    await tester.tap(find.widgetWithText(ChoiceChip, 'Requests'));
+    await tester.pumpAndSettle();
+    expect(find.text('Called organization · City Hospital'), findsNothing);
+    expect(find.text('Visit requested · Nurse Amina'), findsOneWidget);
+
+    await tester.tap(find.widgetWithText(ChoiceChip, 'All'));
+    await tester.pumpAndSettle();
+    expect(find.text('Called organization · City Hospital'), findsOneWidget);
+    expect(find.text('Visit requested · Nurse Amina'), findsOneWidget);
+  });
+
   testWidgets('TC-6.8-14: tapping a booking entry opens its detail sheet with Confirm and Cancel', (tester) async {
     final fakeClient = FakeApiClient(
       getHandler: (path) => path.contains('/bookings/req-1') ? _pendingBooking : {'items': [_bookingEntry]},

@@ -595,6 +595,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get noWellnessCheckScheduledMessage => 'No wellness check scheduled';
 
   @override
+  String get wellnessCheckDueNowLabel => 'Check due now — tap to answer';
+
+  @override
   String nextMedicationMessage(String drug, String time) {
     return 'Next: $drug at $time';
   }
@@ -618,6 +621,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get panicHoldButtonSubtitle => 'to send help';
 
   @override
+  String get panicHoldButtonSemanticsLabel =>
+      'Press and hold for 2 seconds to send help to your Guardians';
+
+  @override
   String get panicSendingLabel => 'Sending alert...';
 
   @override
@@ -632,7 +639,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String panicToldCountMessage(int count) {
-    return 'We told $count Guardian(s)';
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'We told $count Guardians',
+      one: 'We told $count Guardian',
+    );
+    return '$_temp0';
   }
 
   @override
@@ -1244,6 +1257,12 @@ class AppLocalizationsEn extends AppLocalizations {
       'Couldn\'t load the voice message. Try again.';
 
   @override
+  String get playVoiceMessageTooltip => 'Play voice message';
+
+  @override
+  String get pauseVoiceMessageTooltip => 'Pause voice message';
+
+  @override
   String get activityBookingCancelled => 'Booking cancelled';
 
   @override
@@ -1263,6 +1282,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get activityOrgContact => 'Called organization';
+
+  @override
+  String get activityFilterCallsLabel => 'Calls';
+
+  @override
+  String get activityFilterRequestsLabel => 'Requests';
 
   @override
   String addedByLabel(String name) {
@@ -1431,6 +1456,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get deleteButtonLabel => 'Delete';
 
   @override
+  String get editButtonLabel => 'Edit';
+
+  @override
   String get deleteRecordConfirmBody =>
       'This record will be permanently removed.';
 
@@ -1464,6 +1492,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get directoryOrganizationsTabLabel => 'Organizations';
+
+  @override
+  String get emergencyNumbersSectionHeader => 'Emergency numbers';
 
   @override
   String get directoryProvidersTabLabel => 'Home Care';
@@ -2043,4 +2074,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get callAlreadyEndedMessage => 'This call has already ended.';
+
+  @override
+  String get cancelCallTooltip => 'Cancel call';
 }
