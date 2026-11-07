@@ -6,6 +6,7 @@ import 'package:humsafar_frontend/l10n/app_localizations.dart';
 import '../../../core/formatting/format_helpers.dart';
 import '../../../core/network/api_exception.dart';
 import '../../../core/network/providers.dart';
+import '../../../core/scheduling/schedule_helpers.dart';
 import '../../../core/theme/humsafar_colors.dart';
 import '../../../shared/widgets/accessibility_toggle_button.dart';
 import '../../../shared/widgets/export_scope_sheet.dart';
@@ -31,15 +32,54 @@ String metricLabel(AppLocalizations l10n, String metric) {
   }
 }
 
+/// Bug fix (P-07, QA 5.10 Results v1.0, H-02): `value`/`diastolic` are
+/// real numbers, and Dart's default `$value` interpolation shows a
+/// whole double as "138.0" — vitals_contract.md: "Values are rounded to
+/// one decimal", which this reproduces without the trailing ".0" when
+/// a value happens to be a whole number.
+String _formatVitalNumber(dynamic value) {
+  if (value is num) return value == value.roundToDouble() ? value.round().toString() : value.toStringAsFixed(1);
+  return '$value';
+}
+
+/// (P-07 fix) "C"/"F" on their own read as a stray letter, not a
+/// temperature — degree sign only applies to temperature; every other
+/// metric's unit (mmHg, mg/dL, %) is shown as the server sends it.
+String _unitLabel(String metric, String? unit) {
+  if (metric == 'temperature') return '°${unit ?? 'C'}';
+  return unit ?? '';
+}
+
+/// (P-07 fix) blood sugar's `context` (fasting / after_meal / random)
+/// was saved and sent back but never shown — add_vital_reading_screen.dart
+/// already has the matching localized labels for its own picker.
+String? _sugarContextLabel(AppLocalizations l10n, Map<String, dynamic> reading) {
+  if (reading['metric_type'] != 'blood_sugar') return null;
+  switch (reading['context'] as String?) {
+    case 'fasting':
+      return l10n.sugarContextFasting;
+    case 'after_meal':
+      return l10n.sugarContextAfterMeal;
+    case 'random':
+      return l10n.sugarContextRandom;
+    default:
+      return null;
+  }
+}
+
 /// Reading-object -> one display line, shared by the latest tiles and
 /// the history list below. `vitals_contract.md` is explicit there is
 /// no high/low/normal judgement — this only ever shows the number.
-String _valueLine(Map<String, dynamic>? reading) {
+String _valueLine(AppLocalizations l10n, Map<String, dynamic>? reading) {
   if (reading == null) return '—';
-  final metric = reading['metric_type'] as String?;
-  final value = reading['value'];
-  if (metric == 'blood_pressure') return '$value/${reading['diastolic']} ${reading['unit'] ?? 'mmHg'}';
-  return '$value ${reading['unit'] ?? ''}'.trim();
+  final metric = reading['metric_type'] as String? ?? '';
+  final value = _formatVitalNumber(reading['value']);
+  final unit = _unitLabel(metric, reading['unit'] as String?);
+  final contextLabel = _sugarContextLabel(l10n, reading);
+  final line = metric == 'blood_pressure'
+      ? '$value/${_formatVitalNumber(reading['diastolic'])} $unit'.trim()
+      : '$value $unit'.trim();
+  return contextLabel == null ? line : '$line ($contextLabel)';
 }
 
 /// Tasks 5.7 — mockups 26/28 "Vitals"/"My health", grounded in
@@ -200,7 +240,7 @@ class _VitalsScreenState extends ConsumerState<VitalsScreen> {
                     children: [
                       Text(metricLabel(l10n, metric), style: Theme.of(context).textTheme.bodySmall),
                       const SizedBox(height: 4),
-                      Text(_valueLine(reading), style: Theme.of(context).textTheme.titleMedium),
+                      Text(_valueLine(l10n, reading), style: Theme.of(context).textTheme.titleMedium),
                       if (metric == 'heart_rate')
                         Text(l10n.fromBandNote, style: Theme.of(context).textTheme.bodySmall?.copyWith(color: HumsafarColors.muted)),
                     ],
@@ -238,8 +278,18 @@ class _VitalsScreenState extends ConsumerState<VitalsScreen> {
               margin: const EdgeInsets.only(bottom: 8),
               child: ListTile(
                 leading: Icon(isBand ? Icons.watch_outlined : Icons.edit_note),
-                title: Text('${metricLabel(l10n, reading['metric_type'] as String? ?? '')} · ${_valueLine(reading)}'),
-                subtitle: Text(recordedAt == null ? '' : formatDateDisplay(recordedAt, languageCode)),
+                title: Text('${metricLabel(l10n, reading['metric_type'] as String? ?? '')} · ${_valueLine(l10n, reading)}'),
+                // Bug fix (P-05, QA 5.10 Results v1.0, H-01): this
+                // showed the date only, no time, and never read
+                // `recorded_by_name` (vitals_contract.md) at all — so
+                // there was no way to tell apart two readings on the
+                // same day, or see who typed a Guardian-entered one
+                // (null for a band reading, which already has its own
+                // watch icon above).
+                subtitle: Text(recordedAt == null
+                    ? ''
+                    : '${formatDateDisplay(recordedAt, languageCode)} · ${formatClockTime(recordedAt)}'
+                        '${reading['recorded_by_name'] == null ? '' : ' · ${l10n.addedByLabel(reading['recorded_by_name'] as String)}'}'),
                 trailing: canDelete
                     ? (_pendingDelete.contains(readingId)
                         ? const SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2))

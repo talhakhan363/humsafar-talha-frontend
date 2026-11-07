@@ -328,23 +328,35 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
 
   Widget _buildVitalsMetricDetail(AppLocalizations l10n, String metric, Map<String, dynamic> data) {
     final count = data['count'] as int? ?? 0;
-    final min = data['min'] as Map<String, dynamic>?;
-    final max = data['max'] as Map<String, dynamic>?;
-    final average = data['avg'] as Map<String, dynamic>?;
+    // Bug fix (P-02, QA 5.10 Results v1.0, H-09): these were read as
+    // Maps and crashed ("type 'double' is not a subtype of type
+    // 'Map<String, dynamic>?'") the moment a Dependent had any vitals.
+    // Per analytics_contract.md, min/max/avg are plain numbers — the
+    // top (systolic) value for blood_pressure, the only value for
+    // every other metric — with a separate *_diastolic sibling field
+    // for blood_pressure's bottom number. Only `latest` is an object
+    // (value/diastolic/recorded_at/source); it also has no `unit` of
+    // its own, so the metric-level `unit` below covers it too.
+    final unit = data['unit'] as String?;
+    final min = data['min'] as num?;
+    final minDiastolic = data['min_diastolic'] as num?;
+    final max = data['max'] as num?;
+    final maxDiastolic = data['max_diastolic'] as num?;
+    final average = data['avg'] as num?;
+    final averageDiastolic = data['avg_diastolic'] as num?;
     final latest = data['latest'] as Map<String, dynamic>?;
     final trend = data['trend'] as String?;
-    // Assumed renamed the same way as the adherence-level field of the
-    // same name — see the class doc comment's named-assumption note.
     final perDay = (data['daily'] as List<dynamic>? ?? []).cast<Map<String, dynamic>>();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text('${l10n.vitalsMetricCountLabel}: $count'),
-        if (min != null) Text('${l10n.vitalsMinLabel}: ${_pointValueLine(metric, min)}'),
-        if (max != null) Text('${l10n.vitalsMaxLabel}: ${_pointValueLine(metric, max)}'),
-        if (average != null) Text('${l10n.vitalsAverageLabel}: ${_pointValueLine(metric, average)}'),
-        if (latest != null) Text('${l10n.vitalsLatestLabel}: ${_pointValueLine(metric, latest)}'),
+        if (min != null) Text('${l10n.vitalsMinLabel}: ${_summaryValueLine(metric, min, minDiastolic, unit)}'),
+        if (max != null) Text('${l10n.vitalsMaxLabel}: ${_summaryValueLine(metric, max, maxDiastolic, unit)}'),
+        if (average != null)
+          Text('${l10n.vitalsAverageLabel}: ${_summaryValueLine(metric, average, averageDiastolic, unit)}'),
+        if (latest != null) Text('${l10n.vitalsLatestLabel}: ${_latestValueLine(metric, latest, unit)}'),
         if (trend != null) Text('${l10n.vitalsTrendLabel}: ${_trendLabel(l10n, trend)}'),
         const SizedBox(height: 12),
         if (perDay.isEmpty)
@@ -369,7 +381,15 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
         lineBarsData: [
           LineChartBarData(
             spots: [
-              for (var i = 0; i < perDay.length; i++) FlSpot(i.toDouble(), (perDay[i]['value'] as num? ?? 0).toDouble()),
+              // Bug fix (P-02, same crash's cause): a `daily` vitals
+              // entry has no `value` field — analytics_contract.md's
+              // per-day shape is {date, count, avg, min, max,
+              // *_diastolic}, same as the summary fields above. Reading
+              // the missing key silently defaulted every point to 0,
+              // so even once the crash is fixed this would have drawn
+              // a flat zero line instead of a real trend (QA 5.10 H-09
+              // expects "Chart over 7/30 days").
+              for (var i = 0; i < perDay.length; i++) FlSpot(i.toDouble(), (perDay[i]['avg'] as num? ?? 0).toDouble()),
             ],
             isCurved: false,
             color: primary,
@@ -380,16 +400,36 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
     );
   }
 
-  /// Same "blood_pressure needs a second number" branch as
-  /// `vitals_screen.dart`'s `_valueLine`, adapted for an analytics
-  /// min/max/average/latest point (which carries `value`/`diastolic`/
-  /// `unit` directly, not wrapped with its own `metric_type` — this
-  /// screen already knows which metric it's looking at from the outer
-  /// map key).
-  String _pointValueLine(String metric, Map<String, dynamic> point) {
-    final value = point['value'];
-    if (metric == 'blood_pressure') return '$value/${point['diastolic']} ${point['unit'] ?? 'mmHg'}';
-    return '$value ${point['unit'] ?? ''}'.trim();
+  /// Bug fix (2026-11-07, TC-7.3-01): same whole-number ".0" problem
+  /// P-07 already fixed in `vitals_screen.dart`'s `_formatVitalNumber`
+  /// — the real backend sends these as doubles
+  /// (`analytics_contract.md`'s own example: `"avg": 130.0`), so
+  /// without this every clean round number showed a stray ".0" here
+  /// too (expected "Min: 110/70 mmHg", got "Min: 110.0/70.0 mmHg").
+  String _formatNum(num value) => value == value.roundToDouble() ? value.round().toString() : value.toStringAsFixed(1);
+
+  /// Same "blood_pressure needs a second number" idea as
+  /// `vitals_screen.dart`'s `_valueLine`, for the plain-number
+  /// min/max/avg fields (P-02 fix) — `unit` comes from the metric
+  /// level, not the point itself (see the doc comment above).
+  String _summaryValueLine(String metric, num value, num? diastolic, String? unit) {
+    if (metric == 'blood_pressure') {
+      return '${_formatNum(value)}/${diastolic == null ? '-' : _formatNum(diastolic)} ${unit ?? 'mmHg'}';
+    }
+    return '${_formatNum(value)} ${unit ?? ''}'.trim();
+  }
+
+  /// `latest` is still the one object field in this response shape
+  /// (value/diastolic/recorded_at/source, no `unit` of its own).
+  String _latestValueLine(String metric, Map<String, dynamic> point, String? unit) {
+    final rawValue = point['value'];
+    final value = rawValue is num ? _formatNum(rawValue) : '$rawValue';
+    if (metric == 'blood_pressure') {
+      final rawDiastolic = point['diastolic'];
+      final diastolic = rawDiastolic is num ? _formatNum(rawDiastolic) : '$rawDiastolic';
+      return '$value/$diastolic ${unit ?? 'mmHg'}';
+    }
+    return '$value ${unit ?? ''}'.trim();
   }
 
   String _trendLabel(AppLocalizations l10n, String trend) {

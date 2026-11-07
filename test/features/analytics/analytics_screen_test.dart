@@ -37,32 +37,48 @@ Map<String, dynamic> _fullAnalyticsBody() => {
           {'drug_name': 'Metformin', 'rate_percent': 95, 'taken': 19, 'missed': 1},
         ],
       },
+      // Bug fix (2026-11-07): this fixture used to nest min/max/avg as
+      // {value, diastolic, unit} objects and give daily points a plain
+      // `value` key. That doesn't match analytics_contract.md as it
+      // reads today ("avg": 130.0, "min": 120.0, "max": 140.0,
+      // "avg_diastolic": 90.0, ... — min/max/avg are plain numbers with
+      // *_diastolic siblings, daily points carry avg/min/max/count, and
+      // only `latest` is an object) — it was also the exact shape QA's
+      // P-02 finding (5.10 Results v1.0) describes crashing on a real
+      // device. Reshaped to match the real contract; every numeric
+      // value below is unchanged from the old fixture, so the
+      // `expect()` lines after this didn't need to change.
       'vitals': {
         'metrics': [
           {
             'metric_type': 'blood_pressure',
             'count': 4,
-            'min': {'value': 110, 'diastolic': 70, 'unit': 'mmHg'},
-            'max': {'value': 140, 'diastolic': 90, 'unit': 'mmHg'},
-            'avg': {'value': 122, 'diastolic': 78, 'unit': 'mmHg'},
-            'latest': {'value': 118, 'diastolic': 76, 'unit': 'mmHg'},
+            'unit': 'mmHg',
+            'min': 110,
+            'min_diastolic': 70,
+            'max': 140,
+            'max_diastolic': 90,
+            'avg': 122,
+            'avg_diastolic': 78,
+            'latest': {'value': 118, 'diastolic': 76, 'recorded_at': '2026-09-24T08:00:00Z', 'source': 'manual'},
             'trend': 'steady',
             'daily': [
-              {'date': '2026-09-23', 'value': 120, 'diastolic': 80},
-              {'date': '2026-09-24', 'value': 118, 'diastolic': 76},
+              {'date': '2026-09-23', 'count': 1, 'avg': 120, 'min': 120, 'max': 120, 'avg_diastolic': 80, 'min_diastolic': 80, 'max_diastolic': 80},
+              {'date': '2026-09-24', 'count': 1, 'avg': 118, 'min': 118, 'max': 118, 'avg_diastolic': 76, 'min_diastolic': 76, 'max_diastolic': 76},
             ],
           },
           {
             'metric_type': 'heart_rate',
             'count': 10,
-            'min': {'value': 60, 'unit': 'bpm'},
-            'max': {'value': 95, 'unit': 'bpm'},
-            'avg': {'value': 74, 'unit': 'bpm'},
-            'latest': {'value': 72, 'unit': 'bpm'},
+            'unit': 'bpm',
+            'min': 60,
+            'max': 95,
+            'avg': 74,
+            'latest': {'value': 72, 'recorded_at': '2026-09-24T08:00:00Z', 'source': 'manual'},
             'trend': 'rising',
             'daily': [
-              {'date': '2026-09-23', 'value': 70},
-              {'date': '2026-09-24', 'value': 74},
+              {'date': '2026-09-23', 'count': 1, 'avg': 70, 'min': 70, 'max': 70},
+              {'date': '2026-09-24', 'count': 1, 'avg': 74, 'min': 74, 'max': 74},
             ],
           },
         ],
