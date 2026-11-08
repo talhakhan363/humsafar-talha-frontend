@@ -255,7 +255,8 @@ class _EmergencySettingsScreenState extends ConsumerState<EmergencySettingsScree
                   ],
                 ),
                 const SizedBox(height: 8),
-                Text(l10n.remoteAlarmDescription(widget.summary.email)),
+                // (F-04 fix) see DependentSummary.displayName.
+                Text(l10n.remoteAlarmDescription(widget.summary.displayName)),
                 const SizedBox(height: 16),
                 if (isPrimary)
                   ElevatedButton(

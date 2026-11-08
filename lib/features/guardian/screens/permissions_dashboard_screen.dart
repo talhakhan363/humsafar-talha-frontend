@@ -146,7 +146,8 @@ class _PermissionsDashboardScreenState extends ConsumerState<PermissionsDashboar
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(secondary.email, style: Theme.of(context).textTheme.titleMedium),
+                // (F-04 fix) see _SecondaryRow.displayName.
+                Text(secondary.displayName, style: Theme.of(context).textTheme.titleMedium),
                 Text(secondary.phone, style: Theme.of(context).textTheme.bodySmall),
                 const Divider(),
                 ..._modules.map((module) {
@@ -194,17 +195,30 @@ class _PermissionsDashboardScreenState extends ConsumerState<PermissionsDashboar
 }
 
 class _SecondaryRow {
-  _SecondaryRow({required this.guardianId, required this.email, required this.phone, required this.modules});
+  _SecondaryRow({
+    required this.guardianId,
+    required this.email,
+    required this.phone,
+    required this.modules,
+    this.fullName = '',
+  });
 
   final String guardianId;
   final String email;
   final String phone;
   final Map<String, bool> modules;
+  // Bug fix (F-04, ICP-1 Results v1.1): the guardians list now carries
+  // full_name too (Abdullah, 2026-11-08) — empty string, not null, when
+  // unset.
+  final String fullName;
+
+  String get displayName => fullName.isEmpty ? email : fullName;
 
   factory _SecondaryRow.fromJson(Map<String, dynamic> json) => _SecondaryRow(
         guardianId: json['guardian_id'] as String,
         email: json['email'] as String,
         phone: json['phone'] as String,
         modules: (json['modules'] as Map<String, dynamic>).map((key, value) => MapEntry(key, value as bool)),
+        fullName: json['full_name'] as String? ?? '',
       );
 }

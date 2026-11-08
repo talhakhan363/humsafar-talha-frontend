@@ -101,7 +101,8 @@ class _DependentDetailScreenState extends ConsumerState<DependentDetailScreen> {
   Future<void> _startCall(DependentSummary summary) async {
     final isVideo = await showCallTypePicker(context);
     if (isVideo == null || !mounted) return;
-    context.push('/calls/outgoing', extra: {'calleeId': summary.dependentId, 'calleeName': summary.email, 'isVideo': isVideo});
+    // (F-04 fix) summary.displayName, not .email — see DependentSummary.
+    context.push('/calls/outgoing', extra: {'calleeId': summary.dependentId, 'calleeName': summary.displayName, 'isVideo': isVideo});
   }
 
   String _kycStatusLabel(AppLocalizations l10n, String status) {
@@ -124,7 +125,8 @@ class _DependentDetailScreenState extends ConsumerState<DependentDetailScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(summary.email),
+        // (F-04 fix) see DependentSummary.displayName.
+        title: Text(summary.displayName),
         actions: const [LanguageSwitchButton(), AccessibilityToggleButton()],
       ),
       body: RefreshIndicator(
@@ -158,7 +160,15 @@ class _DependentDetailScreenState extends ConsumerState<DependentDetailScreen> {
                 (guardian) => Card(
                   child: ListTile(
                     leading: Icon(guardian['guardian_role'] == 'primary' ? Icons.shield : Icons.visibility),
-                    title: Text(guardian['email'] as String? ?? ''),
+                    // Bug fix (F-04, ICP-1 Results v1.1): the linked-Guardians
+                    // list now carries full_name too (Abdullah, 2026-11-08) —
+                    // empty string, not null, when a Guardian never set one.
+                    title: Text(
+                      (() {
+                        final name = guardian['full_name'] as String? ?? '';
+                        return name.isEmpty ? (guardian['email'] as String? ?? '') : name;
+                      })(),
+                    ),
                     subtitle: Text(
                       '${guardian['guardian_role'] == 'primary' ? l10n.primaryGuardianFullLabel : l10n.secondaryGuardianFullLabel} · '
                       '${(guardian['verified'] as bool? ?? false) ? l10n.verifiedLabel : l10n.notVerifiedLabel}',
@@ -179,7 +189,8 @@ class _DependentDetailScreenState extends ConsumerState<DependentDetailScreen> {
             // Task 4.6 — same "any Guardian can attempt, the screen gates
             // the actual write" shape as Live Map above.
             ElevatedButton.icon(
-              onPressed: () => context.push('/messages/chat', extra: {'peerId': summary.dependentId, 'peerName': summary.email}),
+              // (F-04 fix) see DependentSummary.displayName.
+              onPressed: () => context.push('/messages/chat', extra: {'peerId': summary.dependentId, 'peerName': summary.displayName}),
               icon: const Icon(Icons.chat_bubble_outline),
               label: Text(l10n.messageButtonLabel),
             ),

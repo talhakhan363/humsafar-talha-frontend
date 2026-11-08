@@ -150,10 +150,13 @@ class _GuardianHomeScreenState extends ConsumerState<GuardianHomeScreen> {
     if (mounted) context.go('/login');
   }
 
+  // Bug fix (F-04, ICP-1 Results v1.1): now the Dependent's real name via
+  // DependentSummary.displayName (falls back to email itself if the
+  // backend's full_name is still empty), not the email directly.
   String? _emailFor(String? dependentId) {
     if (dependentId == null) return null;
     final match = (_dependents ?? []).where((d) => d.dependentId == dependentId);
-    return match.isEmpty ? null : match.first.email;
+    return match.isEmpty ? null : match.first.displayName;
   }
 
   // Bug fix (F-19, QA Retest debug-apk-1.8 v1.0, check 1.8-b): the
@@ -313,7 +316,8 @@ class _GuardianHomeScreenState extends ConsumerState<GuardianHomeScreen> {
           ...dependents.map((dependent) => Card(
                 child: ListTile(
                   leading: Icon(dependent.isPrimary ? Icons.shield : Icons.visibility),
-                  title: Text(dependent.email),
+                  // (F-04 fix) see _emailFor's doc comment above.
+                  title: Text(dependent.displayName),
                   subtitle: Text(
                     '${dependent.isPrimary ? l10n.primaryRoleLabel : l10n.secondaryRoleLabel} · '
                     '${l10n.kycStatusPrefixLabel}: ${_kycStatusLabel(l10n, dependent.kycStatus)} · '

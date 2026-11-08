@@ -64,8 +64,10 @@ class _AlertsScreenState extends ConsumerState<AlertsScreen> {
   bool _isLoading = true;
   String? _loadError;
   final Set<String> _pendingAck = {};
-  // (N-07 fix) see _load's doc comment below.
-  Map<String, String> _dependentEmailById = {};
+  // (N-07 fix) see _load's doc comment below. Renamed from
+  // _dependentEmailById (F-04 fix): now the real name via
+  // DependentSummary.displayName where the backend has one.
+  Map<String, String> _dependentNameById = {};
 
   @override
   void initState() {
@@ -105,7 +107,7 @@ class _AlertsScreenState extends ConsumerState<AlertsScreen> {
         _open = items.where((n) => n['is_acknowledged'] != true).toList();
         _seen = items.where((n) => n['is_acknowledged'] == true).toList();
         _notices = notices;
-        _dependentEmailById = {for (final d in dependents) d.dependentId: d.email};
+        _dependentNameById = {for (final d in dependents) d.dependentId: d.displayName};
       });
     } on ApiException catch (e) {
       if (!mounted) return;
@@ -223,7 +225,7 @@ class _AlertsScreenState extends ConsumerState<AlertsScreen> {
                   children: [
                     ...rows.map((n) => _AlertCard(
                           notification: n,
-                          dependentEmail: _dependentEmailById[n['dependent_id']],
+                          dependentEmail: _dependentNameById[n['dependent_id']],
                           showAckButton: _tab == _AlertsTab.open,
                           isPending: _pendingAck.contains(n['notification_id']),
                           onAcknowledge: () => _acknowledge(n),
@@ -273,6 +275,8 @@ class _AlertCard extends StatelessWidget {
   final Map<String, dynamic> notification;
   // (N-07 fix) null when this Guardian only has one linked Dependent, or
   // the lookup didn't resolve — nothing new to disambiguate in that case.
+  // Despite the param name, this is the Dependent's real name once F-04
+  // gives one — see alerts_screen.dart's _dependentNameById.
   final String? dependentEmail;
   final bool showAckButton;
   final bool isPending;
