@@ -28,7 +28,9 @@ void main() {
 
     expect(find.text('Ammi'), findsOneWidget);
     expect(fakeClient.lastPostPath, '/calls');
-    expect(fakeClient.lastPostData, {'receiver_id': 'dep-9', 'type': 'video'});
+    // Bug fix (F-25, Sarim's 9 Nov report): the real backend contract is
+    // callee_id, not receiver_id — this test was asserting the bug.
+    expect(fakeClient.lastPostData, {'callee_id': 'dep-9', 'type': 'video'});
   });
 
   testWidgets('TC-4.7-02: callee accepts — navigates to the active call screen with the real join info', (tester) async {
