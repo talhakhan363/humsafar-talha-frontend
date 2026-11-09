@@ -162,6 +162,11 @@ class AppLocalizationsUr extends AppLocalizations {
   String get genericValidationError =>
       'براہ کرم خانے چیک کریں اور دوبارہ کوشش کریں۔';
 
+  // Bug fix (F-21, Sarim's 9 Nov report): see app_localizations_en.dart.
+  @override
+  String get cantReachServerError =>
+      'سرور تک رسائی نہیں ہو سکی۔ اپنا انٹرنیٹ چیک کریں اور دوبارہ کوشش کریں۔';
+
   @override
   String get retryButton => 'دوبارہ کوشش کریں';
 
@@ -600,8 +605,7 @@ class AppLocalizationsUr extends AppLocalizations {
   String get noWellnessCheckScheduledMessage => 'کوئی ویلنیس چیک شیڈول نہیں ہے';
 
   @override
-  String get wellnessCheckDueNowLabel =>
-      'چیک اب واجب ہے — جواب دینے کے لیے دبائیں';
+  String get wellnessCheckDueNowLabel => 'چیک اب واجب ہے — جواب دینے کے لیے دبائیں';
 
   @override
   String nextMedicationMessage(String drug, String time) {
@@ -620,6 +624,10 @@ class AppLocalizationsUr extends AppLocalizations {
   @override
   String get panicHoldInstructions => 'بٹن کو 2 سیکنڈ تک دبائے رکھیں';
 
+  // Bug fix (N-06, QA 3.16 Accessibility Results v1.0, D-04): "دبائیں"
+  // means a single press ("press"), same as the mistake this label is
+  // meant to prevent — the UI text sheet's wording is "دبائے رکھیں"
+  // (keep pressing), matching panicHoldInstructions right above.
   @override
   String get panicHoldButtonLabel => 'دبائے رکھیں';
 
@@ -627,8 +635,7 @@ class AppLocalizationsUr extends AppLocalizations {
   String get panicHoldButtonSubtitle => 'مدد بھیجنے کے لیے';
 
   @override
-  String get panicHoldButtonSemanticsLabel =>
-      'اپنے گارڈینز کو مدد بھیجنے کے لیے 2 سیکنڈ تک دبائے رکھیں';
+  String get panicHoldButtonSemanticsLabel => 'اپنے گارڈینز کو مدد بھیجنے کے لیے 2 سیکنڈ تک دبائے رکھیں';
 
   @override
   String get panicSendingLabel => 'الرٹ بھیجا جا رہا ہے...';
@@ -927,16 +934,18 @@ class AppLocalizationsUr extends AppLocalizations {
   @override
   String get alertTypeExternalContact => 'ایمرجنسی رابطہ الرٹ';
 
+  // NOTE (placeholder, flag for T6 Urdu review — this is a safety
+  // screen, same category as the other 32 safety-screen strings T6
+  // already covers): straightforward working translations, not yet
+  // checked by the team's Urdu term-by-term pass.
   @override
   String get externalContactSentTitle => 'ایمرجنسی رابطے کو پیغام بھیج دیا گیا';
 
   @override
-  String get externalContactNoContactTitle =>
-      'کوئی ایمرجنسی رابطہ محفوظ نہیں ہے';
+  String get externalContactNoContactTitle => 'کوئی ایمرجنسی رابطہ محفوظ نہیں ہے';
 
   @override
-  String get externalContactFailedTitle =>
-      'ایمرجنسی رابطے تک نہیں پہنچا جا سکا';
+  String get externalContactFailedTitle => 'ایمرجنسی رابطے تک نہیں پہنچا جا سکا';
 
   @override
   String get alertTypeGeneric => 'الرٹ';
@@ -1494,8 +1503,7 @@ class AppLocalizationsUr extends AppLocalizations {
   String get medicationScheduleDeletedSnackbar => 'دوا حذف کر دی گئی۔';
 
   @override
-  String get medicationScheduleDeleteFailedSnackbar =>
-      'دوا حذف نہیں ہو سکی۔ دوبارہ کوشش کریں۔';
+  String get medicationScheduleDeleteFailedSnackbar => 'دوا حذف نہیں ہو سکی۔ دوبارہ کوشش کریں۔';
 
   @override
   String get demoDataDisabledMessage =>

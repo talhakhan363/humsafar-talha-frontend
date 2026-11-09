@@ -48,6 +48,7 @@
   "livenessCapturedConfirmation": "لائیونیس تصویر لے لی گئی (نمائشی)",
   "submitForVerificationButton": "تصدیق کے لیے جمع کروائیں",
   "genericValidationError": "براہ کرم خانے چیک کریں اور دوبارہ کوشش کریں۔",
+  "cantReachServerError": "سرور تک رسائی نہیں ہو سکی۔ اپنا انٹرنیٹ چیک کریں اور دوبارہ کوشش کریں۔",
   "retryButton": "دوبارہ کوشش کریں",
   "tryAgainButton": "دوبارہ کوشش کریں",
   "goToLoginButton": "لاگ ان پر جائیں",

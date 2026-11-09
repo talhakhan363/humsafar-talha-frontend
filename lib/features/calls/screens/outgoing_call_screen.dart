@@ -89,9 +89,12 @@ class _OutgoingCallScreenState extends ConsumerState<OutgoingCallScreen> {
 
   Future<void> _startCall() async {
     try {
+      // Bug fix (F-25, Sarim's 9 Nov report): call_contract.md's POST
+      // /calls needs callee_id — this sent receiver_id and got a 422
+      // VALIDATION_ERROR every time, blocking every outgoing call.
       final response = await ref.read(apiClientProvider).post<Map<String, dynamic>>(
             '/calls',
-            data: {'receiver_id': widget.calleeId, 'type': widget.isVideo ? 'video' : 'voice'},
+            data: {'callee_id': widget.calleeId, 'type': widget.isVideo ? 'video' : 'voice'},
           );
       final data = response.data!;
       if (!mounted) return;

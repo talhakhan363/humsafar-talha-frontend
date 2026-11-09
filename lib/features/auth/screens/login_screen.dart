@@ -74,6 +74,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         return l10n.accountNotActivatedError;
       case 'VALIDATION_ERROR':
         return l10n.genericValidationError;
+      // Bug fix (F-21, Sarim's 9 Nov report, debug-apk-1.9): a connection
+      // timeout (api_client.dart's ApiException.unexpected, no server
+      // envelope at all) fell to `default` and showed Dio's raw
+      // exception text ("The request connection took longer than
+      // 0:00:00.000000...") verbatim.
+      case 'unexpected_error':
+        return l10n.cantReachServerError;
       default:
         return e.message;
     }

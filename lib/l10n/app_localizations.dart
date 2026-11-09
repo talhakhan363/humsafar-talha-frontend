@@ -386,6 +386,12 @@ abstract class AppLocalizations {
   /// **'Please check the fields and try again.'**
   String get genericValidationError;
 
+  /// No description provided for @cantReachServerError.
+  ///
+  /// In en, this message translates to:
+  /// **'Can't reach the server. Check your internet and try again.'**
+  String get cantReachServerError;
+
   /// No description provided for @retryButton.
   ///
   /// In en, this message translates to:
@@ -611,7 +617,7 @@ abstract class AppLocalizations {
   /// No description provided for @abandonKycConfirmBody.
   ///
   /// In en, this message translates to:
-  /// **'You\'ll need to register again from the start. Nothing has been saved to an account yet.'**
+  /// **'You'll need to register again from the start. Nothing has been saved to an account yet.'**
   String get abandonKycConfirmBody;
 
   /// No description provided for @abandonKycButtonLabel.
@@ -1148,7 +1154,12 @@ abstract class AppLocalizations {
   /// **'No wellness check scheduled'**
   String get noWellnessCheckScheduledMessage;
 
-  /// No description provided for @wellnessCheckDueNowLabel.
+  /// Bug fix (N-10, QA 3.16 Accessibility Results v1.0, B-07):
+  /// `nextOccurrenceForTime` can only ever report a strictly-future
+  /// occurrence, so this screen had no way to say "a check is waiting
+  /// right now" even when `GET .../wellness-check-responses?status=pending`
+  /// says one is. Shown in place of [nextWellnessCheckMessage] when
+  /// that's the case — see dependent_home_screen.dart's `_loadUpcoming`.
   ///
   /// In en, this message translates to:
   /// **'Check due now — tap to answer'**
@@ -1196,7 +1207,11 @@ abstract class AppLocalizations {
   /// **'to send help'**
   String get panicHoldButtonSubtitle;
 
-  /// No description provided for @panicHoldButtonSemanticsLabel.
+  /// Bug fix (N-04, QA 3.16 Accessibility Results v1.0, E-02): a bare
+  /// CircularProgressIndicator under this button exposed itself to
+  /// TalkBack as an unexplained percent value. This one label (read via
+  /// `Semantics`/`ExcludeSemantics` in panic_hold_button.dart) replaces
+  /// that for the whole button.
   ///
   /// In en, this message translates to:
   /// **'Press and hold for 2 seconds to send help to your Guardians'**
@@ -1226,10 +1241,10 @@ abstract class AppLocalizations {
   /// **'Help is coming'**
   String get panicHelpIsComingTitle;
 
-  /// Bug fix (N-14, QA 3.16 Accessibility Results v1.0, D-04): was the literal placeholder text 'Guardian(s)' for every count. ICU plural form here for forward-compat with a real flutter gen-l10n run — app_localizations_en.dart's hand-written override (this project has no gen-l10n tool available) is the one actually read at runtime right now.
+  /// No description provided for @panicToldCountMessage.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, one{We told {count} Guardian} other{We told {count} Guardians}}'**
+  /// **'We told {count} Guardian(s)'**
   String panicToldCountMessage(int count);
 
   /// No description provided for @panicTriggeredAtMessage.
@@ -2312,13 +2327,15 @@ abstract class AppLocalizations {
   /// **'Couldn\'t load the voice message. Try again.'**
   String get audioDownloadFailedMessage;
 
-  /// No description provided for @playVoiceMessageTooltip.
+  /// Bug fix (N-08, QA 3.16 Accessibility Results v1.0, C-02): the
+  /// play/pause icon on a received voice message had no tooltip, so
+  /// TalkBack announced it as a bare unlabeled icon button.
   ///
   /// In en, this message translates to:
   /// **'Play voice message'**
   String get playVoiceMessageTooltip;
 
-  /// No description provided for @pauseVoiceMessageTooltip.
+  /// Same fix as [playVoiceMessageTooltip], for the icon's other state.
   ///
   /// In en, this message translates to:
   /// **'Pause voice message'**
@@ -2366,13 +2383,15 @@ abstract class AppLocalizations {
   /// **'Called organization'**
   String get activityOrgContact;
 
-  /// No description provided for @activityFilterCallsLabel.
+  /// Bug fix (G-04, QA 6.12 Directory Results v1.0, D-16): the Activity
+  /// log had no way to narrow the timeline down to just calls or just
+  /// visit requests (screen 18d has two filter chips for this).
   ///
   /// In en, this message translates to:
   /// **'Calls'**
   String get activityFilterCallsLabel;
 
-  /// No description provided for @activityFilterRequestsLabel.
+  /// Same fix as [activityFilterCallsLabel], for the other chip.
   ///
   /// In en, this message translates to:
   /// **'Requests'**
@@ -2684,7 +2703,8 @@ abstract class AppLocalizations {
   /// **'Delete'**
   String get deleteButtonLabel;
 
-  /// No description provided for @editButtonLabel.
+  /// Bug fix (N-08, QA 3.16 Accessibility Results v1.0, C-02): the edit
+  /// icon on a medical record row had no tooltip for TalkBack.
   ///
   /// In en, this message translates to:
   /// **'Edit'**
@@ -2723,7 +2743,7 @@ abstract class AppLocalizations {
   /// No description provided for @medicationScheduleDeleteFailedSnackbar.
   ///
   /// In en, this message translates to:
-  /// **'Couldn\'t delete the medicine. Try again.'**
+  /// **'Couldn't delete the medicine. Try again.'**
   String get medicationScheduleDeleteFailedSnackbar;
 
   /// No description provided for @demoDataDisabledMessage.
@@ -2750,7 +2770,10 @@ abstract class AppLocalizations {
   /// **'Organizations'**
   String get directoryOrganizationsTabLabel;
 
-  /// No description provided for @emergencyNumbersSectionHeader.
+  /// Bug fix (G-03, QA 6.12 Directory Results v1.0, D-01): the national
+  /// emergency numbers (Rescue 1122, Edhi 115, ...) were sorted
+  /// alphabetically among ~20 demo entries instead of grouped at the
+  /// top, as in mockup screen 18.
   ///
   /// In en, this message translates to:
   /// **'Emergency numbers'**
@@ -3842,7 +3865,9 @@ abstract class AppLocalizations {
   /// **'This call has already ended.'**
   String get callAlreadyEndedMessage;
 
-  /// No description provided for @cancelCallTooltip.
+  /// Bug fix (N-08, QA 3.16 Accessibility Results v1.0, C-02): the
+  /// hang-up icon on the outgoing-call screen had no tooltip for
+  /// TalkBack.
   ///
   /// In en, this message translates to:
   /// **'Cancel call'**

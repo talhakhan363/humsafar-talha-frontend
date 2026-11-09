@@ -51,6 +51,7 @@
   "livenessCapturedConfirmation": "Liveness photo captured (mock)",
   "submitForVerificationButton": "Submit for Verification",
   "genericValidationError": "Please check the fields and try again.",
+  "cantReachServerError": "Can't reach the server. Check your internet and try again.",
   "retryButton": "Retry",
   "tryAgainButton": "Try again",
   "goToLoginButton": "Go to login",

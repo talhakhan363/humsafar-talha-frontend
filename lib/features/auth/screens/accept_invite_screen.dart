@@ -68,6 +68,10 @@ class _AcceptInviteScreenState extends ConsumerState<AcceptInviteScreen> {
         return l10n.alreadyLinkedError;
       case 'GUARDIAN_CAP_REACHED':
         return l10n.guardianCapReachedError;
+      // Bug fix (F-21, Sarim's 9 Nov report): see login_screen.dart's
+      // _messageFor doc comment.
+      case 'unexpected_error':
+        return l10n.cantReachServerError;
       default:
         return e.message;
     }

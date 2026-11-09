@@ -159,6 +159,11 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get genericValidationError => 'Please check the fields and try again.';
 
+  // Bug fix (F-21, Sarim's 9 Nov report): raw Dio exception text (e.g.
+  // "connectTimeout...") was showing on screen instead of a real message.
+  @override
+  String get cantReachServerError => 'Can\'t reach the server. Check your internet and try again.';
+
   @override
   String get retryButton => 'Retry';
 
@@ -621,8 +626,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get panicHoldButtonSubtitle => 'to send help';
 
   @override
-  String get panicHoldButtonSemanticsLabel =>
-      'Press and hold for 2 seconds to send help to your Guardians';
+  String get panicHoldButtonSemanticsLabel => 'Press and hold for 2 seconds to send help to your Guardians';
 
   @override
   String get panicSendingLabel => 'Sending alert...';
@@ -639,13 +643,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String panicToldCountMessage(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'We told $count Guardians',
-      one: 'We told $count Guardian',
-    );
-    return '$_temp0';
+    // Bug fix (N-14, QA 3.16 Accessibility Results v1.0, D-04): "Guardian(s)"
+    // read literally on a screen reader (and looked like a typo to a sighted
+    // user) for every count, including 1. Urdu's noun ("گارڈین") doesn't
+    // change with count — confirmed against every other count-based message
+    // in app_ur.arb (alertsOpenTabLabel, escalateSuccessSnackbar,
+    // unreadMessagesSubtitle, openedCountLabel, cameraViewerCountLabel) — so
+    // only this English override needs the singular/plural split.
+    return 'We told $count ${count == 1 ? 'Guardian' : 'Guardians'}';
   }
 
   @override
@@ -926,8 +931,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get externalContactNoContactTitle => 'No emergency contact set';
 
   @override
-  String get externalContactFailedTitle =>
-      'Emergency contact could not be reached';
+  String get externalContactFailedTitle => 'Emergency contact could not be reached';
 
   @override
   String get alertTypeGeneric => 'Alert';
@@ -1477,8 +1481,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get medicationScheduleDeletedSnackbar => 'Medicine deleted.';
 
   @override
-  String get medicationScheduleDeleteFailedSnackbar =>
-      'Couldn\'t delete the medicine. Try again.';
+  String get medicationScheduleDeleteFailedSnackbar => 'Couldn\'t delete the medicine. Try again.';
 
   @override
   String get demoDataDisabledMessage =>

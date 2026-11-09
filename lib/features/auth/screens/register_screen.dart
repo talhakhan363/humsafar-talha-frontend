@@ -134,6 +134,10 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
         return l10n.guardianCapReachedError;
       case 'VALIDATION_ERROR':
         return l10n.genericValidationError;
+      // Bug fix (F-21, Sarim's 9 Nov report): see login_screen.dart's
+      // _messageFor doc comment.
+      case 'unexpected_error':
+        return l10n.cantReachServerError;
       default:
         return e.message;
     }
