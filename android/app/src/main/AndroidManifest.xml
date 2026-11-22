@@ -43,18 +43,42 @@
          as POST_NOTIFICATIONS above); without the manifest entry the OS
          would refuse the runtime grant outright. -->
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <!-- Bug fix (F-13, Sarim's 9 Nov report) — lets the remote-alarm
+         notification in push_service.dart's firebaseMessagingBackgroundHandler
+         actually show full-screen (ring like a real alarm/incoming call) on a
+         locked phone instead of just a normal heads-up banner. Granted
+         automatically below Android 14 (API 34) once declared here; on 14+
+         it's pre-granted for apps in the ALARM/CALL category this
+         notification already declares, but caveat flagged since this
+         hasn't been verified on a real Android 14+ device yet. -->
+    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
     <application
-        android:label="humsafar_talha_frontend"
+        android:label="Humsafar"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
-        android:usesCleartextTraffic="true">
-        <!-- 2026-10-22 — allows plain http:// Dio calls (the emulator default
-             10.0.2.2:8000 and real-device testing against a teammate's LAN IP
-             like Abdullah's backend at 192.168.1.37:8000). Android blocks
-             cleartext traffic by default from API 28+, which this app's
-             targetSdk exceeds; every real call in this codebase is http, not
-             https, so without this flag a real-device run would be silently
-             blocked by the OS, not by anything wrong in the app itself. -->
+        android:allowBackup="false"
+        android:usesCleartextTraffic="false">
+        <!-- Bug fix (SEC-14, Sarim's 22 Nov security review): allowBackup
+             defaulted to true (unset = true), which lets `adb backup` (and
+             Android's own auto-backup) pull this app's private storage —
+             including flutter_secure_storage's keystore-backed prefs file
+             and any cached vitals/records data — off a device with USB
+             debugging on, no root needed. False opts out of both. -->
+        <!-- Bug fix (SEC-08, Sarim's 22 Nov security review): this used to
+             be `true` so plain http:// Dio calls would work (the emulator
+             default 10.0.2.2:8000 and real-device testing against a
+             teammate's LAN IP like Abdullah's backend at 192.168.1.37:8000,
+             since every call in this codebase was http, not https, as of
+             2026-10-22 — Android blocks cleartext by default from API 28+,
+             which this app's targetSdk exceeds). The deployed backend is
+             now https (https://humsafar-api-s851.onrender.com, the
+             dart-define default as of the 1.9.1 build), so a real app
+             install no longer needs cleartext at all — this is now `false`
+             everywhere EXCEPT the debug build variant, which re-enables it
+             (see android/app/src/debug/AndroidManifest.xml) so `flutter
+             run` against a teammate's local LAN backend still works day to
+             day. Any release/profile build — the only builds Sarim or
+             anyone outside the team would ever see — gets `false`. -->
         <activity
             android:name=".MainActivity"
             android:exported="true"

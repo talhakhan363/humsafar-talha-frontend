@@ -4,4 +4,12 @@
          to allow setting breakpoints, to provide hot reload, etc.
     -->
     <uses-permission android:name="android.permission.INTERNET"/>
+    <!-- Bug fix (SEC-08, Sarim's 22 Nov security review): main's manifest
+         now sets usesCleartextTraffic="false" (release/profile builds no
+         longer allow it — see android/app/src/main/AndroidManifest.xml's
+         comment). This debug-only override puts it back to `true` just for
+         `flutter run`/debug APKs, so testing against a teammate's local LAN
+         http:// backend (no https on a dev machine) keeps working day to
+         day without weakening any build that could leave the team's hands. -->
+    <application android:usesCleartextTraffic="true" />
 </manifest>
