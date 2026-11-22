@@ -236,6 +236,22 @@ dev_dependencies:
   # discipline as every other pin in this file.
   flutter_launcher_icons: ^0.14.4
 
+  # Task 1.12/PR #106 (Sarim's 8 Nov spec, docs/design/1.12_identity_access/
+  # README.md's "Splash and launch" section) — generates the native Android
+  # splash screen (00 Splash) from the `flutter_native_splash:` config
+  # below. Same "dev-only, can't affect the runtime dependency graph"
+  # reasoning as flutter_launcher_icons just above.
+  #
+  # Bug fix (2026-11-09, Talha's real `flutter pub get` run): pinned
+  # ^2.4.8 at first (then-latest per pub.dev), but 2.4.8 depends on
+  # `meta ^1.18.0` while `flutter_test` (from the Flutter SDK itself)
+  # pins `meta` to exactly 1.16.0 — an unresolvable version clash, same
+  # "declared constraint doesn't line up with what's actually in the SDK"
+  # shape as the fl_chart/vector_math override elsewhere in this file.
+  # Downgraded to 2.4.7 per pub's own suggested fix in the error output;
+  # confirmed against a real `flutter pub get`, not guessed.
+  flutter_native_splash: ^2.4.7
+
 # Task 7.3 fix #2 (2026-10-22) — see fl_chart's comment above. Forces the
 # `vector_math` version flutter_test otherwise pins at `2.1.4` up to
 # `2.2.0`, which is what fl_chart 1.1.0's interactive-viewer code actually
@@ -284,6 +300,24 @@ flutter_launcher_icons:
   adaptive_icon_background: "assets/brand/app-icon/Humsafar_AppIcon_v1.0_background_1024.png"
   adaptive_icon_foreground: "assets/brand/app-icon/Humsafar_AppIcon_v1.0_foreground_1024.png"
 
+# Task 1.12/PR #106 (Sarim's 8 Nov spec) — 00 Splash: the Android system
+# splash screen, shown by the OS itself before the Flutter engine has even
+# started, so it can't be a Flutter widget at all — this is what
+# flutter_native_splash's config generates native Android resources from.
+# Exact values copied from the README's own sample config: teal
+# HumsafarColors.primary (#0E7490) behind the white-amber symbol, and the
+# same icon again under android_12 for Android 12+'s separate (and
+# stricter, single-icon-on-single-colour) splash API. Run `dart run
+# flutter_native_splash:create` after `flutter pub get` to actually
+# generate the native resources — this config block alone does nothing
+# until that command runs.
+flutter_native_splash:
+  color: "#0E7490"
+  image: assets/brand/splash/Humsafar_Splash_Icon_v0.1_1152.png
+  android_12:
+    color: "#0E7490"
+    image: assets/brand/splash/Humsafar_Splash_Icon_v0.1_1152.png
+
 flutter:
   uses-material-design: true
   # Task 1.10 — tells the Flutter tool to generate AppLocalizations from
@@ -296,5 +330,16 @@ flutter:
   # (generated, not recorded — a placeholder for whatever real alarm
   # sound the team picks), not music or a voice recording, so it's free
   # of any licensing question.
+  #
+  # Task 1.12/PR #106 — the splash icon above is referenced directly by
+  # path in flutter_native_splash's config, not through this list (that
+  # tool reads the file straight off disk at generation time), but it
+  # still needs to be a real asset Flutter packages, hence listed here
+  # too. The symbol/wordmark PNGs are the 00b Launch screen's own assets
+  # (splash_screen.dart) — see that file's doc comment for exactly how
+  # they're used.
   assets:
     - assets/sounds/alarm.wav
+    - assets/brand/splash/Humsafar_Splash_Icon_v0.1_1152.png
+    - assets/brand/logo/symbol/Humsafar_Symbol_v1.0_white-amber_1024.png
+    - assets/brand/logo/wordmark/Humsafar_Wordmark_v1.0_white_1024.png
