@@ -1,7 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../network/api_exception.dart';
 import '../network/providers.dart';
@@ -26,8 +28,25 @@ class PushService {
   final FirebaseMessaging _messaging;
   final FlutterLocalNotificationsPlugin _localNotifications;
 
-  static const criticalChannelId = 'critical_alerts';
+  // Bug fix (F-23, Sarim's 9 Nov report): bumped from 'critical_alerts' to
+  // a new id, NOT just edited in place. Android notification-channel
+  // settings (sound, importance, vibration) are immutable once a channel
+  // is first created on a device — any phone that already ran an earlier
+  // build keeps using 'critical_alerts' exactly as it was first created
+  // (default system sound, no custom alarm tone) no matter what this code
+  // says now. A fresh id is the only way an already-installed phone
+  // actually picks up the new alarm-style sound below.
+  static const criticalChannelId = 'critical_alerts_v2';
   static const standardChannelId = 'standard_alerts';
+
+  // Bug fix (F-23): android/app/src/main/res/raw/alarm_critical.wav — the
+  // same placeholder tone already bundled as assets/sounds/alarm.wav for
+  // alarm_screen.dart's F-13 fix, copied into the Android raw resources so
+  // a *notification* (not just the in-app alarm screen) can use it as a
+  // real alarm-style sound instead of the generic default notification
+  // ping. Android raw-resource names can't have a file extension, hence
+  // 'alarm_critical' here with no '.wav'.
+  static const _criticalChannelSound = RawResourceAndroidNotificationSound('alarm_critical');
 
   bool _initialized = false;
 
@@ -39,6 +58,14 @@ class PushService {
   /// a cold start, if that's how the app was launched.
   Future<void> initializeChannelsAndHandlers({
     required void Function(RemoteMessage message) onMessageTapped,
+    // Bug fix (F-24, Sarim's 9 Nov report): optional, falls back to
+    // [onMessageTapped] if not given. main.dart passes something DIFFERENT
+    // here than onMessageTapped — see [pendingColdStartNotificationProvider]'s
+    // doc comment below for why a cold-start tap can't safely navigate
+    // immediately the way a background tap (app already running, a
+    // session already active and showing a real screen, nothing to race)
+    // can.
+    void Function(RemoteMessage message)? onColdStartTap,
   }) async {
     if (_initialized) return;
     _initialized = true;
@@ -51,9 +78,15 @@ class PushService {
     await androidPlugin?.createNotificationChannel(const AndroidNotificationChannel(
       criticalChannelId,
       'Critical alerts',
-      description: 'Panic, missed dose, geofence breach and other urgent alerts.',
+      description: 'Panic, missed dose, geofence breach, remote alarm and other urgent alerts.',
       importance: Importance.max,
       playSound: true,
+      // Bug fix (F-23, Sarim's 9 Nov report): was relying on the device's
+      // default notification sound, which reads as just another ping, not
+      // an alarm. Real backend-vs-test-tone caveat: alarm_critical.wav is
+      // still the same synthesized placeholder noted in alarm_screen.dart's
+      // F-13 doc comment, not a final sound design.
+      sound: _criticalChannelSound,
     ));
     await androidPlugin?.createNotificationChannel(const AndroidNotificationChannel(
       standardChannelId,
@@ -71,7 +104,7 @@ class PushService {
     // notification. Must be checked explicitly — onMessageOpenedApp only
     // fires for a background (not terminated) tap.
     final initial = await _messaging.getInitialMessage();
-    if (initial != null) onMessageTapped(initial);
+    if (initial != null) (onColdStartTap ?? onMessageTapped)(initial);
   }
 
   Future<void> _showForegroundNotification(RemoteMessage message) async {
@@ -89,6 +122,13 @@ class PushService {
           isCritical ? 'Critical alerts' : 'Standard alerts',
           importance: isCritical ? Importance.max : Importance.defaultImportance,
           priority: isCritical ? Priority.max : Priority.defaultPriority,
+          // Bug fix (F-23): matches the channel's own sound (see
+          // createNotificationChannel above) — Android actually plays the
+          // channel's sound regardless of this field on O+ (API 26+,
+          // which this app's whole supported range is above), but setting
+          // it here too keeps this call self-describing and correct on
+          // the off chance a channel sound lookup ever fails.
+          sound: isCritical ? _criticalChannelSound : null,
         ),
       ),
     );
@@ -102,16 +142,65 @@ class PushService {
 /// Must be a top-level (or static) function per the firebase_messaging
 /// API — it runs in its own background isolate, which is why it
 /// re-initializes Firebase rather than reusing anything from the main
-/// isolate. Deliberately does nothing else: the OS already auto-displays
-/// the push's own `notification` payload while the app is backgrounded
-/// or terminated (that's what `default_notification_channel_id` in
-/// AndroidManifest.xml is for) — this handler exists only because
-/// firebase_messaging requires one to be registered at all for
-/// background delivery to work, not because this app needs custom
-/// background processing.
+/// isolate. For every push type except `remote_alarm` this still does
+/// nothing else: the OS already auto-displays the push's own
+/// `notification` payload while the app is backgrounded or terminated
+/// (that's what `default_notification_channel_id` in AndroidManifest.xml
+/// is for) — this handler exists only because firebase_messaging requires
+/// one to be registered at all for background delivery to work.
+///
+/// **Bug fix (F-13, Sarim's 9 Nov report): "alarm doesn't ring when the
+/// app is closed."** A `remote_alarm` push used to rely entirely on that
+/// same passive OS auto-display — a normal, silenceable notification that
+/// doesn't wake the screen or loop a sound, nothing like an actual alarm.
+/// `alarm_screen.dart`'s own F-13 fix already solved this for when the
+/// screen is open (loops the alarm sound on Android's alarm stream, which
+/// silent mode can't mute) — but that fix only runs once that screen is
+/// showing, which never happens on its own while the app is backgrounded
+/// or terminated. This shows a dedicated full-screen, alarm-category
+/// local notification instead, matching how a real alarm clock or
+/// incoming call behaves on a locked phone (requires
+/// `USE_FULL_SCREEN_INTENT` in AndroidManifest.xml, added alongside this
+/// fix).
+///
+/// **Open dependency, flagged rather than assumed — needs confirming with
+/// Abdullah before this is genuinely done end to end:** this only
+/// replaces the OS's passive auto-display cleanly if the backend sends
+/// `remote_alarm` pushes as a data-only FCM message (no top-level
+/// `notification` key). If the push still carries a `notification`
+/// payload, the OS will ALSO auto-display its own passive notification
+/// from `standard_alerts` at the same time this handler shows its own —
+/// two separate notifications for one alarm, not one correct one. Not
+/// verified against a real build or a real push for the same reason as
+/// `alarm_screen.dart`'s own F-13 fix: nothing in this sandbox can send an
+/// actual FCM message.
 @pragma('vm:entry-point')
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
+
+  if (message.data['type'] != 'remote_alarm') return;
+
+  final title = message.notification?.title ?? (message.data['title'] as String?) ?? 'Remote alarm';
+  final body = message.notification?.body ?? (message.data['body'] as String?) ?? 'Someone is trying to reach you.';
+
+  await FlutterLocalNotificationsPlugin().show(
+    message.hashCode,
+    title,
+    body,
+    const NotificationDetails(
+      android: AndroidNotificationDetails(
+        PushService.criticalChannelId,
+        'Critical alerts',
+        importance: Importance.max,
+        priority: Priority.max,
+        category: AndroidNotificationCategory.alarm,
+        fullScreenIntent: true,
+        ongoing: true,
+        autoCancel: false,
+        sound: PushService._criticalChannelSound,
+      ),
+    ),
+  );
 }
 
 /// Maps a push's `data.type` (notification_contract.md's full `type`
@@ -201,6 +290,57 @@ Map<String, dynamic>? incomingCallPushData(Map<String, dynamic> data) {
     'isVideo': data['call_type'] == 'video',
   };
 }
+
+/// Navigates to wherever a tapped push says to go. A shared function
+/// (not duplicated in main.dart and splash_screen.dart) so the
+/// incoming_call-vs-everything-else routing decision only lives in one
+/// place.
+///
+/// Used two different ways:
+/// - main.dart's live background-tap path calls this immediately (a
+///   session is already active and showing a real screen — nothing to
+///   race).
+/// - splash_screen.dart calls this too, but only for a COLD-START tap,
+///   and only after its own session check has already picked the app's
+///   real home route — see [pendingColdStartNotificationProvider]'s doc
+///   comment for the F-24 bug this ordering fixes.
+void navigateForNotificationTap(BuildContext context, RemoteMessage message) {
+  // Task 4.7 — incoming_call needs more than a route string (see
+  // incomingCallPushData's doc comment), so it's checked first, ahead of
+  // the generic route-string mapper below.
+  final callData = incomingCallPushData(message.data);
+  if (callData != null) {
+    GoRouter.of(context).push('/calls/incoming', extra: callData);
+    return;
+  }
+  final route = routeForNotificationType(message.data['type'] as String?);
+  if (route == null) return;
+  GoRouter.of(context).push(route);
+}
+
+/// **Bug fix (F-24, Sarim's 9 Nov report): "tapping a notification
+/// doesn't stay on its target screen."** A cold-start notification tap
+/// (`initializeChannelsAndHandlers`'s `getInitialMessage` check) used to
+/// call [navigateForNotificationTap] immediately, from a post-frame
+/// callback in `main.dart`'s `initState` — racing `SplashScreen`'s own
+/// `_checkSession()`, a real network round-trip to `GET /auth/me`.
+/// Whichever finished second won, and since `SplashScreen`'s own
+/// `context.go(...)` REPLACES the entire navigation stack rather than
+/// pushing onto it, if the session check lost — er, finished AFTER the
+/// notification's push, which it reliably does since it needs a network
+/// round-trip and `getInitialMessage()` doesn't — it silently wiped the
+/// notification's target screen off the stack, landing the person back
+/// on their plain home screen with no obvious sign anything was ever
+/// wrong.
+///
+/// Holding the tapped message here instead of navigating straight away
+/// lets `SplashScreen` apply it itself, AFTER its own routing decision —
+/// see `splash_screen.dart`'s `_applyPendingColdStartNotification`. A
+/// background tap (app already running when the notification arrives)
+/// never touches this provider at all: `main.dart`'s `onMessageTapped`
+/// still navigates immediately for that case, since there's no splash
+/// screen in the way once a session is already active.
+final pendingColdStartNotificationProvider = StateProvider<RemoteMessage?>((ref) => null);
 
 final pushServiceProvider = Provider<PushService>((ref) => PushService());
 
