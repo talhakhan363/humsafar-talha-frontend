@@ -1,8 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:humsafar_frontend/l10n/app_localizations.dart';
 
 import 'core/auth/current_user_provider.dart';
@@ -14,13 +14,30 @@ import 'core/theme/accessibility_mode_provider.dart';
 import 'core/theme/app_theme.dart';
 
 Future<void> main() async {
+  // Bug fix (Talha's 22 Nov real-device test, PR #106 splash work): the
+  // native "00 Splash" screen (flutter_native_splash's generated Android
+  // 12+ resources) was shrinking and sliding into a corner instead of
+  // just handing off cleanly to the Flutter "00b Launch" screen
+  // (splash_screen.dart). Root cause: `flutter_native_splash:create` only
+  // generates the native resources — it does NOT, by itself, hold that
+  // native splash on screen until Flutter is actually ready to draw.
+  // Without `preserve()` here, Android 12+'s own SplashScreen API runs
+  // ITS OWN default exit animation (a scale-down-and-move, which is
+  // exactly the "shrink into a corner" glitch) on its own timer,
+  // completely independent of whether this app's first frame is ready —
+  // the two then visibly collide. `preserve()` holds the native splash
+  // exactly as-is until something explicitly calls `.remove()` — see
+  // splash_screen.dart's initState for where that happens, timed to the
+  // same moment the Launch screen's own content is ready to take over.
+  final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+
   // Task 3.14 — Firebase must be initialized before anything touches
   // FirebaseMessaging, and the background message handler must be
   // registered before runApp (it has to be in place even if the app is
   // killed moments later — that's the whole point of a background
   // handler). See push_service.dart's doc comments for why both of these
   // are otherwise minimal.
-  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
 
@@ -65,7 +82,14 @@ class _HumsafarAppState extends ConsumerState<HumsafarApp> {
   Future<void> _initializePush() async {
     try {
       final pushService = ref.read(pushServiceProvider);
-      await pushService.initializeChannelsAndHandlers(onMessageTapped: _handleNotificationTap);
+      await pushService.initializeChannelsAndHandlers(
+        onMessageTapped: _handleNotificationTap,
+        // Bug fix (F-24, Sarim's 9 Nov report): a cold-start tap is held
+        // here instead of navigated immediately — see
+        // pendingColdStartNotificationProvider's doc comment in
+        // push_service.dart for the splash-screen race this avoids.
+        onColdStartTap: (message) => ref.read(pendingColdStartNotificationProvider.notifier).state = message,
+      );
       // "Whenever Firebase gives the app a new token" (notification_contract.md)
       // — only re-register while someone is actually signed in; a token
       // refresh with nobody logged in has nothing to register it against.
@@ -82,17 +106,10 @@ class _HumsafarAppState extends ConsumerState<HumsafarApp> {
   void _handleNotificationTap(RemoteMessage message) {
     final context = rootNavigatorKey.currentContext;
     if (context == null) return;
-    // Task 4.7 — incoming_call needs more than a route string (see
-    // push_service.dart's incomingCallPushData doc comment), so it's
-    // checked first, ahead of the generic route-string mapper below.
-    final callData = incomingCallPushData(message.data);
-    if (callData != null) {
-      GoRouter.of(context).push('/calls/incoming', extra: callData);
-      return;
-    }
-    final route = routeForNotificationType(message.data['type'] as String?);
-    if (route == null) return;
-    GoRouter.of(context).push(route);
+    // Bug fix (F-24): the actual routing decision now lives in one shared
+    // place (push_service.dart's navigateForNotificationTap) instead of
+    // being duplicated here and in splash_screen.dart's cold-start replay.
+    navigateForNotificationTap(context, message);
   }
 
   @override
