@@ -10,6 +10,7 @@ import '../../../core/files/file_picker_source.dart';
 import '../../../core/formatting/format_helpers.dart';
 import '../../../core/network/api_exception.dart';
 import '../../../core/network/providers.dart';
+import '../../../core/platform/secure_screen.dart';
 import '../../../core/theme/humsafar_colors.dart';
 import '../../../shared/widgets/accessibility_toggle_button.dart';
 import '../../../shared/widgets/language_switch_button.dart';
@@ -38,7 +39,11 @@ class AddRecordScreen extends ConsumerStatefulWidget {
   ConsumerState<AddRecordScreen> createState() => _AddRecordScreenState();
 }
 
-class _AddRecordScreenState extends ConsumerState<AddRecordScreen> {
+// Bug fix (SEC-15, Sarim's 22 Nov security review): see
+// secure_screen.dart's own doc comment — this screen uploads a new
+// medical record (PHI), so screenshots/screen recording are blocked for
+// as long as it's on screen.
+class _AddRecordScreenState extends ConsumerState<AddRecordScreen> with SecureScreenMixin<AddRecordScreen> {
   late final TextEditingController _titleController;
   late final TextEditingController _notesController;
   String _category = 'prescription';

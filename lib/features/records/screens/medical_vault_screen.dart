@@ -10,6 +10,7 @@ import '../../../core/files/file_providers.dart';
 import '../../../core/formatting/format_helpers.dart';
 import '../../../core/network/api_exception.dart';
 import '../../../core/network/providers.dart';
+import '../../../core/platform/secure_screen.dart';
 import '../../../shared/widgets/accessibility_toggle_button.dart';
 import '../../../shared/widgets/export_scope_sheet.dart';
 import '../../../shared/widgets/language_switch_button.dart';
@@ -74,7 +75,11 @@ class MedicalVaultScreen extends ConsumerStatefulWidget {
   ConsumerState<MedicalVaultScreen> createState() => _MedicalVaultScreenState();
 }
 
-class _MedicalVaultScreenState extends ConsumerState<MedicalVaultScreen> {
+// Bug fix (SEC-15, Sarim's 22 Nov security review): see
+// secure_screen.dart's own doc comment — this screen shows real PHI
+// (prescriptions, lab reports, x-rays), so screenshots/screen recording
+// are blocked for as long as it's on screen.
+class _MedicalVaultScreenState extends ConsumerState<MedicalVaultScreen> with SecureScreenMixin<MedicalVaultScreen> {
   static const _pageSize = 30;
 
   List<Map<String, dynamic>> _records = [];

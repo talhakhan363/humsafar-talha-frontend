@@ -6,6 +6,7 @@ import 'package:uuid/uuid.dart';
 
 import '../../../core/network/api_exception.dart';
 import '../../../core/network/providers.dart';
+import '../../../core/platform/secure_screen.dart';
 import '../../../core/theme/humsafar_colors.dart';
 import '../../../shared/widgets/accessibility_toggle_button.dart';
 import '../../../shared/widgets/language_switch_button.dart';
@@ -30,7 +31,11 @@ class AddVitalReadingScreen extends ConsumerStatefulWidget {
   ConsumerState<AddVitalReadingScreen> createState() => _AddVitalReadingScreenState();
 }
 
-class _AddVitalReadingScreenState extends ConsumerState<AddVitalReadingScreen> {
+// Bug fix (SEC-15, Sarim's 22 Nov security review): see
+// secure_screen.dart's own doc comment — this screen captures a new
+// vitals reading (PHI), so screenshots/screen recording are blocked for
+// as long as it's on screen.
+class _AddVitalReadingScreenState extends ConsumerState<AddVitalReadingScreen> with SecureScreenMixin<AddVitalReadingScreen> {
   String _metric = 'blood_pressure';
   final _systolicController = TextEditingController();
   final _diastolicController = TextEditingController();

@@ -6,6 +6,7 @@ import '../../../core/files/file_providers.dart';
 import '../../../core/network/api_config.dart';
 import '../../../core/network/api_exception.dart';
 import '../../../core/network/providers.dart';
+import '../../../core/platform/secure_screen.dart';
 import '../../../core/theme/humsafar_colors.dart';
 import '../../../shared/widgets/accessibility_toggle_button.dart';
 import '../../../shared/widgets/language_switch_button.dart';
@@ -28,7 +29,13 @@ class DoctorLinksScreen extends ConsumerStatefulWidget {
   ConsumerState<DoctorLinksScreen> createState() => _DoctorLinksScreenState();
 }
 
-class _DoctorLinksScreenState extends ConsumerState<DoctorLinksScreen> {
+// Bug fix (SEC-15, Sarim's 22 Nov security review): see
+// secure_screen.dart's own doc comment — this screen shows/creates doctor
+// share links tied to the vault (PHI-adjacent), so screenshots/screen
+// recording are blocked for as long as it's on screen (covers the
+// inline create-link form below too, since that's the same window, not a
+// separate pushed route).
+class _DoctorLinksScreenState extends ConsumerState<DoctorLinksScreen> with SecureScreenMixin<DoctorLinksScreen> {
   List<Map<String, dynamic>> _links = [];
   bool _isLoading = true;
   String? _loadError;

@@ -4,6 +4,7 @@ import 'package:humsafar_frontend/l10n/app_localizations.dart';
 
 import '../../../core/network/api_exception.dart';
 import '../../../core/network/providers.dart';
+import '../../../core/platform/secure_screen.dart';
 import '../../../core/theme/humsafar_colors.dart';
 import '../../../shared/widgets/accessibility_toggle_button.dart';
 import '../../../shared/widgets/language_switch_button.dart';
@@ -29,7 +30,11 @@ class RecordAccessScreen extends ConsumerStatefulWidget {
   ConsumerState<RecordAccessScreen> createState() => _RecordAccessScreenState();
 }
 
-class _RecordAccessScreenState extends ConsumerState<RecordAccessScreen> {
+// Bug fix (SEC-15, Sarim's 22 Nov security review): see
+// secure_screen.dart's own doc comment — this screen controls which
+// Secondaries can see which record categories (PHI-adjacent), so
+// screenshots/screen recording are blocked for as long as it's on screen.
+class _RecordAccessScreenState extends ConsumerState<RecordAccessScreen> with SecureScreenMixin<RecordAccessScreen> {
   List<Map<String, dynamic>> _secondaries = [];
   bool _isLoading = true;
   String? _loadError;

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/auth/app_user.dart';
@@ -18,7 +19,7 @@ import '../../core/theme/humsafar_colors.dart';
 /// 2.5 Step D wires this to an actual "are we already logged in" check.
 ///
 /// If no refresh token is stored, we skip the network entirely and go
-/// straight to /role-select - no point calling the backend for a brand
+/// straight to /welcome - no point calling the backend for a brand
 /// new install. If one IS stored, GET /auth/me is the check: the shared
 /// ApiClient already refreshes-and-retries transparently on an expired
 /// access token (Step A), so this one call covers both "access token
@@ -26,7 +27,16 @@ import '../../core/theme/humsafar_colors.dart';
 ///
 /// Any failure from that call - no valid session left, refresh token also
 /// expired/invalid - means "not logged in": tokens are cleared and we go
-/// to /role-select, same as a first run, rather than retry forever.
+/// to /welcome, same as a first run, rather than retry forever.
+///
+/// Bug fix (UI-01/F-07, Sarim's 22 Nov design-vs-app report): this used to
+/// send a signed-out user to /role-select, a dev-only screen (see
+/// role_select_screen.dart's own "TEMPORARY, DEV-ONLY" comment) with no
+/// splash, logo or Welcome branding at all. /welcome is the real,
+/// designed screen (mockup 01) a real user should land on; /role-select
+/// still exists and still works, just isn't reachable from here anymore
+/// — it's a quick manual way to jump straight into Guardian/Dependent
+/// mode for testing, reached by typing the route directly.
 ///
 /// Task 3.14 (2026-10-21): a restored session also (re-)registers this
 /// device's push token (`registerPushToken`, best-effort) — covers the
@@ -96,7 +106,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
       // KYC — see pending_dependent_registration_provider.dart's doc
       // comment. A Dependent never gets tokens until kyc-verify succeeds,
       // so this is exactly the branch where an unfinished KYC
-      // registration would otherwise strand someone at /role-select with
+      // registration would otherwise strand someone at /welcome with
       // no way back in.
       final pending = await ref.read(pendingDependentRegistrationStorageProvider).read();
       if (!mounted) return;
@@ -105,7 +115,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
         context.go('/kyc/dependent');
         return;
       }
-      context.go('/role-select');
+      context.go('/welcome');
       return;
     }
 
@@ -141,7 +151,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
     } on ApiException {
       await tokenStorage.clear();
       if (!mounted) return;
-      context.go('/role-select');
+      context.go('/welcome');
     }
   }
 
@@ -184,11 +194,26 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
   /// every other phone. Using proportional `Spacer` weights instead keeps
   /// the same relative layout (symbol upper-middle, wordmark just below
   /// it, loader well below that) across screen sizes, but the exact
-  /// spacing has NOT been checked side-by-side against the real Figma
-  /// frame ("Splash → Launch" prototype) — do that before treating this
-  /// as pixel-accurate.
+  /// *vertical* spacing has NOT been checked side-by-side against the real
+  /// Figma frame ("Splash → Launch" prototype) — do that before treating
+  /// this as pixel-accurate.
+  ///
+  /// Bug fix (UI-14, Sarim's report on debug-apk-1.9.2): the symbol showed
+  /// small and top-left and the loader bottom-left, instead of centred.
+  /// Root cause confirmed by reading this method, not guessed — `Column`'s
+  /// default `crossAxisAlignment.center` only centres children WITHIN the
+  /// Column's own width, and a bare `Column` (no `width`/stretch applied
+  /// by a parent) sizes itself to its widest child rather than filling the
+  /// screen; with nothing to fill or centre that narrower box itself
+  /// within the Scaffold, it — and every child inside it — sat flush
+  /// against the left edge. Wrapping it in a `SizedBox(width:
+  /// double.infinity)` gives the Column the full screen width to centre
+  /// its children within, which is the only change this fix makes; the
+  /// vertical Spacer proportions below are unchanged.
   Widget _buildBody() {
-    return Column(
+    return SizedBox(
+      width: double.infinity,
+      child: Column(
       children: [
         const Spacer(flex: 3),
         AnimatedContainer(
@@ -196,8 +221,13 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
           curve: Curves.easeInOut,
           width: _symbolSize,
           height: _symbolSize,
+          // Brand v2.0 (Sarim's 22 Nov handoff, assets/brand/README.md):
+          // "Splash and launch (00/00b): icon splash/
+          // Humsafar_Splash_Icon_v2.0_1152.png" — 00b reuses the exact
+          // same file as the native 00 splash (not a separate "symbol"
+          // asset) so the handoff is pixel-identical, not just similar.
           child: Image.asset(
-            'assets/brand/logo/symbol/Humsafar_Symbol_v1.0_white-amber_1024.png',
+            'assets/brand/splash/Humsafar_Splash_Icon_v2.0_1152.png',
             fit: BoxFit.contain,
           ),
         ),
@@ -207,12 +237,14 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
           curve: Curves.easeInOut,
           opacity: _showWordmark ? 1 : 0,
           // Spec: "wordmark ... visible part 230 px wide" — `width: 230`
-          // on Image itself (not a wrapping SizedBox) is what makes it
-          // auto-compute height preserving the source PNG's real aspect
-          // ratio (1024x512, 2:1) instead of needing both dimensions
-          // spelled out.
-          child: const Image(
-            image: AssetImage('assets/brand/logo/wordmark/Humsafar_Wordmark_v1.0_white_1024.png'),
+          // on the SvgPicture itself (not a wrapping SizedBox) auto-
+          // computes height preserving the source's real aspect ratio.
+          // Brand v2.0: the wordmark now ships as an SVG, not a PNG
+          // (assets/brand/README.md), spec names this exact file:
+          // "Humsafar_Wordmark_v2.0_white.svg ... visible part 230 px
+          // wide".
+          child: SvgPicture.asset(
+            'assets/brand/logo/exports/wordmark/Humsafar_Wordmark_v2.0_white.svg',
             width: 230,
           ),
         ),
@@ -233,6 +265,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
         ),
         const Spacer(flex: 2),
       ],
+      ),
     );
   }
 }

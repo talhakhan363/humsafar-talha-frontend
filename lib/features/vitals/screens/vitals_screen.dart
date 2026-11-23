@@ -6,6 +6,7 @@ import 'package:humsafar_frontend/l10n/app_localizations.dart';
 import '../../../core/formatting/format_helpers.dart';
 import '../../../core/network/api_exception.dart';
 import '../../../core/network/providers.dart';
+import '../../../core/platform/secure_screen.dart';
 import '../../../core/scheduling/schedule_helpers.dart';
 import '../../../core/theme/humsafar_colors.dart';
 import '../../../shared/widgets/accessibility_toggle_button.dart';
@@ -107,7 +108,11 @@ class VitalsScreen extends ConsumerStatefulWidget {
   ConsumerState<VitalsScreen> createState() => _VitalsScreenState();
 }
 
-class _VitalsScreenState extends ConsumerState<VitalsScreen> {
+// Bug fix (SEC-15, Sarim's 22 Nov security review): see
+// secure_screen.dart's own doc comment — this screen shows real vitals
+// history (PHI), so screenshots/screen recording are blocked for as long
+// as it's on screen.
+class _VitalsScreenState extends ConsumerState<VitalsScreen> with SecureScreenMixin<VitalsScreen> {
   Map<String, dynamic>? _latest;
   List<Map<String, dynamic>> _history = [];
   String? _metricFilter;

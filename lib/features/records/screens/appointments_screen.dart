@@ -5,6 +5,7 @@ import 'package:humsafar_frontend/l10n/app_localizations.dart';
 import '../../../core/formatting/format_helpers.dart';
 import '../../../core/network/api_exception.dart';
 import '../../../core/network/providers.dart';
+import '../../../core/platform/secure_screen.dart';
 import '../../../core/theme/humsafar_colors.dart';
 import '../../../shared/widgets/accessibility_toggle_button.dart';
 import '../../../shared/widgets/language_switch_button.dart';
@@ -24,7 +25,12 @@ class AppointmentsScreen extends ConsumerStatefulWidget {
   ConsumerState<AppointmentsScreen> createState() => _AppointmentsScreenState();
 }
 
-class _AppointmentsScreenState extends ConsumerState<AppointmentsScreen> {
+// Bug fix (SEC-15, Sarim's 22 Nov security review): see
+// secure_screen.dart's own doc comment — this screen shows appointment
+// records (PHI), so screenshots/screen recording are blocked for as long
+// as it's on screen (covers the inline add/edit form below too, since
+// that's the same window, not a separate pushed route).
+class _AppointmentsScreenState extends ConsumerState<AppointmentsScreen> with SecureScreenMixin<AppointmentsScreen> {
   List<Map<String, dynamic>> _appointments = [];
   bool _showUpcoming = true;
   bool _isLoading = true;
