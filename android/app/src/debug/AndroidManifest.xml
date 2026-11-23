@@ -1,4 +1,5 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
     <!-- The INTERNET permission is required for development. Specifically,
          the Flutter tool needs it to communicate with the running application
          to allow setting breakpoints, to provide hot reload, etc.
@@ -10,6 +11,16 @@
          comment). This debug-only override puts it back to `true` just for
          `flutter run`/debug APKs, so testing against a teammate's local LAN
          http:// backend (no https on a dev machine) keeps working day to
-         day without weakening any build that could leave the team's hands. -->
-    <application android:usesCleartextTraffic="true" />
+         day without weakening any build that could leave the team's hands.
+
+         Bug fix (2026-11-22, Talha's real debug `flutter build apk` run):
+         a plain attribute conflict like this one isn't resolved silently by
+         Android's manifest merger just because it's in a build-type
+         manifest — it refuses outright unless told explicitly which value
+         wins, hence `tools:replace` below (and the `xmlns:tools` namespace
+         on <manifest> above, required for `tools:` to resolve at all).
+         Confirmed against the real Gradle merger error, not assumed. -->
+    <application
+        android:usesCleartextTraffic="true"
+        tools:replace="android:usesCleartextTraffic" />
 </manifest>

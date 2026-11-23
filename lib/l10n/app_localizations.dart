@@ -140,6 +140,54 @@ abstract class AppLocalizations {
   /// **'Continue as Dependent'**
   String get continueAsDependent;
 
+  /// No description provided for @welcomeScreenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome'**
+  String get welcomeScreenTitle;
+
+  /// No description provided for @welcomeTagline.
+  ///
+  /// In en, this message translates to:
+  /// **'Care for your loved ones, together'**
+  String get welcomeTagline;
+
+  /// No description provided for @welcomeWhoIsUsingPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Who is using this phone?'**
+  String get welcomeWhoIsUsingPrompt;
+
+  /// No description provided for @welcomeGuardianCardTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'I am a Guardian'**
+  String get welcomeGuardianCardTitle;
+
+  /// No description provided for @welcomeGuardianCardSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'I look after someone'**
+  String get welcomeGuardianCardSubtitle;
+
+  /// No description provided for @welcomeDependentCardTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'I am a Dependent'**
+  String get welcomeDependentCardTitle;
+
+  /// No description provided for @welcomeDependentCardSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Someone looks after me'**
+  String get welcomeDependentCardSubtitle;
+
+  /// No description provided for @welcomeAlreadyHaveAccountPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Already have an account?'**
+  String get welcomeAlreadyHaveAccountPrompt;
+
   /// No description provided for @guardianHomePlaceholder.
   ///
   /// In en, this message translates to:

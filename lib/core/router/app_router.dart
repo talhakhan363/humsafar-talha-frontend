@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 
 import '../../features/splash/splash_screen.dart';
 import '../../features/onboarding/screens/role_select_screen.dart';
+import '../../features/onboarding/screens/welcome_screen.dart';
+import '../../providers/app_mode_provider.dart';
 import '../../features/guardian/screens/guardian_home_screen.dart';
 import '../../features/guardian/screens/link_dependent_screen.dart';
 import '../../features/guardian/screens/dependent_detail_screen.dart';
@@ -122,15 +124,31 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         name: 'splash',
         pageBuilder: (context, state) => NoTransitionPage(key: state.pageKey, child: const SplashScreen()),
       ),
+      // Bug fix (Sarim's 22 Nov Welcome-screen handoff, UI-01/F-07): the
+      // dev-only /role-select screen is still registered (kept reachable
+      // for quick manual testing, by typing the route directly) but is
+      // no longer where splash_screen.dart sends a signed-out user —
+      // that's /welcome now.
       GoRoute(
         path: '/role-select',
         name: 'role-select',
         pageBuilder: (context, state) => NoTransitionPage(key: state.pageKey, child: const RoleSelectScreen()),
       ),
       GoRoute(
+        path: '/welcome',
+        name: 'welcome',
+        pageBuilder: (context, state) => NoTransitionPage(key: state.pageKey, child: const WelcomeScreen()),
+      ),
+      GoRoute(
         path: '/register',
         name: 'register',
-        pageBuilder: (context, state) => NoTransitionPage(key: state.pageKey, child: const RegisterScreen()),
+        // welcome_screen.dart pushes here with `extra: AppMode.guardian`
+        // or `AppMode.dependent` so the role toggle on this screen is
+        // already set to whatever card the person tapped; every other
+        // caller (the dev "Preview" link) passes no extra and keeps the
+        // screen's own default.
+        pageBuilder: (context, state) =>
+            NoTransitionPage(key: state.pageKey, child: RegisterScreen(initialRole: state.extra as AppMode?)),
       ),
       GoRoute(
         path: '/login',

@@ -31,6 +31,30 @@ class AppLocalizationsUr extends AppLocalizations {
   String get continueAsDependent => 'بطور ڈیپینڈنٹ جاری رکھیں';
 
   @override
+  String get welcomeScreenTitle => 'خوش آمدید';
+
+  @override
+  String get welcomeTagline => 'اپنوں کا ساتھ، ہر لمحہ';
+
+  @override
+  String get welcomeWhoIsUsingPrompt => 'اس فون کو کون استعمال کر رہا ہے؟';
+
+  @override
+  String get welcomeGuardianCardTitle => 'میں ایک سرپرست ہوں';
+
+  @override
+  String get welcomeGuardianCardSubtitle => 'میں کسی کا خیال رکھتا ہوں';
+
+  @override
+  String get welcomeDependentCardTitle => 'میں ایک زیرِ نگہداشت فرد ہوں';
+
+  @override
+  String get welcomeDependentCardSubtitle => 'کوئی میرا خیال رکھتا ہے';
+
+  @override
+  String get welcomeAlreadyHaveAccountPrompt => 'پہلے سے اکاؤنٹ ہے؟';
+
+  @override
   String get guardianHomePlaceholder =>
       'گارڈین ہوم اسکرین کی جگہ نما۔\nاصل ڈیش بورڈ مواد فیز 2 سے شامل ہوگا۔';
 

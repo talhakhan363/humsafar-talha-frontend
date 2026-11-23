@@ -31,6 +31,30 @@ class AppLocalizationsEn extends AppLocalizations {
   String get continueAsDependent => 'Continue as Dependent';
 
   @override
+  String get welcomeScreenTitle => 'Welcome';
+
+  @override
+  String get welcomeTagline => 'Care for your loved ones, together';
+
+  @override
+  String get welcomeWhoIsUsingPrompt => 'Who is using this phone?';
+
+  @override
+  String get welcomeGuardianCardTitle => 'I am a Guardian';
+
+  @override
+  String get welcomeGuardianCardSubtitle => 'I look after someone';
+
+  @override
+  String get welcomeDependentCardTitle => 'I am a Dependent';
+
+  @override
+  String get welcomeDependentCardSubtitle => 'Someone looks after me';
+
+  @override
+  String get welcomeAlreadyHaveAccountPrompt => 'Already have an account?';
+
+  @override
   String get guardianHomePlaceholder =>
       'Guardian home screen placeholder.\nReal dashboard content lands from Phase 2 onward.';
 

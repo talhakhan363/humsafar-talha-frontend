@@ -58,6 +58,46 @@ dependencies:
   flutter_map: ^7.0.2
   latlong2: ^0.9.1
 
+  # Brand v2.0 (Sarim's 22 Nov handoff, assets/brand/README.md): the
+  # symbol and wordmark now ship as SVG, not PNG, so both the 00b Launch
+  # wordmark and the new Welcome screen's logo need an SVG renderer.
+  #
+  # Bug fix (2026-11-22, Talha's real `flutter pub get` run): pinned
+  # ^2.3.0 at first, but flutter_svg >=2.2.4 needs Dart SDK >=3.9.0, while
+  # Talha's installed Dart SDK is 3.8.1 — an unresolvable version clash,
+  # same "declared constraint doesn't line up with what's actually
+  # installed" shape as the flutter_native_splash/meta clash earlier in
+  # this file. Downgraded to 2.2.3 per pub's own suggested fix in the
+  # error output; confirmed against a real `flutter pub get`, not guessed.
+  flutter_svg: ^2.2.3
+
+  # Task 1.12/PR #106 (Sarim's 8 Nov spec, docs/design/1.12_identity_access/
+  # README.md's "Splash and launch" section) — generates the native Android
+  # splash screen (00 Splash) from the `flutter_native_splash:` config
+  # near the bottom of this file. Run `dart run flutter_native_splash:create`
+  # after `flutter pub get` to actually generate the native resources —
+  # that config block alone does nothing until that command runs.
+  #
+  # Bug fix (2026-11-22, `flutter analyze`): moved here from
+  # dev_dependencies — main.dart and splash_screen.dart both import this
+  # package's own `FlutterNativeSplash.preserve()`/`.remove()` API at
+  # runtime (the native-splash-handoff fix), and the analyzer's
+  # `depend_on_referenced_packages` lint correctly flagged that as
+  # mismatched: a dev_dependency builds fine for this app's own local
+  # build either way (this is the root app, not a published package
+  # other projects consume), but importing its code into real app files
+  # while declaring it dev-only is misleading, not just a lint nitpick.
+  #
+  # Bug fix (2026-11-09, Talha's real `flutter pub get` run): pinned
+  # ^2.4.8 at first (then-latest per pub.dev), but 2.4.8 depends on
+  # `meta ^1.18.0` while `flutter_test` (from the Flutter SDK itself)
+  # pins `meta` to exactly 1.16.0 — an unresolvable version clash, same
+  # "declared constraint doesn't line up with what's actually in the SDK"
+  # shape as the fl_chart/vector_math override elsewhere in this file.
+  # Downgraded to 2.4.7 per pub's own suggested fix in the error output;
+  # confirmed against a real `flutter pub get`, not guessed.
+  flutter_native_splash: ^2.4.7
+
   # Task 2.7 — background location service. geolocator handles permission
   # requests + reading GPS fixes; battery_plus reads the battery level the
   # location_contract.md POST body optionally carries (feeds Task 2.3's
@@ -236,21 +276,6 @@ dev_dependencies:
   # discipline as every other pin in this file.
   flutter_launcher_icons: ^0.14.4
 
-  # Task 1.12/PR #106 (Sarim's 8 Nov spec, docs/design/1.12_identity_access/
-  # README.md's "Splash and launch" section) — generates the native Android
-  # splash screen (00 Splash) from the `flutter_native_splash:` config
-  # below. Same "dev-only, can't affect the runtime dependency graph"
-  # reasoning as flutter_launcher_icons just above.
-  #
-  # Bug fix (2026-11-09, Talha's real `flutter pub get` run): pinned
-  # ^2.4.8 at first (then-latest per pub.dev), but 2.4.8 depends on
-  # `meta ^1.18.0` while `flutter_test` (from the Flutter SDK itself)
-  # pins `meta` to exactly 1.16.0 — an unresolvable version clash, same
-  # "declared constraint doesn't line up with what's actually in the SDK"
-  # shape as the fl_chart/vector_math override elsewhere in this file.
-  # Downgraded to 2.4.7 per pub's own suggested fix in the error output;
-  # confirmed against a real `flutter pub get`, not guessed.
-  flutter_native_splash: ^2.4.7
 
 # Task 7.3 fix #2 (2026-10-22) — see fl_chart's comment above. Forces the
 # `vector_math` version flutter_test otherwise pins at `2.1.4` up to
@@ -292,13 +317,21 @@ dependency_overrides:
 # written the same run — so F-08 was already done; this is just
 # preventing the next run from throwing on a platform this app doesn't
 # have.
+# Brand v2.0 (Sarim's 22 Nov handoff, assets/brand/README.md): file names
+# only change, same sizes/settings as v1 — see that README's own "For
+# Talha" section for the exact snippet this was copied from.
+# `adaptive_icon_background` is now the plain teal colour string per
+# Sarim's sample config, not a separate background PNG like v1 used (the
+# v2.0 background PNG still exists in assets/brand/ if that ever needs to
+# change back, but the colour string is simpler and is what the README
+# itself shows).
 flutter_launcher_icons:
   android: true
   ios: false
-  image_path: "assets/brand/app-icon/Humsafar_AppIcon_v1.0_full_1024.png"
+  image_path: "assets/brand/app-icon/Humsafar_AppIcon_v2.0_full_1024.png"
   min_sdk_android: 21
-  adaptive_icon_background: "assets/brand/app-icon/Humsafar_AppIcon_v1.0_background_1024.png"
-  adaptive_icon_foreground: "assets/brand/app-icon/Humsafar_AppIcon_v1.0_foreground_1024.png"
+  adaptive_icon_background: "#0E7490"
+  adaptive_icon_foreground: "assets/brand/app-icon/Humsafar_AppIcon_v2.0_foreground_1024.png"
 
 # Task 1.12/PR #106 (Sarim's 8 Nov spec) — 00 Splash: the Android system
 # splash screen, shown by the OS itself before the Flutter engine has even
@@ -311,12 +344,14 @@ flutter_launcher_icons:
 # flutter_native_splash:create` after `flutter pub get` to actually
 # generate the native resources — this config block alone does nothing
 # until that command runs.
+# Brand v2.0 (Sarim's 22 Nov handoff): same icon file Welcome/Launch now
+# use for a seamless 00 -> 00b handoff, just the v2.0 file name.
 flutter_native_splash:
   color: "#0E7490"
-  image: assets/brand/splash/Humsafar_Splash_Icon_v0.1_1152.png
+  image: assets/brand/splash/Humsafar_Splash_Icon_v2.0_1152.png
   android_12:
     color: "#0E7490"
-    image: assets/brand/splash/Humsafar_Splash_Icon_v0.1_1152.png
+    image: assets/brand/splash/Humsafar_Splash_Icon_v2.0_1152.png
 
 flutter:
   uses-material-design: true
@@ -335,11 +370,15 @@ flutter:
   # path in flutter_native_splash's config, not through this list (that
   # tool reads the file straight off disk at generation time), but it
   # still needs to be a real asset Flutter packages, hence listed here
-  # too. The symbol/wordmark PNGs are the 00b Launch screen's own assets
-  # (splash_screen.dart) — see that file's doc comment for exactly how
-  # they're used.
+  # too — 00b Launch (splash_screen.dart) also loads this same PNG at
+  # runtime for its own symbol, so it has to be declared regardless.
+  #
+  # Brand v2.0 (Sarim's 22 Nov handoff): symbol/wordmark are now SVGs
+  # under assets/brand/logo/exports/ (not assets/brand/logo/<name>/ like
+  # the old v1 PNGs) — used by 00b Launch's wordmark (splash_screen.dart)
+  # and the new Welcome screen (welcome_screen.dart).
   assets:
     - assets/sounds/alarm.wav
-    - assets/brand/splash/Humsafar_Splash_Icon_v0.1_1152.png
-    - assets/brand/logo/symbol/Humsafar_Symbol_v1.0_white-amber_1024.png
-    - assets/brand/logo/wordmark/Humsafar_Wordmark_v1.0_white_1024.png
+    - assets/brand/splash/Humsafar_Splash_Icon_v2.0_1152.png
+    - assets/brand/logo/exports/symbol/Humsafar_Symbol_v2.0_white-amber.svg
+    - assets/brand/logo/exports/wordmark/Humsafar_Wordmark_v2.0_white.svg

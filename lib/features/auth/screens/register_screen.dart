@@ -19,7 +19,17 @@ import '../../../shared/widgets/language_switch_button.dart';
 /// the role to Guardian, since a Dependent can't be invited this way (the
 /// backend itself rejects that combination with 422).
 class RegisterScreen extends ConsumerStatefulWidget {
-  const RegisterScreen({super.key});
+  // Bug fix (Sarim's 22 Nov Welcome-screen handoff): the new Welcome
+  // screen (01, welcome_screen.dart) asks "Who is using this phone?"
+  // before Create account ever appears, so the role toggle below
+  // shouldn't make the person choose twice. Optional and defaults to
+  // null (falls back to the segmented control's own existing
+  // AppMode.guardian default below) so every other caller of this screen
+  // — the dev "Preview" link on role_select_screen.dart in particular —
+  // keeps behaving exactly as before.
+  const RegisterScreen({super.key, this.initialRole});
+
+  final AppMode? initialRole;
 
   @override
   ConsumerState<RegisterScreen> createState() => _RegisterScreenState();
@@ -35,7 +45,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
   final _inviteTokenController = TextEditingController();
-  AppMode _selectedRole = AppMode.guardian;
+  late AppMode _selectedRole = widget.initialRole ?? AppMode.guardian;
   bool _isSubmitting = false;
 
   bool get _hasInvite => _inviteTokenController.text.trim().isNotEmpty;
@@ -145,12 +155,12 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
 
   // Bug fix (2026-10-30, user-reported): same back-button fix as
   // login_screen.dart — see that screen's doc comment for the full
-  // explanation.
+  // explanation, including the 22 Nov /welcome update.
   void _onBack(BuildContext context) {
     if (context.canPop()) {
       context.pop();
     } else {
-      context.go('/role-select');
+      context.go('/welcome');
     }
   }
 

@@ -87,17 +87,23 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   }
 
   // Bug fix (2026-10-30, user-reported): back from this screen used to
-  // exit the app directly instead of returning to the dev role switcher.
-  // Reached via a push (role_select_screen.dart's "Preview" link),
+  // exit the app directly instead of returning to where it was reached
+  // from. Reached via a push (originally role_select_screen.dart's
+  // "Preview" link, now welcome_screen.dart's "Log in" link),
   // `context.pop()` already does the right thing on its own — this only
   // kicks in on the other path here, straight after logout
   // (`context.go('/login')`), which resets the whole stack and leaves
   // nothing to pop back to.
+  //
+  // Bug fix (Sarim's 22 Nov Welcome-screen handoff): falls back to
+  // /welcome now, not /role-select — see splash_screen.dart's doc
+  // comment on why /role-select is no longer where a signed-out user
+  // should land.
   void _onBack(BuildContext context) {
     if (context.canPop()) {
       context.pop();
     } else {
-      context.go('/role-select');
+      context.go('/welcome');
     }
   }
 
