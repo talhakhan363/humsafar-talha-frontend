@@ -2105,4 +2105,147 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get cancelCallTooltip => 'Cancel call';
+
+  @override
+  String get alertsOpenTabLabelNoCount => 'Open';
+
+  @override
+  String get alertsNoticesTabLabelNoCount => 'Notices';
+
+  @override
+  String get createAccountConsentText =>
+      'By creating an account you agree to the Privacy Policy and Terms.';
+
+  @override
+  String get createAccountPrivacyLinkLabel => 'Privacy Policy';
+
+  @override
+  String get createAccountTermsLinkLabel => 'Terms';
+
+  @override
+  String get legalPrivacyTitle => 'Privacy Policy';
+
+  @override
+  String get legalTermsTitle => 'Terms';
+
+  @override
+  String get legalDraftVersionLabel => 'v0.2 (draft) · 23 Nov 2026';
+
+  @override
+  String get privacyWhatThisIsTitle => 'What this is';
+
+  @override
+  String get privacyWhatThisIsBody =>
+      'Humsafar helps a family look after someone they love. It is a final-year university project, so this is a prototype. Please read this page before you register.';
+
+  @override
+  String get privacyWhatWeCollectTitle => 'What we collect';
+
+  @override
+  String get privacyWhatWeCollectBody =>
+      '• Your name, email address, phone number and password. The password is stored scrambled, never as plain text.\n• For a Dependent: a CNIC number and a live photo to check who they are. [To confirm with Abdullah: the photo is checked, then deleted.]\n• The location of the Dependent\'s phone.\n• Health information that the Dependent or a Guardian enters: medicines, readings (blood pressure, sugar, SpO2, temperature), records, appointments and wellness check answers.\n• Messages and voice messages.\n• Camera video while a Guardian is watching, and short clips after a Panic or alarm.\n• A notification code for your phone, and a log of who did what (the audit log).';
+
+  @override
+  String get privacyWhyWeCollectTitle => 'Why we collect it';
+
+  @override
+  String get privacyWhyWeCollectBody =>
+      'To keep the Dependent safe: to alert Guardians in an emergency, to send medicine and wellness reminders, to show where the Dependent is, and to keep their records in one place. We do not sell your data and we do not show ads.';
+
+  @override
+  String get privacyWhoCanSeeTitle => 'Who can see it';
+
+  @override
+  String get privacyWhoCanSeeBody =>
+      '• The Primary Guardian can see everything about their Dependent.\n• A Secondary Guardian sees only what the Primary Guardian allows.\n• The Dependent sees their own information, and can see who is watching the camera.\n• An emergency contact gets a text message only when an emergency alert reaches them.\n• A doctor link opens only the records the Guardian chose, for a limited time.';
+
+  @override
+  String get privacyServicesWeUseTitle => 'Services we use';
+
+  @override
+  String get privacyServicesWeUseBody =>
+      'Hosting (Render), notifications (Firebase), and calls and live video (ZegoCloud). Text messages (SMS) are simulated in this prototype.';
+
+  @override
+  String get privacyHowWeProtectTitle => 'How we protect it';
+
+  @override
+  String get privacyHowWeProtectBody =>
+      'Data travels over HTTPS. Record files, video clips and reports are stored encrypted. Too many wrong passwords or codes are blocked for a while. Live video is protected on its way through the video provider, but it is not end-to-end encrypted.';
+
+  @override
+  String get privacyHowLongWeKeepTitle => 'How long we keep it';
+
+  @override
+  String get privacyHowLongWeKeepBody =>
+      'While your account is open. After an account is closed, it can be reopened for 60 days. After that the data is deleted, or the identity is removed. The activity log is kept one year longer.';
+
+  @override
+  String get privacyYourChoicesTitle => 'Your choices';
+
+  @override
+  String get privacyYourChoicesBody =>
+      'You can close your account in Settings. The Primary Guardian can hide record categories from a Secondary Guardian, and can change what each Secondary may do.';
+
+  @override
+  String get privacyNotMedicalAdviceTitle => 'Not medical advice';
+
+  @override
+  String get privacyNotMedicalAdviceBody =>
+      'Humsafar shows numbers and reminders. It does not diagnose or say whether a reading is good or bad. Ask a doctor what a reading means.';
+
+  @override
+  String get privacyContactTitle => 'Contact';
+
+  @override
+  String get privacyContactBody => 'Humsafar project team: [email to add].';
+
+  @override
+  String get termsAPrototypeTitle => 'A prototype';
+
+  @override
+  String get termsAPrototypeBody =>
+      'Humsafar is a student project. It can change, stop working or lose test data. It is provided as it is, with no promise that it will always work.';
+
+  @override
+  String get termsWhoCanUseTitle => 'Who can use it';
+
+  @override
+  String get termsWhoCanUseBody =>
+      'Guardians must be adults (18 or older). A Guardian may link a Dependent only with that person\'s knowledge and agreement.';
+
+  @override
+  String get termsYourResponsibilitiesTitle => 'Your responsibilities';
+
+  @override
+  String get termsYourResponsibilitiesBody =>
+      'Give correct information. Keep your password private. Do not use Humsafar to track or watch someone who does not know. Do not use it for anything illegal.';
+
+  @override
+  String get termsNotEmergencyServiceTitle => 'It is not an emergency service';
+
+  @override
+  String get termsNotEmergencyServiceBody =>
+      'The Panic button and alerts can be delayed by the internet, the phone or its battery. In a real emergency, also call the emergency numbers (Edhi 115, Rescue 1122, Police 15).';
+
+  @override
+  String get termsHealthInformationTitle => 'Health information';
+
+  @override
+  String get termsHealthInformationBody =>
+      'What you enter is for your own records. It is not medical advice.';
+
+  @override
+  String get termsAccountsTitle => 'Accounts';
+
+  @override
+  String get termsAccountsBody =>
+      'You can close your account at any time. We may close an account that is misused.';
+
+  @override
+  String get termsChangesTitle => 'Changes';
+
+  @override
+  String get termsChangesBody =>
+      'We may update this page. The version is shown at the top.';
 }

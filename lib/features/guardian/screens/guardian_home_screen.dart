@@ -8,9 +8,12 @@ import '../../../core/guardian/dependent_summary.dart';
 import '../../../core/network/api_exception.dart';
 import '../../../core/network/providers.dart';
 import '../../../core/scheduling/schedule_helpers.dart';
+import '../../../core/theme/accessibility_mode.dart';
+import '../../../core/theme/accessibility_mode_provider.dart';
 import '../../../core/theme/humsafar_colors.dart';
 import '../../../shared/widgets/accessibility_toggle_button.dart';
 import '../../../shared/widgets/language_switch_button.dart';
+import '../../../shared/widgets/skeleton_loader.dart';
 import '../notification_display.dart';
 
 /// Task 1.8/1.11 built this as a static placeholder. Task 2.5 Step E wires
@@ -66,7 +69,7 @@ class GuardianHomeScreen extends ConsumerStatefulWidget {
   ConsumerState<GuardianHomeScreen> createState() => _GuardianHomeScreenState();
 }
 
-class _GuardianHomeScreenState extends ConsumerState<GuardianHomeScreen> {
+class _GuardianHomeScreenState extends ConsumerState<GuardianHomeScreen> with SkeletonTimeoutMixin<GuardianHomeScreen> {
   List<DependentSummary>? _dependents;
   String? _loadError;
   bool _isLoading = true;
@@ -86,6 +89,16 @@ class _GuardianHomeScreenState extends ConsumerState<GuardianHomeScreen> {
       _isLoading = true;
       _loadError = null;
     });
+    // Handoff README, "Loading states": a skeleton never loops forever —
+    // after ~10s it becomes the same "Can't reach the server" message a
+    // real failure would show (F-21). See skeleton_loader.dart's
+    // SkeletonTimeoutMixin doc comment.
+    startSkeletonTimeout(() {
+      setState(() {
+        _isLoading = false;
+        _loadError = AppLocalizations.of(context)!.cantReachServerError;
+      });
+    });
     try {
       final response = await ref.read(apiClientProvider).get<List<dynamic>>('/guardians/me/dependents');
       final list =
@@ -96,6 +109,7 @@ class _GuardianHomeScreenState extends ConsumerState<GuardianHomeScreen> {
       if (!mounted) return;
       setState(() => _loadError = e.message);
     } finally {
+      cancelSkeletonTimeout();
       if (mounted) setState(() => _isLoading = false);
     }
   }
@@ -264,8 +278,26 @@ class _GuardianHomeScreenState extends ConsumerState<GuardianHomeScreen> {
 
   Widget _buildBody() {
     final l10n = AppLocalizations.of(context)!;
+    // Bug fix (Sarim's 22 Nov loading-states spec): grey skeleton rows
+    // instead of a spinner while the dependent list loads (mockups
+    // 07s/08s — not fetched into this pass, built from the handoff
+    // README's own written rules; see skeleton_loader.dart). Three rows
+    // is a simplification (this screen doesn't know ahead of time
+    // whether it'll end up showing 1 or 5 real dependent cards), not a
+    // pixel match to the unseen mockup's exact row count.
     if (_isLoading) {
-      return const Center(child: CircularProgressIndicator());
+      final highContrast = ref.watch(accessibilityModeProvider) == AccessibilityMode.highContrast;
+      return SkeletonShimmer(
+        highContrast: highContrast,
+        child: ListView(
+          padding: const EdgeInsets.fromLTRB(16, 16, 16, 120),
+          children: const [
+            SkeletonListCard(),
+            SkeletonListCard(),
+            SkeletonListCard(),
+          ],
+        ),
+      );
     }
     if (_loadError != null) {
       return Center(

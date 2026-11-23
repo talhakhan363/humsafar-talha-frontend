@@ -13,9 +13,12 @@ import '../../../core/auth/current_user_provider.dart';
 import '../../../core/network/api_exception.dart';
 import '../../../core/network/providers.dart';
 import '../../../core/scheduling/schedule_helpers.dart';
+import '../../../core/theme/accessibility_mode.dart';
+import '../../../core/theme/accessibility_mode_provider.dart';
 import '../../../core/theme/humsafar_colors.dart';
 import '../../../shared/widgets/accessibility_toggle_button.dart';
 import '../../../shared/widgets/language_switch_button.dart';
+import '../../../shared/widgets/skeleton_loader.dart';
 import '../../calls/widgets/call_type_picker.dart';
 import '../models/chat_message.dart';
 import '../widgets/voice_recorder_sheet.dart';
@@ -81,7 +84,7 @@ class _Draft {
   _DraftStatus status;
 }
 
-class _ChatScreenState extends ConsumerState<ChatScreen> {
+class _ChatScreenState extends ConsumerState<ChatScreen> with SkeletonTimeoutMixin<ChatScreen> {
   final List<ChatMessage> _messages = [];
   final List<_Draft> _drafts = [];
   String? _nextBefore;
@@ -109,6 +112,16 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
       _isLoading = true;
       _loadError = null;
     });
+    // Handoff README, "Loading states": a skeleton never loops forever —
+    // after ~10s it becomes the same "Can't reach the server" message a
+    // real failure would show (F-21). See skeleton_loader.dart's
+    // SkeletonTimeoutMixin doc comment.
+    startSkeletonTimeout(() {
+      setState(() {
+        _isLoading = false;
+        _loadError = AppLocalizations.of(context)!.cantReachServerError;
+      });
+    });
     try {
       final response = await ref.read(apiClientProvider).get<Map<String, dynamic>>(
             '/messages',
@@ -128,6 +141,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
       if (!mounted) return;
       setState(() => _loadError = e.message);
     } finally {
+      cancelSkeletonTimeout();
       if (mounted) setState(() => _isLoading = false);
     }
   }
@@ -285,7 +299,29 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   }
 
   Widget _buildMessageList(AppLocalizations l10n) {
-    if (_isLoading) return const Center(child: CircularProgressIndicator());
+    // Bug fix (Sarim's 22 Nov loading-states spec): skeleton chat bubbles
+    // instead of a spinner while the thread loads (mockups 17s/17bs — not
+    // fetched into this pass, built from the handoff README's own
+    // written rules; see skeleton_loader.dart). The composer below this
+    // list already stays real regardless of `_isLoading` (see build()) —
+    // nothing extra needed for that half of "stay real".
+    if (_isLoading) {
+      final highContrast = ref.watch(accessibilityModeProvider) == AccessibilityMode.highContrast;
+      return SkeletonShimmer(
+        highContrast: highContrast,
+        child: ListView(
+          reverse: true,
+          padding: const EdgeInsets.all(16),
+          children: const [
+            SkeletonChatBubble(alignEnd: true, width: 140),
+            SkeletonChatBubble(alignEnd: false, width: 200),
+            SkeletonChatBubble(alignEnd: false, width: 160),
+            SkeletonChatBubble(alignEnd: true, width: 220),
+            SkeletonChatBubble(alignEnd: false, width: 130),
+          ],
+        ),
+      );
+    }
     if (_loadError != null) {
       return Center(
         child: Padding(

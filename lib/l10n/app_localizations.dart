@@ -3901,6 +3901,258 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Cancel call'**
   String get cancelCallTooltip;
+
+  /// No description provided for @alertsOpenTabLabelNoCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Open'**
+  String get alertsOpenTabLabelNoCount;
+
+  /// No description provided for @alertsNoticesTabLabelNoCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Notices'**
+  String get alertsNoticesTabLabelNoCount;
+
+  /// No description provided for @createAccountConsentText.
+  ///
+  /// In en, this message translates to:
+  /// **'By creating an account you agree to the Privacy Policy and Terms.'**
+  String get createAccountConsentText;
+
+  /// No description provided for @createAccountPrivacyLinkLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy Policy'**
+  String get createAccountPrivacyLinkLabel;
+
+  /// No description provided for @createAccountTermsLinkLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Terms'**
+  String get createAccountTermsLinkLabel;
+
+  /// No description provided for @legalPrivacyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy Policy'**
+  String get legalPrivacyTitle;
+
+  /// No description provided for @legalTermsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Terms'**
+  String get legalTermsTitle;
+
+  /// No description provided for @legalDraftVersionLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'v0.2 (draft) · 23 Nov 2026'**
+  String get legalDraftVersionLabel;
+
+  /// No description provided for @privacyWhatThisIsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'What this is'**
+  String get privacyWhatThisIsTitle;
+
+  /// No description provided for @privacyWhatThisIsBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Humsafar helps a family look after someone they love. It is a final-year university project, so this is a prototype. Please read this page before you register.'**
+  String get privacyWhatThisIsBody;
+
+  /// No description provided for @privacyWhatWeCollectTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'What we collect'**
+  String get privacyWhatWeCollectTitle;
+
+  /// No description provided for @privacyWhatWeCollectBody.
+  ///
+  /// In en, this message translates to:
+  /// **'• Your name, email address, phone number and password. The password is stored scrambled, never as plain text.\n• For a Dependent: a CNIC number and a live photo to check who they are. [To confirm with Abdullah: the photo is checked, then deleted.]\n• The location of the Dependent\'s phone.\n• Health information that the Dependent or a Guardian enters: medicines, readings (blood pressure, sugar, SpO2, temperature), records, appointments and wellness check answers.\n• Messages and voice messages.\n• Camera video while a Guardian is watching, and short clips after a Panic or alarm.\n• A notification code for your phone, and a log of who did what (the audit log).'**
+  String get privacyWhatWeCollectBody;
+
+  /// No description provided for @privacyWhyWeCollectTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Why we collect it'**
+  String get privacyWhyWeCollectTitle;
+
+  /// No description provided for @privacyWhyWeCollectBody.
+  ///
+  /// In en, this message translates to:
+  /// **'To keep the Dependent safe: to alert Guardians in an emergency, to send medicine and wellness reminders, to show where the Dependent is, and to keep their records in one place. We do not sell your data and we do not show ads.'**
+  String get privacyWhyWeCollectBody;
+
+  /// No description provided for @privacyWhoCanSeeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Who can see it'**
+  String get privacyWhoCanSeeTitle;
+
+  /// No description provided for @privacyWhoCanSeeBody.
+  ///
+  /// In en, this message translates to:
+  /// **'• The Primary Guardian can see everything about their Dependent.\n• A Secondary Guardian sees only what the Primary Guardian allows.\n• The Dependent sees their own information, and can see who is watching the camera.\n• An emergency contact gets a text message only when an emergency alert reaches them.\n• A doctor link opens only the records the Guardian chose, for a limited time.'**
+  String get privacyWhoCanSeeBody;
+
+  /// No description provided for @privacyServicesWeUseTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Services we use'**
+  String get privacyServicesWeUseTitle;
+
+  /// No description provided for @privacyServicesWeUseBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Hosting (Render), notifications (Firebase), and calls and live video (ZegoCloud). Text messages (SMS) are simulated in this prototype.'**
+  String get privacyServicesWeUseBody;
+
+  /// No description provided for @privacyHowWeProtectTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'How we protect it'**
+  String get privacyHowWeProtectTitle;
+
+  /// No description provided for @privacyHowWeProtectBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Data travels over HTTPS. Record files, video clips and reports are stored encrypted. Too many wrong passwords or codes are blocked for a while. Live video is protected on its way through the video provider, but it is not end-to-end encrypted.'**
+  String get privacyHowWeProtectBody;
+
+  /// No description provided for @privacyHowLongWeKeepTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'How long we keep it'**
+  String get privacyHowLongWeKeepTitle;
+
+  /// No description provided for @privacyHowLongWeKeepBody.
+  ///
+  /// In en, this message translates to:
+  /// **'While your account is open. After an account is closed, it can be reopened for 60 days. After that the data is deleted, or the identity is removed. The activity log is kept one year longer.'**
+  String get privacyHowLongWeKeepBody;
+
+  /// No description provided for @privacyYourChoicesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your choices'**
+  String get privacyYourChoicesTitle;
+
+  /// No description provided for @privacyYourChoicesBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You can close your account in Settings. The Primary Guardian can hide record categories from a Secondary Guardian, and can change what each Secondary may do.'**
+  String get privacyYourChoicesBody;
+
+  /// No description provided for @privacyNotMedicalAdviceTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Not medical advice'**
+  String get privacyNotMedicalAdviceTitle;
+
+  /// No description provided for @privacyNotMedicalAdviceBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Humsafar shows numbers and reminders. It does not diagnose or say whether a reading is good or bad. Ask a doctor what a reading means.'**
+  String get privacyNotMedicalAdviceBody;
+
+  /// No description provided for @privacyContactTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact'**
+  String get privacyContactTitle;
+
+  /// No description provided for @privacyContactBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Humsafar project team: [email to add].'**
+  String get privacyContactBody;
+
+  /// No description provided for @termsAPrototypeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'A prototype'**
+  String get termsAPrototypeTitle;
+
+  /// No description provided for @termsAPrototypeBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Humsafar is a student project. It can change, stop working or lose test data. It is provided as it is, with no promise that it will always work.'**
+  String get termsAPrototypeBody;
+
+  /// No description provided for @termsWhoCanUseTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Who can use it'**
+  String get termsWhoCanUseTitle;
+
+  /// No description provided for @termsWhoCanUseBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Guardians must be adults (18 or older). A Guardian may link a Dependent only with that person\'s knowledge and agreement.'**
+  String get termsWhoCanUseBody;
+
+  /// No description provided for @termsYourResponsibilitiesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your responsibilities'**
+  String get termsYourResponsibilitiesTitle;
+
+  /// No description provided for @termsYourResponsibilitiesBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Give correct information. Keep your password private. Do not use Humsafar to track or watch someone who does not know. Do not use it for anything illegal.'**
+  String get termsYourResponsibilitiesBody;
+
+  /// No description provided for @termsNotEmergencyServiceTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'It is not an emergency service'**
+  String get termsNotEmergencyServiceTitle;
+
+  /// No description provided for @termsNotEmergencyServiceBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The Panic button and alerts can be delayed by the internet, the phone or its battery. In a real emergency, also call the emergency numbers (Edhi 115, Rescue 1122, Police 15).'**
+  String get termsNotEmergencyServiceBody;
+
+  /// No description provided for @termsHealthInformationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Health information'**
+  String get termsHealthInformationTitle;
+
+  /// No description provided for @termsHealthInformationBody.
+  ///
+  /// In en, this message translates to:
+  /// **'What you enter is for your own records. It is not medical advice.'**
+  String get termsHealthInformationBody;
+
+  /// No description provided for @termsAccountsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Accounts'**
+  String get termsAccountsTitle;
+
+  /// No description provided for @termsAccountsBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You can close your account at any time. We may close an account that is misused.'**
+  String get termsAccountsBody;
+
+  /// No description provided for @termsChangesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Changes'**
+  String get termsChangesTitle;
+
+  /// No description provided for @termsChangesBody.
+  ///
+  /// In en, this message translates to:
+  /// **'We may update this page. The version is shown at the top.'**
+  String get termsChangesBody;
 }
 
 class _AppLocalizationsDelegate

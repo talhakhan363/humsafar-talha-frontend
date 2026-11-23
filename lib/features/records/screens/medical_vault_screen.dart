@@ -11,9 +11,12 @@ import '../../../core/formatting/format_helpers.dart';
 import '../../../core/network/api_exception.dart';
 import '../../../core/network/providers.dart';
 import '../../../core/platform/secure_screen.dart';
+import '../../../core/theme/accessibility_mode.dart';
+import '../../../core/theme/accessibility_mode_provider.dart';
 import '../../../shared/widgets/accessibility_toggle_button.dart';
 import '../../../shared/widgets/export_scope_sheet.dart';
 import '../../../shared/widgets/language_switch_button.dart';
+import '../../../shared/widgets/skeleton_loader.dart';
 
 const _categories = ['prescription', 'lab_report', 'xray', 'other'];
 
@@ -79,7 +82,8 @@ class MedicalVaultScreen extends ConsumerStatefulWidget {
 // secure_screen.dart's own doc comment — this screen shows real PHI
 // (prescriptions, lab reports, x-rays), so screenshots/screen recording
 // are blocked for as long as it's on screen.
-class _MedicalVaultScreenState extends ConsumerState<MedicalVaultScreen> with SecureScreenMixin<MedicalVaultScreen> {
+class _MedicalVaultScreenState extends ConsumerState<MedicalVaultScreen>
+    with SecureScreenMixin<MedicalVaultScreen>, SkeletonTimeoutMixin<MedicalVaultScreen> {
   static const _pageSize = 30;
 
   List<Map<String, dynamic>> _records = [];
@@ -102,6 +106,16 @@ class _MedicalVaultScreenState extends ConsumerState<MedicalVaultScreen> with Se
       _isLoading = true;
       _loadError = null;
     });
+    // Handoff README, "Loading states": a skeleton never loops forever —
+    // after ~10s it becomes the same "Can't reach the server" message a
+    // real failure would show (F-21). See skeleton_loader.dart's
+    // SkeletonTimeoutMixin doc comment.
+    startSkeletonTimeout(() {
+      setState(() {
+        _isLoading = false;
+        _loadError = AppLocalizations.of(context)!.cantReachServerError;
+      });
+    });
     try {
       final response = await ref.read(apiClientProvider).get<Map<String, dynamic>>(
         '/dependents/${widget.dependentId}/records',
@@ -116,6 +130,7 @@ class _MedicalVaultScreenState extends ConsumerState<MedicalVaultScreen> with Se
       if (!mounted) return;
       setState(() => _loadError = _messageFor(e));
     } finally {
+      cancelSkeletonTimeout();
       if (mounted) setState(() => _isLoading = false);
     }
   }
@@ -287,7 +302,27 @@ class _MedicalVaultScreenState extends ConsumerState<MedicalVaultScreen> with Se
   }
 
   Widget _buildBody(AppLocalizations l10n) {
-    if (_isLoading) return const Center(child: CircularProgressIndicator());
+    // Bug fix (Sarim's 22 Nov loading-states spec): grey skeleton rows
+    // instead of a spinner while records load (mockup 26s — not fetched
+    // into this pass, built from the handoff README's own written rules;
+    // see skeleton_loader.dart). The category filter chips above this
+    // body already render unconditionally (see build()), so they already
+    // "stay real" during loading without any change here.
+    if (_isLoading) {
+      final highContrast = ref.watch(accessibilityModeProvider) == AccessibilityMode.highContrast;
+      return SkeletonShimmer(
+        highContrast: highContrast,
+        child: ListView(
+          padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+          children: const [
+            SkeletonListCard(leadingIsCircle: false),
+            SkeletonListCard(leadingIsCircle: false),
+            SkeletonListCard(leadingIsCircle: false),
+            SkeletonListCard(leadingIsCircle: false),
+          ],
+        ),
+      );
+    }
     if (_loadError != null) {
       return Center(
         child: Padding(

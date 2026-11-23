@@ -7,9 +7,12 @@ import '../../../core/guardian/dependent_summary.dart';
 import '../../../core/network/api_exception.dart';
 import '../../../core/network/providers.dart';
 import '../../../core/scheduling/schedule_helpers.dart';
+import '../../../core/theme/accessibility_mode.dart';
+import '../../../core/theme/accessibility_mode_provider.dart';
 import '../../../core/theme/humsafar_colors.dart';
 import '../../../shared/widgets/accessibility_toggle_button.dart';
 import '../../../shared/widgets/language_switch_button.dart';
+import '../../../shared/widgets/skeleton_loader.dart';
 import '../notification_display.dart';
 
 /// Task 3.14 — the cross-Dependent notification inbox (mockup 08),
@@ -56,7 +59,7 @@ class AlertsScreen extends ConsumerStatefulWidget {
 
 enum _AlertsTab { open, seen, notices }
 
-class _AlertsScreenState extends ConsumerState<AlertsScreen> {
+class _AlertsScreenState extends ConsumerState<AlertsScreen> with SkeletonTimeoutMixin<AlertsScreen> {
   List<Map<String, dynamic>> _open = [];
   List<Map<String, dynamic>> _seen = [];
   List<Map<String, dynamic>> _notices = [];
@@ -79,6 +82,16 @@ class _AlertsScreenState extends ConsumerState<AlertsScreen> {
     setState(() {
       _isLoading = true;
       _loadError = null;
+    });
+    // Handoff README, "Loading states": a skeleton never loops forever —
+    // after ~10s it becomes the same "Can't reach the server" message a
+    // real failure would show (F-21). See skeleton_loader.dart's
+    // SkeletonTimeoutMixin doc comment.
+    startSkeletonTimeout(() {
+      setState(() {
+        _isLoading = false;
+        _loadError = AppLocalizations.of(context)!.cantReachServerError;
+      });
     });
     try {
       final apiClient = ref.read(apiClientProvider);
@@ -113,6 +126,7 @@ class _AlertsScreenState extends ConsumerState<AlertsScreen> {
       if (!mounted) return;
       setState(() => _loadError = e.message);
     } finally {
+      cancelSkeletonTimeout();
       if (mounted) setState(() => _isLoading = false);
     }
   }
@@ -163,7 +177,6 @@ class _AlertsScreenState extends ConsumerState<AlertsScreen> {
   }
 
   Widget _buildBody(AppLocalizations l10n) {
-    if (_isLoading) return const Center(child: CircularProgressIndicator());
     if (_loadError != null) {
       return Center(
         child: Padding(
@@ -189,6 +202,13 @@ class _AlertsScreenState extends ConsumerState<AlertsScreen> {
       _AlertsTab.seen => l10n.alertsEmptySeenMessage,
       _AlertsTab.notices => l10n.alertsEmptyNoticesMessage,
     };
+    // Bug fix (Sarim's 22 Nov loading-states spec): the tabs themselves
+    // "stay real" while the list loads — only their counts are hidden
+    // ("Open", not "Open (3)") until the real numbers are in, per the
+    // handoff README. That means the tab row now has to render during
+    // `_isLoading` too (it used to be hidden behind a full-screen
+    // spinner), which is a deliberate UI change this fix makes, not a
+    // leftover from before it.
     return Column(
       children: [
         Padding(
@@ -198,7 +218,7 @@ class _AlertsScreenState extends ConsumerState<AlertsScreen> {
             runSpacing: 8,
             children: [
               ChoiceChip(
-                label: Text(l10n.alertsOpenTabLabel(_open.length)),
+                label: Text(_isLoading ? l10n.alertsOpenTabLabelNoCount : l10n.alertsOpenTabLabel(_open.length)),
                 selected: _tab == _AlertsTab.open,
                 onSelected: (_) => setState(() => _tab = _AlertsTab.open),
               ),
@@ -210,7 +230,8 @@ class _AlertsScreenState extends ConsumerState<AlertsScreen> {
               // (F-12 fix) third tab: standard notices, see the class
               // doc comment.
               ChoiceChip(
-                label: Text(l10n.alertsNoticesTabLabel(_notices.length)),
+                label:
+                    Text(_isLoading ? l10n.alertsNoticesTabLabelNoCount : l10n.alertsNoticesTabLabel(_notices.length)),
                 selected: _tab == _AlertsTab.notices,
                 onSelected: (_) => setState(() => _tab = _AlertsTab.notices),
               ),
@@ -218,7 +239,20 @@ class _AlertsScreenState extends ConsumerState<AlertsScreen> {
           ),
         ),
         Expanded(
-          child: rows.isEmpty
+          child: _isLoading
+              ? SkeletonShimmer(
+                  highContrast: ref.watch(accessibilityModeProvider) == AccessibilityMode.highContrast,
+                  child: ListView(
+                    padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
+                    children: const [
+                      SkeletonListCard(leadingIsCircle: false),
+                      SkeletonListCard(leadingIsCircle: false),
+                      SkeletonListCard(leadingIsCircle: false),
+                      SkeletonListCard(leadingIsCircle: false),
+                    ],
+                  ),
+                )
+              : rows.isEmpty
               ? Center(child: Text(emptyMessage, textAlign: TextAlign.center))
               : ListView(
                   padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),

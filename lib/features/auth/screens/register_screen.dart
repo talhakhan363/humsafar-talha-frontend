@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -6,6 +7,7 @@ import 'package:humsafar_frontend/l10n/app_localizations.dart';
 import '../../../core/auth/pending_dependent_registration_provider.dart';
 import '../../../core/network/api_exception.dart';
 import '../../../core/network/providers.dart';
+import '../../../core/theme/humsafar_colors.dart';
 import '../../../providers/app_mode_provider.dart';
 import '../../../shared/widgets/accessibility_toggle_button.dart';
 import '../../../shared/widgets/language_switch_button.dart';
@@ -48,6 +50,17 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   late AppMode _selectedRole = widget.initialRole ?? AppMode.guardian;
   bool _isSubmitting = false;
 
+  // Bug fix (Sarim's 23 Nov Privacy/Terms spec): the two tappable words in
+  // the new consent line below the button. Built once and disposed in
+  // [dispose], same reasoning as the TextEditingControllers above —
+  // GestureRecognizers aren't free to leave ungarbage-collected if this
+  // screen gets built many times (e.g. re-opened from the back-button
+  // history), and the project already disposes everything disposable here.
+  late final TapGestureRecognizer _privacyLinkRecognizer = TapGestureRecognizer()
+    ..onTap = () => context.push('/legal/privacy');
+  late final TapGestureRecognizer _termsLinkRecognizer = TapGestureRecognizer()
+    ..onTap = () => context.push('/legal/terms');
+
   bool get _hasInvite => _inviteTokenController.text.trim().isNotEmpty;
 
   @override
@@ -74,6 +87,8 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
     _passwordController.dispose();
     _confirmPasswordController.dispose();
     _inviteTokenController.dispose();
+    _privacyLinkRecognizer.dispose();
+    _termsLinkRecognizer.dispose();
     super.dispose();
   }
 
@@ -178,6 +193,52 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
     );
   }
 
+  /// Finds `createAccountPrivacyLinkLabel`/`createAccountTermsLinkLabel`
+  /// as literal substrings inside `createAccountConsentText` and makes
+  /// just those two words tappable, rather than storing the sentence
+  /// pre-split into prefix/middle/suffix keys. A translator only ever has
+  /// to write one natural sentence per language (the PDF's own Urdu
+  /// already reads naturally this way, words in normal RTL order) instead
+  /// of three fragments that would have to be re-ordered by hand for
+  /// Urdu's different word order.
+  Widget _buildConsentLine(AppLocalizations l10n) {
+    final text = l10n.createAccountConsentText;
+    final privacyLabel = l10n.createAccountPrivacyLinkLabel;
+    final termsLabel = l10n.createAccountTermsLinkLabel;
+    final baseStyle = Theme.of(context).textTheme.bodySmall?.copyWith(color: HumsafarColors.muted) ??
+        const TextStyle(fontSize: 12, color: HumsafarColors.muted);
+    final linkStyle = baseStyle.copyWith(
+      color: HumsafarColors.primaryDark,
+      decoration: TextDecoration.underline,
+      fontWeight: FontWeight.w600,
+    );
+
+    final privacyIndex = text.indexOf(privacyLabel);
+    final termsIndex = text.indexOf(termsLabel, privacyIndex >= 0 ? privacyIndex + privacyLabel.length : 0);
+
+    // Fallback: if a future translation re-words the sentence so it no
+    // longer literally contains both link labels, fall back to plain
+    // text rather than risk a bad substring split — the two screens are
+    // still one tap away from the app bar elsewhere if this ever
+    // triggers; it only costs the inline convenience, not access.
+    if (privacyIndex < 0 || termsIndex < 0) {
+      return Text(text, style: baseStyle);
+    }
+
+    return RichText(
+      text: TextSpan(
+        style: baseStyle,
+        children: [
+          TextSpan(text: text.substring(0, privacyIndex)),
+          TextSpan(text: privacyLabel, style: linkStyle, recognizer: _privacyLinkRecognizer),
+          TextSpan(text: text.substring(privacyIndex + privacyLabel.length, termsIndex)),
+          TextSpan(text: termsLabel, style: linkStyle, recognizer: _termsLinkRecognizer),
+          TextSpan(text: text.substring(termsIndex + termsLabel.length)),
+        ],
+      ),
+    );
+  }
+
   Widget _buildScaffold(BuildContext context, AppLocalizations l10n) {
     return Scaffold(
       appBar: AppBar(
@@ -272,6 +333,13 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                     ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2))
                     : Text(l10n.registerButton),
               ),
+              const SizedBox(height: 12),
+              // Bug fix (Sarim's 23 Nov Privacy/Terms spec, screen 03 v0.3):
+              // one line under the button with "Privacy Policy" and "Terms"
+              // as tappable links, opening the two new plain-text screens.
+              // No consent tick box for the prototype — the spec is
+              // explicit tapping Create account itself counts as agreeing.
+              _buildConsentLine(l10n),
               const SizedBox(height: 12),
               TextButton(
                 onPressed: _isSubmitting ? null : () => context.push('/login'),

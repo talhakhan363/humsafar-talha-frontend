@@ -40,6 +40,8 @@ import '../../features/dependent/screens/alarm_screen.dart';
 import '../../features/auth/screens/register_screen.dart';
 import '../../features/auth/screens/login_screen.dart';
 import '../../features/auth/screens/accept_invite_screen.dart';
+import '../../features/legal/screens/privacy_policy_screen.dart';
+import '../../features/legal/screens/terms_screen.dart';
 import '../../features/kyc/screens/guardian_verification_screen.dart';
 import '../../features/kyc/screens/dependent_kyc_screen.dart';
 import '../../features/dependent/screens/share_id_screen.dart';
@@ -154,6 +156,22 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: '/login',
         name: 'login',
         pageBuilder: (context, state) => NoTransitionPage(key: state.pageKey, child: const LoginScreen()),
+      ),
+      // Sarim's 23 Nov Privacy/Terms spec (docs/design/1.12_identity_access/
+      // README.md's "Consent line, Privacy Policy and Terms" section):
+      // mockups 03b/03c, opened from the new consent line under Create
+      // account's button (register_screen.dart). No `extra`, no auth
+      // required to view — these are plain static text screens, reachable
+      // the same way regardless of sign-in state.
+      GoRoute(
+        path: '/legal/privacy',
+        name: 'legal-privacy',
+        pageBuilder: (context, state) => NoTransitionPage(key: state.pageKey, child: const PrivacyPolicyScreen()),
+      ),
+      GoRoute(
+        path: '/legal/terms',
+        name: 'legal-terms',
+        pageBuilder: (context, state) => NoTransitionPage(key: state.pageKey, child: const TermsScreen()),
       ),
       GoRoute(
         path: '/invitations/accept',

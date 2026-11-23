@@ -2118,4 +2118,147 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get cancelCallTooltip => 'کال منسوخ کریں';
+
+  @override
+  String get alertsOpenTabLabelNoCount => 'کھلے';
+
+  @override
+  String get alertsNoticesTabLabelNoCount => 'اطلاعات';
+
+  @override
+  String get createAccountConsentText =>
+      'اکاؤنٹ بنا کر آپ پرائیویسی پالیسی اور شرائط سے اتفاق کرتے ہیں۔';
+
+  @override
+  String get createAccountPrivacyLinkLabel => 'پرائیویسی پالیسی';
+
+  @override
+  String get createAccountTermsLinkLabel => 'شرائط';
+
+  @override
+  String get legalPrivacyTitle => 'پرائیویسی پالیسی';
+
+  @override
+  String get legalTermsTitle => 'شرائط';
+
+  @override
+  String get legalDraftVersionLabel => 'v0.2 (draft) · 23 Nov 2026';
+
+  @override
+  String get privacyWhatThisIsTitle => 'یہ کیا ہے';
+
+  @override
+  String get privacyWhatThisIsBody =>
+      'ہمسفر خاندان کو اپنے پیاروں کا خیال رکھنے میں مدد دیتا ہے۔ یہ یونیورسٹی کا فائنل ایئر پروجیکٹ ہے، اس لیے یہ ایک تجرباتی ایپ ہے۔ رجسٹر کرنے سے پہلے یہ صفحہ پڑھ لیں۔';
+
+  @override
+  String get privacyWhatWeCollectTitle => 'ہم کیا معلومات لیتے ہیں';
+
+  @override
+  String get privacyWhatWeCollectBody =>
+      '• آپ کا نام، ای میل، فون نمبر اور پاس ورڈ۔ پاس ورڈ سادہ شکل میں نہیں، بدلی ہوئی شکل میں محفوظ ہوتا ہے۔\n• زیرِ نگہداشت فرد کے لیے: شناخت کی جانچ کے لیے شناختی کارڈ نمبر اور لائیو تصویر۔ [عبداللہ سے تصدیق: تصویر جانچ کے بعد مٹا دی جاتی ہے۔]\n• زیرِ نگہداشت فرد کے فون کی لوکیشن۔\n• صحت کی معلومات جو وہ یا کوئی سرپرست درج کرے: دوائیں، ریڈنگز (بلڈ پریشر، شوگر، SpO2، درجہ حرارت)، ریکارڈ، اپائنٹمنٹس اور خیریت کی جانچ کے جوابات۔\n• پیغامات اور آواز کے پیغامات۔\n• جب کوئی سرپرست دیکھ رہا ہو تو کیمرے کی ویڈیو، اور مدد یا الارم کے بعد مختصر کلپس۔\n• آپ کے فون کا نوٹیفیکیشن کوڈ، اور یہ ریکارڈ کہ کس نے کیا کیا (آڈٹ لاگ)۔';
+
+  @override
+  String get privacyWhyWeCollectTitle => 'ہم یہ کیوں لیتے ہیں';
+
+  @override
+  String get privacyWhyWeCollectBody =>
+      'زیرِ نگہداشت فرد کی حفاظت کے لیے: ایمرجنسی میں سرپرستوں کو بتانے، دوا اور خیریت کی یاد دہانی بھیجنے، فرد کی جگہ دکھانے اور ان کے ریکارڈ ایک جگہ رکھنے کے لیے۔ ہم آپ کا ڈیٹا بیچتے نہیں اور اشتہار نہیں دکھاتے۔';
+
+  @override
+  String get privacyWhoCanSeeTitle => 'اسے کون دیکھ سکتا ہے';
+
+  @override
+  String get privacyWhoCanSeeBody =>
+      '• پرائمری سرپرست اپنے زیرِ نگہداشت فرد کی ہر معلومات دیکھ سکتا ہے۔\n• سیکنڈری سرپرست صرف وہی دیکھتا ہے جس کی اجازت پرائمری سرپرست دے۔\n• زیرِ نگہداشت فرد اپنی معلومات دیکھتا ہے، اور یہ بھی کہ کیمرہ کون دیکھ رہا ہے۔\n• ایمرجنسی رابطے کو صرف ایمرجنسی الرٹ پہنچنے پر ٹیکسٹ میسج ملتا ہے۔\n• ڈاکٹر کا لنک صرف وہ ریکارڈ کھولتا ہے جو سرپرست نے چنے ہوں، اور محدود وقت کے لیے۔';
+
+  @override
+  String get privacyServicesWeUseTitle => 'ہم کون سی سروسز استعمال کرتے ہیں';
+
+  @override
+  String get privacyServicesWeUseBody =>
+      'ہوسٹنگ (Render)، نوٹیفیکیشن (Firebase)، اور کالز اور لائیو ویڈیو (ZegoCloud)۔ اس تجرباتی ورژن میں ٹیکسٹ میسج (SMS) اصلی نہیں، نقلی ہیں۔';
+
+  @override
+  String get privacyHowWeProtectTitle => 'ہم اسے کیسے محفوظ رکھتے ہیں';
+
+  @override
+  String get privacyHowWeProtectBody =>
+      'ڈیٹا HTTPS کے ذریعے جاتا ہے۔ ریکارڈ کی فائلیں، ویڈیو کلپس اور رپورٹیں انکرپٹ کر کے رکھی جاتی ہیں۔ غلط پاس ورڈ یا کوڈ بہت بار ڈالنے پر کچھ دیر کے لیے روک دیا جاتا ہے۔ لائیو ویڈیو ویڈیو فراہم کنندہ سے گزرتے وقت محفوظ ہوتی ہے، لیکن اینڈ ٹو اینڈ انکرپٹڈ نہیں ہوتی۔';
+
+  @override
+  String get privacyHowLongWeKeepTitle => 'ہم اسے کتنی دیر رکھتے ہیں';
+
+  @override
+  String get privacyHowLongWeKeepBody =>
+      'جب تک آپ کا اکاؤنٹ کھلا ہے۔ اکاؤنٹ بند ہونے کے بعد 60 دن تک دوبارہ کھولا جا سکتا ہے۔ اس کے بعد ڈیٹا مٹا دیا جاتا ہے یا شناخت ہٹا دی جاتی ہے۔ سرگرمی کا ریکارڈ ایک سال مزید رکھا جاتا ہے۔';
+
+  @override
+  String get privacyYourChoicesTitle => 'آپ کے اختیارات';
+
+  @override
+  String get privacyYourChoicesBody =>
+      'آپ سیٹنگز میں اپنا اکاؤنٹ بند کر سکتے ہیں۔ پرائمری سرپرست ریکارڈ کی اقسام سیکنڈری سرپرست سے چھپا سکتا ہے، اور ہر سیکنڈری کی اجازتیں بدل سکتا ہے۔';
+
+  @override
+  String get privacyNotMedicalAdviceTitle => 'طبی مشورہ نہیں';
+
+  @override
+  String get privacyNotMedicalAdviceBody =>
+      'ہمسفر نمبر اور یاد دہانیاں دکھاتا ہے۔ یہ تشخیص نہیں کرتا اور نہ بتاتا ہے کہ ریڈنگ اچھی ہے یا بری۔ ریڈنگ کا مطلب ڈاکٹر سے پوچھیں۔';
+
+  @override
+  String get privacyContactTitle => 'رابطہ';
+
+  @override
+  String get privacyContactBody => 'ہمسفر پروجیکٹ ٹیم: [ای میل شامل کریں]۔';
+
+  @override
+  String get termsAPrototypeTitle => 'ایک تجرباتی ایپ';
+
+  @override
+  String get termsAPrototypeBody =>
+      'ہمسفر طلبہ کا پروجیکٹ ہے۔ یہ بدل سکتا ہے، کام کرنا بند کر سکتا ہے یا ٹیسٹ ڈیٹا کھو سکتا ہے۔ یہ جیسا ہے ویسا دیا جاتا ہے، اس کے ہمیشہ چلنے کی کوئی ضمانت نہیں۔';
+
+  @override
+  String get termsWhoCanUseTitle => 'کون استعمال کر سکتا ہے';
+
+  @override
+  String get termsWhoCanUseBody =>
+      'سرپرست بالغ (18 سال یا زیادہ) ہونا چاہیے۔ سرپرست کسی زیرِ نگہداشت فرد کو صرف اس کے علم اور رضامندی سے جوڑ سکتا ہے۔';
+
+  @override
+  String get termsYourResponsibilitiesTitle => 'آپ کی ذمہ داریاں';
+
+  @override
+  String get termsYourResponsibilitiesBody =>
+      'درست معلومات دیں۔ اپنا پاس ورڈ خفیہ رکھیں۔ ہمسفر کو کسی ایسے شخص کا پیچھا کرنے یا اسے دیکھنے کے لیے استعمال نہ کریں جسے اس کا علم نہ ہو۔ اسے کسی غیر قانونی کام کے لیے استعمال نہ کریں۔';
+
+  @override
+  String get termsNotEmergencyServiceTitle => 'یہ ایمرجنسی سروس نہیں';
+
+  @override
+  String get termsNotEmergencyServiceBody =>
+      'مدد کے بٹن اور الرٹس میں انٹرنیٹ، فون یا بیٹری کی وجہ سے دیر ہو سکتی ہے۔ حقیقی ایمرجنسی میں ایمرجنسی نمبروں پر بھی کال کریں (ایدھی 115، ریسکیو 1122، پولیس 15)۔';
+
+  @override
+  String get termsHealthInformationTitle => 'صحت کی معلومات';
+
+  @override
+  String get termsHealthInformationBody =>
+      'آپ جو درج کرتے ہیں وہ آپ کے اپنے ریکارڈ کے لیے ہے۔ یہ طبی مشورہ نہیں۔';
+
+  @override
+  String get termsAccountsTitle => 'اکاؤنٹس';
+
+  @override
+  String get termsAccountsBody =>
+      'آپ جب چاہیں اپنا اکاؤنٹ بند کر سکتے ہیں۔ غلط استعمال ہونے والا اکاؤنٹ ہم بند کر سکتے ہیں۔';
+
+  @override
+  String get termsChangesTitle => 'تبدیلیاں';
+
+  @override
+  String get termsChangesBody =>
+      'ہم اس صفحے کو اپ ڈیٹ کر سکتے ہیں۔ ورژن اوپر دکھایا جاتا ہے۔';
 }

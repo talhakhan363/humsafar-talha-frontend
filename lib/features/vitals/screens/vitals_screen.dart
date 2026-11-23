@@ -8,10 +8,13 @@ import '../../../core/network/api_exception.dart';
 import '../../../core/network/providers.dart';
 import '../../../core/platform/secure_screen.dart';
 import '../../../core/scheduling/schedule_helpers.dart';
+import '../../../core/theme/accessibility_mode.dart';
+import '../../../core/theme/accessibility_mode_provider.dart';
 import '../../../core/theme/humsafar_colors.dart';
 import '../../../shared/widgets/accessibility_toggle_button.dart';
 import '../../../shared/widgets/export_scope_sheet.dart';
 import '../../../shared/widgets/language_switch_button.dart';
+import '../../../shared/widgets/skeleton_loader.dart';
 
 const _manualMetrics = ['blood_pressure', 'blood_sugar', 'spo2', 'temperature'];
 const _allMetrics = ['blood_pressure', 'blood_sugar', 'spo2', 'temperature', 'heart_rate'];
@@ -112,7 +115,8 @@ class VitalsScreen extends ConsumerStatefulWidget {
 // secure_screen.dart's own doc comment — this screen shows real vitals
 // history (PHI), so screenshots/screen recording are blocked for as long
 // as it's on screen.
-class _VitalsScreenState extends ConsumerState<VitalsScreen> with SecureScreenMixin<VitalsScreen> {
+class _VitalsScreenState extends ConsumerState<VitalsScreen>
+    with SecureScreenMixin<VitalsScreen>, SkeletonTimeoutMixin<VitalsScreen> {
   Map<String, dynamic>? _latest;
   List<Map<String, dynamic>> _history = [];
   String? _metricFilter;
@@ -131,6 +135,16 @@ class _VitalsScreenState extends ConsumerState<VitalsScreen> with SecureScreenMi
       _isLoading = true;
       _loadError = null;
     });
+    // Handoff README, "Loading states": a skeleton never loops forever —
+    // after ~10s it becomes the same "Can't reach the server" message a
+    // real failure would show (F-21). See skeleton_loader.dart's
+    // SkeletonTimeoutMixin doc comment.
+    startSkeletonTimeout(() {
+      setState(() {
+        _isLoading = false;
+        _loadError = AppLocalizations.of(context)!.cantReachServerError;
+      });
+    });
     try {
       final apiClient = ref.read(apiClientProvider);
       final latestResponse = await apiClient.get<Map<String, dynamic>>('/dependents/${widget.dependentId}/vitals/latest');
@@ -147,6 +161,7 @@ class _VitalsScreenState extends ConsumerState<VitalsScreen> with SecureScreenMi
       if (!mounted) return;
       setState(() => _loadError = _messageFor(e));
     } finally {
+      cancelSkeletonTimeout();
       if (mounted) setState(() => _isLoading = false);
     }
   }
@@ -210,7 +225,6 @@ class _VitalsScreenState extends ConsumerState<VitalsScreen> with SecureScreenMi
   }
 
   Widget _buildBody(AppLocalizations l10n) {
-    if (_isLoading) return const Center(child: CircularProgressIndicator());
     if (_loadError != null) {
       return Center(
         child: Padding(
@@ -227,34 +241,53 @@ class _VitalsScreenState extends ConsumerState<VitalsScreen> with SecureScreenMi
       );
     }
     final languageCode = Localizations.localeOf(context).languageCode;
+    // Bug fix (Sarim's 22 Nov loading-states spec): the "Vitals history"
+    // heading and the metric filter chips below "stay real" while the
+    // tiles/history load — only the data regions (the tiles grid, the
+    // history rows) become skeletons (mockups 26s/15s — not fetched into
+    // this pass, built from the handoff README's own written rules; see
+    // skeleton_loader.dart). That means this body is no longer a single
+    // early-return on `_isLoading` like before this fix — each data
+    // region below checks it on its own instead.
+    final highContrast = ref.watch(accessibilityModeProvider) == AccessibilityMode.highContrast;
     return ListView(
       padding: const EdgeInsets.all(16),
       children: [
-        Wrap(
-          spacing: 8,
-          runSpacing: 8,
-          children: _allMetrics.map((metric) {
-            final reading = _latest?[metric] as Map<String, dynamic>?;
-            return SizedBox(
-              width: 150,
-              child: Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(12),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(metricLabel(l10n, metric), style: Theme.of(context).textTheme.bodySmall),
-                      const SizedBox(height: 4),
-                      Text(_valueLine(l10n, reading), style: Theme.of(context).textTheme.titleMedium),
-                      if (metric == 'heart_rate')
-                        Text(l10n.fromBandNote, style: Theme.of(context).textTheme.bodySmall?.copyWith(color: HumsafarColors.muted)),
-                    ],
-                  ),
+        _isLoading
+            ? SkeletonShimmer(
+                highContrast: highContrast,
+                child: Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: List.generate(_allMetrics.length, (_) => const SkeletonMetricTile()),
                 ),
+              )
+            : Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: _allMetrics.map((metric) {
+                  final reading = _latest?[metric] as Map<String, dynamic>?;
+                  return SizedBox(
+                    width: 150,
+                    child: Card(
+                      child: Padding(
+                        padding: const EdgeInsets.all(12),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(metricLabel(l10n, metric), style: Theme.of(context).textTheme.bodySmall),
+                            const SizedBox(height: 4),
+                            Text(_valueLine(l10n, reading), style: Theme.of(context).textTheme.titleMedium),
+                            if (metric == 'heart_rate')
+                              Text(l10n.fromBandNote,
+                                  style: Theme.of(context).textTheme.bodySmall?.copyWith(color: HumsafarColors.muted)),
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
+                }).toList(),
               ),
-            );
-          }).toList(),
-        ),
         const SizedBox(height: 20),
         Text(l10n.vitalsHistoryHeader, style: Theme.of(context).textTheme.titleMedium),
         const SizedBox(height: 8),
@@ -268,7 +301,19 @@ class _VitalsScreenState extends ConsumerState<VitalsScreen> with SecureScreenMi
           ),
         ),
         const SizedBox(height: 8),
-        if (_history.isEmpty)
+        if (_isLoading)
+          SkeletonShimmer(
+            highContrast: highContrast,
+            child: const Column(
+              children: [
+                SkeletonListCard(leadingIsCircle: false),
+                SkeletonListCard(leadingIsCircle: false),
+                SkeletonListCard(leadingIsCircle: false),
+                SkeletonListCard(leadingIsCircle: false),
+              ],
+            ),
+          )
+        else if (_history.isEmpty)
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 24),
             child: Text(l10n.noVitalsReadingsMessage, textAlign: TextAlign.center),

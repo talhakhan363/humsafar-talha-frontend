@@ -5,9 +5,12 @@ import 'package:humsafar_frontend/l10n/app_localizations.dart';
 
 import '../../../core/network/api_exception.dart';
 import '../../../core/network/providers.dart';
+import '../../../core/theme/accessibility_mode.dart';
+import '../../../core/theme/accessibility_mode_provider.dart';
 import '../../../core/theme/humsafar_colors.dart';
 import '../../../shared/widgets/accessibility_toggle_button.dart';
 import '../../../shared/widgets/language_switch_button.dart';
+import '../../../shared/widgets/skeleton_loader.dart';
 import '../models/conversation_summary.dart';
 
 /// Task 4.6 — mockups 17 (Guardian: one row per Dependent) and 25
@@ -36,7 +39,7 @@ class MessagesScreen extends ConsumerStatefulWidget {
   ConsumerState<MessagesScreen> createState() => _MessagesScreenState();
 }
 
-class _MessagesScreenState extends ConsumerState<MessagesScreen> {
+class _MessagesScreenState extends ConsumerState<MessagesScreen> with SkeletonTimeoutMixin<MessagesScreen> {
   List<ConversationSummary>? _conversations;
   String? _loadError;
   bool _isLoading = true;
@@ -52,6 +55,16 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
       _isLoading = true;
       _loadError = null;
     });
+    // Handoff README, "Loading states": a skeleton never loops forever —
+    // after ~10s it becomes the same "Can't reach the server" message a
+    // real failure would show (F-21). See skeleton_loader.dart's
+    // SkeletonTimeoutMixin doc comment.
+    startSkeletonTimeout(() {
+      setState(() {
+        _isLoading = false;
+        _loadError = AppLocalizations.of(context)!.cantReachServerError;
+      });
+    });
     try {
       final response = await ref.read(apiClientProvider).get<Map<String, dynamic>>('/messages/conversations');
       if (!mounted) return;
@@ -64,6 +77,7 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
       if (!mounted) return;
       setState(() => _loadError = e.message);
     } finally {
+      cancelSkeletonTimeout();
       if (mounted) setState(() => _isLoading = false);
     }
   }
@@ -100,8 +114,24 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
   }
 
   Widget _buildBody(AppLocalizations l10n) {
+    // Bug fix (Sarim's 22 Nov loading-states spec): grey skeleton rows
+    // instead of a spinner while conversations load (mockups 17s/17bs —
+    // not fetched into this pass, built from the handoff README's own
+    // written rules; see skeleton_loader.dart).
     if (_isLoading) {
-      return const Center(child: CircularProgressIndicator());
+      final highContrast = ref.watch(accessibilityModeProvider) == AccessibilityMode.highContrast;
+      return SkeletonShimmer(
+        highContrast: highContrast,
+        child: ListView(
+          padding: const EdgeInsets.all(16),
+          children: const [
+            SkeletonListCard(),
+            SkeletonListCard(),
+            SkeletonListCard(),
+            SkeletonListCard(),
+          ],
+        ),
+      );
     }
     if (_loadError != null) {
       return Center(
