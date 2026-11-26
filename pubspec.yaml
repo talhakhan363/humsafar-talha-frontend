@@ -254,6 +254,45 @@ dependencies:
   # (Task 4.4b). The ZegoCloud Server Secret never ships in this app.
   zego_uikit_prebuilt_call: 4.24.5
 
+  # Task 5.5 — real wearable band integration (Abdullah's 25 Nov BLE
+  # spec: scan for "Humsafar Band", connect, read its custom
+  # characteristic). flutter_blue_plus is the only BLE package in this
+  # file so far — this app's second native-SDK dependency after
+  # zego_uikit_prebuilt_call above.
+  #
+  # Version floor risk (2026-11-26, could not be confirmed without a real
+  # `flutter pub get` on Talha's machine — same category of risk flagged
+  # on fl_chart/zego_uikit_prebuilt_call above, named here up front
+  # instead of guessed silently): flutter_blue_plus's published floor has
+  # historically been low (`sdk: '>=3.0.0 <4.0.0'`, no high
+  # Flutter-version bump the way flutter_svg/flutter_native_splash hit
+  # elsewhere in this file), so it's expected to resolve cleanly against
+  # this project's `>=3.3.0 <4.0.0` environment and Flutter 3.32.1 — but
+  # that's inferred from the package's past release pattern, not verified
+  # against this exact pinned version. If `flutter pub get` fails on
+  # this line, send the real error; an adjusted pin is a quick follow-up,
+  # same as every other native-plugin round in this file.
+  flutter_blue_plus: ^1.35.3
+
+  # Needed by ble_band_service.dart to request BLUETOOTH_SCAN/
+  # BLUETOOTH_CONNECT (Android 12+) before a scan starts. Already a
+  # transitive dependency (via zego_uikit_prebuilt_call, see its comment
+  # above) — naming it directly here is the honest version, same
+  # reasoning as shared_preferences' N-02 fix elsewhere in this file.
+  #
+  # Bug fix (2026-11-26, Talha's real `flutter pub get` run): the first
+  # pin here, `^11.3.1`, failed to resolve — zego_uikit_prebuilt_call
+  # 4.24.5 itself declares `permission_handler: ^12.0.1`, which `^11.3.1`
+  # can't satisfy (confirmed exactly the risk flagged above, not guessed).
+  # Bumped to `^12.0.3` per pub's own suggested fix in the error output.
+  # permission_handler's common API (Permission.bluetoothScan/
+  # bluetoothConnect/locationWhenInUse, `.request()`,
+  # PermissionStatus.isGranted/isLimited — everything ble_band_service.dart
+  # calls) has stayed stable across its 10.x-12.x majors, so no Dart-level
+  # change is expected here beyond the pubspec line itself; if
+  # `flutter analyze` disagrees, send the real error.
+  permission_handler: ^12.0.3
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

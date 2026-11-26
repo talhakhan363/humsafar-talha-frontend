@@ -210,6 +210,16 @@ class _MyBandScreenState extends ConsumerState<MyBandScreen> {
           ),
         ),
         const SizedBox(height: 16),
+        // Task 5.5 (Abdullah's 25 Nov spec) — opens the real BLE session
+        // with the physical band (live_band_screen.dart), separate from
+        // this screen's own status/unpair actions, which only ever talk
+        // to the server.
+        ElevatedButton.icon(
+          onPressed: () => context.push('/wearable/live', extra: widget.dependentId).then((_) => _load()),
+          icon: const Icon(Icons.bluetooth_connected),
+          label: Text(l10n.liveReadingsButtonLabel),
+        ),
+        const SizedBox(height: 12),
         ElevatedButton.icon(
           onPressed: _isActing ? null : _generateDemoData,
           icon: const Icon(Icons.auto_awesome),

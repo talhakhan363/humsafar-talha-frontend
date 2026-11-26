@@ -3971,7 +3971,7 @@ abstract class AppLocalizations {
   /// No description provided for @privacyWhatWeCollectBody.
   ///
   /// In en, this message translates to:
-  /// **'• Your name, email address, phone number and password. The password is stored scrambled, never as plain text.\n• For a Dependent: a CNIC number and a live photo to check who they are. [To confirm with Abdullah: the photo is checked, then deleted.]\n• The location of the Dependent\'s phone.\n• Health information that the Dependent or a Guardian enters: medicines, readings (blood pressure, sugar, SpO2, temperature), records, appointments and wellness check answers.\n• Messages and voice messages.\n• Camera video while a Guardian is watching, and short clips after a Panic or alarm.\n• A notification code for your phone, and a log of who did what (the audit log).'**
+  /// **'• Your name, email address, phone number and password. The password is stored scrambled, never as plain text.\n• For a Dependent: a CNIC number and a live photo to check who they are. Your photo is used only to check that you are a real person. Humsafar does not store it.\n• The location of the Dependent\'s phone.\n• Health information that the Dependent or a Guardian enters: medicines, readings (blood pressure, sugar, SpO2, temperature), records, appointments and wellness check answers.\n• Messages and voice messages.\n• Camera video while a Guardian is watching, and short clips after a Panic or alarm.\n• A notification code for your phone, and a log of who did what (the audit log).'**
   String get privacyWhatWeCollectBody;
 
   /// No description provided for @privacyWhyWeCollectTitle.
@@ -4153,6 +4153,132 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'We may update this page. The version is shown at the top.'**
   String get termsChangesBody;
+
+  /// No description provided for @bandBluetoothPermissionDeniedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Bluetooth and location permissions are needed to scan for your band. Please allow them in your phone\'s Settings.'**
+  String get bandBluetoothPermissionDeniedMessage;
+
+  /// No description provided for @bandScanButtonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan for Band'**
+  String get bandScanButtonLabel;
+
+  /// No description provided for @bandScanningMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Scanning for your Humsafar Band…'**
+  String get bandScanningMessage;
+
+  /// No description provided for @bandScanTimeoutMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t find a nearby Humsafar Band. Make sure it\'s turned on and close to your phone, or enter its address below.'**
+  String get bandScanTimeoutMessage;
+
+  /// No description provided for @liveReadingsButtonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Live Readings'**
+  String get liveReadingsButtonLabel;
+
+  /// No description provided for @liveBandScreenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Live Band Readings'**
+  String get liveBandScreenTitle;
+
+  /// No description provided for @liveBandRequestingPermissionsMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Asking for Bluetooth permission…'**
+  String get liveBandRequestingPermissionsMessage;
+
+  /// No description provided for @liveBandScanningMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Looking for your Humsafar Band…'**
+  String get liveBandScanningMessage;
+
+  /// No description provided for @liveBandConnectingMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Connecting to your band…'**
+  String get liveBandConnectingMessage;
+
+  /// No description provided for @liveBandConnectedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Connected'**
+  String get liveBandConnectedMessage;
+
+  /// No description provided for @liveBandDisconnectedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Disconnected'**
+  String get liveBandDisconnectedMessage;
+
+  /// No description provided for @liveBandConnectFailedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t connect to the band. Make sure it\'s turned on and nearby, then try again.'**
+  String get liveBandConnectFailedMessage;
+
+  /// No description provided for @liveBandNotFoundMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t find a nearby Humsafar Band. Make sure it\'s turned on and close to your phone.'**
+  String get liveBandNotFoundMessage;
+
+  /// No description provided for @liveBandPermissionDeniedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Bluetooth and location permissions are needed to connect to your band. Please allow them in your phone\'s Settings.'**
+  String get liveBandPermissionDeniedMessage;
+
+  /// No description provided for @liveHeartRateLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Heart Rate'**
+  String get liveHeartRateLabel;
+
+  /// No description provided for @liveSpo2Label.
+  ///
+  /// In en, this message translates to:
+  /// **'Oxygen (SpO2)'**
+  String get liveSpo2Label;
+
+  /// No description provided for @liveTemperatureLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Temperature'**
+  String get liveTemperatureLabel;
+
+  /// No description provided for @liveStepsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Steps'**
+  String get liveStepsLabel;
+
+  /// No description provided for @liveNoReadingYetLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for a reading…'**
+  String get liveNoReadingYetLabel;
+
+  /// No description provided for @liveBandSyncingMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Sending readings to your Guardian…'**
+  String get liveBandSyncingMessage;
+
+  /// No description provided for @liveBandLastSyncedLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Last sent'**
+  String get liveBandLastSyncedLabel;
 }
 
 class _AppLocalizationsDelegate

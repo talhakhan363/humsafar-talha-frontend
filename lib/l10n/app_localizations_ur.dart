@@ -2156,7 +2156,7 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get privacyWhatWeCollectBody =>
-      '• آپ کا نام، ای میل، فون نمبر اور پاس ورڈ۔ پاس ورڈ سادہ شکل میں نہیں، بدلی ہوئی شکل میں محفوظ ہوتا ہے۔\n• زیرِ نگہداشت فرد کے لیے: شناخت کی جانچ کے لیے شناختی کارڈ نمبر اور لائیو تصویر۔ [عبداللہ سے تصدیق: تصویر جانچ کے بعد مٹا دی جاتی ہے۔]\n• زیرِ نگہداشت فرد کے فون کی لوکیشن۔\n• صحت کی معلومات جو وہ یا کوئی سرپرست درج کرے: دوائیں، ریڈنگز (بلڈ پریشر، شوگر، SpO2، درجہ حرارت)، ریکارڈ، اپائنٹمنٹس اور خیریت کی جانچ کے جوابات۔\n• پیغامات اور آواز کے پیغامات۔\n• جب کوئی سرپرست دیکھ رہا ہو تو کیمرے کی ویڈیو، اور مدد یا الارم کے بعد مختصر کلپس۔\n• آپ کے فون کا نوٹیفیکیشن کوڈ، اور یہ ریکارڈ کہ کس نے کیا کیا (آڈٹ لاگ)۔';
+      '• آپ کا نام، ای میل، فون نمبر اور پاس ورڈ۔ پاس ورڈ سادہ شکل میں نہیں، بدلی ہوئی شکل میں محفوظ ہوتا ہے۔\n• زیرِ نگہداشت فرد کے لیے: شناخت کی جانچ کے لیے شناختی کارڈ نمبر اور لائیو تصویر۔ آپ کی تصویر صرف یہ تصدیق کرنے کے لیے استعمال ہوتی ہے کہ آپ ایک حقیقی شخص ہیں۔ ہمسفر اسے محفوظ نہیں کرتا۔\n• زیرِ نگہداشت فرد کے فون کی لوکیشن۔\n• صحت کی معلومات جو وہ یا کوئی سرپرست درج کرے: دوائیں، ریڈنگز (بلڈ پریشر، شوگر، SpO2، درجہ حرارت)، ریکارڈ، اپائنٹمنٹس اور خیریت کی جانچ کے جوابات۔\n• پیغامات اور آواز کے پیغامات۔\n• جب کوئی سرپرست دیکھ رہا ہو تو کیمرے کی ویڈیو، اور مدد یا الارم کے بعد مختصر کلپس۔\n• آپ کے فون کا نوٹیفیکیشن کوڈ، اور یہ ریکارڈ کہ کس نے کیا کیا (آڈٹ لاگ)۔';
 
   @override
   String get privacyWhyWeCollectTitle => 'ہم یہ کیوں لیتے ہیں';
@@ -2261,4 +2261,74 @@ class AppLocalizationsUr extends AppLocalizations {
   @override
   String get termsChangesBody =>
       'ہم اس صفحے کو اپ ڈیٹ کر سکتے ہیں۔ ورژن اوپر دکھایا جاتا ہے۔';
+
+  @override
+  String get bandBluetoothPermissionDeniedMessage =>
+      'آپ کے بینڈ کو تلاش کرنے کے لیے بلوٹوتھ اور لوکیشن کی اجازت درکار ہے۔ براہ کرم اپنے فون کی ترتیبات میں اجازت دیں۔';
+
+  @override
+  String get bandScanButtonLabel => 'بینڈ تلاش کریں';
+
+  @override
+  String get bandScanningMessage => 'آپ کا ہمسفر بینڈ تلاش کیا جا رہا ہے…';
+
+  @override
+  String get bandScanTimeoutMessage =>
+      'قریب میں ہمسفر بینڈ نہیں ملا۔ یقینی بنائیں کہ یہ آن ہے اور آپ کے فون کے قریب ہے، یا نیچے اس کا ایڈریس خود درج کریں۔';
+
+  @override
+  String get liveReadingsButtonLabel => 'لائیو ریڈنگز';
+
+  @override
+  String get liveBandScreenTitle => 'لائیو بینڈ ریڈنگز';
+
+  @override
+  String get liveBandRequestingPermissionsMessage =>
+      'بلوٹوتھ کی اجازت مانگی جا رہی ہے…';
+
+  @override
+  String get liveBandScanningMessage => 'آپ کا ہمسفر بینڈ تلاش کیا جا رہا ہے…';
+
+  @override
+  String get liveBandConnectingMessage => 'آپ کے بینڈ سے رابطہ کیا جا رہا ہے…';
+
+  @override
+  String get liveBandConnectedMessage => 'رابطہ قائم ہے';
+
+  @override
+  String get liveBandDisconnectedMessage => 'رابطہ منقطع';
+
+  @override
+  String get liveBandConnectFailedMessage =>
+      'بینڈ سے رابطہ نہیں ہو سکا۔ یقینی بنائیں کہ یہ آن ہے اور قریب ہے، پھر دوبارہ کوشش کریں۔';
+
+  @override
+  String get liveBandNotFoundMessage =>
+      'قریب میں ہمسفر بینڈ نہیں ملا۔ یقینی بنائیں کہ یہ آن ہے اور آپ کے فون کے قریب ہے۔';
+
+  @override
+  String get liveBandPermissionDeniedMessage =>
+      'آپ کے بینڈ سے رابطے کے لیے بلوٹوتھ اور لوکیشن کی اجازت درکار ہے۔ براہ کرم اپنے فون کی ترتیبات میں اجازت دیں۔';
+
+  @override
+  String get liveHeartRateLabel => 'دل کی دھڑکن';
+
+  @override
+  String get liveSpo2Label => 'آکسیجن (SpO2)';
+
+  @override
+  String get liveTemperatureLabel => 'درجہ حرارت';
+
+  @override
+  String get liveStepsLabel => 'قدم';
+
+  @override
+  String get liveNoReadingYetLabel => 'ریڈنگ کا انتظار ہے…';
+
+  @override
+  String get liveBandSyncingMessage =>
+      'ریڈنگز آپ کے سرپرست کو بھیجی جا رہی ہیں…';
+
+  @override
+  String get liveBandLastSyncedLabel => 'آخری بار بھیجا گیا';
 }

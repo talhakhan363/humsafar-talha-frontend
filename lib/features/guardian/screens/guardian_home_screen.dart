@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -239,11 +240,20 @@ class _GuardianHomeScreenState extends ConsumerState<GuardianHomeScreen> with Sk
                 ),
             ],
           ),
-          IconButton(
-            icon: const Icon(Icons.swap_horiz),
-            tooltip: l10n.switchModeTooltip,
-            onPressed: () => context.go('/role-select'),
-          ),
+          // Bug fix (F-32, Sarim's 22 Nov security review): this dev-only
+          // role switcher was still visible on release builds — an app a
+          // real family installs should never show a button that jumps
+          // straight into someone else's account type with no sign-in.
+          // `kDebugMode` is false in every profile/release build
+          // (`flutter build apk --release`), true only under `flutter
+          // run`/debug builds, so this stays available for day-to-day
+          // dev work without shipping to anyone outside the team.
+          if (kDebugMode)
+            IconButton(
+              icon: const Icon(Icons.swap_horiz),
+              tooltip: l10n.switchModeTooltip,
+              onPressed: () => context.go('/role-select'),
+            ),
           IconButton(
             icon: const Icon(Icons.logout),
             tooltip: l10n.logoutButton,

@@ -890,7 +890,7 @@
   "privacyWhatThisIsTitle": "What this is",
   "privacyWhatThisIsBody": "Humsafar helps a family look after someone they love. It is a final-year university project, so this is a prototype. Please read this page before you register.",
   "privacyWhatWeCollectTitle": "What we collect",
-  "privacyWhatWeCollectBody": "• Your name, email address, phone number and password. The password is stored scrambled, never as plain text.\n• For a Dependent: a CNIC number and a live photo to check who they are. [To confirm with Abdullah: the photo is checked, then deleted.]\n• The location of the Dependent's phone.\n• Health information that the Dependent or a Guardian enters: medicines, readings (blood pressure, sugar, SpO2, temperature), records, appointments and wellness check answers.\n• Messages and voice messages.\n• Camera video while a Guardian is watching, and short clips after a Panic or alarm.\n• A notification code for your phone, and a log of who did what (the audit log).",
+  "privacyWhatWeCollectBody": "• Your name, email address, phone number and password. The password is stored scrambled, never as plain text.\n• For a Dependent: a CNIC number and a live photo to check who they are. Your photo is used only to check that you are a real person. Humsafar does not store it.\n• The location of the Dependent's phone.\n• Health information that the Dependent or a Guardian enters: medicines, readings (blood pressure, sugar, SpO2, temperature), records, appointments and wellness check answers.\n• Messages and voice messages.\n• Camera video while a Guardian is watching, and short clips after a Panic or alarm.\n• A notification code for your phone, and a log of who did what (the audit log).",
   "privacyWhyWeCollectTitle": "Why we collect it",
   "privacyWhyWeCollectBody": "To keep the Dependent safe: to alert Guardians in an emergency, to send medicine and wellness reminders, to show where the Dependent is, and to keep their records in one place. We do not sell your data and we do not show ads.",
   "privacyWhoCanSeeTitle": "Who can see it",
@@ -921,5 +921,28 @@
   "termsAccountsTitle": "Accounts",
   "termsAccountsBody": "You can close your account at any time. We may close an account that is misused.",
   "termsChangesTitle": "Changes",
-  "termsChangesBody": "We may update this page. The version is shown at the top."
+  "termsChangesBody": "We may update this page. The version is shown at the top.",
+
+  "bandBluetoothPermissionDeniedMessage": "Bluetooth and location permissions are needed to scan for your band. Please allow them in your phone's Settings.",
+  "bandScanButtonLabel": "Scan for Band",
+  "bandScanningMessage": "Scanning for your Humsafar Band…",
+  "bandScanTimeoutMessage": "Couldn't find a nearby Humsafar Band. Make sure it's turned on and close to your phone, or enter its address below.",
+
+  "liveReadingsButtonLabel": "Live Readings",
+  "liveBandScreenTitle": "Live Band Readings",
+  "liveBandRequestingPermissionsMessage": "Asking for Bluetooth permission…",
+  "liveBandScanningMessage": "Looking for your Humsafar Band…",
+  "liveBandConnectingMessage": "Connecting to your band…",
+  "liveBandConnectedMessage": "Connected",
+  "liveBandDisconnectedMessage": "Disconnected",
+  "liveBandConnectFailedMessage": "Couldn't connect to the band. Make sure it's turned on and nearby, then try again.",
+  "liveBandNotFoundMessage": "Couldn't find a nearby Humsafar Band. Make sure it's turned on and close to your phone.",
+  "liveBandPermissionDeniedMessage": "Bluetooth and location permissions are needed to connect to your band. Please allow them in your phone's Settings.",
+  "liveHeartRateLabel": "Heart Rate",
+  "liveSpo2Label": "Oxygen (SpO2)",
+  "liveTemperatureLabel": "Temperature",
+  "liveStepsLabel": "Steps",
+  "liveNoReadingYetLabel": "Waiting for a reading…",
+  "liveBandSyncingMessage": "Sending readings to your Guardian…",
+  "liveBandLastSyncedLabel": "Last sent"
 }

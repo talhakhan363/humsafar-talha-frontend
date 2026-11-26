@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -309,11 +310,15 @@ class _DependentHomeScreenState extends ConsumerState<DependentHomeScreen> with 
         actions: [
           const LanguageSwitchButton(),
           const AccessibilityToggleButton(),
-          IconButton(
-            icon: const Icon(Icons.swap_horiz),
-            tooltip: l10n.switchModeTooltip,
-            onPressed: () => context.go('/role-select'),
-          ),
+          // Bug fix (F-32, Sarim's 22 Nov security review): see
+          // guardian_home_screen.dart's matching comment — this dev-only
+          // shortcut must not reach a release build.
+          if (kDebugMode)
+            IconButton(
+              icon: const Icon(Icons.swap_horiz),
+              tooltip: l10n.switchModeTooltip,
+              onPressed: () => context.go('/role-select'),
+            ),
         ],
       ),
       body: RefreshIndicator(

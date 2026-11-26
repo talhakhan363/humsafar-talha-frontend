@@ -5,19 +5,21 @@ import 'package:humsafar_frontend/l10n/app_localizations.dart';
 import '../../../core/network/api_exception.dart';
 import '../../../core/network/providers.dart';
 import '../../../core/theme/humsafar_colors.dart';
+import '../../../core/wearable/ble_band_service.dart';
 import '../../../shared/widgets/accessibility_toggle_button.dart';
 import '../../../shared/widgets/language_switch_button.dart';
 
 /// Task 5.8 — mockup 27b "Connect band", grounded in
-/// `wearable_contract.md`. **Named scope decision:** no real BLE scan —
-/// Task 2.4 (the BLE spike) and Task 5.5 (the real band) aren't built,
-/// so this screen offers manual entry of the band's Bluetooth address,
-/// exactly as the contract itself allows ("the phone knows the band's
-/// Bluetooth address from its scan" — the scan is the only part
-/// deferred; typing the address in is a legitimate stand-in the
-/// contract's own body validates and accepts the same way). Matches
-/// the handbook's explicit instruction to build 5.6-5.8 against the
-/// mocked endpoints now rather than waiting on the purchase.
+/// `wearable_contract.md`. **Originally a named scope decision** (no
+/// real BLE scan — manual address entry only, exactly as the contract's
+/// own body allows), now partly closed: Task 5.5 (Abdullah's 25 Nov
+/// spec) adds a real scan via `BleBandService`, so this screen can now
+/// find the real band and fill the address in automatically. Manual
+/// entry stays as the fallback — scanning can fail (permissions
+/// refused, Bluetooth off, band out of range), and the contract itself
+/// still validates/accepts a typed address the same way either path
+/// fills it in. **Not yet tested against a real band** — see
+/// `ble_band_service.dart`'s own doc comment.
 class ConnectBandScreen extends ConsumerStatefulWidget {
   const ConnectBandScreen({super.key, required this.dependentId});
 
@@ -33,11 +35,52 @@ class _ConnectBandScreenState extends ConsumerState<ConnectBandScreen> {
   bool _isSaving = false;
   String? _error;
 
+  final _scanService = BleBandService();
+  bool _isScanning = false;
+
   @override
   void dispose() {
     _addressController.dispose();
     _nameController.dispose();
+    _scanService.dispose();
     super.dispose();
+  }
+
+  /// Short discovery-only scan — connects to nothing, just finds the
+  /// band's platform id (its BLE address on Android) and name, then
+  /// fills both fields so the existing manual-entry `_pair()` flow below
+  /// can run unchanged. Falls back to leaving the fields for manual
+  /// entry on any failure (permission refused, Bluetooth off, band not
+  /// found) rather than blocking the screen.
+  Future<void> _scanForBand() async {
+    final l10n = AppLocalizations.of(context)!;
+    setState(() {
+      _isScanning = true;
+      _error = null;
+    });
+    try {
+      final granted = await _scanService.requestPermissions();
+      if (!granted) {
+        if (!mounted) return;
+        setState(() => _error = l10n.bandBluetoothPermissionDeniedMessage);
+        return;
+      }
+      final device = await _scanService.scanForDevice();
+      if (!mounted) return;
+      if (device == null) {
+        setState(() => _error = l10n.bandScanTimeoutMessage);
+        return;
+      }
+      setState(() {
+        _addressController.text = device.remoteId.str;
+        _nameController.text = BleBandService.deviceName;
+      });
+    } catch (_) {
+      if (!mounted) return;
+      setState(() => _error = l10n.bandScanTimeoutMessage);
+    } finally {
+      if (mounted) setState(() => _isScanning = false);
+    }
   }
 
   Future<void> _pair() async {
@@ -93,6 +136,14 @@ class _ConnectBandScreenState extends ConsumerState<ConnectBandScreen> {
         padding: EdgeInsets.fromLTRB(16, 16, 16, 16 + MediaQuery.of(context).viewPadding.bottom),
         children: [
           Text(l10n.connectBandInstructions),
+          const SizedBox(height: 16),
+          OutlinedButton.icon(
+            onPressed: _isScanning ? null : _scanForBand,
+            icon: _isScanning
+                ? const SizedBox(height: 16, width: 16, child: CircularProgressIndicator(strokeWidth: 2))
+                : const Icon(Icons.bluetooth_searching),
+            label: Text(_isScanning ? l10n.bandScanningMessage : l10n.bandScanButtonLabel),
+          ),
           const SizedBox(height: 16),
           TextField(
             controller: _addressController,

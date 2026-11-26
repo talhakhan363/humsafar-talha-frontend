@@ -2143,7 +2143,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get privacyWhatWeCollectBody =>
-      '• Your name, email address, phone number and password. The password is stored scrambled, never as plain text.\n• For a Dependent: a CNIC number and a live photo to check who they are. [To confirm with Abdullah: the photo is checked, then deleted.]\n• The location of the Dependent\'s phone.\n• Health information that the Dependent or a Guardian enters: medicines, readings (blood pressure, sugar, SpO2, temperature), records, appointments and wellness check answers.\n• Messages and voice messages.\n• Camera video while a Guardian is watching, and short clips after a Panic or alarm.\n• A notification code for your phone, and a log of who did what (the audit log).';
+      '• Your name, email address, phone number and password. The password is stored scrambled, never as plain text.\n• For a Dependent: a CNIC number and a live photo to check who they are. Your photo is used only to check that you are a real person. Humsafar does not store it.\n• The location of the Dependent\'s phone.\n• Health information that the Dependent or a Guardian enters: medicines, readings (blood pressure, sugar, SpO2, temperature), records, appointments and wellness check answers.\n• Messages and voice messages.\n• Camera video while a Guardian is watching, and short clips after a Panic or alarm.\n• A notification code for your phone, and a log of who did what (the audit log).';
 
   @override
   String get privacyWhyWeCollectTitle => 'Why we collect it';
@@ -2248,4 +2248,73 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get termsChangesBody =>
       'We may update this page. The version is shown at the top.';
+
+  @override
+  String get bandBluetoothPermissionDeniedMessage =>
+      'Bluetooth and location permissions are needed to scan for your band. Please allow them in your phone\'s Settings.';
+
+  @override
+  String get bandScanButtonLabel => 'Scan for Band';
+
+  @override
+  String get bandScanningMessage => 'Scanning for your Humsafar Band…';
+
+  @override
+  String get bandScanTimeoutMessage =>
+      'Couldn\'t find a nearby Humsafar Band. Make sure it\'s turned on and close to your phone, or enter its address below.';
+
+  @override
+  String get liveReadingsButtonLabel => 'Live Readings';
+
+  @override
+  String get liveBandScreenTitle => 'Live Band Readings';
+
+  @override
+  String get liveBandRequestingPermissionsMessage =>
+      'Asking for Bluetooth permission…';
+
+  @override
+  String get liveBandScanningMessage => 'Looking for your Humsafar Band…';
+
+  @override
+  String get liveBandConnectingMessage => 'Connecting to your band…';
+
+  @override
+  String get liveBandConnectedMessage => 'Connected';
+
+  @override
+  String get liveBandDisconnectedMessage => 'Disconnected';
+
+  @override
+  String get liveBandConnectFailedMessage =>
+      'Couldn\'t connect to the band. Make sure it\'s turned on and nearby, then try again.';
+
+  @override
+  String get liveBandNotFoundMessage =>
+      'Couldn\'t find a nearby Humsafar Band. Make sure it\'s turned on and close to your phone.';
+
+  @override
+  String get liveBandPermissionDeniedMessage =>
+      'Bluetooth and location permissions are needed to connect to your band. Please allow them in your phone\'s Settings.';
+
+  @override
+  String get liveHeartRateLabel => 'Heart Rate';
+
+  @override
+  String get liveSpo2Label => 'Oxygen (SpO2)';
+
+  @override
+  String get liveTemperatureLabel => 'Temperature';
+
+  @override
+  String get liveStepsLabel => 'Steps';
+
+  @override
+  String get liveNoReadingYetLabel => 'Waiting for a reading…';
+
+  @override
+  String get liveBandSyncingMessage => 'Sending readings to your Guardian…';
+
+  @override
+  String get liveBandLastSyncedLabel => 'Last sent';
 }

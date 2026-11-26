@@ -1,4 +1,5 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
     <!-- Task 4.7 — latent bug caught while adding this task's own
          permissions: INTERNET was declared only in the debug/profile
          manifests (android/app/src/debug and .../profile), which is
@@ -20,7 +21,22 @@
          below are already declared for Tasks 2.5/4.8. -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH" android:maxSdkVersion="30" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" android:maxSdkVersion="30" />
+    <!-- Task 5.5 — real wearable band integration (Abdullah's 25 Nov
+         spec). Android 12+ (API 31+) replaced the legacy BLUETOOTH/
+         BLUETOOTH_ADMIN pair above with these two scoped runtime
+         permissions; both declared with maxSdkVersion="30" above so the
+         OS doesn't grant the old blanket permission on newer Android
+         where it no longer applies. `neverForLocation` on the scan
+         permission is accurate here — this app identifies the band by
+         its advertised name, not by deriving the phone's location from
+         scan results — so it does NOT also require
+         ACCESS_FINE_LOCATION on Android 12+ (that permission stays
+         declared below regardless, for Task 2.7's own location feature
+         and for BLE scanning on pre-12 Android, which still needs it). -->
+    <uses-permission android:name="android.permission.BLUETOOTH_SCAN" android:usesPermissionFlags="neverForLocation" tools:targetApi="s" />
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" android:minSdkVersion="31" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.CAMERA" />

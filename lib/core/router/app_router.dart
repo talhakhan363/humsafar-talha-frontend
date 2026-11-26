@@ -27,6 +27,7 @@ import '../../features/vitals/screens/vitals_screen.dart';
 import '../../features/vitals/screens/add_vital_reading_screen.dart';
 import '../../features/wearable/screens/my_band_screen.dart';
 import '../../features/wearable/screens/connect_band_screen.dart';
+import '../../features/wearable/screens/live_band_screen.dart';
 import '../../features/directory/screens/directory_screen.dart';
 import '../../features/directory/screens/request_visit_screen.dart';
 import '../../features/directory/screens/activity_log_screen.dart';
@@ -383,6 +384,16 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         name: 'connect-band',
         pageBuilder: (context, state) =>
             NoTransitionPage(key: state.pageKey, child: ConnectBandScreen(dependentId: state.extra as String)),
+      ),
+      // Task 5.5 (Abdullah's 25 Nov spec) — the live BLE session with the
+      // real band, separate from '/wearable/connect' above (one-time
+      // server registration only). See live_band_screen.dart's own doc
+      // comment for the split.
+      GoRoute(
+        path: '/wearable/live',
+        name: 'live-band',
+        pageBuilder: (context, state) =>
+            NoTransitionPage(key: state.pageKey, child: LiveBandScreen(dependentId: state.extra as String)),
       ),
       GoRoute(
         path: '/directory',
