@@ -75,6 +75,7 @@ class _GuardianHomeScreenState extends ConsumerState<GuardianHomeScreen> with Sk
   String? _loadError;
   bool _isLoading = true;
   List<Map<String, dynamic>> _criticalAlerts = [];
+  int _unacknowledgedCriticalCount = 0;
   int _unreadMessages = 0;
 
   @override
@@ -126,7 +127,16 @@ class _GuardianHomeScreenState extends ConsumerState<GuardianHomeScreen> with Sk
             queryParameters: {'priority': 'critical', 'unacknowledged': true, 'limit': 10},
           );
       if (!mounted) return;
-      setState(() => _criticalAlerts = (response.data?['items'] as List<dynamic>? ?? []).cast<Map<String, dynamic>>());
+      setState(() {
+        _criticalAlerts = (response.data?['items'] as List<dynamic>? ?? []).cast<Map<String, dynamic>>();
+        // Bug fix (F-28, Sarim's 9 Nov/25 Nov reports: "no way to open
+        // Alerts without an open alert"): notification_contract.md is
+        // explicit that `unacknowledged_critical` (not the page of
+        // `items`, which is capped at `limit: 10` above) is the right
+        // count for a badge, since it counts every waiting critical
+        // alert, not just the ones fetched for this preview.
+        _unacknowledgedCriticalCount = response.data?['unacknowledged_critical'] as int? ?? _criticalAlerts.length;
+      });
     } on ApiException {
       // best-effort, see doc comment above
     }
@@ -215,6 +225,40 @@ class _GuardianHomeScreenState extends ConsumerState<GuardianHomeScreen> with Sk
         actions: [
           const LanguageSwitchButton(),
           const AccessibilityToggleButton(),
+          // Bug fix (F-28, Sarim's 9 Nov/25 Nov reports: "no way to open
+          // Alerts without an open alert"): before this, `/guardian/alerts`
+          // was only reachable from the Panic banner or a "Needs attention"
+          // preview row below — both of which only render when there's
+          // currently something to preview (see this screen's own build()
+          // further down). A Guardian with zero open critical alerts at the
+          // moment they open the app had no way at all to reach the Alerts
+          // inbox (open/seen/notices tabs) to check history. Same
+          // Stack+badge pattern as the Messages icon right after this one.
+          Stack(
+            alignment: Alignment.center,
+            children: [
+              IconButton(
+                icon: const Icon(Icons.notifications_outlined),
+                tooltip: l10n.alertsScreenTitle,
+                onPressed: () => context.push('/guardian/alerts'),
+              ),
+              if (_unacknowledgedCriticalCount > 0)
+                Positioned(
+                  right: 6,
+                  top: 6,
+                  child: Container(
+                    padding: const EdgeInsets.all(2),
+                    constraints: const BoxConstraints(minWidth: 16, minHeight: 16),
+                    decoration: const BoxDecoration(color: HumsafarColors.danger, shape: BoxShape.circle),
+                    child: Text(
+                      '$_unacknowledgedCriticalCount',
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(color: Colors.white, fontSize: 10),
+                    ),
+                  ),
+                ),
+            ],
+          ),
           Stack(
             alignment: Alignment.center,
             children: [

@@ -45,8 +45,15 @@ android {
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "com.example.humsafar_talha_frontend"
+        // Bug fix (SEC-19, Sarim's 22 Nov security review): flipped off the
+        // Android Studio default "com.example.*" id, now that the release
+        // keystore and the matching `com.humsafar.app` Firebase app both
+        // exist (see android/key.properties' own comment and
+        // google-services.json's second `client` entry). Deliberately left
+        // `namespace` above untouched — it only has to match MainActivity.kt's
+        // actual Kotlin package folder, not this id, and Android Gradle
+        // Plugin has supported namespace != applicationId since AGP 7.
+        applicationId = "com.humsafar.app"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         // 2026-10-22 — bumped from 23: the audio_session plugin (pulled in
