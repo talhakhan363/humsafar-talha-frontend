@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/widgets.dart';
@@ -56,8 +58,69 @@ class PushService {
   /// [onMessageTapped] is called whenever the person opens the app via a
   /// notification — on a running app (background tap) and once more for
   /// a cold start, if that's how the app was launched.
+  ///
+  /// **Bug fix (F-13/F-24/F-29, Sarim's 24 Nov retest on 1.9.4 — one root
+  /// cause behind all three): a LOCALLY-shown notification (every
+  /// standard/critical push while the app is in the foreground, via
+  /// [_showForegroundNotification]; and the full-screen remote-alarm push
+  /// while backgrounded/terminated, via [firebaseMessagingBackgroundHandler])
+  /// had NO tap handler registered at all.** `_localNotifications.initialize`
+  /// was called with nothing but `android: androidInit` — no
+  /// `onDidReceiveNotificationResponse`. Android still let the person tap
+  /// it (flutter_local_notifications always wires a default "open the app"
+  /// PendingIntent even with no callback set), but tapping just launched
+  /// `MainActivity` with no payload for anything to route on, landing on
+  /// the app's plain default screen. That's exactly: F-24 ("tap does
+  /// nothing" — it does something, just not the deep link); F-29
+  /// (`incoming_call`'s own push never got a chance to push
+  /// `/calls/incoming`, because nothing ever read the push's `call_id`
+  /// back out of the notification once Firebase's own auto-display wasn't
+  /// in play); and F-13 ("rings about 2s, no full-screen alarm" — the
+  /// full-screen notification posts and plays its sound once, but nothing
+  /// ever navigates into `alarm_screen.dart`'s own looping-alarm-sound UI,
+  /// because that only happens by actually opening `/dependent/alarm`,
+  /// which never fires without a tap handler to fire it).
+  ///
+  /// Fixed by: every `.show(...)` call below now attaches a `payload`
+  /// (the push's own `data` map, JSON-encoded); `onDidReceiveNotificationResponse`
+  /// handles a tap while the app process is alive (foreground or
+  /// backgrounded-but-not-killed) by decoding that payload and calling
+  /// [onMessageTapped] with it, exactly like an FCM-native background tap
+  /// already did; and a genuinely cold (fully terminated, then launched BY
+  /// the tap) case is picked up via `getNotificationAppLaunchDetails()`
+  /// after `initialize()` — the plugin's own purpose-built mechanism for
+  /// this, parallel to `getInitialMessage()` already being used for an
+  /// FCM-native cold start just below. `onDidReceiveBackgroundNotificationResponse`
+  /// must also be wired (the plugin requires SOME handler registered for
+  /// background delivery to work at all, mirroring why
+  /// `FirebaseMessaging.onBackgroundMessage` needs one in main.dart) but is
+  /// a deliberate no-op — see [_onBackgroundNotificationResponse]'s own
+  /// doc comment for why it can't navigate directly and doesn't need to.
+  ///
+  /// **Signature change, not additive:** [onMessageTapped]/[onColdStartTap]
+  /// now take the push's `Map<String, dynamic> data` directly rather than
+  /// a whole `RemoteMessage` — the only reason they ever needed a
+  /// `RemoteMessage` was to read `.data` back out of it
+  /// ([navigateForNotificationTap] never touched anything else on it), and
+  /// a locally-shown notification's tap has a JSON-decoded `Map`, never a
+  /// real `RemoteMessage`, to hand back. One shared type lets a tap on
+  /// EITHER kind of notification call the exact same navigation logic.
+  ///
+  /// **Still not verified against a real push or a real device** — same
+  /// disclosed limit as every other push_service.dart fix: nothing in this
+  /// sandbox can send an actual FCM message or tap a real Android
+  /// notification tray entry. The payload-encode/decode round trip and the
+  /// plugin API shapes used here (`onDidReceiveNotificationResponse`,
+  /// `onDidReceiveBackgroundNotificationResponse`,
+  /// `getNotificationAppLaunchDetails()`) are flutter_local_notifications
+  /// 18.0.1's own documented, stable API (unchanged across the 9.x-18.x
+  /// majors) — not guessed — but `flutter analyze`/`flutter test` is the
+  /// first real check this gets, and a real-device tap test (does the
+  /// alarm push actually open `/dependent/alarm`? does a call push open
+  /// `/calls/incoming`?) is still needed before trusting F-13/F-24/F-29
+  /// closed.
   Future<void> initializeChannelsAndHandlers({
-    required void Function(RemoteMessage message) onMessageTapped,
+    required void Function(Map<String, dynamic> data) onMessageTapped,
     // Bug fix (F-24, Sarim's 9 Nov report): optional, falls back to
     // [onMessageTapped] if not given. main.dart passes something DIFFERENT
     // here than onMessageTapped — see [pendingColdStartNotificationProvider]'s
@@ -65,13 +128,18 @@ class PushService {
     // immediately the way a background tap (app already running, a
     // session already active and showing a real screen, nothing to race)
     // can.
-    void Function(RemoteMessage message)? onColdStartTap,
+    void Function(Map<String, dynamic> data)? onColdStartTap,
   }) async {
     if (_initialized) return;
     _initialized = true;
 
     const androidInit = AndroidInitializationSettings('@mipmap/ic_launcher');
-    await _localNotifications.initialize(const InitializationSettings(android: androidInit));
+    await _localNotifications.initialize(
+      const InitializationSettings(android: androidInit),
+      // Bug fix (F-13/F-24/F-29): see this method's own doc comment above.
+      onDidReceiveNotificationResponse: (response) => _handleLocalNotificationTap(response, onMessageTapped),
+      onDidReceiveBackgroundNotificationResponse: _onBackgroundNotificationResponse,
+    );
 
     final androidPlugin =
         _localNotifications.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
@@ -98,13 +166,62 @@ class PushService {
     await _messaging.requestPermission(alert: true, badge: true, sound: true);
 
     FirebaseMessaging.onMessage.listen(_showForegroundNotification);
-    FirebaseMessaging.onMessageOpenedApp.listen(onMessageTapped);
+    FirebaseMessaging.onMessageOpenedApp.listen((message) => onMessageTapped(message.data));
 
-    // Cold start: the app was fully closed and opened BY tapping a
-    // notification. Must be checked explicitly — onMessageOpenedApp only
-    // fires for a background (not terminated) tap.
+    // Cold start: the app was fully closed and opened BY tapping an
+    // FCM-auto-displayed notification. Must be checked explicitly —
+    // onMessageOpenedApp only fires for a background (not terminated) tap.
     final initial = await _messaging.getInitialMessage();
-    if (initial != null) (onColdStartTap ?? onMessageTapped)(initial);
+    if (initial != null) {
+      (onColdStartTap ?? onMessageTapped)(initial.data);
+      return;
+    }
+
+    // Bug fix (F-13/F-24/F-29): the OTHER cold-start shape —
+    // getInitialMessage() above only ever sees a tap on Firebase's OWN
+    // auto-displayed notification. It stays null for a tap on a
+    // notification THIS class drew itself via flutter_local_notifications
+    // (every standard/critical foreground alert, and the full-screen
+    // remote-alarm one), so that case needs the plugin's own equivalent.
+    final launchDetails = await _localNotifications.getNotificationAppLaunchDetails();
+    if (launchDetails?.didNotificationLaunchApp ?? false) {
+      final data = _decodePayload(launchDetails!.notificationResponse?.payload);
+      if (data != null) (onColdStartTap ?? onMessageTapped)(data);
+    }
+  }
+
+  static void _handleLocalNotificationTap(
+    NotificationResponse response,
+    void Function(Map<String, dynamic> data) onMessageTapped,
+  ) {
+    final data = _decodePayload(response.payload);
+    if (data != null) onMessageTapped(data);
+  }
+
+  /// Required by flutter_local_notifications for background delivery to
+  /// work at all (same reason `firebaseMessagingBackgroundHandler` must be
+  /// registered for FCM background delivery) — but a deliberate no-op.
+  /// This runs in its own background isolate when the app is fully
+  /// terminated and the person taps the notification, with no live
+  /// `ProviderContainer`/`BuildContext`/router to navigate with. Rather
+  /// than trying to navigate from here, [initializeChannelsAndHandlers]
+  /// picks this exact tap back up the next time the app actually starts,
+  /// by reading `getNotificationAppLaunchDetails()` — the OS keeps that
+  /// record independently of this isolate, the same way
+  /// `getInitialMessage()` already lets an FCM-native cold start be
+  /// applied once a real app/context exists (see
+  /// `splash_screen.dart`'s `_applyPendingColdStartNotification`).
+  @pragma('vm:entry-point')
+  static void _onBackgroundNotificationResponse(NotificationResponse response) {}
+
+  static Map<String, dynamic>? _decodePayload(String? payload) {
+    if (payload == null) return null;
+    try {
+      final decoded = jsonDecode(payload);
+      return decoded is Map<String, dynamic> ? decoded : null;
+    } catch (_) {
+      return null;
+    }
   }
 
   Future<void> _showForegroundNotification(RemoteMessage message) async {
@@ -113,7 +230,21 @@ class PushService {
     final isCritical = message.data['priority'] == 'critical';
     final channelId = isCritical ? criticalChannelId : standardChannelId;
     await _localNotifications.show(
-      notification.hashCode,
+      // Bug fix (N-17, Sarim's 24 Nov retest: "notifications pile up"):
+      // `notification` (message.notification) is a fresh RemoteNotification
+      // instance built from the platform channel on every delivery, and it
+      // has no custom == / hashCode — so `.hashCode` was Dart's default
+      // identity hash, different every single time even when the SAME
+      // logical alert is redelivered (FCM retry, or onMessage firing twice
+      // for one push). Android only replaces a notification that shares
+      // the same id, so every redelivery stacked a brand-new tray entry
+      // instead of updating the existing one. `data.notification_id`
+      // (notification_contract.md's push data shape) is the backend's own
+      // stable id for this exact notification record — hashing that
+      // content-derived string instead gives the same id back for a
+      // redelivery of the same alert, while two genuinely different
+      // alerts (different notification_id) still get independent ids.
+      (message.data['notification_id'] as String?)?.hashCode ?? notification.hashCode,
       notification.title,
       notification.body,
       NotificationDetails(
@@ -131,6 +262,9 @@ class PushService {
           sound: isCritical ? _criticalChannelSound : null,
         ),
       ),
+      // Bug fix (F-13/F-24/F-29): see initializeChannelsAndHandlers' doc
+      // comment — without this, there is nothing for a tap to route on.
+      payload: jsonEncode(message.data),
     );
   }
 
@@ -184,7 +318,12 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   final body = message.notification?.body ?? (message.data['body'] as String?) ?? 'Someone is trying to reach you.';
 
   await FlutterLocalNotificationsPlugin().show(
-    message.hashCode,
+    // Bug fix (N-17, same root cause as _showForegroundNotification's
+    // show() call above): `message` is a fresh RemoteMessage per
+    // delivery with no custom hashCode, so a redelivered/retried alarm
+    // push got a new, unrelated id every time instead of replacing its
+    // own prior tray entry.
+    (message.data['notification_id'] as String?)?.hashCode ?? message.hashCode,
     title,
     body,
     const NotificationDetails(
@@ -200,6 +339,13 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
         sound: PushService._criticalChannelSound,
       ),
     ),
+    // Bug fix (F-13, Sarim's 24 Nov retest — "rings about 2s, no
+    // full-screen alarm"): without a payload, tapping (or the system's
+    // own full-screen-intent auto-launch) had nothing to route on, so it
+    // never actually opened `/dependent/alarm` — see
+    // PushService.initializeChannelsAndHandlers' doc comment for the full
+    // root-cause writeup, which applies to this notification too.
+    payload: jsonEncode(message.data),
   );
 }
 
@@ -304,16 +450,23 @@ Map<String, dynamic>? incomingCallPushData(Map<String, dynamic> data) {
 ///   and only after its own session check has already picked the app's
 ///   real home route — see [pendingColdStartNotificationProvider]'s doc
 ///   comment for the F-24 bug this ordering fixes.
-void navigateForNotificationTap(BuildContext context, RemoteMessage message) {
+///
+/// **Signature change (F-13/F-24/F-29 fix):** takes the push's
+/// `Map<String, dynamic> data` directly, not a whole `RemoteMessage` — see
+/// `initializeChannelsAndHandlers`' doc comment. This is what lets a tap on
+/// a LOCALLY-shown notification (decoded from its JSON `payload`, never a
+/// real `RemoteMessage`) call the exact same routing logic as a tap on an
+/// FCM-native one.
+void navigateForNotificationTap(BuildContext context, Map<String, dynamic> data) {
   // Task 4.7 — incoming_call needs more than a route string (see
   // incomingCallPushData's doc comment), so it's checked first, ahead of
   // the generic route-string mapper below.
-  final callData = incomingCallPushData(message.data);
+  final callData = incomingCallPushData(data);
   if (callData != null) {
     GoRouter.of(context).push('/calls/incoming', extra: callData);
     return;
   }
-  final route = routeForNotificationType(message.data['type'] as String?);
+  final route = routeForNotificationType(data['type'] as String?);
   if (route == null) return;
   GoRouter.of(context).push(route);
 }
@@ -340,7 +493,13 @@ void navigateForNotificationTap(BuildContext context, RemoteMessage message) {
 /// never touches this provider at all: `main.dart`'s `onMessageTapped`
 /// still navigates immediately for that case, since there's no splash
 /// screen in the way once a session is already active.
-final pendingColdStartNotificationProvider = StateProvider<RemoteMessage?>((ref) => null);
+///
+/// Holds `Map<String, dynamic>` (the push's own `data`), not a
+/// `RemoteMessage` — see `navigateForNotificationTap`'s doc comment: a
+/// cold start from tapping a LOCALLY-shown notification (the F-13/F-24/F-29
+/// fix) only ever has a JSON-decoded `Map` to offer, never a real
+/// `RemoteMessage`.
+final pendingColdStartNotificationProvider = StateProvider<Map<String, dynamic>?>((ref) => null);
 
 final pushServiceProvider = Provider<PushService>((ref) => PushService());
 

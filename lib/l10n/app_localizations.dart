@@ -2264,10 +2264,10 @@ abstract class AppLocalizations {
   /// **'Message'**
   String get messageButtonLabel;
 
-  /// No description provided for @unreadMessagesSubtitle.
+  /// Bug fix (N-16, Sarim's 24 Nov retest): was the literal placeholder text '{count} new message(s)' for every count, same class of bug as N-14 (panicToldCountMessage). ICU plural form here for forward-compat with a real flutter gen-l10n run — app_localizations_en.dart's hand-written override (this project has no gen-l10n tool available) is the one actually read at runtime right now.
   ///
   /// In en, this message translates to:
-  /// **'{count} new message(s)'**
+  /// **'{count, plural, one{{count} new message} other{{count} new messages}}'**
   String unreadMessagesSubtitle(int count);
 
   /// No description provided for @quickReplyIAmFine.

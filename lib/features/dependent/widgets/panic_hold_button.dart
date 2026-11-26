@@ -152,14 +152,37 @@ class _PanicHoldButtonState extends State<PanicHoldButton> with SingleTickerProv
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(16),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(widget.label, style: labelStyle, textAlign: TextAlign.center),
-                        const SizedBox(height: 6),
-                        Text(widget.subtitle, style: subtitleStyle, textAlign: TextAlign.center),
-                      ],
+                    // Bug fix (F-27, Sarim's 24 Nov retest: "Urdu Panic
+                    // hold screen overflows at max accessibility font
+                    // size"): this circle is a fixed 220x220 (by design —
+                    // it's the hold-to-confirm dial, not a scrolling
+                    // layout), but [labelStyle] deliberately DOES scale
+                    // with textTheme.titleLarge and the accessibility
+                    // large-text toggle (see the doc comment above). A
+                    // fixed-size container around text that's allowed to
+                    // grow unbounded was always going to overflow once
+                    // both landed at once: the longer Urdu strings plus
+                    // the largest accessibility scale step pushed the
+                    // Column past 220px and Flutter threw the classic
+                    // yellow/black RenderFlex overflow stripes right on
+                    // the button face. FittedBox(scaleDown) keeps the
+                    // circle's fixed size and the text's relative
+                    // proportions (label still bigger than subtitle), but
+                    // shrinks the whole label+subtitle block down to fit
+                    // instead of overflowing — normal sizes are
+                    // completely unaffected since scaleDown never grows
+                    // past the child's natural size.
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(widget.label, style: labelStyle, textAlign: TextAlign.center),
+                          const SizedBox(height: 6),
+                          Text(widget.subtitle, style: subtitleStyle, textAlign: TextAlign.center),
+                        ],
+                      ),
                     ),
                   ),
                 ),

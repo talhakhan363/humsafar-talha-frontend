@@ -1226,7 +1226,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String unreadMessagesSubtitle(int count) {
-    return '$count new message(s)';
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count new messages',
+      one: '$count new message',
+    );
+    return '$_temp0';
   }
 
   @override

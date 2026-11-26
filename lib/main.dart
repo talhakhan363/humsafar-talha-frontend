@@ -88,7 +88,7 @@ class _HumsafarAppState extends ConsumerState<HumsafarApp> {
         // here instead of navigated immediately — see
         // pendingColdStartNotificationProvider's doc comment in
         // push_service.dart for the splash-screen race this avoids.
-        onColdStartTap: (message) => ref.read(pendingColdStartNotificationProvider.notifier).state = message,
+        onColdStartTap: (data) => ref.read(pendingColdStartNotificationProvider.notifier).state = data,
       );
       // "Whenever Firebase gives the app a new token" (notification_contract.md)
       // — only re-register while someone is actually signed in; a token
@@ -103,13 +103,13 @@ class _HumsafarAppState extends ConsumerState<HumsafarApp> {
     }
   }
 
-  void _handleNotificationTap(RemoteMessage message) {
+  void _handleNotificationTap(Map<String, dynamic> data) {
     final context = rootNavigatorKey.currentContext;
     if (context == null) return;
     // Bug fix (F-24): the actual routing decision now lives in one shared
     // place (push_service.dart's navigateForNotificationTap) instead of
     // being duplicated here and in splash_screen.dart's cold-start replay.
-    navigateForNotificationTap(context, message);
+    navigateForNotificationTap(context, data);
   }
 
   @override

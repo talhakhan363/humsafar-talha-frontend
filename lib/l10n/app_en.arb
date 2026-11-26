@@ -544,8 +544,9 @@
   "communicationAccessDeniedMessage": "Only Guardians with Communication access can message right now.",
   "messagesButtonLabel": "Messages",
   "messageButtonLabel": "Message",
-  "unreadMessagesSubtitle": "{count} new message(s)",
+  "unreadMessagesSubtitle": "{count, plural, one{{count} new message} other{{count} new messages}}",
   "@unreadMessagesSubtitle": {
+    "description": "Bug fix (N-16, Sarim's 24 Nov retest): was the literal placeholder text '{count} new message(s)' for every count, same class of bug as N-14 (panicToldCountMessage). ICU plural form here for forward-compat with a real flutter gen-l10n run — app_localizations_en.dart's hand-written override (this project has no gen-l10n tool available) is the one actually read at runtime right now.",
     "placeholders": {
       "count": {
         "type": "int"

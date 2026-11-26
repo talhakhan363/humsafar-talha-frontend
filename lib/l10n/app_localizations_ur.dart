@@ -1799,7 +1799,7 @@ class AppLocalizationsUr extends AppLocalizations {
   String get sugarContextAfterMeal => 'کھانے کے بعد';
 
   @override
-  String get sugarContextFasting => 'روزہ';
+  String get sugarContextFasting => 'نہار منہ';
 
   @override
   String get sugarContextFieldLabel => 'سیاق و سباق (اختیاری)';
