@@ -982,6 +982,9 @@ class AppLocalizationsUr extends AppLocalizations {
   String get alertsScreenTitle => 'الرٹس';
 
   @override
+  String get dependentNoticesScreenTitle => 'اطلاعات';
+
+  @override
   String alertsOpenTabLabel(int count) {
     return 'کھلے ($count)';
   }

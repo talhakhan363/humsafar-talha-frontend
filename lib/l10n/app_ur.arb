@@ -286,6 +286,7 @@
   "tierLevel2SecondaryLabel": "سطح 2 · سیکنڈری",
   "tierLevel3SmsLabel": "سطح 3 · ایس ایم ایس بھیج دیا گیا",
   "alertsScreenTitle": "الرٹس",
+  "dependentNoticesScreenTitle": "اطلاعات",
   "alertsOpenTabLabel": "کھلے ({count})",
   "alertsSeenTabLabel": "دیکھے گئے",
   "alertsNoticesTabLabel": "اطلاعات ({count})",

@@ -65,32 +65,34 @@ void main() {
   });
 
   group('incomingCallPushData (TC-4.7-13..15)', () {
+    // Bug fix (Sarim's 1.9.5 retest, F-29/F-24): the real push has no
+    // `caller_name` field (see incomingCallPushData's own doc comment) —
+    // these cases no longer assert one, and `incomingCallPushData` no
+    // longer returns a `callerName` key at all.
     test('TC-4.7-13: well-formed incoming_call payload is parsed', () {
       final result = incomingCallPushData({
         'type': 'incoming_call',
         'call_id': 'call-42',
-        'caller_name': 'Ammi',
         'call_type': 'video',
       });
 
-      expect(result, {'callId': 'call-42', 'callerName': 'Ammi', 'isVideo': true});
+      expect(result, {'callId': 'call-42', 'isVideo': true});
     });
 
     test('TC-4.7-14: call_type "voice" (or anything other than "video") maps to isVideo: false', () {
       final result = incomingCallPushData({
         'type': 'incoming_call',
         'call_id': 'call-43',
-        'caller_name': 'Abdullah',
         'call_type': 'voice',
       });
 
-      expect(result, {'callId': 'call-43', 'callerName': 'Abdullah', 'isVideo': false});
+      expect(result, {'callId': 'call-43', 'isVideo': false});
     });
 
     test('TC-4.7-15: wrong type, missing call_id, or missing type all return null', () {
       expect(incomingCallPushData({'type': 'message', 'call_id': 'call-1'}), null);
       expect(incomingCallPushData({'type': 'incoming_call'}), null);
-      expect(incomingCallPushData({'call_id': 'call-1', 'caller_name': 'Ammi'}), null);
+      expect(incomingCallPushData({'call_id': 'call-1'}), null);
     });
   });
 }

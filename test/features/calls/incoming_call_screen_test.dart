@@ -14,7 +14,7 @@ import '../../support/widget_test_harness.dart';
 List<GoRoute> _routes() => [
       GoRoute(
         path: '/calls/incoming-under-test',
-        builder: (_, __) => const IncomingCallScreen(callId: 'call-1', callerName: 'Abdullah', isVideo: false),
+        builder: (_, __) => const IncomingCallScreen(callId: 'call-1', isVideo: false),
       ),
       GoRoute(path: '/calls/active', builder: (_, __) => stubScreen('CALL_ACTIVE_STUB')),
     ];
@@ -26,7 +26,10 @@ List<GoRoute> _hostedRoutes() => [
 
 void main() {
   testWidgets('TC-4.7-07: still ringing — shows the caller name and Accept/Decline', (tester) async {
-    final fakeClient = FakeApiClient(getHandler: (_) => {'call_id': 'call-1', 'status': 'ringing'});
+    // Bug fix (Sarim's 1.9.5 retest, F-29/F-24): the name now comes from
+    // this same GET's `other_name` field, not a `callerName` constructor
+    // arg — see incoming_call_screen.dart's doc comment.
+    final fakeClient = FakeApiClient(getHandler: (_) => {'call_id': 'call-1', 'status': 'ringing', 'other_name': 'Abdullah'});
     await tester.pumpWidget(wrapWithRouter(fakeClient: fakeClient, initialLocation: '/calls/incoming-under-test', routes: _routes()));
     await tester.pumpAndSettle();
 
@@ -91,7 +94,7 @@ void main() {
       routes: [
         GoRoute(
           path: '/calls/incoming-video-under-test',
-          builder: (_, __) => const IncomingCallScreen(callId: 'call-2', callerName: 'Abdullah', isVideo: true),
+          builder: (_, __) => const IncomingCallScreen(callId: 'call-2', isVideo: true),
         ),
       ],
     ));

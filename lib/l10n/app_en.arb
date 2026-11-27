@@ -397,6 +397,7 @@
   "tierLevel2SecondaryLabel": "Level 2 · Secondary",
   "tierLevel3SmsLabel": "Level 3 · SMS sent",
   "alertsScreenTitle": "Alerts",
+  "dependentNoticesScreenTitle": "Notices",
   "alertsOpenTabLabel": "Open ({count})",
   "@alertsOpenTabLabel": {
     "placeholders": {

@@ -973,6 +973,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get alertsScreenTitle => 'Alerts';
 
   @override
+  String get dependentNoticesScreenTitle => 'Notices';
+
+  @override
   String alertsOpenTabLabel(int count) {
     return 'Open ($count)';
   }

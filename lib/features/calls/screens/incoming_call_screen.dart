@@ -25,11 +25,17 @@ import '../../../core/theme/humsafar_colors.dart';
 /// `OutgoingCallScreen`'s doc comment for the full named field-name
 /// caveat on `call_contract.md`'s assumed shape, and for why this
 /// doesn't use ZegoCloud's own Call Invitation UI.
+///
+/// **Bug fix (Sarim's 1.9.5 retest, F-29/F-24): caller name now comes
+/// from this same `GET /calls/{id}` call's `other_name` field**, not
+/// from the push — see `push_service.dart`'s `incomingCallPushData` doc
+/// comment for why the push never had a usable name to begin with.
+/// Shows '…' (loading) rather than a blank/'?' avatar until that first
+/// response lands.
 class IncomingCallScreen extends ConsumerStatefulWidget {
-  const IncomingCallScreen({super.key, required this.callId, required this.callerName, required this.isVideo});
+  const IncomingCallScreen({super.key, required this.callId, required this.isVideo});
 
   final String callId;
-  final String callerName;
   final bool isVideo;
 
   @override
@@ -41,6 +47,7 @@ enum _IncomingCallState { loading, ringing, accepting, alreadyOver, error }
 class _IncomingCallScreenState extends ConsumerState<IncomingCallScreen> {
   _IncomingCallState _state = _IncomingCallState.loading;
   String? _errorMessage;
+  String _callerName = '';
 
   @override
   void initState() {
@@ -53,7 +60,13 @@ class _IncomingCallScreenState extends ConsumerState<IncomingCallScreen> {
       final response = await ref.read(apiClientProvider).get<Map<String, dynamic>>('/calls/${widget.callId}');
       final status = response.data?['status'] as String?;
       if (!mounted) return;
-      setState(() => _state = status == 'ringing' ? _IncomingCallState.ringing : _IncomingCallState.alreadyOver);
+      setState(() {
+        // Bug fix (F-29/F-24): `other_name` (call_contract.md line 20) is
+        // the real, contract-given source for the caller's display name —
+        // see this class's own doc comment.
+        _callerName = response.data?['other_name'] as String? ?? '';
+        _state = status == 'ringing' ? _IncomingCallState.ringing : _IncomingCallState.alreadyOver;
+      });
     } on ApiException catch (e) {
       if (!mounted) return;
       setState(() {
@@ -125,10 +138,10 @@ class _IncomingCallScreenState extends ConsumerState<IncomingCallScreen> {
                     children: [
                       CircleAvatar(
                         radius: 48,
-                        child: Text(widget.callerName.isNotEmpty ? widget.callerName[0].toUpperCase() : '?'),
+                        child: Text(_callerName.isNotEmpty ? _callerName[0].toUpperCase() : '?'),
                       ),
                       const SizedBox(height: 16),
-                      Text(widget.callerName, style: const TextStyle(color: Colors.white, fontSize: 22)),
+                      Text(_callerName, style: const TextStyle(color: Colors.white, fontSize: 22)),
                       const SizedBox(height: 8),
                       Text(_subtitle(l10n), style: const TextStyle(color: Colors.white70, fontSize: 16)),
                       const SizedBox(height: 32),

@@ -34,6 +34,7 @@ import '../../features/directory/screens/activity_log_screen.dart';
 import '../../features/messaging/screens/messages_screen.dart';
 import '../../features/messaging/screens/chat_screen.dart';
 import '../../features/dependent/screens/dependent_home_screen.dart';
+import '../../features/dependent/screens/dependent_notices_screen.dart';
 import '../../features/dependent/screens/panic_screen.dart';
 import '../../features/dependent/screens/wellness_check_screen.dart';
 import '../../features/dependent/screens/medication_confirm_screen.dart';
@@ -467,9 +468,12 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           final args = state.extra as Map<String, dynamic>;
           return NoTransitionPage(
             key: state.pageKey,
+            // Bug fix (F-29/F-24, Sarim's 1.9.5 retest): no more
+            // `callerName` extra — see incoming_call_screen.dart's doc
+            // comment, the real name now comes from this screen's own
+            // `GET /calls/{id}` call.
             child: IncomingCallScreen(
               callId: args['callId'] as String,
-              callerName: args['callerName'] as String,
               isVideo: args['isVideo'] as bool,
             ),
           );
@@ -498,6 +502,14 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: '/dependent',
         name: 'dependent-home',
         pageBuilder: (context, state) => NoTransitionPage(key: state.pageKey, child: const DependentHomeScreen()),
+      ),
+      // Bug fix (F-28 continuation, Sarim's 1.9.5 retest) — see
+      // dependent_notices_screen.dart's own doc comment for why this is a
+      // new, purpose-built screen rather than reusing `/guardian/alerts`.
+      GoRoute(
+        path: '/dependent/notices',
+        name: 'dependent-notices',
+        pageBuilder: (context, state) => NoTransitionPage(key: state.pageKey, child: const DependentNoticesScreen()),
       ),
       GoRoute(
         path: '/dependent/panic',

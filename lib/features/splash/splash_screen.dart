@@ -67,9 +67,41 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
   bool _showLoader = false;
   Timer? _loaderDelayTimer;
 
+  // Bug fix (UI-14, Sarim's 1.9.5 retest: "the splash only shows ~0.5s"):
+  // `_checkSession()` has no floor on how long it takes — a brand new
+  // install with no refresh token stored skips the network call entirely
+  // (see that method's own doc comment) and a signed-in session can
+  // resolve `GET /auth/me` in well under a second against the deployed
+  // backend. Either way, `context.go(...)` could fire before the symbol's
+  // own 600ms shrink/wordmark-fade animation above had any real chance to
+  // play, cutting the branded moment this screen exists for down to
+  // whatever the network/storage happened to take — not a fixed, designed
+  // duration. Every `context.go(...)` call in `_checkSession` now awaits
+  // this shared minimum first; the delay runs concurrently with the real
+  // session check (both start at the same moment in `initState`), so a
+  // slow network still takes exactly as long as it takes — this only
+  // stops a FAST path from cutting the splash short.
+  //
+  // Bug fix (`flutter test` regression caught right after the above): a
+  // bare `Future.delayed(...)` field was a real `Timer` under the hood
+  // with nothing ever cancelling it — `widget_test.dart`'s plain
+  // `pumpWidget(HumsafarApp())` smoke test disposes this screen well
+  // before 900ms of fake-async time elapses, and flutter_test's own
+  // `AutomatedTestWidgetsFlutterBinding` asserts no Timer is left pending
+  // after disposal ("A Timer is still pending even after the widget tree
+  // was disposed"). Same shape as `_loaderDelayTimer` right above, which
+  // already gets cancelled in `dispose()` for exactly this reason — this
+  // minimum-display gate now does too, via an explicit `Timer` driving a
+  // `Completer` instead of a bare `Future.delayed`.
+  final Completer<void> _minimumDisplayCompleter = Completer<void>();
+  Timer? _minimumDisplayTimer;
+
   @override
   void initState() {
     super.initState();
+    _minimumDisplayTimer = Timer(const Duration(milliseconds: 900), () {
+      if (!_minimumDisplayCompleter.isCompleted) _minimumDisplayCompleter.complete();
+    });
     WidgetsBinding.instance.addPostFrameCallback((_) {
       // Bug fix (Talha's 22 Nov real-device test): hands off from the
       // native "00 Splash" to this screen at exactly this moment — see
@@ -94,6 +126,12 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
   @override
   void dispose() {
     _loaderDelayTimer?.cancel();
+    _minimumDisplayTimer?.cancel();
+    // Lets anything still awaiting `_minimumDisplayCompleter.future` (every
+    // `!mounted` check right after it already guards against acting on a
+    // disposed screen) resolve immediately instead of hanging — mirrors
+    // cancelling the Timer itself, just for the Completer side of the pair.
+    if (!_minimumDisplayCompleter.isCompleted) _minimumDisplayCompleter.complete();
     super.dispose();
   }
 
@@ -112,9 +150,13 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
       if (!mounted) return;
       if (pending != null) {
         ref.read(pendingDependentRegistrationProvider.notifier).state = pending;
+        await _minimumDisplayCompleter.future;
+        if (!mounted) return;
         context.go('/kyc/dependent');
         return;
       }
+      await _minimumDisplayCompleter.future;
+      if (!mounted) return;
       context.go('/welcome');
       return;
     }
@@ -126,8 +168,10 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
       await registerPushToken(ref.read);
       if (!mounted) return;
 
+      bool goToGuardian = false;
+      bool verified = false;
       if (user.isGuardian) {
-        bool verified = false;
+        goToGuardian = true;
         try {
           final verification = await ref.read(apiClientProvider).get<Map<String, dynamic>>('/guardians/me/verification');
           verified = (verification.data?['verified'] as bool?) ?? false;
@@ -135,6 +179,15 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
           verified = false;
         }
         if (!mounted) return;
+      }
+      // Bug fix (UI-14): the session check (and, for a Guardian, the
+      // extra verification check above) already ran concurrently with
+      // `_minimumDisplayCompleter.future` since both started in `initState` — this only
+      // waits out whatever's left of it, it never adds real network time
+      // on top.
+      await _minimumDisplayCompleter.future;
+      if (!mounted) return;
+      if (goToGuardian) {
         context.go(verified ? '/guardian' : '/kyc/guardian');
       } else {
         context.go('/dependent');
@@ -150,6 +203,8 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
       _applyPendingColdStartNotification();
     } on ApiException {
       await tokenStorage.clear();
+      if (!mounted) return;
+      await _minimumDisplayCompleter.future;
       if (!mounted) return;
       context.go('/welcome');
     }

@@ -68,6 +68,36 @@
          notification already declares, but caveat flagged since this
          hasn't been verified on a real Android 14+ device yet. -->
     <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
+    <!-- Bug fix (SEC-22, Sarim's 1.9.5 security retest): confirmed via a
+         real build's own merged manifest
+         (build/app/intermediates/merged_manifest/debug/processDebugMainManifest/AndroidManifest.xml,
+         26 Nov) — ZegoCloud's bundled AAR declares this exact permission
+         at protectionLevel="normal", which Android auto-grants to ANY
+         app that simply declares a matching <uses-permission>, no user
+         approval needed at all. Several of Zego's own call-related
+         receivers (not declared anywhere in THIS app's manifest — they
+         come from the AAR, which is why they weren't visible without
+         building and reading the merged output) gate on this exact
+         permission via android:permission="com.humsafar.app.PERMISSION_CALL",
+         so "normal" made that gate meaningless: any other installed app
+         could request the same permission for free and broadcast fake
+         call events to them. Redeclaring it here at
+         protectionLevel="signature" overrides the library's own
+         declaration — `tools:node="replace"` is required, or Android's
+         manifest merger refuses the build over the conflicting
+         protectionLevel values instead of silently picking one. Only an
+         app signed with this app's own release key can hold the
+         permission now. Scope note: this fixes exactly what Sarim's
+         report named (PERMISSION_CALL + the receivers gated on it) — the
+         same merged manifest has other android:exported="true"
+         components too (the launcher Activity, deliberately; others not
+         yet individually reviewed), which is a separate, broader
+         exported-components audit if one is wanted, not folded into this
+         fix. -->
+    <permission
+        android:name="com.humsafar.app.PERMISSION_CALL"
+        android:protectionLevel="signature"
+        tools:node="replace" />
     <application
         android:label="Humsafar"
         android:name="${applicationName}"

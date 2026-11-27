@@ -230,21 +230,26 @@ class PushService {
     final isCritical = message.data['priority'] == 'critical';
     final channelId = isCritical ? criticalChannelId : standardChannelId;
     await _localNotifications.show(
-      // Bug fix (N-17, Sarim's 24 Nov retest: "notifications pile up"):
-      // `notification` (message.notification) is a fresh RemoteNotification
-      // instance built from the platform channel on every delivery, and it
-      // has no custom == / hashCode — so `.hashCode` was Dart's default
-      // identity hash, different every single time even when the SAME
-      // logical alert is redelivered (FCM retry, or onMessage firing twice
-      // for one push). Android only replaces a notification that shares
-      // the same id, so every redelivery stacked a brand-new tray entry
-      // instead of updating the existing one. `data.notification_id`
-      // (notification_contract.md's push data shape) is the backend's own
-      // stable id for this exact notification record — hashing that
-      // content-derived string instead gives the same id back for a
-      // redelivery of the same alert, while two genuinely different
-      // alerts (different notification_id) still get independent ids.
-      (message.data['notification_id'] as String?)?.hashCode ?? notification.hashCode,
+      // Bug fix (N-17, Sarim's 24 Nov + 1.9.5 retests: "notifications pile
+      // up" / "one Panic alert gives a group of 15"): `notification`
+      // (message.notification) is a fresh RemoteNotification instance
+      // built from the platform channel on every delivery, and it has no
+      // custom == / hashCode — so `.hashCode` was Dart's default identity
+      // hash, different every single time even when the SAME logical
+      // alert is redelivered (FCM retry, or onMessage firing twice for one
+      // push). Android only replaces a notification that shares the same
+      // id, so every redelivery stacked a brand-new tray entry instead of
+      // updating the existing one. The first fix hashed `notification_id`
+      // (notification_contract.md's stable id for one notification
+      // record) — still not enough for a Panic that climbs the escalation
+      // chain, where EACH reminder is its own notification record (own
+      // `notification_id`) but shares one `event_id` for the whole open
+      // Panic; `event_id` is the more specific, correct key where the
+      // backend sends one (preferred first), falling back to
+      // `notification_id` for everything else.
+      (message.data['event_id'] as String?)?.hashCode ??
+          (message.data['notification_id'] as String?)?.hashCode ??
+          notification.hashCode,
       notification.title,
       notification.body,
       NotificationDetails(
@@ -276,12 +281,13 @@ class PushService {
 /// Must be a top-level (or static) function per the firebase_messaging
 /// API — it runs in its own background isolate, which is why it
 /// re-initializes Firebase rather than reusing anything from the main
-/// isolate. For every push type except `remote_alarm` this still does
-/// nothing else: the OS already auto-displays the push's own
-/// `notification` payload while the app is backgrounded or terminated
-/// (that's what `default_notification_channel_id` in AndroidManifest.xml
-/// is for) — this handler exists only because firebase_messaging requires
-/// one to be registered at all for background delivery to work.
+/// isolate. For every push type except `remote_alarm`/`incoming_call`
+/// this still does nothing else: the OS already auto-displays the push's
+/// own `notification` payload while the app is backgrounded or
+/// terminated (that's what `default_notification_channel_id` in
+/// AndroidManifest.xml is for) — this handler exists only because
+/// firebase_messaging requires one to be registered at all for
+/// background delivery to work.
 ///
 /// **Bug fix (F-13, Sarim's 9 Nov report): "alarm doesn't ring when the
 /// app is closed."** A `remote_alarm` push used to rely entirely on that
@@ -297,52 +303,100 @@ class PushService {
 /// `USE_FULL_SCREEN_INTENT` in AndroidManifest.xml, added alongside this
 /// fix).
 ///
-/// **Open dependency, flagged rather than assumed — needs confirming with
-/// Abdullah before this is genuinely done end to end:** this only
-/// replaces the OS's passive auto-display cleanly if the backend sends
-/// `remote_alarm` pushes as a data-only FCM message (no top-level
-/// `notification` key). If the push still carries a `notification`
-/// payload, the OS will ALSO auto-display its own passive notification
-/// from `standard_alerts` at the same time this handler shows its own —
-/// two separate notifications for one alarm, not one correct one. Not
-/// verified against a real build or a real push for the same reason as
-/// `alarm_screen.dart`'s own F-13 fix: nothing in this sandbox can send an
-/// actual FCM message.
+/// **Bug fix (F-29/F-24, Sarim's 1.9.5 retest): `incoming_call` got the
+/// exact same passive-auto-display-only treatment `remote_alarm` had
+/// before F-13 — this early-returned for every type except
+/// `remote_alarm`, so a call push while backgrounded/terminated never
+/// got a payload-bearing local notification of its own.** The tap-routing
+/// machinery itself (`initializeChannelsAndHandlers`'s
+/// `onDidReceiveNotificationResponse`/`getNotificationAppLaunchDetails`)
+/// was already fixed for F-13/F-24/F-29 together, but it only ever fires
+/// for a notification THIS app drew — Firebase's own passive auto-display
+/// (if the push happens to carry a top-level `notification` block) still
+/// routes a tap through `onMessageOpenedApp`/`getInitialMessage`
+/// correctly too, but if the push is data-only (plausible — and likely,
+/// given `call_contract.md`/`notification_contract.md` never mention a
+/// `notification` block for `incoming_call`, only `data`), a data-only
+/// message delivered while backgrounded/terminated shows **nothing at
+/// all** — no banner, no sound, nothing to tap — which matches Sarim's
+/// "tap does nothing" exactly (there was nothing there to tap). Now
+/// drawn the same deliberate way as `remote_alarm`: full-screen, its own
+/// category, with the payload attached. Uses
+/// `AndroidNotificationCategory.call` (not `.alarm`) and `autoCancel:
+/// true`/`ongoing: false` — unlike an alarm, answering or missing a call
+/// is a one-shot interaction, not something that needs a separate "stop"
+/// action to dismiss.
+///
+/// **Open dependencies, flagged rather than assumed — needs confirming
+/// with Abdullah before either is genuinely done end to end:** (1) this
+/// only replaces the OS's passive auto-display cleanly if the backend
+/// sends these as data-only FCM messages (no top-level `notification`
+/// key) — if either still carries one, the OS auto-displays its own
+/// passive notification from `standard_alerts`/`critical_alerts_v2` at
+/// the same time this handler shows its own, two notifications for one
+/// event instead of one correct one; (2) this is not verified against a
+/// real build or a real push, same limit as every other push_service.dart
+/// fix — nothing in this sandbox can send an actual FCM message, so a
+/// real-device retest of F-13/F-24/F-29 is still the thing that actually
+/// closes them, not this read.
 @pragma('vm:entry-point')
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
 
-  if (message.data['type'] != 'remote_alarm') return;
+  final type = message.data['type'] as String?;
+  if (type != 'remote_alarm' && type != 'incoming_call') return;
+  final isCall = type == 'incoming_call';
 
-  final title = message.notification?.title ?? (message.data['title'] as String?) ?? 'Remote alarm';
-  final body = message.notification?.body ?? (message.data['body'] as String?) ?? 'Someone is trying to reach you.';
+  final title = message.notification?.title ??
+      (message.data['title'] as String?) ??
+      (isCall ? 'Incoming call' : 'Remote alarm');
+  final body = message.notification?.body ??
+      (message.data['body'] as String?) ??
+      (isCall ? 'Someone is calling you.' : 'Someone is trying to reach you.');
 
   await FlutterLocalNotificationsPlugin().show(
-    // Bug fix (N-17, same root cause as _showForegroundNotification's
-    // show() call above): `message` is a fresh RemoteMessage per
-    // delivery with no custom hashCode, so a redelivered/retried alarm
-    // push got a new, unrelated id every time instead of replacing its
-    // own prior tray entry.
-    (message.data['notification_id'] as String?)?.hashCode ?? message.hashCode,
+    // Bug fix (N-17, Sarim's 1.9.5 retest — "one Panic alert gives a
+    // group of 15" / redelivered pushes stacking instead of replacing):
+    // `message` itself is a fresh RemoteMessage per delivery with no
+    // custom hashCode, so a redelivered/retried push got a new, unrelated
+    // tray id every time. `notification_id` alone (the previous fix)
+    // still didn't collapse a chain of DIFFERENT notification records
+    // that all belong to the same underlying event (e.g. several
+    // escalation reminders for one still-open Panic) — `event_id`
+    // (notification_contract.md's own field for exactly this: the same
+    // escalation/panic event across its whole lifecycle) is the correct,
+    // more specific key where the backend sends one; `incoming_call` has
+    // no `event_id`/`notification_id` at all (call_contract.md's push
+    // shape is just call_id/call_type/caller_id/expires_at), so its own
+    // `call_id` is the right collapsing key there — one call, one tray
+    // entry, however many times it's redelivered.
+    (message.data['event_id'] as String?)?.hashCode ??
+        (message.data['notification_id'] as String?)?.hashCode ??
+        (message.data['call_id'] as String?)?.hashCode ??
+        message.hashCode,
     title,
     body,
-    const NotificationDetails(
+    NotificationDetails(
       android: AndroidNotificationDetails(
         PushService.criticalChannelId,
         'Critical alerts',
         importance: Importance.max,
         priority: Priority.max,
-        category: AndroidNotificationCategory.alarm,
+        category: isCall ? AndroidNotificationCategory.call : AndroidNotificationCategory.alarm,
         fullScreenIntent: true,
-        ongoing: true,
-        autoCancel: false,
+        // A ringing call is a one-shot interaction (answer/decline/miss),
+        // not an ongoing state that needs its own separate "stop" action
+        // the way a sounding alarm does — see this function's own doc
+        // comment.
+        ongoing: !isCall,
+        autoCancel: isCall,
         sound: PushService._criticalChannelSound,
       ),
     ),
-    // Bug fix (F-13, Sarim's 24 Nov retest — "rings about 2s, no
-    // full-screen alarm"): without a payload, tapping (or the system's
-    // own full-screen-intent auto-launch) had nothing to route on, so it
-    // never actually opened `/dependent/alarm` — see
+    // Bug fix (F-13/F-24/F-29, Sarim's 24 Nov + 1.9.5 retests): without a
+    // payload, tapping (or the system's own full-screen-intent
+    // auto-launch) had nothing to route on, so it never actually opened
+    // `/dependent/alarm` or `/calls/incoming` — see
     // PushService.initializeChannelsAndHandlers' doc comment for the full
     // root-cause writeup, which applies to this notification too.
     payload: jsonEncode(message.data),
@@ -420,19 +474,26 @@ String? routeForNotificationType(String? type) {
 /// own small pure function for the same "unit-testable without
 /// Firebase/BuildContext" reason [routeForNotificationType] is pure.
 ///
-/// **Named field-name caveat** (same as the rest of Task 4.7 — see
-/// `outgoing_call_screen.dart`'s doc comment for the full one): assumed
-/// push `data` shape `{"type": "incoming_call", "call_id": ...,
-/// "caller_name": ..., "call_type": "video"|"voice"}`. If the real
-/// `notification_contract.md`/`call_contract.md` field names differ,
-/// only this function needs adjusting.
+/// **Bug fix (Sarim's 1.9.5 retest, F-29/F-24): the push has no
+/// `caller_name` field.** `call_contract.md` line 9 and
+/// `notification_contract.md`'s own push-data list for `incoming_call`
+/// both give the exact same shape: `data.call_id`, `data.call_type`,
+/// `data.caller_id`, `data.expires_at` — `caller_id` is a user id, not a
+/// display name, and there is no `caller_name` anywhere in the real
+/// contract. Reading `data['caller_name']` always silently returned the
+/// `''` fallback, so `IncomingCallScreen` showed a blank name/`'?'`
+/// avatar every time — cosmetic on its own, but see this screen's own
+/// doc comment and `incoming_call_screen.dart`'s for the bigger, actually
+/// blocking F-29 root cause this was found alongside. The real name is
+/// `other_name` from `GET /calls/{id}` (`call_contract.md` line 20),
+/// which `IncomingCallScreen` already calls on load — fetched there now,
+/// not guessed from the push.
 Map<String, dynamic>? incomingCallPushData(Map<String, dynamic> data) {
   if (data['type'] != 'incoming_call') return null;
   final callId = data['call_id'] as String?;
   if (callId == null) return null;
   return {
     'callId': callId,
-    'callerName': data['caller_name'] as String? ?? '',
     'isVideo': data['call_type'] == 'video',
   };
 }

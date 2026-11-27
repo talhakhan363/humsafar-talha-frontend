@@ -1814,6 +1814,12 @@ abstract class AppLocalizations {
   /// **'Alerts'**
   String get alertsScreenTitle;
 
+  /// No description provided for @dependentNoticesScreenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Notices'**
+  String get dependentNoticesScreenTitle;
+
   /// No description provided for @alertsOpenTabLabel.
   ///
   /// In en, this message translates to:

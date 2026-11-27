@@ -308,6 +308,18 @@ class _DependentHomeScreenState extends ConsumerState<DependentHomeScreen> with 
       appBar: AppBar(
         title: Text(l10n.dependentHomeTitle),
         actions: [
+          // Bug fix (F-28 continuation, Sarim's 1.9.5 retest: "the
+          // Dependent side has no way in"). Plain IconButton, not the
+          // badged Stack GuardianHomeScreen's bell uses — that badge
+          // counts `unacknowledged_critical` (notification_contract.md),
+          // a Guardian-only concept this screen's notices deliberately
+          // don't surface (see dependent_notices_screen.dart's own doc
+          // comment for why `AlertsScreen` itself isn't reused here).
+          IconButton(
+            icon: const Icon(Icons.notifications_outlined),
+            tooltip: l10n.dependentNoticesScreenTitle,
+            onPressed: () => context.push('/dependent/notices'),
+          ),
           const LanguageSwitchButton(),
           const AccessibilityToggleButton(),
           // Bug fix (F-32, Sarim's 22 Nov security review): see
