@@ -1154,6 +1154,26 @@ abstract class AppLocalizations {
   /// **'Open Settings'**
   String get openSettingsButton;
 
+  /// (F-13 fix) Dismiss button on the full-screen-intent permission nudge.
+  ///
+  /// In en, this message translates to:
+  /// **'Not now'**
+  String get notNowButton;
+
+  /// (F-13 fix) Title of the one-time-per-launch dialog nudging the
+  /// person to grant Android 14+'s full-screen-intent special access —
+  /// see full_screen_intent_access.dart's class doc comment.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow full-screen alerts'**
+  String get fullScreenAlarmPermissionTitle;
+
+  /// (F-13 fix) Body of the same dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Remote alarms and calls need full-screen alerts to ring and wake your phone's screen even when it's locked. Please allow this in your phone's Settings.'**
+  String get fullScreenAlarmPermissionBody;
+
   /// No description provided for @dependentHomeTitle.
   ///
   /// In en, this message translates to:
@@ -1214,7 +1234,9 @@ abstract class AppLocalizations {
   /// **'Next: {drug} at {time}'**
   String nextMedicationMessage(String drug, String time);
 
-  /// No description provided for @medicineDueNowSubtitle.
+  /// Bug fix (UI-17, Sarim's 1.9.5 design-vs-app pass): the Home medicine
+  /// button, when a dose is currently due, used to show no drug/dose/time
+  /// at all — see dependent_home_screen.dart's own comment.
   ///
   /// In en, this message translates to:
   /// **'{drug} {dosage} · due {time}'**
@@ -1820,7 +1842,8 @@ abstract class AppLocalizations {
   /// **'Alerts'**
   String get alertsScreenTitle;
 
-  /// No description provided for @dependentNoticesScreenTitle.
+  /// Bug fix (F-28 continuation, Sarim's 1.9.5 retest): the Dependent's own
+  /// read-only notices entry point — see dependent_notices_screen.dart.
   ///
   /// In en, this message translates to:
   /// **'Notices'**
@@ -2168,13 +2191,20 @@ abstract class AppLocalizations {
   /// **'Your Guardian is looking for you'**
   String get alarmLookingForYouTitle;
 
-  /// No description provided for @alarmScreenSubtitle.
+  /// Bug fix (UI-19, Sarim's 1.9.5 design-vs-app pass): design 24 names
+  /// the Guardian who triggered the alarm — see alarm_screen.dart's own
+  /// comment on where [name] comes from and its fallback-to-email note
+  /// (this backend has no Guardian name field yet, same named gap as
+  /// alerts_screen.dart's own N-07 fix).
   ///
   /// In en, this message translates to:
   /// **'Alarm from {name} · {remaining} left'**
   String alarmScreenSubtitle(String name, String remaining);
 
-  /// No description provided for @defaultGuardianLabel.
+  /// (UI-19 fix) Used as [alarmScreenSubtitle]'s `name` argument only
+  /// when alarm_screen.dart's best-effort Guardian-name lookup comes back
+  /// empty — the pre-UI-19 generic wording, kept as its own key so it
+  /// stays translated rather than hardcoded in Dart.
   ///
   /// In en, this message translates to:
   /// **'your Guardian'**
@@ -3920,25 +3950,25 @@ abstract class AppLocalizations {
   /// **'Cancel call'**
   String get cancelCallTooltip;
 
-  /// No description provided for @muteMicTooltip.
+  /// (UI-20 fix) OutgoingCallScreen's Mute toggle, mic currently on.
   ///
   /// In en, this message translates to:
   /// **'Mute microphone'**
   String get muteMicTooltip;
 
-  /// No description provided for @unmuteMicTooltip.
+  /// (UI-20 fix) OutgoingCallScreen's Mute toggle, mic currently off.
   ///
   /// In en, this message translates to:
   /// **'Unmute microphone'**
   String get unmuteMicTooltip;
 
-  /// No description provided for @speakerOnTooltip.
+  /// (UI-20 fix) OutgoingCallScreen's Speaker toggle, speaker currently on.
   ///
   /// In en, this message translates to:
   /// **'Turn off speaker'**
   String get speakerOnTooltip;
 
-  /// No description provided for @speakerOffTooltip.
+  /// (UI-20 fix) OutgoingCallScreen's Speaker toggle, speaker currently off.
   ///
   /// In en, this message translates to:
   /// **'Turn on speaker'**

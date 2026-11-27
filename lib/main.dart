@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +9,7 @@ import 'package:humsafar_frontend/l10n/app_localizations.dart';
 
 import 'core/auth/current_user_provider.dart';
 import 'core/localization/app_locale_provider.dart';
+import 'core/platform/full_screen_intent_access.dart';
 import 'core/push/push_service.dart';
 import 'core/router/app_router.dart';
 import 'core/theme/accessibility_mode.dart';
@@ -101,6 +104,51 @@ class _HumsafarAppState extends ConsumerState<HumsafarApp> {
     } catch (_) {
       // best-effort, see doc comment above
     }
+    // Bug fix (F-13, Sarim's 26 Nov retest): see
+    // full_screen_intent_access.dart's class doc comment. Deliberately
+    // outside the try/catch above — a Firebase init failure and this
+    // Android-settings check are independent concerns, and a person
+    // shouldn't lose this nudge just because push setup failed on their
+    // device.
+    unawaited(_checkFullScreenIntentAccess());
+  }
+
+  /// (F-13 fix) Shows a one-time-per-launch nudge if Android hasn't
+  /// granted this app full-screen-intent access — see
+  /// full_screen_intent_access.dart's class doc comment for why that can
+  /// silently happen on Android 14+ even with the manifest permission
+  /// declared. Shown every launch while still not granted, deliberately
+  /// not persisted-dismissed anywhere — this gates whether a remote alarm
+  /// or an incoming call actually wakes a locked screen, so staying
+  /// visible until the person actually fixes it (or the OS re-grants it)
+  /// is the honest behavior, not nagging for its own sake.
+  Future<void> _checkFullScreenIntentAccess() async {
+    final granted = await FullScreenIntentAccess.canUseFullScreenIntent();
+    if (granted) return;
+    final context = rootNavigatorKey.currentContext;
+    // Bug fix (flutter analyze, use_build_context_synchronously): checking
+    // this State's own `mounted` doesn't satisfy the lint, since it can't
+    // tell that guards `context` specifically — `context.mounted` is the
+    // check tied to the actual BuildContext used below.
+    if (context == null || !context.mounted) return;
+    final l10n = AppLocalizations.of(context)!;
+    showDialog<void>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: Text(l10n.fullScreenAlarmPermissionTitle),
+        content: Text(l10n.fullScreenAlarmPermissionBody),
+        actions: [
+          TextButton(onPressed: () => Navigator.of(dialogContext).pop(), child: Text(l10n.notNowButton)),
+          TextButton(
+            onPressed: () {
+              Navigator.of(dialogContext).pop();
+              FullScreenIntentAccess.openSettings();
+            },
+            child: Text(l10n.openSettingsButton),
+          ),
+        ],
+      ),
+    );
   }
 
   void _handleNotificationTap(Map<String, dynamic> data) {

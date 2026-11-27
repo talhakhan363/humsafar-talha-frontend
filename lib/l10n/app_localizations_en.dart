@@ -595,6 +595,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get openSettingsButton => 'Open Settings';
 
   @override
+  String get notNowButton => 'Not now';
+
+  @override
+  String get fullScreenAlarmPermissionTitle => 'Allow full-screen alerts';
+
+  @override
+  String get fullScreenAlarmPermissionBody =>
+      'Remote alarms and calls need full-screen alerts to ring and wake your phone\'s screen even when it\'s locked. Please allow this in your phone\'s Settings.';
+
+  @override
   String get dependentHomeTitle => 'Home';
 
   @override
@@ -630,6 +640,7 @@ class AppLocalizationsEn extends AppLocalizations {
     return 'Next: $drug at $time';
   }
 
+  // Bug fix (UI-17, Sarim's 1.9.5 design-vs-app pass).
   @override
   String medicineDueNowSubtitle(String drug, String dosage, String time) {
     return '$drug $dosage · due $time';
@@ -977,6 +988,8 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get alertsScreenTitle => 'Alerts';
 
+  // Bug fix (F-28 continuation, Sarim's 1.9.5 retest): "the Dependent side
+  // has no way in" to any notices — see dependent_notices_screen.dart.
   @override
   String get dependentNoticesScreenTitle => 'Notices';
 
@@ -1237,6 +1250,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String unreadMessagesSubtitle(int count) {
+    // Bug fix (N-16, Sarim's 24 Nov retest): was the literal placeholder
+    // text '$count new message(s)' for every count — same class of bug
+    // as N-14 (panicToldCountMessage above), fixed the same way.
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,

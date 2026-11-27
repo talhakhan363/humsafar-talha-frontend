@@ -600,6 +600,16 @@ class AppLocalizationsUr extends AppLocalizations {
   String get openSettingsButton => 'سیٹنگز کھولیں';
 
   @override
+  String get notNowButton => 'ابھی نہیں';
+
+  @override
+  String get fullScreenAlarmPermissionTitle => 'فل اسکرین الرٹس کی اجازت دیں';
+
+  @override
+  String get fullScreenAlarmPermissionBody =>
+      'ریموٹ الارم اور کالز کو بجنے اور فون لاک ہونے کے باوجود اسکرین جگانے کے لیے فل اسکرین الرٹس درکار ہیں۔ براہ کرم اپنے فون کی سیٹنگز میں اسے اجازت دیں۔';
+
+  @override
   String get dependentHomeTitle => 'ہوم';
 
   @override
@@ -636,6 +646,7 @@ class AppLocalizationsUr extends AppLocalizations {
     return 'اگلی خوراک: $drug, $time پر';
   }
 
+  // Bug fix (UI-17, Sarim's 1.9.5 design-vs-app pass).
   @override
   String medicineDueNowSubtitle(String drug, String dosage, String time) {
     return '$drug $dosage · $time کو واجب';
@@ -986,6 +997,7 @@ class AppLocalizationsUr extends AppLocalizations {
   @override
   String get alertsScreenTitle => 'الرٹس';
 
+  // Bug fix (F-28 continuation, Sarim's 1.9.5 retest).
   @override
   String get dependentNoticesScreenTitle => 'اطلاعات';
 
@@ -1810,6 +1822,11 @@ class AppLocalizationsUr extends AppLocalizations {
   String get sugarContextAfterMeal => 'کھانے کے بعد';
 
   @override
+  // Bug fix (N-13, Sarim's 24 Nov retest): 'روزہ' is the religious
+  // (Ramadan) fast, not the medical "fasting blood sugar" sense this
+  // dropdown means (add_vital_reading_screen.dart's `context: 'fasting'`
+  // sugar reading). 'نہار منہ' ("on an empty stomach") is the term used
+  // in Urdu medical contexts for a fasting glucose reading.
   String get sugarContextFasting => 'نہار منہ';
 
   @override

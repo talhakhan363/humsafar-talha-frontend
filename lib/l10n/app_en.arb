@@ -193,6 +193,9 @@
   "locationPermissionDeniedForeverMessage": "Location permission was permanently denied. Enable it from your phone's Settings.",
   "locationServiceDisabledMessage": "Turn on Location Services in your phone's Settings to share your location.",
   "openSettingsButton": "Open Settings",
+  "notNowButton": "Not now",
+  "fullScreenAlarmPermissionTitle": "Allow full-screen alerts",
+  "fullScreenAlarmPermissionBody": "Remote alarms and calls need full-screen alerts to ring and wake your phone's screen even when it's locked. Please allow this in your phone's Settings.",
   "dependentHomeTitle": "Home",
   "dependentHomeGreeting": "Assalam o Alaikum, {name}",
   "@dependentHomeGreeting": {
