@@ -60,7 +60,7 @@ class MedicationConfirmScreen extends ConsumerStatefulWidget {
 
 enum _Phase { loading, loadError, noneDue, prompt, confirm, taken }
 
-class _MedicationConfirmScreenState extends ConsumerState<MedicationConfirmScreen> {
+class _MedicationConfirmScreenState extends ConsumerState<MedicationConfirmScreen> with WidgetsBindingObserver {
   _Phase _phase = _Phase.loading;
   String? _loadError;
   bool _isSubmitting = false;
@@ -76,13 +76,32 @@ class _MedicationConfirmScreenState extends ConsumerState<MedicationConfirmScree
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _resolveDose();
   }
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _tickTimer?.cancel();
     super.dispose();
+  }
+
+  /// Bug fix (N-20, Sarim's report: "Ammi's My medicine ... stale after
+  /// more time"): before this, there was no way at all to find out
+  /// a dose had since become due/pending again (e.g. a Guardian's
+  /// "give more time" - medication_contract.md's /extend - while this
+  /// exact screen was already open) short of fully leaving and
+  /// re-entering it. Only re-resolves from `noneDue`/`loadError`
+  /// though - those two are true dead ends with no in-progress state to
+  /// lose, unlike `prompt`/`confirm`, where an unrelated app-resume must
+  /// never silently drop a live `confirm_token` or an unconfirmed
+  /// "did you take it?" answer the person is mid-way through.
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed && (_phase == _Phase.noneDue || _phase == _Phase.loadError)) {
+      _resolveDose();
+    }
   }
 
   Future<void> _resolveDose() async {
@@ -229,7 +248,23 @@ class _MedicationConfirmScreenState extends ConsumerState<MedicationConfirmScree
         return Center(
           child: Padding(
             padding: const EdgeInsets.all(24.0),
-            child: Text(l10n.noMedicineDueMessage, textAlign: TextAlign.center),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(l10n.noMedicineDueMessage, textAlign: TextAlign.center),
+                const SizedBox(height: 12),
+                // Bug fix (N-20): this was a dead end with no way to
+                // check again - see didChangeAppLifecycleState's doc
+                // comment for the resume-triggered half of this fix;
+                // this is the manual half, for someone who never leaves
+                // this exact screen (so no resume event ever fires) and
+                // just wants to check again after a Guardian gave them
+                // more time. Same retryButton string loadError already
+                // uses just below, for the same "try the fetch again"
+                // action.
+                OutlinedButton(onPressed: _resolveDose, child: Text(l10n.retryButton)),
+              ],
+            ),
           ),
         );
       case _Phase.prompt:

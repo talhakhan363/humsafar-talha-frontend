@@ -126,6 +126,17 @@ class _DependentHomeScreenState extends ConsumerState<DependentHomeScreen> with 
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
       _startLocationSharing();
+      // Bug fix (N-20, Sarim's report: "Ammi's My medicine and Home
+      // stale after more time"): a Guardian's "give more time" action
+      // (medication_contract.md's /extend) flips a dose straight back
+      // to pending server-side while this screen may be sitting in the
+      // background the whole time - nothing here used to notice when
+      // the person came back. This mirrors the reload this screen
+      // already does when the person returns from actually opening the
+      // medicine/wellness-check screens themselves (the `.then((_) =>
+      // _loadUpcoming())` calls below) - resuming the app from the
+      // background is the same kind of "might be stale now" moment.
+      _loadUpcoming();
     } else {
       _locationService?.stop();
     }
