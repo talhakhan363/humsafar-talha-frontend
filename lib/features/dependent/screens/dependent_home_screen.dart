@@ -385,8 +385,19 @@ class _DependentHomeScreenState extends ConsumerState<DependentHomeScreen> with 
                       : context.push('/dependent/medication'))
                   .then((_) => _loadUpcoming()),
               label: doseDue != null ? l10n.medicineStep1OfTwoLabel : l10n.myMedicineButtonLabel,
+              // Bug fix (UI-17, Sarim's 1.9.5 design-vs-app pass): "the
+              // Home button only says 'Step 1 of 2' ... the person can't
+              // tell which medicine it is" — design 20 shows the drug
+              // name, dose and time on it. `doseDue` already carries
+              // `drug_name`/`dosage`/`scheduled_for` (medication_contract.md's
+              // dose-list shape), this just displays them instead of a
+              // blank subtitle.
               subtitle: doseDue != null
-                  ? ''
+                  ? l10n.medicineDueNowSubtitle(
+                      doseDue['drug_name'] as String? ?? '',
+                      doseDue['dosage'] as String? ?? '',
+                      formatClockTime(DateTime.tryParse(doseDue['scheduled_for'] as String? ?? '')?.toLocal() ?? now),
+                    )
                   : (_isLoadingSchedules
                       ? ''
                       : (_nextMedication != null

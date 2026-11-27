@@ -247,47 +247,95 @@ class _MedicationScheduleScreenState extends ConsumerState<MedicationScheduleScr
             child: Text(l10n.noMedicationSchedulesMessage, textAlign: TextAlign.center),
           )
         else
-          ..._schedules.map((schedule) {
-            final scheduleId = schedule['schedule_id'] as String;
-            final days = (schedule['days'] as List<dynamic>?)?.cast<String>() ?? const <String>[];
-            final frequencyLabel = schedule['frequency'] == 'weekly'
-                ? '${l10n.weeklyLabel} (${days.map((d) => weekdayShortLabel(l10n, d)).join(', ')})'
-                : l10n.dailyLabel;
+          // Bug fix (UI-21, Sarim's 1.9.5 design-vs-app pass): a medicine
+          // with several times a day (this form still only has one
+          // time-of-day picker per submission — see _save's doc comment —
+          // so multiple doses are several schedule_id rows sharing the
+          // same drug_name/dosage) used to render as that many separate,
+          // identical-looking cards. Grouped here by (drug_name, dosage)
+          // into one card per medicine, each scheduled time listed inside
+          // it — the add/edit form itself is unchanged, this is purely a
+          // list-rendering regroup. Each time keeps its own Switch/Delete,
+          // since those act on one schedule_id, not the whole medicine.
+          ..._groupedSchedules().entries.map((group) {
+            final rows = group.value;
+            final first = rows.first;
             return Card(
               margin: const EdgeInsets.only(bottom: 12),
-              child: ListTile(
-                onTap: _canManage ? () => _openForm(existing: schedule) : null,
-                title: Text('${schedule['drug_name']} · ${schedule['dosage']}'),
-                subtitle: Text('${formatHHMM(_scheduleTimeHHMM(schedule) ?? '00:00')} · $frequencyLabel'),
-                // (N-15 fix) delete alongside the existing on/off switch —
-                // see _delete's doc comment.
-                trailing: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Switch(
-                      value: schedule['active'] as bool? ?? true,
-                      onChanged: !_canManage || _pendingToggle.contains(scheduleId)
-                          ? null
-                          : (value) => _toggleActive(schedule, value),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
+                    child: Text(
+                      '${first['drug_name']} · ${first['dosage']}',
+                      style: Theme.of(context).textTheme.titleMedium,
                     ),
-                    if (_canManage)
-                      _pendingDelete.contains(scheduleId)
-                          ? const Padding(
-                              padding: EdgeInsets.all(8),
-                              child: SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2)),
-                            )
-                          : IconButton(
-                              icon: const Icon(Icons.delete_outline, color: HumsafarColors.muted),
-                              tooltip: l10n.deleteButtonLabel,
-                              onPressed: () => _delete(schedule),
-                            ),
-                  ],
-                ),
+                  ),
+                  const Divider(height: 1),
+                  ...rows.map((schedule) {
+                    final scheduleId = schedule['schedule_id'] as String;
+                    final days = (schedule['days'] as List<dynamic>?)?.cast<String>() ?? const <String>[];
+                    final frequencyLabel = schedule['frequency'] == 'weekly'
+                        ? '${l10n.weeklyLabel} (${days.map((d) => weekdayShortLabel(l10n, d)).join(', ')})'
+                        : l10n.dailyLabel;
+                    return ListTile(
+                      onTap: _canManage ? () => _openForm(existing: schedule) : null,
+                      // Bug fix (TC-3.15-03/04 regression during UI-21's
+                      // first pass): these two were briefly split into a
+                      // separate title/subtitle, but both existing tests
+                      // assert on the combined string as ONE Text widget
+                      // ('8:00 AM · Daily') — reverted to match, same
+                      // single-Text shape the pre-UI-21 flat list always
+                      // used for this part of each row.
+                      title: Text('${formatHHMM(_scheduleTimeHHMM(schedule) ?? '00:00')} · $frequencyLabel'),
+                      // (N-15 fix) delete alongside the existing on/off
+                      // switch — see _delete's doc comment.
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Switch(
+                            value: schedule['active'] as bool? ?? true,
+                            onChanged: !_canManage || _pendingToggle.contains(scheduleId)
+                                ? null
+                                : (value) => _toggleActive(schedule, value),
+                          ),
+                          if (_canManage)
+                            _pendingDelete.contains(scheduleId)
+                                ? const Padding(
+                                    padding: EdgeInsets.all(8),
+                                    child:
+                                        SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2)),
+                                  )
+                                : IconButton(
+                                    icon: const Icon(Icons.delete_outline, color: HumsafarColors.muted),
+                                    tooltip: l10n.deleteButtonLabel,
+                                    onPressed: () => _delete(schedule),
+                                  ),
+                        ],
+                      ),
+                    );
+                  }),
+                  const SizedBox(height: 4),
+                ],
               ),
             );
           }),
       ],
     );
+  }
+
+  /// (UI-21 fix) See the `else` branch's doc comment above. A plain
+  /// `Map` literal already preserves insertion order in Dart, so groups
+  /// come out in the same order `_schedules` listed their first member —
+  /// no sorting imposed that the backend didn't already choose.
+  Map<String, List<Map<String, dynamic>>> _groupedSchedules() {
+    final grouped = <String, List<Map<String, dynamic>>>{};
+    for (final schedule in _schedules) {
+      final key = '${schedule['drug_name']}\u0000${schedule['dosage']}';
+      grouped.putIfAbsent(key, () => []).add(schedule);
+    }
+    return grouped;
   }
 }
 

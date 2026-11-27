@@ -494,6 +494,12 @@ final appRouterProvider = Provider<GoRouter>((ref) {
               userId: args['userId'] as String,
               userName: args['userName'] as String,
               isVideo: args['isVideo'] as bool,
+              // Bug fix (UI-20): only OutgoingCallScreen passes these —
+              // IncomingCallScreen doesn't, and CallScreen's own
+              // constructor defaults (mic on, not on speaker) cover that
+              // case the same way it always behaved.
+              turnOnMicrophoneWhenJoining: args['turnOnMicrophoneWhenJoining'] as bool? ?? true,
+              useSpeakerWhenJoining: args['useSpeakerWhenJoining'] as bool? ?? false,
             ),
           );
         },

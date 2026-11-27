@@ -253,6 +253,29 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              // Bug fix (UI-22, Sarim's 1.9.5 design-vs-app pass): this
+              // role picker used to sit right before the Register button,
+              // after every text field — Sarim wants the role choice made
+              // up front, not buried at the bottom. Moved here verbatim
+              // (same widgets, same _hasInvite lock logic below), nothing
+              // about the lock-to-Guardian behavior itself changed.
+              Text(l10n.registeringAsLabel, style: Theme.of(context).textTheme.bodyMedium),
+              const SizedBox(height: 8),
+              SegmentedButton<AppMode>(
+                segments: [
+                  ButtonSegment(value: AppMode.guardian, label: Text(l10n.roleGuardianOption)),
+                  ButtonSegment(value: AppMode.dependent, label: Text(l10n.roleDependentOption)),
+                ],
+                selected: {_selectedRole},
+                onSelectionChanged: (_isSubmitting || _hasInvite)
+                    ? null
+                    : (selection) => setState(() => _selectedRole = selection.first),
+              ),
+              if (_hasInvite) ...[
+                const SizedBox(height: 4),
+                Text(l10n.roleLockedToGuardianNote, style: const TextStyle(fontSize: 12)),
+              ],
+              const SizedBox(height: 24),
               TextFormField(
                 controller: _nameController,
                 decoration: InputDecoration(labelText: l10n.fullNameLabel),
@@ -309,23 +332,6 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                   helperText: l10n.inviteCodeHelperText,
                 ),
               ),
-              const SizedBox(height: 24),
-              Text(l10n.registeringAsLabel, style: Theme.of(context).textTheme.bodyMedium),
-              const SizedBox(height: 8),
-              SegmentedButton<AppMode>(
-                segments: [
-                  ButtonSegment(value: AppMode.guardian, label: Text(l10n.roleGuardianOption)),
-                  ButtonSegment(value: AppMode.dependent, label: Text(l10n.roleDependentOption)),
-                ],
-                selected: {_selectedRole},
-                onSelectionChanged: (_isSubmitting || _hasInvite)
-                    ? null
-                    : (selection) => setState(() => _selectedRole = selection.first),
-              ),
-              if (_hasInvite) ...[
-                const SizedBox(height: 4),
-                Text(l10n.roleLockedToGuardianNote, style: const TextStyle(fontSize: 12)),
-              ],
               const SizedBox(height: 24),
               ElevatedButton(
                 onPressed: _isSubmitting ? null : _submit,

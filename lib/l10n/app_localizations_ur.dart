@@ -637,6 +637,11 @@ class AppLocalizationsUr extends AppLocalizations {
   }
 
   @override
+  String medicineDueNowSubtitle(String drug, String dosage, String time) {
+    return '$drug $dosage · $time کو واجب';
+  }
+
+  @override
   String get noMedicationScheduledMessage => 'کوئی دوا شیڈول نہیں ہے';
 
   @override
@@ -1187,9 +1192,12 @@ class AppLocalizationsUr extends AppLocalizations {
   String get alarmLookingForYouTitle => 'آپ کا گارڈین آپ کو ڈھونڈ رہا ہے';
 
   @override
-  String alarmScreenSubtitle(String remaining) {
-    return 'آپ کے گارڈین کا الارم · $remaining باقی';
+  String alarmScreenSubtitle(String name, String remaining) {
+    return '$name کا الارم · $remaining باقی';
   }
+
+  @override
+  String get defaultGuardianLabel => 'آپ کے گارڈین';
 
   @override
   String get stopAlarmButtonLabel => 'الارم بند کریں';
@@ -2121,6 +2129,18 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get cancelCallTooltip => 'کال منسوخ کریں';
+
+  @override
+  String get muteMicTooltip => 'مائیکروفون خاموش کریں';
+
+  @override
+  String get unmuteMicTooltip => 'مائیکروفون چالو کریں';
+
+  @override
+  String get speakerOnTooltip => 'اسپیکر بند کریں';
+
+  @override
+  String get speakerOffTooltip => 'اسپیکر چالو کریں';
 
   @override
   String get alertsOpenTabLabelNoCount => 'کھلے';

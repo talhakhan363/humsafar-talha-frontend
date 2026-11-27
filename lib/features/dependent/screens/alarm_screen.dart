@@ -28,10 +28,21 @@ import '../../../shared/widgets/language_switch_button.dart';
 ///    triggering Guardian's phone number, and nothing Task 3.14 reads
 ///    (alarm_contract.md's `data`/response only carries `triggered_by`,
 ///    a Guardian user id, not a phone number) resolves that from the
-///    Dependent side — `GET /dependents/{id}/guardians` is the Guardian-
-///    side screen's own endpoint, not confirmed callable by a Dependent
-///    here. Adding that lookup is backend-adjacent follow-up work, not
-///    this screen's job.
+///    Dependent side. Still cut — see below, this is unrelated to the
+///    Guardian-name fix just below it.
+///
+/// **Bug fix (UI-19, Sarim's 1.9.5 design-vs-app pass, design 24):** the
+/// subtitle used to say generic "your Guardian" — Sarim wants it to name
+/// whoever actually triggered the alarm. `_load()` now best-effort calls
+/// `GET /dependents/{id}/guardians` (the Guardian-side screen's own
+/// endpoint — `linkage_contract.md` doesn't document it as Dependent-
+/// callable, so this is tried defensively and never blocks the alarm
+/// screen itself if it 403s/fails) and matches `guardian_id` against the
+/// alarm's `triggered_by`. That endpoint's documented response has no
+/// `full_name` field (unlike the symmetric Guardian-facing endpoint,
+/// which got one via F-04) — so the resolved name falls back to `email`,
+/// then to the old generic wording if the lookup fails outright, mirroring
+/// `DependentSummary.displayName`'s own fallback convention.
 ///
 /// **Bug fix (F-13, QA ICP-3 Results v1.1, step 11):** this used to rely
 /// entirely on `PushService`'s notification sound for "rings loudly,
@@ -73,6 +84,10 @@ class _AlarmScreenState extends ConsumerState<AlarmScreen> {
   // (F-13 fix) see the class doc comment.
   final AudioPlayer _alarmSound = AudioPlayer();
   bool _isSoundPlaying = false;
+  // (UI-19 fix) see the class doc comment. Null until resolved (or if the
+  // best-effort lookup fails) — the build method falls back to the old
+  // generic wording in that case.
+  String? _guardianName;
 
   String get _dependentId => ref.read(currentUserProvider)!.userId;
 
@@ -133,6 +148,32 @@ class _AlarmScreenState extends ConsumerState<AlarmScreen> {
     }
   }
 
+  /// (UI-19 fix) See the class doc comment. Best-effort only: any
+  /// failure (403, network error, no matching entry, no name field on
+  /// the match) just leaves [_guardianName] null, and the build method
+  /// falls back to the old generic wording — this must never throw past
+  /// here and must never block `_load()`'s own loading state.
+  Future<void> _resolveGuardianName(String? triggeredBy) async {
+    if (triggeredBy == null || triggeredBy.isEmpty) return;
+    try {
+      final response = await ref.read(apiClientProvider).get<List<dynamic>>('/dependents/$_dependentId/guardians');
+      final guardians = response.data ?? const [];
+      for (final entry in guardians) {
+        if (entry is! Map<String, dynamic>) continue;
+        if ((entry['guardian_id'] as String?) != triggeredBy) continue;
+        final fullName = entry['full_name'] as String?;
+        final email = entry['email'] as String?;
+        final resolved = (fullName != null && fullName.isNotEmpty) ? fullName : email;
+        if (resolved != null && resolved.isNotEmpty && mounted) {
+          setState(() => _guardianName = resolved);
+        }
+        return;
+      }
+    } catch (_) {
+      // best-effort, see the method doc comment above.
+    }
+  }
+
   Future<void> _load() async {
     setState(() {
       _isLoading = true;
@@ -149,8 +190,13 @@ class _AlarmScreenState extends ConsumerState<AlarmScreen> {
         _isActive = active;
         _expiresAt = expiresAt;
         _now = DateTime.now();
+        // (UI-19 fix) don't carry a stale name over if _load() re-runs
+        // for a different alarm — _resolveGuardianName repopulates it
+        // below when one is active.
+        _guardianName = null;
       });
       if (active) {
+        unawaited(_resolveGuardianName(alarm?['triggered_by'] as String?));
         unawaited(_startAlarmSound());
         _tickTimer = Timer.periodic(const Duration(seconds: 1), (_) {
           if (!mounted) return;
@@ -291,7 +337,7 @@ class _AlarmScreenState extends ConsumerState<AlarmScreen> {
           ),
           const SizedBox(height: 8),
           Text(
-            l10n.alarmScreenSubtitle(formatCountdown(remaining)),
+            l10n.alarmScreenSubtitle(_guardianName ?? l10n.defaultGuardianLabel, formatCountdown(remaining)),
             textAlign: TextAlign.center,
             style: const TextStyle(color: Colors.white70),
           ),

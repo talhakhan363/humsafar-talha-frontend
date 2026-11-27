@@ -83,6 +83,30 @@ class AppTheme {
         elevation: 0,
       ),
       textTheme: fontTextTheme,
+      // Bug fix (UI-18/UI-22, Sarim's 1.9.5 design-vs-app pass: "small
+      // grey" medicine-confirm button, "pale Register button"). Root
+      // cause confirmed by reading this theme, not guessed: the standard
+      // theme never set an `elevatedButtonTheme` at all, so every plain
+      // `ElevatedButton()` across the WHOLE app (not just these two) fell
+      // back to Material 3's own default — which, unlike Material 2,
+      // paints an ElevatedButton's background from `colorScheme.surface`
+      // (a near-white elevation tint) with the label in `colorScheme.
+      // primary`, not a solid filled primary-color button. That reads as
+      // exactly the "small grey" / "pale" look both findings describe,
+      // on screens that never set their own explicit style to compensate
+      // (the alarm screen's Stop button happens to look fine only because
+      // it already passes its own explicit `ElevatedButton.styleFrom`).
+      // This is a theme-level fix on purpose rather than patching two
+      // buttons individually: every other plain ElevatedButton in the app
+      // picks up the same solid teal/white style this app's designs
+      // consistently use elsewhere, not just the two screens Sarim named.
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: HumsafarColors.primary,
+          foregroundColor: Colors.white,
+          minimumSize: const Size(64, 48),
+        ),
+      ),
     );
   }
 

@@ -32,6 +32,14 @@ import '../../../core/theme/humsafar_colors.dart';
 /// comment for why the push never had a usable name to begin with.
 /// Shows '…' (loading) rather than a blank/'?' avatar until that first
 /// response lands.
+///
+/// **Bug fix (UI-20, Sarim's 1.9.5 design-vs-app pass):** was plain
+/// `Colors.black`, same complaint as `OutgoingCallScreen` (mockup 17e) —
+/// re-themed to `HumsafarColors.primaryDark` for consistency with the
+/// rest of the app's palette. No Mute/Speaker controls added here on
+/// purpose: Sarim's note cited the "Calling..." screen's controls
+/// specifically, and this screen's job is just Accept/Decline before any
+/// call state exists.
 class IncomingCallScreen extends ConsumerStatefulWidget {
   const IncomingCallScreen({super.key, required this.callId, required this.isVideo});
 
@@ -126,7 +134,7 @@ class _IncomingCallScreenState extends ConsumerState<IncomingCallScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: HumsafarColors.primaryDark,
       body: SafeArea(
         child: Center(
           child: Padding(

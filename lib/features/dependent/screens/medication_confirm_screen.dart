@@ -290,12 +290,34 @@ class _MedicationConfirmScreenState extends ConsumerState<MedicationConfirmScree
             else
               Chip(label: Text(l10n.medicineConfirmExpiresNote(formatCountdown(remaining)))),
             const SizedBox(height: 24),
-            ElevatedButton(
-              onPressed: _isSubmitting
-                  ? null
-                  : (expired ? () => _startConfirm(fromPrompt: false) : _confirmTaken),
-              child: Text(expired ? l10n.medicineTryAgainButtonLabel : l10n.medicineConfirmButtonLabel),
+            // Bug fix (UI-18, Sarim's 1.9.5 design-vs-app pass): this was
+            // one small `ElevatedButton` with no "Not yet" option at all —
+            // design 23b has a large teal "Yes, confirm" alongside an
+            // equally large "Not yet". `ElevatedButton`'s own paleness is
+            // fixed at the theme level now (see app_theme.dart's
+            // `elevatedButtonTheme` doc comment) — `SizedBox(width:
+            // double.infinity)` here is what makes both buttons actually
+            // large/full-width, matching the mockup, not just differently
+            // colored. The countdown chip above is unchanged, as asked.
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: _isSubmitting
+                    ? null
+                    : (expired ? () => _startConfirm(fromPrompt: false) : _confirmTaken),
+                child: Text(expired ? l10n.medicineTryAgainButtonLabel : l10n.medicineConfirmButtonLabel),
+              ),
             ),
+            if (!expired) ...[
+              const SizedBox(height: 12),
+              SizedBox(
+                width: double.infinity,
+                child: OutlinedButton(
+                  onPressed: _isSubmitting ? null : _goBack,
+                  child: Text(l10n.notYetLabel),
+                ),
+              ),
+            ],
           ],
         ),
       ),

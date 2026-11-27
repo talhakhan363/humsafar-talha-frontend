@@ -631,6 +631,11 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String medicineDueNowSubtitle(String drug, String dosage, String time) {
+    return '$drug $dosage · due $time';
+  }
+
+  @override
   String get noMedicationScheduledMessage => 'No medicine scheduled';
 
   @override
@@ -1171,9 +1176,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get alarmLookingForYouTitle => 'Your Guardian is looking for you';
 
   @override
-  String alarmScreenSubtitle(String remaining) {
-    return 'Alarm from your Guardian · $remaining left';
+  String alarmScreenSubtitle(String name, String remaining) {
+    return 'Alarm from $name · $remaining left';
   }
+
+  @override
+  String get defaultGuardianLabel => 'your Guardian';
 
   @override
   String get stopAlarmButtonLabel => 'Stop alarm';
@@ -2114,6 +2122,18 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get cancelCallTooltip => 'Cancel call';
+
+  @override
+  String get muteMicTooltip => 'Mute microphone';
+
+  @override
+  String get unmuteMicTooltip => 'Unmute microphone';
+
+  @override
+  String get speakerOnTooltip => 'Turn off speaker';
+
+  @override
+  String get speakerOffTooltip => 'Turn on speaker';
 
   @override
   String get alertsOpenTabLabelNoCount => 'Open';

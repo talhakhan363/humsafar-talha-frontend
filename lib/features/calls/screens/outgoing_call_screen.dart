@@ -56,6 +56,24 @@ import '../../../core/theme/humsafar_colors.dart';
 /// Everything else in this screen (the `/calls` POST, the 2s poll, the
 /// `ringing`/`declined`/`missed`/`ended` status names) was already
 /// correct and needed no change.
+///
+/// **Bug fix (UI-20, Sarim's 1.9.5 design-vs-app pass):** this screen
+/// (mockup 17e) used to be plain `Colors.black` with no Mute/Speaker
+/// controls. Now teal (`HumsafarColors.primaryDark`, matching the rest
+/// of the app's palette — the same color alarm_screen.dart's full-screen
+/// background already uses) and offers a Mute/Speaker toggle. Nothing is
+/// actually muted or routed here, though — this is still the pre-join
+/// polling screen (see above), with no live mic/audio stream of its own
+/// to control. The two toggles instead set the call's *starting* state,
+/// threaded through `_goToCallScreen`'s `extra` map to `CallScreen`,
+/// which applies them to `ZegoUIKitPrebuiltCallConfig.turnOnMicrophoneWhenJoining`/
+/// `.useSpeakerWhenJoining` once the call actually joins (confirmed exact
+/// field names/defaults from `zego_uikit_prebuilt_call`'s own published
+/// API docs — same verify-before-using-a-third-party-SDK-name discipline
+/// as `call_screen.dart`'s own `token`-vs-`appSign` note). Deliberately
+/// NOT added to `IncomingCallScreen` — Sarim's note only cited this
+/// "Calling..." screen's controls (its own plain-black background is
+/// still fixed below, independently).
 class OutgoingCallScreen extends ConsumerStatefulWidget {
   const OutgoingCallScreen({super.key, required this.calleeId, required this.calleeName, required this.isVideo});
 
@@ -74,6 +92,11 @@ class _OutgoingCallScreenState extends ConsumerState<OutgoingCallScreen> {
   String? _callId;
   String? _errorMessage;
   Timer? _pollTimer;
+  // (UI-20 fix) see the class doc comment. Defaults mirror
+  // ZegoUIKitPrebuiltCallConfig's own defaults (mic on, earpiece not
+  // speaker) so leaving both untouched changes nothing from before.
+  bool _micOn = true;
+  bool _speakerOn = false;
 
   @override
   void initState() {
@@ -160,6 +183,9 @@ class _OutgoingCallScreenState extends ConsumerState<OutgoingCallScreen> {
         'isVideo': widget.isVideo,
         'userId': join['user_id'] as String,
         'userName': me?.fullName ?? '',
+        // (UI-20 fix) see the class doc comment.
+        'turnOnMicrophoneWhenJoining': _micOn,
+        'useSpeakerWhenJoining': _speakerOn,
       },
     );
   }
@@ -182,8 +208,9 @@ class _OutgoingCallScreenState extends ConsumerState<OutgoingCallScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final isRinging = _state == _OutgoingCallState.starting || _state == _OutgoingCallState.ringing;
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: HumsafarColors.primaryDark,
       body: SafeArea(
         child: Center(
           child: Padding(
@@ -200,7 +227,38 @@ class _OutgoingCallScreenState extends ConsumerState<OutgoingCallScreen> {
                 const SizedBox(height: 8),
                 Text(_statusLabel(l10n), style: const TextStyle(color: Colors.white70, fontSize: 16)),
                 const SizedBox(height: 32),
-                if (_state == _OutgoingCallState.starting || _state == _OutgoingCallState.ringing)
+                // (UI-20 fix) see the class doc comment — sets the call's
+                // starting mic/speaker state, doesn't control a live
+                // stream (there isn't one yet on this screen).
+                if (isRinging)
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      IconButton(
+                        onPressed: () => setState(() => _micOn = !_micOn),
+                        icon: Icon(_micOn ? Icons.mic : Icons.mic_off, color: HumsafarColors.primaryDark),
+                        iconSize: 28,
+                        tooltip: _micOn ? l10n.muteMicTooltip : l10n.unmuteMicTooltip,
+                        style: IconButton.styleFrom(
+                          backgroundColor: _micOn ? Colors.white : Colors.white.withValues(alpha: 0.4),
+                          shape: const CircleBorder(),
+                        ),
+                      ),
+                      const SizedBox(width: 20),
+                      IconButton(
+                        onPressed: () => setState(() => _speakerOn = !_speakerOn),
+                        icon: Icon(_speakerOn ? Icons.volume_up : Icons.volume_off, color: HumsafarColors.primaryDark),
+                        iconSize: 28,
+                        tooltip: _speakerOn ? l10n.speakerOnTooltip : l10n.speakerOffTooltip,
+                        style: IconButton.styleFrom(
+                          backgroundColor: _speakerOn ? Colors.white : Colors.white.withValues(alpha: 0.4),
+                          shape: const CircleBorder(),
+                        ),
+                      ),
+                    ],
+                  ),
+                if (isRinging) const SizedBox(height: 24),
+                if (isRinging)
                   IconButton(
                     onPressed: _cancelCall,
                     icon: const Icon(Icons.call_end, color: Colors.white),

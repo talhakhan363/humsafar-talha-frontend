@@ -1214,6 +1214,12 @@ abstract class AppLocalizations {
   /// **'Next: {drug} at {time}'**
   String nextMedicationMessage(String drug, String time);
 
+  /// No description provided for @medicineDueNowSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'{drug} {dosage} · due {time}'**
+  String medicineDueNowSubtitle(String drug, String dosage, String time);
+
   /// No description provided for @noMedicationScheduledMessage.
   ///
   /// In en, this message translates to:
@@ -2165,8 +2171,14 @@ abstract class AppLocalizations {
   /// No description provided for @alarmScreenSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Alarm from your Guardian · {remaining} left'**
-  String alarmScreenSubtitle(String remaining);
+  /// **'Alarm from {name} · {remaining} left'**
+  String alarmScreenSubtitle(String name, String remaining);
+
+  /// No description provided for @defaultGuardianLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'your Guardian'**
+  String get defaultGuardianLabel;
 
   /// No description provided for @stopAlarmButtonLabel.
   ///
@@ -3907,6 +3919,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Cancel call'**
   String get cancelCallTooltip;
+
+  /// No description provided for @muteMicTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Mute microphone'**
+  String get muteMicTooltip;
+
+  /// No description provided for @unmuteMicTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Unmute microphone'**
+  String get unmuteMicTooltip;
+
+  /// No description provided for @speakerOnTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn off speaker'**
+  String get speakerOnTooltip;
+
+  /// No description provided for @speakerOffTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn on speaker'**
+  String get speakerOffTooltip;
 
   /// No description provided for @alertsOpenTabLabelNoCount.
   ///

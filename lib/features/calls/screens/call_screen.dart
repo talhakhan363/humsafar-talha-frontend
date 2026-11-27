@@ -59,6 +59,12 @@ class CallScreen extends ConsumerWidget {
     required this.userId,
     required this.userName,
     required this.isVideo,
+    // (UI-20 fix) see outgoing_call_screen.dart's class doc comment.
+    // Defaults match ZegoUIKitPrebuiltCallConfig's own defaults, so
+    // IncomingCallScreen (which doesn't pass these) behaves exactly as
+    // before.
+    this.turnOnMicrophoneWhenJoining = true,
+    this.useSpeakerWhenJoining = false,
   });
 
   /// This app's own backend call id — used only for
@@ -75,16 +81,24 @@ class CallScreen extends ConsumerWidget {
   final String userId;
   final String userName;
   final bool isVideo;
+  final bool turnOnMicrophoneWhenJoining;
+  final bool useSpeakerWhenJoining;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final config = isVideo ? ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall() : ZegoUIKitPrebuiltCallConfig.oneOnOneVoiceCall()
+      // (UI-20 fix) see this class's own doc comment and
+      // outgoing_call_screen.dart's — confirmed exact field names from
+      // zego_uikit_prebuilt_call's published API before using them.
+      ..turnOnMicrophoneWhenJoining = turnOnMicrophoneWhenJoining
+      ..useSpeakerWhenJoining = useSpeakerWhenJoining;
     return ZegoUIKitPrebuiltCall(
       appID: appId,
       token: token,
       callID: roomId,
       userID: userId,
       userName: userName,
-      config: isVideo ? ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall() : ZegoUIKitPrebuiltCallConfig.oneOnOneVoiceCall(),
+      config: config,
       onDispose: () => unawaited(_endCallBestEffort(ref)),
     );
   }

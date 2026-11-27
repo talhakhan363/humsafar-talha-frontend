@@ -227,6 +227,20 @@
       }
     }
   },
+  "medicineDueNowSubtitle": "{drug} {dosage} · due {time}",
+  "@medicineDueNowSubtitle": {
+    "placeholders": {
+      "drug": {
+        "type": "String"
+      },
+      "dosage": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
   "noMedicationScheduledMessage": "No medicine scheduled",
   "panicScreenTitle": "Panic",
   "panicNeedHelpTitle": "Need help?",
@@ -520,14 +534,18 @@
   "emergencyContactDeniedNote": "You can view this but only the Primary Guardian can change it.",
   "alarmScreenTitle": "Alarm",
   "alarmLookingForYouTitle": "Your Guardian is looking for you",
-  "alarmScreenSubtitle": "Alarm from your Guardian · {remaining} left",
+  "alarmScreenSubtitle": "Alarm from {name} · {remaining} left",
   "@alarmScreenSubtitle": {
     "placeholders": {
+      "name": {
+        "type": "String"
+      },
       "remaining": {
         "type": "String"
       }
     }
   },
+  "defaultGuardianLabel": "your Guardian",
   "stopAlarmButtonLabel": "Stop alarm",
   "stopAlarmFailedSnackbar": "Couldn't stop the alarm. Try again.",
   "noActiveAlarmMessage": "No alarm is sounding right now.",
@@ -878,6 +896,10 @@
   "callConnectingLabel": "Connecting…",
   "callAlreadyEndedMessage": "This call has already ended.",
   "cancelCallTooltip": "Cancel call",
+  "muteMicTooltip": "Mute microphone",
+  "unmuteMicTooltip": "Unmute microphone",
+  "speakerOnTooltip": "Turn off speaker",
+  "speakerOffTooltip": "Turn on speaker",
 
   "alertsOpenTabLabelNoCount": "Open",
   "alertsNoticesTabLabelNoCount": "Notices",
